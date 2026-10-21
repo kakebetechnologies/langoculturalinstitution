@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 $counts = site_counts();
+$won = one("SELECT * FROM leaders WHERE grp='won_nyaci' AND status='published' ORDER BY sort, id LIMIT 1");
 page_start(__('About LCI'), ['hero' => ['eyebrow' => __('About us'), 'title' => __('Preserving Lango culture, uniting our people'), 'sub' => __('The traditional authority of the Lango people of mid-northern Uganda.'), 'crumbs' => [[__('About'), null]], 'image' => site_img('hero_image_1', 'assets/img/photos/hero-site.jpg')]]);
 ?>
 <section class="section">
   <div class="container split">
     <div class="collage reveal">
-      <span class="collage__o"></span><span class="collage__t"></span>
       <div class="collage__a"><img loading="lazy" src="<?= e(site_img('about_image_1', 'assets/img/photos/hero-aerial.jpg')) ?>" alt=""></div>
       <div class="collage__b"><img loading="lazy" src="<?= e(site_img('about_image_2', 'assets/img/photos/hero-field.jpg')) ?>" alt=""></div>
       <div class="collage__badge"><b><?= (int)$counts['clans'] ?></b><small><?php _e('Clans'); ?></small></div>
@@ -21,12 +21,22 @@ page_start(__('About LCI'), ['hero' => ['eyebrow' => __('About us'), 'title' => 
   </div>
 </section>
 
+<?php if ($won): ?>
+<section class="section section--tight" style="padding-top:0">
+  <div class="container"><div class="wn reveal">
+    <div class="wn__ph"><?php if ($won['photo']): ?><img loading="lazy" src="<?= e(media_url($won['photo'])) ?>" alt="<?= e($won['name']) ?>"><?php else: echo icon('user'); endif; ?></div>
+    <div class="wn__txt"><span class="eyebrow"><?php _e('Our Paramount Chief'); ?></span><h2><?= e($won['name']) ?></h2><p class="wn__role"><?= e((string)$won['title']) ?></p><p><?= e((string)$won['bio']) ?></p>
+      <p style="display:flex;gap:12px;flex-wrap:wrap;margin:0"><a class="btn btn--dark btn--sm" href="<?= e(url('leadership')) ?>"><?php _e('Leadership & governance'); ?></a><a class="btn btn--outline btn--sm" href="<?= e(url('people')) ?>"><?php _e('Notable Langos'); ?></a></p></div>
+  </div></div>
+</section>
+<?php endif; ?>
+
 <section class="section section--cream">
   <div class="container">
     <div class="sec-head"><div class="eyebrow"><?php _e('Our purpose'); ?></div><h2><?php _e('Mission & vision'); ?></h2></div>
     <div class="grid g2">
-      <div class="box reveal" style="padding:38px"><div class="mv" style="grid-template-columns:1fr;margin:0"><div><span class="ic"><?= icon('flag') ?></span><span><b style="font-size:1.35rem"><?php _e('Our Mission'); ?></b><p style="font-size:1rem"><?= e(setting('mission')) ?></p></span></div></div></div>
-      <div class="box reveal" style="padding:38px"><div class="mv" style="grid-template-columns:1fr;margin:0"><div><span class="ic o"><?= icon('eye') ?></span><span><b style="font-size:1.35rem"><?php _e('Our Vision'); ?></b><p style="font-size:1rem"><?= e(setting('vision')) ?></p></span></div></div></div>
+      <div class="pillar reveal" style="--c:var(--red);padding:30px 28px"><span class="pillar__n"><?php _e('MISSION'); ?></span><h3 style="font-size:1.25rem"><?php _e('Our Mission'); ?></h3><p style="font-size:1rem;margin:0"><?= e(setting('mission')) ?></p></div>
+      <div class="pillar reveal" style="--c:var(--sky);padding:30px 28px"><span class="pillar__n"><?php _e('VISION'); ?></span><h3 style="font-size:1.25rem"><?php _e('Our Vision'); ?></h3><p style="font-size:1rem;margin:0"><?= e(setting('vision')) ?></p></div>
     </div>
   </div>
 </section>

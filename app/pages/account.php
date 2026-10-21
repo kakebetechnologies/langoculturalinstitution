@@ -13,8 +13,9 @@ if ($sub === 'login') {
     if (is_post()) {
         csrf_check();
         if (!throttle('login', 8, 900)) { flash(__('Too many sign-in attempts. Please wait 15 minutes.'), 'error'); redirect('account/login'); }
-        if (login_user(post('email'), (string)($_POST['password'] ?? ''))) { audit('login'); redirect(is_staff() ? url('admin/') : 'account'); }
-        flash(__('Incorrect email or password.'), 'error'); redirect('account/login');
+        $next = safe_next(get('next'));
+        if (login_user(post('email'), (string)($_POST['password'] ?? ''))) { audit('login'); redirect(is_staff() ? url('admin/') : ($next ?: 'account')); }
+        flash(__('Incorrect email or password.'), 'error'); redirect('account/login' . ($next ? '?next=' . urlencode($next) : ''));
     }
     page_start(__('Sign in'), ['hero' => ['title' => __('Sign in'), 'crumbs' => [[__('Account'), null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
     ?>
@@ -22,7 +23,7 @@ if ($sub === 'login') {
       <div class="field"><label><?php _e('Email'); ?></label><input type="email" name="email" required autofocus></div>
       <div class="field"><label><?php _e('Password'); ?></label><input type="password" name="password" required></div>
       <button class="btn btn--primary btn--block"><?php _e('Sign in'); ?></button>
-      <p style="text-align:center;margin:0"><?php _e('New here?'); ?> <a href="<?= e(url('account/register')) ?>"><?php _e('Create a free account'); ?></a></p>
+      <p style="text-align:center;margin:0"><?php _e('New here?'); ?> <a href="<?= e(url('account/register', get('next') ? ['next' => get('next')] : [])) ?>"><?php _e('Create a free account'); ?></a></p>
     </form></div></section>
     <?php page_end(); return;
 }
@@ -32,28 +33,36 @@ if ($sub === 'register') {
     if (is_post()) {
         csrf_check(); keep_old($_POST);
         if (!empty($_POST['website'])) redirect('');
-        if (!throttle('register', 5, 1800)) { flash(__('Too many attempts. Please try later.'), 'error'); redirect('account/register'); }
+        $next = safe_next(get('next'));
+        $back = 'account/register' . ($next ? '?next=' . urlencode($next) : '');
+        if (!throttle('register', 5, 1800)) { flash(__('Too many attempts. Please try later.'), 'error'); redirect($back); }
         $name = post('name'); $email = strtolower(post('email')); $pw = (string)($_POST['password'] ?? '');
+        [$clanId, $clanOther] = read_clan_input();
         $err = null;
         if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $err = __('Please enter your name and a valid email.');
+        elseif (post('clan_id') === '') $err = __('Please choose your clan, or “My clan is not listed”.');
+        elseif (post('clan_id') === 'other' && !$clanOther) $err = __('Please type the name of your clan.');
         elseif (strlen($pw) < 8) $err = __('Choose a password of at least 8 characters.');
         elseif (val('SELECT COUNT(*) FROM users WHERE email=?', [$email])) $err = __('An account with this email already exists. Try signing in.');
-        if ($err) { flash($err, 'error'); redirect('account/register'); }
-        insert('users', ['name' => $name, 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'country' => post('country') ?: null]);
+        if ($err) { flash($err, 'error'); redirect($back); }
+        insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'clan_id' => $clanId, 'clan_other' => $clanOther,
+            'country' => post('country') ?: null, 'phone' => post('phone') ?: null]);
         clear_old();
         login_user($email, $pw);
         flash(__('Welcome to the Lango community!'));
-        redirect('account');
+        redirect($next ?: 'account');
     }
     page_start(__('Create an account'), ['hero' => ['title' => __('Join the community'), 'sub' => __('Earn points and badges, and track every contribution you make.'), 'crumbs' => [[__('Account'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section"><div class="container" style="max-width:520px"><form class="formcard form" method="post"><?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
       <div class="field"><label><?php _e('Full name'); ?></label><input type="text" name="name" required value="<?= e(old('name')) ?>"></div>
       <div class="field"><label><?php _e('Email'); ?></label><input type="email" name="email" required value="<?= e(old('email')) ?>"></div>
-      <div class="field"><label><?php _e('Country'); ?></label><input type="text" name="country" value="<?= e(old('country', 'Uganda')) ?>"></div>
+      <div class="field"><label for="rc"><?php _e('Your clan'); ?> *</label><?= clan_select('rc', old('clan_id') ?: null, true, (string)old('clan_other')) ?><small><?php _e('Not in the list? Choose “My clan is not listed” and type its name — we will add it.'); ?></small></div>
+      <div class="fgrid"><div class="field"><label><?php _e('Country'); ?></label><input type="text" name="country" value="<?= e(old('country', 'Uganda')) ?>"></div>
+        <div class="field"><label><?php _e('Phone (optional)'); ?></label><input type="tel" name="phone" value="<?= e(old('phone')) ?>"></div></div>
       <div class="field"><label><?php _e('Password'); ?></label><input type="password" name="password" required minlength="8" autocomplete="new-password"><small><?php _e('At least 8 characters.'); ?></small></div>
       <button class="btn btn--primary btn--block"><?php _e('Create account'); ?></button>
-      <p style="text-align:center;margin:0"><?php _e('Already have an account?'); ?> <a href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a></p>
+      <p style="text-align:center;margin:0"><?php _e('Already have an account?'); ?> <a href="<?= e(url('account/login', get('next') ? ['next' => get('next')] : [])) ?>"><?php _e('Sign in'); ?></a></p>
     </form></div></section>
     <?php page_end(); return;
 }
@@ -65,7 +74,8 @@ $mine = all('SELECT * FROM contributions WHERE user_id=? ORDER BY created_at DES
 $published = count(array_filter($mine, fn($c) => $c['status'] === 'published'));
 [$badge] = badge_for_points((int)$u['points']);
 $lead = all("SELECT name, points FROM users WHERE points>0 AND role='contributor' ORDER BY points DESC LIMIT 5");
-page_start(__('My account'), ['hero' => ['eyebrow' => __('Contributor profile'), 'title' => $u['name'], 'sub' => $badge . ' · ' . (int)$u['points'] . ' ' . __('points'), 'crumbs' => [[__('Account'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
+$myClan = $u['clan_id'] ? (string)val('SELECT name FROM clans WHERE id=?', [$u['clan_id']]) : (string)($u['clan_other'] ?? '');
+page_start(__('My account'), ['hero' => ['eyebrow' => __('Contributor profile'), 'title' => $u['name'], 'sub' => $badge . ' · ' . (int)$u['points'] . ' ' . __('points') . ($myClan !== '' ? ' · ' . $myClan . ' ' . __('clan') : ''), 'crumbs' => [[__('Account'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
 ?>
 <section class="section"><div class="container article">
   <div>

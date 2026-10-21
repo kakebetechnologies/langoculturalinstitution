@@ -14,7 +14,7 @@ if (is_post()) {
 }
 page_start(__('Contact'), ['hero' => ['eyebrow' => __('Get in touch'), 'title' => __('Contact the institution'), 'sub' => __('Questions, partnerships, press or research — we would love to hear from you.'), 'crumbs' => [[__('Contact'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
 ?>
-<section class="section"><div class="container article" style="grid-template-columns:minmax(0,1fr) 380px">
+<section class="section"><div class="container article article--form">
   <form class="formcard form" method="post"><?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
     <h2 style="font-size:1.6rem;margin:0"><?php _e('Send us a message'); ?></h2>
     <div class="fgrid"><div class="field"><label><?php _e('Your name'); ?> *</label><input type="text" name="name" required value="<?= e(user()['name'] ?? old('name')) ?>"></div><div class="field"><label><?php _e('Email'); ?> *</label><input type="email" name="email" required value="<?= e(user()['email'] ?? old('email')) ?>"></div>

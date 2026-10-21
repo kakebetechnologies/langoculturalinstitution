@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
 
+define('LCI_ADMIN', true);
 require dirname(__DIR__) . '/app/bootstrap.php';
 require dirname(__DIR__) . '/app/layout.php';
 require dirname(__DIR__) . '/app/lib/content.php';
 require __DIR__ . '/lib.php';
 require __DIR__ . '/screens.php';
+require __DIR__ . '/screens_community.php';
 
 header('Cache-Control: no-store');
 $m = get('m', 'dashboard');
@@ -29,7 +31,7 @@ if (!user() || !is_staff()) {
     }
     ?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · LCI Admin</title><meta name="robots" content="noindex">
     <link rel="icon" href="<?= e(logo_url() ?: asset('assets/img/favicon.svg')) ?>">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('assets/css/admin.css')) ?>"></head>
     <body class="login"><div class="login__box">
       <?= logo_url() ? '<img class="login__logo" src="' . e(logo_url()) . '" alt="">' : '<span class="mark big">LCI</span>' ?>
@@ -55,7 +57,7 @@ if (isset($mods[$m])) {
     crud_run($m, $mods[$m]);
     exit;
 }
-$special = ['dashboard', 'contributions', 'settings', 'translations', 'audit', 'backup', 'profile'];
+$special = ['dashboard', 'notifications', 'contributions', 'words', 'clan_quick', 'settings', 'translations', 'audit', 'backup', 'profile'];
 if (!in_array($m, $special, true)) { http_response_code(404); admin_start('Not found', ''); echo '<div class="panel"><h2>Page not found</h2></div>'; admin_end(); exit; }
 if (!can_module($m)) deny();
 ('screen_' . $m)();

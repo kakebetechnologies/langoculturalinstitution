@@ -6,7 +6,7 @@ page_start(__('AI Cultural Assistant'), ['hero' => ['eyebrow' => __('Ask about L
   <div class="chat" id="chat">
     <div class="chat__log" id="chatlog" aria-live="polite">
       <div class="msg bot"><?php _e('Hello! I can answer questions about Lango history, clans, traditions, the dictionary and more. I only use reviewed content from the LCI archive, so if I do not know something I will say so.'); ?>
-        <div class="sugg" style="margin-top:12px"><?php foreach (['How many clans are there?', 'Which districts make up Lango?', 'What is an Awitong?', 'What are the traditional dances of the Lango?', 'What does yoo mean?'] as $s): ?><button type="button"><?= e(__($s)) ?></button><?php endforeach; ?></div></div>
+        <div class="sugg" style="margin-top:12px"><?php foreach (['Who is the clan leader of Otengoro Olang?', 'Tell me about Amolatar', 'What is Lira City known for?', 'Who was Milton Obote?', 'What is an Awitong?', 'What does yoo mean?'] as $s): ?><button type="button"><?= e(__($s)) ?></button><?php endforeach; ?></div></div>
     </div>
     <form class="chat__in" id="chatform"><input type="text" id="chatq" placeholder="<?= e(__('Ask a question…')) ?>" autocomplete="off" maxlength="300" aria-label="<?= e(__('Your question')) ?>"><button class="btn btn--primary"><?php _e('Ask'); ?></button></form>
   </div>

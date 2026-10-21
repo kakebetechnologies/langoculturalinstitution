@@ -11,7 +11,8 @@ if (($seg[1] ?? '') === 'join') {
         if ($name === '' || $ind === '') { flash(__('Please enter your name and industry.'), 'error'); redirect('professionals/join'); }
         $photo = null;
         try { $photo = save_upload('photo', 'image'); } catch (RuntimeException $e) { flash($e->getMessage(), 'error'); redirect('professionals/join'); }
-        insert('professionals', ['name' => $name, 'email' => post('email') ?: null, 'phone' => post('phone') ?: null, 'clan_id' => (int)post('clan_id') ?: null, 'industry' => $ind,
+        [$clanId, $clanOther] = read_clan_input();
+        insert('professionals', ['name' => $name, 'email' => post('email') ?: null, 'phone' => post('phone') ?: null, 'clan_id' => $clanId, 'clan_other' => $clanOther, 'industry' => $ind,
             'expertise' => post('expertise') ?: null, 'location' => post('location') ?: null, 'bio' => mb_substr(post('bio'), 0, 2000) ?: null, 'photo' => $photo]);
         clear_old();
         flash(__('Thank you! Your profile will appear in the directory after verification.'));
@@ -21,7 +22,7 @@ if (($seg[1] ?? '') === 'join') {
     ?>
     <section class="section"><div class="container" style="max-width:780px"><form class="formcard form" method="post" enctype="multipart/form-data"><?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
       <div class="fgrid"><div class="field"><label><?php _e('Full name'); ?> *</label><input type="text" name="name" required value="<?= e(old('name')) ?>"></div><div class="field"><label><?php _e('Industry / profession'); ?> *</label><input type="text" name="industry" required value="<?= e(old('industry')) ?>" placeholder="<?= e(__('e.g. Medicine, Law, Engineering, Agriculture')) ?>"></div>
-      <div class="field"><label><?php _e('Clan'); ?></label><select name="clan_id"><option value=""><?php _e('Select…'); ?></option><?php foreach ($clans as $c): ?><option value="<?= (int)$c['id'] ?>"><?= e($c['name']) ?></option><?php endforeach; ?></select></div><div class="field"><label><?php _e('Where you work'); ?></label><input type="text" name="location" value="<?= e(old('location')) ?>"></div>
+      <div class="field"><label for="pc"><?php _e('Clan'); ?></label><?= clan_select('pc', user()['clan_id'] ?? old('clan_id') ?: null, false, (string)old('clan_other')) ?></div><div class="field"><label><?php _e('Where you work'); ?></label><input type="text" name="location" value="<?= e(old('location')) ?>"></div>
       <div class="field"><label><?php _e('Email'); ?></label><input type="email" name="email" value="<?= e(old('email')) ?>"></div><div class="field"><label><?php _e('Phone'); ?></label><input type="tel" name="phone"></div></div>
       <div class="field"><label><?php _e('Expertise'); ?></label><input type="text" name="expertise" value="<?= e(old('expertise')) ?>"></div>
       <div class="field"><label><?php _e('Short bio'); ?></label><textarea name="bio"><?= e(old('bio')) ?></textarea></div>

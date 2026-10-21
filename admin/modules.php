@@ -45,6 +45,7 @@ return [
         'fields' => [
             'type' => ['type' => 'select', 'options' => ['scholarship' => 'Scholarship', 'grant' => 'Grant', 'volunteer' => 'Volunteer', 'diaspora' => 'Diaspora', 'partner' => 'Partner', 'clan' => 'Clan registration'], 'readonly' => true],
             'name' => ['readonly' => true], 'email' => ['readonly' => true], 'phone' => ['readonly' => true], 'organization' => ['readonly' => true], 'country' => ['readonly' => true],
+            'clan_id' => $clanSel + ['readonly' => true], 'clan_other' => ['readonly' => true, 'label' => 'Clan (typed, not in register)'],
             'details' => ['type' => 'textarea', 'readonly' => true],
             'status' => ['type' => 'select', 'options' => ['new' => 'New', 'reviewing' => 'Reviewing', 'accepted' => 'Accepted', 'declined' => 'Declined'], 'required' => true],
             'notes' => ['type' => 'textarea', 'label' => 'Internal notes'],
@@ -56,9 +57,10 @@ return [
         'list' => ['name', 'industry', 'clan_id', 'status', 'created_at'], 'search' => ['name', 'industry', 'expertise'], 'filters' => ['status'],
         'actions' => ['publish' => ['Verify', 'status', 'published'], 'reject' => ['Reject', 'status', 'rejected']],
         'fields' => [
-            'name' => ['required' => true], 'industry' => ['required' => true], 'expertise' => [], 'clan_id' => $clanSel, 'location' => [], 'email' => ['type' => 'email'], 'phone' => [],
+            'name' => ['required' => true], 'industry' => ['required' => true], 'expertise' => [], 'clan_id' => $clanSel, 'clan_other' => ['label' => 'Clan (typed, not in register)'], 'location' => [], 'email' => ['type' => 'email'], 'phone' => [],
             'bio' => ['type' => 'textarea'], 'photo' => ['type' => 'image'],
             'status' => ['type' => 'select', 'options' => ['pending' => 'Pending', 'published' => 'Verified & published', 'rejected' => 'Rejected'], 'required' => true],
+            'created_at' => ['type' => 'datetime', 'readonly' => true, 'label' => 'Submitted'],
         ],
     ],
 
@@ -101,7 +103,8 @@ return [
         'create' => false, 'list' => ['name', 'email', 'event_id', 'tickets', 'code', 'created_at'], 'search' => ['name', 'email', 'code'], 'filters' => ['event_id'],
         'fields' => [
             'event_id' => ['type' => 'select', 'options' => 'events:id:title', 'label' => 'Event', 'readonly' => true], 'name' => ['readonly' => true], 'email' => ['readonly' => true], 'phone' => ['readonly' => true],
-            'tickets' => ['readonly' => true], 'code' => ['readonly' => true], 'created_at' => ['type' => 'datetime', 'readonly' => true, 'label' => 'Registered'],
+            'tickets' => ['readonly' => true], 'clan_id' => $clanSel + ['readonly' => true], 'clan_other' => ['readonly' => true, 'label' => 'Clan (typed, not in register)'],
+            'code' => ['readonly' => true], 'created_at' => ['type' => 'datetime', 'readonly' => true, 'label' => 'Registered'],
         ],
     ],
     'programs' => [
@@ -135,6 +138,7 @@ return [
             'title' => ['required' => true, 'full' => true],
             'category' => ['type' => 'select', 'options' => ['policy' => 'Policy', 'governance' => 'Governance record', 'historical' => 'Historical', 'research' => 'Research paper', 'report' => 'Report', 'other' => 'Other'], 'required' => true],
             'year' => ['type' => 'number', 'min' => 1800, 'max' => 2100], 'description' => ['type' => 'textarea'], 'file' => ['type' => 'file', 'kind' => 'document', 'label' => 'File (PDF, DOCX…)'],
+            'downloads' => ['type' => 'number', 'readonly' => true, 'label' => 'Downloads'],
             'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'draft'],
         ],
     ],
@@ -148,6 +152,7 @@ return [
     'clans' => [
         'label' => 'Clans', 'icon' => 'users', 'group' => 'Heritage', 'table' => 'clans', 'roles' => array_merge($cont, ['clan_leader']), 'title' => 'name', 'order' => 'name',
         'create_roles' => $cont, 'clan_scope' => 'id=?', 'list' => ['name', 'totem', 'district_id', 'leader_name', 'verified', 'status'], 'search' => ['name', 'totem', 'leader_name'], 'filters' => ['district_id', 'status'],
+        'links' => [['Add clans in bulk', 'clan_quick', 'plus']],
         'view_url' => fn($r) => url('clans/' . $r['slug']),
         'import' => ['columns' => ['name', 'totem', 'totem_type', 'district', 'summary', 'leader_name', 'leader_title'], 'required' => 'name', 'status' => 'draft'],
         'before' => function (array &$d) { if (user()['role'] === 'clan_leader') { unset($d['status'], $d['verified'], $d['slug']); } },
@@ -155,7 +160,8 @@ return [
             'name' => ['required' => true], 'slug' => ['type' => 'slug', 'from' => 'name'], 'totem' => [], 'totem_type' => ['type' => 'select', 'options' => ['animal' => 'Animal', 'plant' => 'Plant', 'bird' => 'Bird', 'other' => 'Other']],
             'district_id' => $distSel, 'summary' => ['type' => 'textarea', 'rows' => 2], 'history' => ['type' => 'rich', 'label' => 'History (English)'], 'history_lg' => ['type' => 'rich', 'label' => 'History (Leb Lango)'],
             'lineage' => ['type' => 'rich'], 'notable_members' => ['type' => 'textarea'], 'leader_name' => ['label' => 'Clan leader'], 'leader_title' => ['label' => 'Leader title', 'default' => 'Awitong'],
-            'leader_photo' => ['type' => 'image'], 'image' => ['type' => 'image', 'label' => 'Clan image'],
+            'leader_photo' => ['type' => 'image', 'label' => 'Clan leader photo', 'help' => 'Shown on this clan page and used when someone asks the AI assistant who leads the clan.'],
+            'image' => ['type' => 'image', 'label' => 'Clan image'], 'source_note' => ['label' => 'Where this name comes from', 'full' => true],
             'verified' => $bool + ['label' => 'Verified by clan leaders / LCI'], 'status' => ['type' => 'select', 'options' => $PUB, 'default' => 'draft'],
         ],
     ],
@@ -183,12 +189,48 @@ return [
     ],
     'districts' => [
         'label' => 'Districts', 'icon' => 'pin', 'group' => 'Heritage', 'table' => 'districts', 'roles' => $cont, 'title' => 'name', 'order' => 'sort, name',
-        'list' => ['name', 'headquarters', 'sort', 'status'], 'search' => ['name'],
+        'list' => ['name', 'kind', 'headquarters', 'population', 'status'], 'search' => ['name'], 'filters' => ['kind', 'status'], 'view_url' => fn($r) => url('districts/' . $r['slug']),
         'fields' => [
-            'name' => ['required' => true], 'slug' => ['type' => 'slug', 'from' => 'name'], 'headquarters' => [], 'description' => ['type' => 'textarea'], 'description_lg' => ['type' => 'textarea', 'label' => 'Description (Leb Lango)'],
-            'image' => ['type' => 'image'], 'lat' => ['type' => 'number', 'step' => 'any', 'label' => 'Latitude'], 'lng' => ['type' => 'number', 'step' => 'any', 'label' => 'Longitude'],
+            'name' => ['required' => true], 'slug' => ['type' => 'slug', 'from' => 'name'], 'kind' => ['type' => 'select', 'options' => ['district' => 'District', 'city' => 'City'], 'required' => true, 'default' => 'district'],
+            'headquarters' => [], 'image' => ['type' => 'image', 'label' => 'Photo (optional)'],
+            'population' => ['type' => 'number', 'min' => 0], 'pop_year' => ['type' => 'number', 'label' => 'Census year', 'min' => 1900, 'max' => 2100],
+            'area_km2' => ['type' => 'number', 'step' => '0.1', 'label' => 'Area (km²)'], 'created_year' => ['type' => 'number', 'label' => 'Year created'],
+            'parent' => ['label' => 'Carved out of'], 'neighbours' => ['label' => 'Neighbouring districts', 'full' => true], 'distance' => ['label' => 'Distances', 'full' => true],
+            'known_for' => ['type' => 'textarea', 'rows' => 6, 'label' => 'Best known for', 'help' => 'One item per line. Shown as the “Best known for” list.'],
+            'subdivisions' => ['type' => 'textarea', 'rows' => 3, 'label' => 'Counties / divisions', 'help' => 'Comma-separated.'],
+            'description' => ['type' => 'rich', 'label' => 'Overview'], 'description_lg' => ['type' => 'textarea', 'label' => 'Overview (Leb Lango)'],
+            'demography' => ['type' => 'rich', 'label' => 'People & demography'], 'economy' => ['type' => 'rich', 'label' => 'Economy & livelihoods'],
+            'attractions' => ['type' => 'rich', 'label' => 'Places to visit'], 'history' => ['type' => 'rich', 'label' => 'History of the district'],
+            'lat' => ['type' => 'number', 'step' => 'any', 'label' => 'Latitude'], 'lng' => ['type' => 'number', 'step' => 'any', 'label' => 'Longitude'],
             'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
         ],
+    ],
+    'notables' => [
+        'label' => 'Notable Langos', 'icon' => 'award', 'group' => 'Heritage', 'table' => 'notables', 'roles' => $cont, 'title' => 'name', 'order' => 'featured DESC, sort, name',
+        'list' => ['name', 'category', 'born', 'featured', 'photo', 'status'], 'search' => ['name', 'title', 'summary'], 'filters' => ['category', 'status'], 'view_url' => fn($r) => url('people/' . $r['slug']),
+        'fields' => [
+            'name' => ['required' => true, 'full' => true], 'short_name' => ['label' => 'Short name (for cards)'], 'slug' => ['type' => 'slug', 'from' => 'name'],
+            'category' => ['type' => 'select', 'options' => PEOPLE_CATS, 'required' => true], 'title' => ['label' => 'Title / what they are known as'],
+            'born' => ['help' => 'Year, e.g. 1925'], 'died' => ['help' => 'Leave empty if living'], 'place' => ['label' => 'Home place'], 'district_id' => $distSel,
+            'summary' => ['type' => 'textarea', 'rows' => 3, 'help' => 'One or two sentences for the card.'], 'body' => ['type' => 'rich', 'label' => 'Their story'],
+            'photo' => ['type' => 'image', 'label' => 'Portrait', 'help' => 'Use a photograph you own or that is properly licensed (for example public domain or Creative Commons), and keep the credit with the story.'],
+            'featured' => $bool + ['label' => 'Feature at the top of the page'], 'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
+    'history_sections' => [
+        'label' => 'History chapters', 'icon' => 'history', 'group' => 'Heritage', 'table' => 'history_sections', 'roles' => $cont, 'title' => 'title', 'order' => 'sort, id',
+        'list' => ['title', 'era', 'sort', 'status'], 'search' => ['title', 'summary'], 'filters' => ['status'], 'view_url' => fn($r) => url('history') . '#' . $r['slug'],
+        'fields' => [
+            'title' => ['required' => true, 'full' => true], 'slug' => ['type' => 'slug', 'from' => 'title'], 'era' => ['help' => 'Shown as a label, e.g. 1962–1971'],
+            'icon' => ['type' => 'select', 'options' => ['users' => 'People', 'globe' => 'Globe', 'star' => 'Star', 'flag' => 'Flag', 'book' => 'Book', 'award' => 'Award', 'clock' => 'Clock', 'shield' => 'Shield', 'pin' => 'Pin', 'heart' => 'Heart', 'history' => 'History']],
+            'summary' => ['type' => 'textarea', 'rows' => 2, 'help' => 'Shown on the chapter header and in the contents.'], 'body' => ['type' => 'rich', 'label' => 'Chapter (English)'], 'body_lg' => ['type' => 'rich', 'label' => 'Chapter (Leb Lango)'],
+            'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
+    'glossary' => [
+        'label' => 'History glossary', 'icon' => 'book', 'group' => 'Heritage', 'table' => 'glossary', 'roles' => $cont, 'title' => 'term', 'order' => 'sort, term',
+        'list' => ['term', 'meaning', 'sort', 'status'], 'search' => ['term', 'meaning'],
+        'fields' => ['term' => ['required' => true], 'meaning' => ['required' => true, 'full' => true], 'note' => ['full' => true, 'help' => 'Why this word matters in Lango history.'], 'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published']],
     ],
     'leaders' => [
         'label' => 'Leadership', 'icon' => 'award', 'group' => 'Heritage', 'table' => 'leaders', 'roles' => $cont, 'title' => 'name', 'order' => "FIELD(grp,'won_nyaci','elders','cabinet','awitong'), sort, id",
@@ -217,10 +259,12 @@ return [
     /* ------------------------------- LANGUAGE ------------------------------- */
     'dictionary' => [
         'label' => 'Dictionary', 'icon' => 'book', 'group' => 'Language', 'table' => 'dictionary', 'roles' => $cont, 'title' => 'lango', 'order' => 'lango',
-        'list' => ['lango', 'english', 'pos', 'verified', 'status'], 'search' => ['lango', 'english'], 'filters' => ['verified', 'status'],
+        'list' => ['lango', 'english', 'pos', 'category', 'verified', 'status'], 'search' => ['lango', 'english'], 'filters' => ['category', 'verified', 'status'],
         'import' => ['columns' => ['lango', 'english', 'pos', 'example_lg', 'example_en'], 'required' => 'lango', 'status' => 'published'],
+        'before' => function (array &$d) { if (isset($d['lango'])) $d['fold'] = mb_substr(lango_fold($d['lango']), 0, 200); },
         'fields' => [
             'lango' => ['label' => 'Leb Lango', 'required' => true], 'english' => ['label' => 'English meaning', 'required' => true], 'pos' => ['label' => 'Part of speech'],
+            'category' => ['type' => 'select', 'options' => WORD_CATS], 'contributor' => ['label' => 'Credit (contributor)', 'help' => 'Shown beside community-suggested words.'],
             'example_lg' => ['label' => 'Example (Leb Lango)'], 'example_en' => ['label' => 'Example (English)'], 'audio' => ['type' => 'file', 'kind' => 'audio', 'label' => 'Pronunciation audio'],
             'source' => [], 'verified' => $bool + ['label' => 'Verified by a language expert'],
             'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
@@ -270,6 +314,7 @@ return [
         'actions' => ['confirm' => ['Confirm', 'status', 'confirmed'], 'fail' => ['Failed', 'status', 'failed']],
         'before' => function (array &$d, bool $new) { if ($new) { $d['reference'] = 'LCI' . new_code(7); } },
         'fields' => [
+            'reference' => ['readonly' => true, 'label' => 'Reference'], 'created_at' => ['type' => 'datetime', 'readonly' => true, 'label' => 'Received'],
             'donor_name' => ['required' => true], 'email' => ['type' => 'email'], 'phone' => [], 'country' => [],
             'amount' => ['type' => 'number', 'step' => '0.01', 'required' => true], 'currency' => ['type' => 'select', 'options' => ['UGX' => 'UGX', 'USD' => 'USD'], 'required' => true, 'default' => 'UGX'],
             'method' => ['type' => 'select', 'options' => ['mtn_momo' => 'MTN Mobile Money', 'airtel_money' => 'Airtel Money', 'visa' => 'Visa', 'mastercard' => 'Mastercard', 'paypal' => 'PayPal', 'bank' => 'Bank transfer', 'cash' => 'Cash'], 'required' => true],
@@ -292,7 +337,8 @@ return [
             'name' => ['required' => true], 'email' => ['type' => 'email', 'required' => true], 'password' => ['type' => 'password', 'label' => 'Password'],
             'role' => ['type' => 'select', 'required' => true, 'options' => ['super_admin' => 'Super administrator', 'admin' => 'Administrator', 'editor' => 'Editor', 'moderator' => 'Moderator', 'clan_leader' => 'Clan leader', 'contributor' => 'Contributor (public)'],
                 'help' => 'Editors manage content. Moderators review community submissions. Clan leaders can edit only their own clan.'],
-            'clan_id' => $clanSel + ['help' => 'Required for clan leaders'], 'phone' => [], 'country' => [], 'points' => ['type' => 'number', 'default' => 0],
+            'clan_id' => $clanSel + ['help' => 'Required for clan leaders. Members choose their clan when they register.'], 'clan_other' => ['label' => 'Clan (typed by member, not in register)'],
+            'phone' => [], 'country' => [], 'points' => ['type' => 'number', 'default' => 0],
             'is_active' => $bool + ['default' => 1, 'label' => 'Account active'], 'must_change_password' => $bool + ['label' => 'Must change password at next sign-in'],
             'last_login' => ['type' => 'datetime', 'readonly' => true, 'label' => 'Last sign-in'],
         ],

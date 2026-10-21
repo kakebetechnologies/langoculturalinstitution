@@ -48,7 +48,9 @@ function insert(string $table, array $data): int
     $cols = array_keys($data);
     $sql = 'INSERT INTO `' . $table . '` (`' . implode('`,`', $cols) . '`) VALUES (' . implode(',', array_fill(0, count($cols), '?')) . ')';
     q($sql, array_values($data));
-    return (int)db()->lastInsertId();
+    $id = (int)db()->lastInsertId();
+    if (function_exists('notify_on_insert')) notify_on_insert($table, $data, $id);
+    return $id;
 }
 
 function update(string $table, array $data, int $id): void

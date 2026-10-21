@@ -22,22 +22,17 @@ $cat = get('category');
 $where = ["status='published'"]; $par = [];
 if (isset(PROGRAM_CATS[$cat])) { $where[] = 'category=?'; $par[] = $cat; }
 $rows = all('SELECT * FROM programs WHERE ' . implode(' AND ', $where) . ' ORDER BY featured DESC, sort, id', $par);
-$imgs = ['hero-aerial', 'hero-field', 'hero-ridge', 'hero-hill', 'hero-site', 'hero-road'];
+$counts = array_column(all("SELECT category, COUNT(*) n FROM programs WHERE status='published' GROUP BY category"), 'n', 'category');
 page_start(__('Programs'), ['hero' => ['eyebrow' => __('Foundation programs'), 'title' => __('Programs that strengthen Lango'), 'sub' => __('Cultural preservation, education, youth empowerment, conservation, development and digital innovation.'), 'crumbs' => [[__('Programs'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
 ?>
 <section class="section"><div class="container">
-  <div class="filters"><a class="pill <?= $cat === '' ? 'on' : '' ?>" href="<?= e(url('programs')) ?>"><?php _e('All'); ?></a><?php foreach (PROGRAM_CATS as $k => $l): ?><a class="pill <?= $cat === $k ? 'on' : '' ?>" href="<?= e(url('programs', ['category' => $k])) ?>"><?= e(__($l)) ?></a><?php endforeach; ?></div>
-  <div class="grid g3">
-    <?php foreach ($rows as $p): ?>
-      <article class="card reveal"><a class="card__img" href="<?= e(url('programs/' . $p['slug'])) ?>"><img loading="lazy" src="<?= e(media_url($p['image'], 'assets/img/photos/' . $imgs[$p['id'] % 6] . '.jpg')) ?>" alt=""></a>
-        <div class="card__body"><span class="tag tag--green"><?= e(__(PROGRAM_CATS[$p['category']])) ?></span><h3><a href="<?= e(url('programs/' . $p['slug'])) ?>"><?= e(t($p, 'title')) ?></a></h3><p><?= e(excerpt($p['summary'], 140)) ?></p>
-          <div style="margin-top:12px"><div class="progress"><i style="width:<?= (int)$p['progress'] ?>%"></i></div><div class="pmeta"><span><?php _e('Progress'); ?></span><b><?= (int)$p['progress'] ?>%</b></div></div>
-          <a class="card__more" href="<?= e(url('programs/' . $p['slug'])) ?>"><?php _e('Learn more'); ?> <?= icon('arrow') ?></a></div></article>
-    <?php endforeach; ?>
-  </div>
-  <?php if (!$rows) echo empty_state(__('No programs in this category yet'), __('Please check another category.'), 'leaf'); ?>
+  <div class="sec-row"><div><span class="eyebrow"><?php _e('What we are working on'); ?></span><h2><?= $cat ? e(__(PROGRAM_CATS[$cat])) : e(__('All programs')) ?></h2></div>
+    <p class="sec-row__note"><?= sprintf(__('%d programs'), count($rows)) ?></p></div>
+  <div class="filters"><a class="pill <?= $cat === '' ? 'on' : '' ?>" href="<?= e(url('programs')) ?>"><?php _e('All'); ?></a><?php foreach (PROGRAM_CATS as $k => $l): if (empty($counts[$k])) continue; ?><a class="pill <?= $cat === $k ? 'on' : '' ?>" href="<?= e(url('programs', ['category' => $k])) ?>"><?= e(__($l)) ?></a><?php endforeach; ?></div>
+  <?php if ($rows): ?><div class="pgrid"><?php foreach ($rows as $p) echo program_card($p); ?></div>
+  <?php else: echo empty_state(__('No programs in this category yet'), __('Please check another category.'), 'leaf'); endif; ?>
 </div></section>
-<section class="section section--sand"><div class="container">
+<section class="section section--cream"><div class="container">
   <div class="sec-head"><div class="eyebrow"><?php _e('Get involved'); ?></div><h2><?php _e('Be part of the work'); ?></h2></div>
   <div class="grid g4">
     <a class="tile" href="<?= e(url('apply/scholarship')) ?>"><span class="ico"><?= icon('book') ?></span><h3><?php _e('Scholarships'); ?></h3><p><?php _e('Apply for LCI education support.'); ?></p></a>

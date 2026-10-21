@@ -16,12 +16,16 @@ function modules(): array { static $m = null; return $m ??= require __DIR__ . '/
 const ADM_ALL = ['super_admin', 'admin'];
 const ADM_CONTENT = ['super_admin', 'admin', 'editor'];
 const ADM_MOD = ['super_admin', 'admin', 'moderator'];
+const ADM_STAFF = ['super_admin', 'admin', 'editor', 'moderator'];
 
 function special_modules(): array
 {
     return [
         'dashboard'     => ['Dashboard', 'home', ['super_admin', 'admin', 'editor', 'moderator', 'clan_leader'], 'Overview'],
+        'notifications' => ['Notifications', 'bell', ADM_STAFF, 'Overview'],
         'contributions' => ['Contributions', 'camera', array_merge(ADM_MOD, ['clan_leader']), 'Moderation'],
+        'words'         => ['Word suggestions', 'book', ADM_STAFF, 'Moderation'],
+        'clan_quick'    => ['Add clans in bulk', 'plus', ADM_CONTENT, 'Heritage'],
         'settings'      => ['Site settings', 'settings', ADM_ALL, 'System'],
         'translations'  => ['Translations', 'globe', ['super_admin', 'admin', 'editor'], 'System'],
         'audit'         => ['Audit log', 'list', ADM_ALL, 'System'],
@@ -50,6 +54,8 @@ function badge_count(string $key): int
             'applications' => (int)val("SELECT COUNT(*) FROM applications WHERE status='new'"),
             'professionals' => (int)val("SELECT COUNT(*) FROM professionals WHERE status='pending'"),
             'donations' => (int)val("SELECT COUNT(*) FROM donations WHERE status='pledged'"),
+            'words' => (int)val("SELECT COUNT(*) FROM contributions WHERE type='language' AND status IN ('pending','under_review','needs_info')"),
+            'notifications' => (int)val('SELECT COUNT(*) FROM notifications WHERE is_read=0'),
         ];
     }
     return $c[$key] ?? 0;
@@ -66,11 +72,14 @@ function admin_start(string $title, string $active, string $actions = ''): void
         if (can_module($k)) $groups[$m['group']][] = [$k, $m['label'], $m['icon']];
     }
     $order = ['Overview', 'Moderation', 'Content', 'Heritage', 'Language', 'Community', 'System'];
+    $bellOn = in_array($u['role'], ADM_STAFF, true);
+    $bellItems = $bellOn ? notif_items(7) : [];
+    $bellN = $bellOn ? badge_count('notifications') : 0;
     ?><!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= e($title) ?> · LCI Admin</title><meta name="robots" content="noindex">
 <link rel="icon" href="<?= e(logo_url() ?: asset('assets/img/favicon.svg')) ?>">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= e(asset('assets/css/admin.css')) ?>">
 </head><body>
 <aside class="side" id="side">
@@ -89,6 +98,16 @@ function admin_start(string $title, string $active, string $actions = ''): void
     <button class="top__burger" id="sideBtn" aria-label="Menu"><?= icon('menu') ?></button>
     <h1><?= e($title) ?></h1>
     <div class="top__actions"><?= $actions ?></div>
+    <?php if ($bellOn): ?>
+    <div class="bell" id="bell" data-poll="<?= e(aurl('notifications', 'poll')) ?>">
+      <button type="button" class="bell__btn" id="bellBtn" aria-label="Notifications" aria-expanded="false" aria-controls="bellMenu"><?= icon('bell') ?><em id="bellN"<?= $bellN ? '' : ' hidden' ?>><?= $bellN > 99 ? '99+' : $bellN ?></em></button>
+      <div class="bell__menu" id="bellMenu" hidden>
+        <div class="bell__head"><b>Notifications</b><form method="post" action="<?= e(aurl('notifications', 'read_all')) ?>"><?= csrf_field() ?><button class="linkbtn">Mark all read</button></form></div>
+        <div class="bell__list" id="bellList"><?= notif_list_html($bellItems) ?></div>
+        <a class="bell__all" href="<?= e(aurl('notifications')) ?>">See all notifications</a>
+      </div>
+    </div>
+    <?php endif; ?>
     <div class="top__user">
       <a href="<?= e(url()) ?>" target="_blank" class="btn btn--sm btn--line"><?= icon('external') ?> View site</a>
       <a href="<?= e(aurl('profile')) ?>" class="who"><span class="av"><?= e(mb_strtoupper(mb_substr($u['name'], 0, 1))) ?></span><span><?= e($u['name']) ?><small><?= e(str_replace('_', ' ', $u['role'])) ?></small></span></a>
@@ -98,6 +117,36 @@ function admin_start(string $title, string $active, string $actions = ''): void
   <main class="content">
     <?= flash_html() ?>
 <?php
+}
+
+/* ---------- notifications (bell + page) ---------- */
+const NOTIF_ICONS = ['contribution' => 'camera', 'word' => 'book', 'message' => 'inbox', 'application' => 'file', 'donation' => 'dollar', 'comment' => 'chat',
+    'professional' => 'users', 'event' => 'calendar', 'user' => 'user', 'clan' => 'flag'];
+
+function time_ago(string $dt): string
+{
+    $s = max(0, time() - strtotime($dt));
+    if ($s < 60) return 'just now';
+    if ($s < 3600) return floor($s / 60) . ' min ago';
+    if ($s < 86400) return floor($s / 3600) . ' h ago';
+    if ($s < 172800) return 'yesterday';
+    return fmt_date($dt, 'j M');
+}
+
+function notif_items(int $limit = 7): array
+{
+    return all('SELECT * FROM notifications ORDER BY is_read ASC, id DESC LIMIT ' . (int)$limit);
+}
+
+function notif_list_html(array $items): string
+{
+    if (!$items) return '<p class="bell__empty">You are all caught up.</p>';
+    $h = '';
+    foreach ($items as $n) {
+        $h .= '<a class="bell__item' . ($n['is_read'] ? '' : ' new') . '" href="' . e(aurl('notifications', 'go', ['id' => $n['id']])) . '"><span class="bell__ic">' . icon(NOTIF_ICONS[$n['type']] ?? 'bell') . '</span>'
+            . '<span><b>' . e($n['title']) . '</b>' . ($n['body'] ? '<small>' . e($n['body']) . '</small>' : '') . '<small class="when">' . e(time_ago($n['created_at'])) . '</small></span></a>';
+    }
+    return $h;
 }
 
 function admin_end(array $scripts = []): void
@@ -330,6 +379,7 @@ function crud_list(string $key, array $mod): void
     $actions = '';
     if (($mod['create'] ?? true) && in_array(user()['role'], $mod['create_roles'] ?? $mod['roles'], true) && !(user()['role'] === 'clan_leader' && isset($mod['clan_scope']))) $actions .= '<a class="btn btn--primary" href="' . e(aurl($key, 'new')) . '">' . icon('plus') . ' New</a>';
     if (!empty($mod['import'])) $actions .= ' <a class="btn btn--line" href="' . e(aurl($key, 'import')) . '">' . icon('upload') . ' Import CSV</a>';
+    foreach (($mod['links'] ?? []) as [$ll, $lm, $li]) if (can_module($lm)) $actions .= ' <a class="btn btn--line" href="' . e(aurl($lm)) . '">' . icon($li) . ' ' . e($ll) . '</a>';
     admin_start($mod['label'], $key, $actions);
     ?>
     <form class="toolbar" method="get"><input type="hidden" name="m" value="<?= e($key) ?>">

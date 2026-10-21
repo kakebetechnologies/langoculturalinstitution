@@ -10,11 +10,31 @@
     nav.classList.toggle('open', open); scrim.classList.toggle('show', open);
     if (close) close.classList.toggle('show', open);
     document.body.style.overflow = open ? 'hidden' : '';
+    if (burger) burger.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
   if (burger) burger.addEventListener('click', function () { setNav(true); });
   if (scrim) scrim.addEventListener('click', function () { setNav(false); });
   if (close) close.addEventListener('click', function () { setNav(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setNav(false); });
+
+  /* mobile drawer: tapping a section opens its sub-menu (accordion); desktop keeps hover menus */
+  var mq = window.matchMedia('(max-width: 991px)');
+  $$('.nav a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (!mq.matches) return;
+      var li = a.parentNode;
+      var isSection = li.classList.contains('has-sub') && li.firstElementChild === a;
+      if (isSection && !li.classList.contains('open')) {
+        e.preventDefault();
+        $$('.nav > li.open').forEach(function (o) { o.classList.remove('open'); o.firstElementChild.setAttribute('aria-expanded', 'false'); });
+        li.classList.add('open'); a.setAttribute('aria-expanded', 'true');
+        return;
+      }
+      setNav(false);
+    });
+  });
+  var onChange = function () { if (!mq.matches) setNav(false); };
+  if (mq.addEventListener) mq.addEventListener('change', onChange);
 
   /* hero slider */
   var slides = $$('.hero__slide'), dots = $$('.hero__dots button'), idx = 0, timer;
@@ -57,37 +77,102 @@
     tl.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
   }
 
-  /* contribution wizard */
-  var wiz = $('#wizard');
-  if (wiz) {
-    var steps = $$('.wstep', wiz), bars = $$('#wsteps i'), cur = 0;
-    var go = function (n) {
-      cur = Math.max(0, Math.min(steps.length - 1, n));
-      steps.forEach(function (s, i) { s.classList.toggle('on', i === cur); });
-      bars.forEach(function (b, i) { b.classList.toggle('on', i <= cur); });
-      wiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  /* contribution form: optional GPS */
+  var gps = $('#gps');
+  if (gps) gps.addEventListener('click', function () {
+    var out = $('#gpsout');
+    if (!navigator.geolocation) { out.textContent = 'Location is not available on this device.'; return; }
+    out.textContent = 'Finding your location…';
+    navigator.geolocation.getCurrentPosition(function (p) {
+      $('#lat').value = p.coords.latitude.toFixed(6); $('#lng').value = p.coords.longitude.toFixed(6);
+      out.textContent = 'Location added: ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4);
+    }, function () { out.textContent = 'We could not get your location. You can still describe the place in words.'; }, { enableHighAccuracy: true, timeout: 12000 });
+  });
+
+  /* clan picker: reveal the free-text field for "My clan is not listed" */
+  $$('[data-clanpick]').forEach(function (box) {
+    var sel = $('select', box), txt = $('input', box);
+    var sync = function () {
+      var other = sel.value === 'other';
+      box.classList.toggle('other', other);
+      txt.required = other;
+      if (!other) txt.value = txt.value;
     };
-    $$('[data-next]', wiz).forEach(function (b) {
+    sel.addEventListener('change', function () { sync(); if (sel.value === 'other') txt.focus(); });
+    sync();
+  });
+
+  /* optional account creation on the contribute form */
+  $$('[data-acct]').forEach(function (box) {
+    var cb = $('input[type=checkbox]', box), pw = $('input[type=password]', box);
+    var sync = function () { box.classList.toggle('on', cb.checked); pw.required = cb.checked; };
+    cb.addEventListener('change', function () { sync(); if (cb.checked) pw.focus(); });
+    sync();
+  });
+
+  /* AI translator */
+  var tf = $('#transform');
+  if (tf) {
+    var tin = $('#tx-in'), tout = $('#tx-out'), tunk = $('#tx-unk'), tgo = $('#tx-go');
+    var dirOf = function () { var r = $('input[name=dir]:checked', tf); return r ? r.value : 'en-lango'; };
+    var labels = function () {
+      var en2lg = dirOf() === 'en-lango';
+      $('#tx-in-label').textContent = en2lg ? 'English' : 'Leb Lango';
+      $('#tx-out-label').textContent = en2lg ? 'Leb Lango' : 'English';
+    };
+    var run = function () {
+      var text = tin.value.trim();
+      if (!text) { tout.innerHTML = '<span class="trans__ph">The translation appears here.</span>'; tunk.textContent = ''; return; }
+      tgo.disabled = true; tout.classList.add('busy');
+      fetch(LCI.base + '/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': LCI.csrf }, body: JSON.stringify({ text: text, direction: dirOf() }) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j.error) { tout.textContent = j.error; tunk.textContent = ''; return; }
+          tout.textContent = j.translation;
+          tunk.innerHTML = '';
+          if (j.unknown_words && j.unknown_words.length) {
+            tunk.appendChild(document.createTextNode('Not in the dictionary yet: '));
+            j.unknown_words.forEach(function (w) {
+              var a = document.createElement('a'); a.textContent = w; a.href = LCI.base + '/contribute?type=language&word=' + encodeURIComponent(w);
+              tunk.appendChild(a); tunk.appendChild(document.createTextNode(' '));
+            });
+          }
+          if (history.replaceState) history.replaceState(null, '', '?dir=' + encodeURIComponent(dirOf()) + '&text=' + encodeURIComponent(text));
+        })
+        .catch(function () { tout.textContent = 'Sorry — the translator could not be reached. Please try again.'; })
+        .then(function () { tgo.disabled = false; tout.classList.remove('busy'); });
+    };
+    tf.addEventListener('submit', function (e) { e.preventDefault(); run(); });
+    $$('input[name=dir]', tf).forEach(function (r) { r.addEventListener('change', function () { labels(); if (tin.value.trim()) run(); }); });
+    $$('#tx-sugg button').forEach(function (b) {
       b.addEventListener('click', function () {
-        var ok = true;
-        $$('[required]', steps[cur]).forEach(function (f) { if (!f.checkValidity()) { f.reportValidity(); ok = false; } });
-        if (cur === 0 && !$('input[name=type]:checked', wiz)) { alert('Please choose what you would like to contribute.'); ok = false; }
-        if (ok) go(cur + 1);
+        var r = $('input[name=dir][value=' + b.dataset.dir + ']', tf); if (r) r.checked = true;
+        tin.value = b.dataset.text; labels(); run(); tin.focus();
       });
     });
-    $$('[data-prev]', wiz).forEach(function (b) { b.addEventListener('click', function () { go(cur - 1); }); });
-    var gps = $('#gps');
-    if (gps) gps.addEventListener('click', function () {
-      var out = $('#gpsout');
-      if (!navigator.geolocation) { out.textContent = 'Location is not available on this device.'; return; }
-      out.textContent = 'Finding your location…';
-      navigator.geolocation.getCurrentPosition(function (p) {
-        $('#lat').value = p.coords.latitude.toFixed(6); $('#lng').value = p.coords.longitude.toFixed(6);
-        out.textContent = 'Location added: ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4);
-      }, function () { out.textContent = 'We could not get your location. You can still describe the place in words.'; }, { enableHighAccuracy: true, timeout: 12000 });
+    labels();
+  }
+
+  /* history page: chapters (details), table of contents, expand / collapse */
+  var chapters = $$('details.chap');
+  if (chapters.length) {
+    var openFor = function (id) { var d = id && document.getElementById(id); if (d && d.tagName === 'DETAILS') d.open = true; };
+    openFor(location.hash.slice(1));
+    window.addEventListener('hashchange', function () { openFor(location.hash.slice(1)); });
+    $$('[data-open]').forEach(function (a) { a.addEventListener('click', function () { openFor(a.dataset.open); }); });
+    $$('[data-expand]').forEach(function (b) {
+      b.addEventListener('click', function () { var all = b.dataset.expand === 'all'; chapters.forEach(function (d) { d.open = all; }); });
     });
-    var pre = new URLSearchParams(location.search).get('type');
-    if (pre) { var r = $('input[name=type][value=' + pre + ']', wiz); if (r) { r.checked = true; go(1); window.scrollTo(0, 0); } }
+    var links = $$('#toc a'), targets = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          links.forEach(function (a, i) { a.classList.toggle('on', targets[i] === en.target); });
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      targets.forEach(function (t) { if (t) spy.observe(t); });
+    }
   }
 
   /* donation amount presets */
@@ -128,7 +213,7 @@
   /* heritage / species / district map (Leaflet is loaded only on pages that need it) */
   var mapEl = $('#map');
   if (mapEl && window.L && window.LCI_PINS) {
-    var m = L.map(mapEl, { scrollWheelZoom: false }).setView([window.LCI_CENTER[0], window.LCI_CENTER[1]], 9);
+    var m = L.map(mapEl, { scrollWheelZoom: false }).setView([window.LCI_CENTER[0], window.LCI_CENTER[1]], window.LCI_ZOOM || 9);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 18 }).addTo(m);
     var pts = [];
     window.LCI_PINS.forEach(function (p) {

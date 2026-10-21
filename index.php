@@ -27,7 +27,7 @@ if ($route === 'sitemap.xml') $route = 'sitemap';
 
 $pages = ['home', 'about', 'leadership', 'history', 'districts', 'clans', 'heritage', 'species', 'language', 'news', 'events', 'programs', 'media',
     'library', 'search', 'contribute', 'donate', 'transparency', 'apply', 'diaspora', 'professionals', 'assistant', 'tours', 'developers',
-    'contact', 'account', 'privacy', 'terms', 'subscribe', 'api', 'download', 'comment', 'sitemap'];
+    'contact', 'account', 'privacy', 'terms', 'subscribe', 'api', 'download', 'comment', 'sitemap', 'people'];
 
 if (!in_array($route, $pages, true)) not_found();
 require __DIR__ . '/app/pages/' . $route . '.php';

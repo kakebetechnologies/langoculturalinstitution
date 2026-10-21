@@ -67,9 +67,9 @@ function icon(string $n, string $cls = ''): string
 function nav_items(): array
 {
     return [
-        [__('About'), 'about', [[__('About LCI'), 'about'], [__('Won Nyaci & Leadership'), 'leadership'], [__('Our History'), 'history'], [__('Our 9 Districts'), 'districts']]],
+        [__('About'), 'about', [[__('About LCI'), 'about'], [__('Won Nyaci & Leadership'), 'leadership'], [__('Our History'), 'history'], [__('Districts & Lira City'), 'districts'], [__('Notable Langos'), 'people']]],
         [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols'], [__('Biodiversity'), 'species'], [__('360° Heritage Tours'), 'tours']]],
-        [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('Proverbs'), 'language/proverbs'], [__('Learn Leb Lango'), 'language/lessons'], [__('Suggest a Word'), 'contribute?type=language']]],
+        [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], [__('Learn Leb Lango'), 'language/lessons'], [__('Suggest a Word'), 'contribute?type=language']]],
         [__('Library'), 'library', [[__('Data Center'), 'library'], [__('Documents'), 'library/documents'], [__('Media Center'), 'media'], [__('Professionals'), 'professionals'], [__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
         [__('News & Events'), 'news', [[__('News & Blog'), 'news'], [__('Events'), 'events']]],
         [__('Programs'), 'programs', [[__('Our Programs'), 'programs'], [__('Scholarships & Grants'), 'apply/scholarship'], [__('Diaspora Partnership'), 'diaspora'], [__('Transparency'), 'transparency']]],
@@ -101,35 +101,47 @@ function page_start(string $title, array $o = []): void
 <script>document.documentElement.className="js"</script>
 <link rel="icon" href="<?= e($logo ?: asset('assets/img/favicon.svg')) ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= e(asset('assets/css/site.css')) ?>">
 <?php if (!empty($o['leaflet'])): ?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"><?php endif; ?>
 </head>
 <body class="<?= e($o['class'] ?? '') ?>">
 <a class="skip" href="#main"><?php _e('Skip to content'); ?></a>
-<header class="header" id="top"><div class="flagbar" aria-hidden="true"></div><div class="container">
+<div class="site">
+<div class="flagbar" aria-hidden="true"></div>
+<div class="topbar"><div class="container">
+  <div class="topbar__l">
+    <?php if (setting('phone')): ?><a href="tel:<?= e(preg_replace('/\s+/', '', setting('phone'))) ?>"><?= icon('phone') ?> <?= e(setting('phone')) ?></a><?php endif; ?>
+    <?php if (setting('email')): ?><a href="mailto:<?= e(setting('email')) ?>"><?= icon('mail') ?> <?= e(setting('email')) ?></a><?php endif; ?>
+  </div>
+  <div class="topbar__r">
+    <?php foreach (['facebook' => 'facebook', 'x' => 'x-social', 'youtube' => 'youtube', 'instagram' => 'instagram'] as $k => $ic): if (setting($k)): ?>
+      <a class="topbar__soc" href="<?= e(setting($k)) ?>" target="_blank" rel="noopener" aria-label="<?= e(ucfirst($k)) ?>"><?= icon($ic) ?></a>
+    <?php endif; endforeach; ?>
+    <span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>" hreflang="en">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>" hreflang="luo">Leb Lango</a></span>
+    <?php if (user()): ?><a href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(explode(' ', user()['name'])[0]) ?></a>
+    <?php else: ?><a href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a><?php endif; ?>
+  </div>
+</div></div>
+<header class="header" id="top"><div class="container header__in">
   <?= brand_html() ?>
   <ul class="nav" id="nav">
-    <?php foreach (nav_items() as [$label, $path, $kids]): $on = $cur === explode('/', $path)[0] || ($path === 'about' && in_array($cur, ['leadership', 'history', 'districts'], true)) || ($path === 'heritage' && in_array($cur, ['clans', 'species', 'tours'], true)) || ($path === 'library' && in_array($cur, ['media', 'professionals', 'assistant', 'developers'], true)) || ($path === 'news' && $cur === 'events') || ($path === 'programs' && in_array($cur, ['apply', 'diaspora', 'transparency', 'donate'], true)); ?>
-      <li><a href="<?= e(url($path)) ?>" class="<?= $on ? 'on' : '' ?>"><?= e($label) ?><?= $kids ? icon('chevron') : '' ?></a>
+    <?php foreach (nav_items() as [$label, $path, $kids]): $on = $cur === explode('/', $path)[0] || ($path === 'about' && in_array($cur, ['leadership', 'history', 'districts', 'people'], true)) || ($path === 'heritage' && in_array($cur, ['clans', 'species', 'tours'], true)) || ($path === 'library' && in_array($cur, ['media', 'professionals', 'assistant', 'developers'], true)) || ($path === 'news' && $cur === 'events') || ($path === 'programs' && in_array($cur, ['apply', 'diaspora', 'transparency', 'donate'], true)); ?>
+      <li class="<?= $kids ? 'has-sub' : '' ?>"><a href="<?= e(url($path)) ?>" class="<?= $on ? 'on' : '' ?>"<?= $kids ? ' aria-haspopup="true" aria-expanded="false"' : '' ?>><span><?= e($label) ?></span><?= $kids ? icon('chevron') : '' ?></a>
         <?php if ($kids): ?><ul><?php foreach ($kids as [$l, $p]): ?><li><a href="<?= e(url($p)) ?>"><?= e($l) ?></a></li><?php endforeach; ?></ul><?php endif; ?>
       </li>
     <?php endforeach; ?>
-    <li class="nav__mobile">
-      <div class="lang" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>">English</a><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>">Leb Lango</a></div>
-      <?php if (user()): ?><a class="btn btn--outline btn--sm" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(explode(' ', user()['name'])[0]) ?></a>
-      <?php else: ?><a class="btn btn--outline btn--sm" href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a><?php endif; ?>
-      <a class="btn btn--primary btn--sm" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate'); ?></a>
+    <li class="nav__foot">
+      <span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>">Leb Lango</a></span>
+      <?php if (user()): ?><a class="nav__acct" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(user()['name']) ?></a>
+      <?php else: ?><a class="nav__acct" href="<?= e(url('account/login')) ?>"><?= icon('user') ?> <?php _e('Sign in'); ?></a><?php endif; ?>
+      <a class="btn btn--primary btn--block" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate'); ?></a>
     </li>
   </ul>
   <button class="navclose" id="navclose" aria-label="Close menu"><?= icon('x') ?></button>
   <div class="header__cta">
-    <div class="lang" role="group" aria-label="Language">
-      <a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>" hreflang="en">EN</a>
-      <a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>" hreflang="luo">LG</a>
-    </div>
-    <a class="btn btn--primary btn--sm btn-don" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate'); ?></a>
-    <button class="burger" id="burger" aria-label="Open menu" aria-controls="nav"><?= icon('menu') ?></button>
+    <a class="btn btn--primary btn-don" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate'); ?></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-controls="nav" aria-expanded="false"><?= icon('menu') ?></button>
   </div>
 </div></header>
 <div class="scrim" id="scrim"></div>
@@ -138,19 +150,19 @@ function page_start(string $title, array $o = []): void
     if (!empty($o['hero'])) {
         $h = $o['hero'];
         $bg = media_url($h['image'] ?? null, 'assets/img/photos/hero-hill.jpg');
-        echo '<section class="pagehero" style="background-image:url(\'' . e($bg) . '\')"><div class="container">';
+        echo '<section class="pagehero"><div class="container"><div class="pagehero__panel" style="background-image:url(\'' . e($bg) . '\')">';
         if (!empty($h['crumbs'])) {
             echo '<nav class="crumbs" aria-label="Breadcrumb"><a href="' . e(url()) . '">' . e(__('Home')) . '</a>';
-            foreach ($h['crumbs'] as [$cl, $cu]) echo '<span>/</span>' . ($cu ? '<a href="' . e(url($cu)) . '">' . e($cl) . '</a>' : e($cl));
+            foreach ($h['crumbs'] as [$cl, $cu]) echo '<span>/</span>' . ($cu ? '<a href="' . e(url($cu)) . '">' . e($cl) . '</a>' : '<b>' . e($cl) . '</b>');
             echo '</nav>';
         }
         if (!empty($h['eyebrow'])) echo '<div class="eyebrow">' . e($h['eyebrow']) . '</div>';
         echo '<h1>' . e($h['title'] ?? $title) . '</h1>';
         if (!empty($h['sub'])) echo '<p>' . e($h['sub']) . '</p>';
-        echo '</div></section>';
+        echo '</div></div></section>';
     }
     $fl = flash_html();
-    if ($fl) echo '<div class="container" style="padding-top:28px">' . $fl . '</div>';
+    if ($fl) echo '<div class="container" style="padding-top:24px">' . $fl . '</div>';
 }
 
 function page_end(array $o = []): void
@@ -161,7 +173,7 @@ function page_end(array $o = []): void
 <footer class="footer">
   <div class="flagbar" aria-hidden="true"></div>
   <div class="container footer__main">
-    <div>
+    <div class="footer__about">
       <?= brand_html(true) ?>
       <p><?= e(setting('site_tagline')) ?> <?php _e('The official digital home of the Lango people, preserving heritage and inspiring the future.'); ?></p>
       <div class="footer__social">
@@ -203,10 +215,11 @@ function page_end(array $o = []): void
   </div>
   <div class="container footer__bottom">
     <span>© <?= date('Y') ?> <?= e($site) ?>. <?php _e('All rights reserved.'); ?></span>
-    <span><a href="<?= e(url('privacy')) ?>"><?php _e('Privacy'); ?></a> · <a href="<?= e(url('terms')) ?>"><?php _e('Terms'); ?></a> · <a href="<?= e(url('contact')) ?>"><?php _e('Contact'); ?></a> · <a href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a></span>
+    <span><a href="<?= e(url('privacy')) ?>"><?php _e('Privacy'); ?></a> · <a href="<?= e(url('terms')) ?>"><?php _e('Terms'); ?></a> · <a href="<?= e(url('contact')) ?>"><?php _e('Contact'); ?></a></span>
   </div>
 </footer>
-<a class="assistant-fab" href="<?= e(url('assistant')) ?>"><?= icon('chat') ?><span class="fab-t"> <?php _e('Ask the Assistant'); ?></span></a>
+</div>
+<a class="assistant-fab" href="<?= e(url('assistant')) ?>" aria-label="<?= e(__('Ask the Assistant')) ?>"><?= icon('chat') ?><span class="fab-t"> <?php _e('Ask the Assistant'); ?></span></a>
 <button class="toplink" id="toplink" aria-label="Back to top"><?= icon('arrow') ?></button>
 <script>window.LCI={base:<?= json_encode(BASE) ?>,csrf:<?= json_encode(csrf_token()) ?>,lang:<?= json_encode(lang()) ?>};</script>
 <?php foreach (($o['scripts'] ?? []) as $s): ?><script src="<?= e($s) ?>"></script><?php endforeach; ?>
@@ -227,6 +240,35 @@ function card(string $href, ?string $img, string $title, string $text = '', stri
     if ($text) $h .= '<p>' . e($text) . '</p>';
     $h .= '<a class="card__more" href="' . e($href) . '">' . e($cta ?: __('Read more')) . ' ' . icon('arrow') . '</a>';
     return $h . '</div></article>';
+}
+
+/** Card for a notable Lango person; a monogram stands in until a licensed portrait is uploaded. */
+function person_card(array $n): string
+{
+    $href = url('people/' . $n['slug']);
+    $nm = trim((string)preg_replace('/^(Maj\.?\s*Gen\.?|Gen\.?|Dr\.?|Rwot)\s+/i', '', (string)($n['short_name'] ?: $n['name'])));
+    $words = array_values(array_filter(preg_split('/[^\p{L}]+/u', $nm)));
+    $ini = mb_strtoupper(count($words) > 1 ? mb_substr($words[0], 0, 1) . mb_substr(end($words), 0, 1) : mb_substr($words[0] ?? '?', 0, 2));
+    $ph = $n['photo'] ? '<img loading="lazy" src="' . e(media_url($n['photo'])) . '" alt="' . e($n['name']) . '">' : '<span class="ncard__mono m' . ((int)$n['id'] % 4) . '" aria-hidden="true">' . e($ini) . '</span>';
+    $years = $n['born'] ? $n['born'] . ($n['died'] ? ' – ' . $n['died'] : '') : '';
+    return '<a class="ncard reveal" href="' . e($href) . '"><span class="ncard__ph">' . $ph . '</span><span class="ncard__body"><span class="ncard__cat">' . e(__(PEOPLE_CATS[$n['category']] ?? 'Notable')) . '</span><h3>' . e($n['short_name'] ?: $n['name']) . '</h3>'
+        . '<span class="ncard__t">' . e((string)$n['title']) . '</span>' . ($years ? '<span class="ncard__y">' . e($years) . '</span>' : '') . '<p>' . e(excerpt((string)$n['summary'], 110)) . '</p></span></a>';
+}
+
+/** Compact programme card — four to a row on desktop. */
+function program_card(array $p): string
+{
+    static $imgs = ['hero-aerial', 'hero-field', 'hero-ridge', 'hero-hill', 'hero-site', 'hero-road'];
+    $href = url('programs/' . $p['slug']);
+    $goal = (float)$p['goal_amount']; $raised = (float)$p['raised_amount'];
+    $pct = $goal > 0 ? min(100, (int)round($raised / $goal * 100)) : (int)$p['progress'];
+    $h = '<article class="pcard reveal"><a class="pcard__img" href="' . e($href) . '" tabindex="-1" aria-hidden="true"><img loading="lazy" src="' . e(media_url($p['image'], 'assets/img/photos/' . $imgs[$p['id'] % 6] . '.jpg')) . '" alt="">';
+    $h .= '<span class="pcard__tag">' . e(__(PROGRAM_CATS[$p['category']] ?? 'Program')) . '</span>' . ($p['featured'] ? '<span class="pcard__star" title="' . e(__('Featured')) . '">' . icon('star') . '</span>' : '') . '</a>';
+    $h .= '<div class="pcard__body"><h3><a href="' . e($href) . '">' . e(t($p, 'title')) . '</a></h3><p>' . e(excerpt((string)$p['summary'], 120)) . '</p>';
+    $h .= '<div class="pcard__prog"><div class="progress"><i style="width:' . $pct . '%"></i></div><span>' . ($goal > 0 ? e(money($raised)) . ' ' . e(__('raised')) . ' · ' : '') . $pct . '%</span></div>';
+    $h .= '<div class="pcard__foot"><a class="link" href="' . e($href) . '">' . e(__('Learn more')) . ' ' . icon('arrow') . '</a>';
+    if ($p['accepts_donations']) $h .= '<a class="btn btn--primary btn--sm" href="' . e(url('donate', ['program' => $p['id']])) . '">' . e(__('Donate')) . '</a>';
+    return $h . '</div></div></article>';
 }
 
 function empty_state(string $title, string $text, string $icon = 'leaf', string $cta = ''): string

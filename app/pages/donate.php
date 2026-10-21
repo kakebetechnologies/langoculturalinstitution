@@ -48,7 +48,7 @@ if (is_post()) {
 $preProg = (int)get('program');
 page_start(__('Donate'), ['hero' => ['eyebrow' => __('Foundation support'), 'title' => __('Give to Lango heritage'), 'sub' => setting('donation_note'), 'crumbs' => [[__('Programs'), 'programs'], [__('Donate'), null]], 'image' => 'assets/img/photos/hero-aerial.jpg']]);
 ?>
-<section class="section"><div class="container article" style="grid-template-columns:minmax(0,1fr) 360px">
+<section class="section"><div class="container article article--form">
   <form class="formcard form" method="post">
     <?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
     <h2 style="font-size:1.6rem;margin:0"><?php _e('Make a donation'); ?></h2>

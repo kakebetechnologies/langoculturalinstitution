@@ -24,6 +24,18 @@ if ($a === 'assistant') {
     json_out(['id' => $id, 'answer_html' => $r['answer_html'], 'sources' => $r['sources']]);
 }
 
+/* ----- translator (used by the translate page) ----- */
+if ($a === 'translate') {
+    if (!is_post()) json_out(['error' => 'POST required'], 405);
+    $body = json_decode((string)file_get_contents('php://input'), true) ?: [];
+    $sess = (string)($_SESSION['csrf'] ?? '');
+    if ($sess === '' || !hash_equals($sess, (string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ''))) json_out(['error' => 'Invalid session'], 403);
+    if (!throttle('translate', 60, 600)) json_out(['error' => __('You are translating very quickly — please wait a moment.')], 429);
+    $text = mb_substr(trim((string)($body['text'] ?? '')), 0, 600);
+    if ($text === '') json_out(['error' => 'No text provided.'], 400);
+    json_out(lango_translate($text, ($body['direction'] ?? '') === 'lango-en' ? 'lango-en' : 'en-lango'));
+}
+
 if ($a !== 'v1') json_out(['name' => 'LCI Open Data API', 'version' => 'v1', 'docs' => url('developers')], $a === '' ? 200 : 404);
 
 $limit = max(1, min(100, (int)get('limit', '25')));
@@ -48,6 +60,18 @@ switch ($res) {
         json_out(['data' => $rows, 'page' => $page]);
     case 'dictionary':
         $rows = all("SELECT lango, english, pos, example_lg, example_en, verified FROM dictionary WHERE status='published' AND (lango LIKE ? OR english LIKE ?) ORDER BY (lango=?) DESC, CHAR_LENGTH(lango) LIMIT $limit OFFSET $off", [$like, $like, get('q')]);
+        json_out(['data' => $rows, 'page' => $page]);
+    case 'translate':
+        $text = mb_substr(trim(get('text')), 0, 600);
+        if ($text === '') json_out(['error' => 'Provide ?text=… and optionally &direction=en-lango|lango-en'], 400);
+        json_out(['data' => lango_translate($text, get('direction') === 'lango-en' ? 'lango-en' : 'en-lango'), 'note' => 'Dictionary-based translation; not a full machine-translation model.']);
+    case 'districts':
+        $rows = all("SELECT name, slug, kind, headquarters, population, pop_year, area_km2, created_year, known_for, lat, lng FROM districts WHERE status='published' ORDER BY sort");
+        foreach ($rows as &$r) { $r['known_for'] = array_values(array_filter(array_map('trim', explode("\n", (string)$r['known_for'])))); $r['url'] = $absolute('districts/' . $r['slug']); }
+        json_out(['data' => $rows]);
+    case 'people':
+        $rows = all("SELECT name, slug, category, title, born, died, summary, photo FROM notables WHERE status='published' ORDER BY featured DESC, sort LIMIT $limit OFFSET $off");
+        foreach ($rows as &$r) { $r['photo'] = $absolute($r['photo']); $r['url'] = $absolute('people/' . $r['slug']); }
         json_out(['data' => $rows, 'page' => $page]);
     case 'word-of-the-day':
         $w = word_of_day();

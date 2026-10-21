@@ -7,6 +7,8 @@ declare(strict_types=1);
  * Cultural facts are limited to what LCI has already published on its own pages;
  * clan names, proverbs and Leb Lango translations are intentionally NOT invented.
  */
+require_once __DIR__ . '/upgrade.php';
+
 function lci_install(array $db, array $admin, string $base, bool $withSamples = true): void
 {
     $pdo = new PDO(sprintf('mysql:host=%s;port=%d;charset=utf8mb4', $db['host'], $db['port']), $db['user'], $db['pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
@@ -170,4 +172,6 @@ function lci_install(array $db, array $admin, string $base, bool $withSamples = 
         }
         $pdo->commit();
     }
+
+    lci_upgrade($pdo);
 }

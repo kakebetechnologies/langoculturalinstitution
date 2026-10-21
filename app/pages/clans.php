@@ -18,11 +18,17 @@ if (!empty($seg[1])) {
         <?php if ($events): ?><h2><?php _e('Clan heritage'); ?></h2><ul><?php foreach ($events as $h): ?><li><a href="<?= e(url('heritage/item/' . $h['slug'])) ?>"><?= e(t($h, 'title')) ?></a></li><?php endforeach; ?></ul><?php endif; ?>
       </div>
       <aside class="aside">
+        <?php $ld = clan_leader_of($c); ?>
+        <div class="box clanleader">
+          <h4><?= e($ld ? $ld['title'] : ($c['leader_title'] ?: 'Awitong')) ?> <span class="dim" style="font-weight:500">· <?php _e('clan leader'); ?></span></h4>
+          <?php if ($ld): ?>
+            <div class="clanleader__in"><span class="clanleader__ph"><?= $ld['photo'] ? '<img src="' . e(media_url($ld['photo'])) . '" alt="' . e($ld['name']) . '">' : icon('user') ?></span><div><b><?= e($ld['name']) ?></b><?php if ($ld['bio']): ?><p><?= e(excerpt($ld['bio'], 140)) ?></p><?php endif; ?></div></div>
+          <?php else: ?><p style="margin:0;font-size:.9rem;color:var(--muted)"><?php _e('The leader of this clan has not been added to the register yet.'); ?></p><?php endif; ?>
+        </div>
         <div class="box"><h4><?php _e('Clan profile'); ?></h4>
           <dl class="kv">
             <?php if ($c['totem']): ?><dt><?php _e('Totem'); ?></dt><dd><?= e($c['totem']) ?><?= $c['totem_type'] ? ' (' . e($c['totem_type']) . ')' : '' ?></dd><?php endif; ?>
             <?php if ($c['district']): ?><dt><?php _e('District'); ?></dt><dd><?= e($c['district']) ?></dd><?php endif; ?>
-            <?php if ($c['leader_name']): ?><dt><?= e($c['leader_title'] ?: 'Awitong') ?></dt><dd><?= e($c['leader_name']) ?></dd><?php endif; ?>
             <dt><?php _e('Status'); ?></dt><dd><?= $c['verified'] ? '<span class="tag tag--green">' . e(__('Verified by LCI')) . '</span>' : '<span class="tag tag--gold">' . e(__('Awaiting verification')) . '</span>' ?></dd>
           </dl>
         </div>
@@ -59,7 +65,7 @@ page_start(__('Clan Explorer'), ['hero' => ['eyebrow' => __('Heritage'), 'title'
       <?php foreach ($districts as $d): ?><a class="pill <?= $dist === $d['slug'] ? 'on' : '' ?>" href="<?= e(url('clans', ['district' => $d['slug']])) ?>"><?= e($d['name']) ?></a><?php endforeach; ?>
     </div>
     <?php if ($rows): ?>
-      <p style="color:var(--muted)"><?= $registered ?> / <?= (int)setting('clan_total', '149') ?> <?php _e('clans published so far'); ?> · <?= $total ?> <?php _e('shown'); ?></p>
+      <p style="color:var(--muted)"><?= $registered ?> / <?= (int)setting('clan_total', '149') ?> <?php _e('clans on the website so far — more are being added'); ?> · <?= $total ?> <?php _e('shown'); ?></p>
       <div class="grid g4">
         <?php foreach ($rows as $c): ?>
           <a class="tile reveal" href="<?= e(url('clans/' . $c['slug'])) ?>">
@@ -71,8 +77,11 @@ page_start(__('Clan Explorer'), ['hero' => ['eyebrow' => __('Heritage'), 'title'
         <?php endforeach; ?>
       </div>
       <?= pager($pg) ?>
+    <?php elseif ($dist !== '' || $qs !== '' || $letter !== ''): ?>
+      <?= empty_state(__('No clans match'), __('No clan matching your search or district has been added to the register yet.'), 'users',
+          '<p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn btn--outline btn--sm" href="' . e(url('clans')) . '">' . e(__('Show all clans')) . '</a>' . ($dist !== '' ? '<a class="btn btn--primary btn--sm" href="' . e(url('districts/' . $dist)) . '">' . e(__('Open the district page')) . '</a>' : '') . '</p>') ?>
     <?php else: ?>
-      <?= empty_state(__('The clan register is being digitised'), __('LCI is documenting all 149 clans. Each clan page will carry its history, totem, lineage and Awitong once verified by its leaders. Clan leaders and members can help right now.'), 'users',
+      <?= empty_state(__('The clan register is being digitised'), __('LCI is documenting all 149 clans. Each clan page will carry its history, totem, lineage and Awitong once verified by its leaders.'), 'users',
           '<p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="' . e(url('apply/clan')) . '">' . e(__('Register your clan')) . '</a><a class="btn btn--outline btn--sm" href="' . e(url('contribute?type=oral_history')) . '">' . e(__('Share clan history')) . '</a></p>') ?>
     <?php endif; ?>
   </div>

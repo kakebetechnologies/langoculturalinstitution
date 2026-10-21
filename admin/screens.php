@@ -7,8 +7,9 @@ function screen_dashboard(): void
     $c = site_counts();
     $stat = [
         ['Contributions to review', badge_count('contributions'), 'contributions', 'camera', 'clay'],
+        ['Word suggestions to review', badge_count('words'), 'words', 'book', 'ochre'],
         ['New messages', badge_count('messages'), 'messages', 'inbox', 'leaf'],
-        ['Comments to moderate', badge_count('comments'), 'comments', 'chat', 'ochre'],
+        ['Comments to moderate', badge_count('comments'), 'comments', 'chat', 'leaf'],
         ['New applications', badge_count('applications'), 'applications', 'file', 'ink'],
         ['Pledges awaiting payment', badge_count('donations'), 'donations', 'dollar', 'clay'],
         ['Professionals to verify', badge_count('professionals'), 'professionals', 'users', 'leaf'],
@@ -131,6 +132,7 @@ function screen_contributions(): void
     if ($a === 'review' && $id) {
         $c = one("SELECT c.*, cl.name clan, d.name district FROM contributions c LEFT JOIN clans cl ON cl.id=c.clan_id LEFT JOIN districts d ON d.id=c.district_id WHERE c.id=? " . str_replace('clan_id', 'c.clan_id', $sw), array_merge([$id], $sp));
         if (!$c) deny();
+        if ($c['type'] === 'language') redirect(aurl('words', 'review', ['id' => $c['id']]));
         admin_start('Review: ' . $c['title'], 'contributions', '<a class="btn btn--line" href="' . e(aurl('contributions')) . '">← All contributions</a>');
         ?>
         <div class="cols two">

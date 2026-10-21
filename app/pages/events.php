@@ -39,8 +39,10 @@ if (!empty($seg[1])) {
         if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) { flash(__('Please enter your name and a valid email.'), 'error'); redirect('events/' . $ev['slug']); }
         if ($past || !$ev['registration_open']) { flash(__('Registration is closed for this event.'), 'error'); redirect('events/' . $ev['slug']); }
         if ($left !== null && $tix > $left) { flash(__('Sorry, not enough places are left.'), 'error'); redirect('events/' . $ev['slug']); }
+        [$clanId, $clanOther] = read_clan_input();
+        if (post('clan_id') === '' || (post('clan_id') === 'other' && !$clanOther)) { flash(__('Please choose your clan, or “My clan is not listed” and type its name.'), 'error'); redirect('events/' . $ev['slug']); }
         $code = new_code(8);
-        insert('event_registrations', ['event_id' => $ev['id'], 'name' => $name, 'email' => $email, 'phone' => $phone ?: null, 'tickets' => $tix, 'code' => $code]);
+        insert('event_registrations', ['event_id' => $ev['id'], 'name' => $name, 'email' => $email, 'phone' => $phone ?: null, 'tickets' => $tix, 'clan_id' => $clanId, 'clan_other' => $clanOther, 'code' => $code]);
         redirect('events/' . $ev['slug'] . '/ticket/' . $code);
     }
 
@@ -55,6 +57,7 @@ if (!empty($seg[1])) {
           <h4 style="margin:0"><?php _e('Register to attend'); ?></h4>
           <div class="field"><label><?php _e('Full name'); ?></label><input type="text" name="name" required value="<?= e(user()['name'] ?? '') ?>"></div>
           <div class="field"><label><?php _e('Email'); ?></label><input type="email" name="email" required value="<?= e(user()['email'] ?? '') ?>"></div>
+          <div class="field"><label for="ec"><?php _e('Your clan'); ?></label><?= clan_select('ec', user()['clan_id'] ?? null, true, (string)(user()['clan_other'] ?? '')) ?></div>
           <div class="fgrid"><div class="field"><label><?php _e('Phone'); ?></label><input type="tel" name="phone"></div><div class="field"><label><?php _e('Tickets'); ?></label><input type="number" name="tickets" min="1" max="10" value="1"></div></div>
           <button class="btn btn--primary btn--block"><?php _e('Get my ticket'); ?></button>
         </form>

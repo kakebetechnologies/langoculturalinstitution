@@ -164,7 +164,7 @@ function clean_html(?string $html): string
 /** Render a stored body: HTML if it contains tags, otherwise paragraphs. */
 function rich(?string $s): string
 {
-    $s = (string)$s;
+    $s = str_replace('{base}', BASE, (string)$s);
     if (trim($s) === '') return '';
     if ($s !== strip_tags($s)) return clean_html($s);
     $paras = preg_split('/\n{2,}/', trim($s));
@@ -304,6 +304,108 @@ function brand_html(bool $footer = false): string
     $logo = logo_url();
     $cls = 'brand' . ($footer ? ' brand--footer' : '');
     $text = '<span class="brand__text"><b>' . e($name) . '</b><small>' . e(setting('org_subtitle', 'Won Nyaci me Lango')) . '</small></span>';
-    if ($logo) return '<a class="' . $cls . ' brand--logo" href="' . e(url()) . '" aria-label="' . e($name) . '"><img class="brand__logo" src="' . e($logo) . '" alt="" width="57" height="80">' . $text . '</a>';
+    if ($logo) return '<a class="' . $cls . ' brand--logo" href="' . e(url()) . '" aria-label="' . e($name) . '"><img class="brand__logo" src="' . e($logo) . '" alt="" width="42" height="60">' . $text . '</a>';
     return '<a class="' . $cls . '" href="' . e(url()) . '" aria-label="' . e($name) . '"><span class="brand__mark" aria-hidden="true">LCI</span>' . $text . '</a>';
+}
+
+
+/* ---------- admin notifications ---------- */
+/** Queue a bell notification for the admin panel. Never throws: a notification must not break a visitor's submission. */
+function notify(string $type, string $title, ?string $body = null, ?string $path = null): void
+{
+    try {
+        q('INSERT INTO notifications (type,title,body,url) VALUES (?,?,?,?)', [$type, mb_substr($title, 0, 190), $body !== null ? mb_substr($body, 0, 400) : null, $path]);
+    } catch (Throwable $e) {}
+}
+
+/**
+ * Called from insert(): every public submission raises a notification for the admins.
+ * Rows created inside the admin panel (LCI_ADMIN) are not announced back to the admins.
+ */
+function notify_on_insert(string $table, array $d, int $id): void
+{
+    if (defined('LCI_ADMIN')) return;
+    $who = (string)($d['name'] ?? $d['donor_name'] ?? 'A visitor');
+    $clanOther = trim((string)($d['clan_other'] ?? $d['contributor_clan_other'] ?? ''));
+    switch ($table) {
+        case 'contributions':
+            $word = ($d['type'] ?? '') === 'language';
+            notify($word ? 'word' : 'contribution', ($word ? (($d['word_cat'] ?? '') === 'proverb' ? 'New proverb suggestion: ' : 'New word suggestion: ') : 'New contribution: ') . ($d['title'] ?? ''),
+                $who . ' · ' . ($word ? 'Language' : (CONTRIB_TYPES[$d['type'] ?? 'cultural'][0] ?? 'Contribution')), $word ? "admin/?m=words&a=review&id=$id" : "admin/?m=contributions&a=review&id=$id");
+            break;
+        case 'messages':
+            notify('message', 'New message: ' . ($d['subject'] ?? 'Contact form'), $who . (isset($d['email']) ? ' · ' . $d['email'] : ''), "admin/?m=messages&a=edit&id=$id"); break;
+        case 'applications':
+            $kind = ['scholarship' => 'Scholarship application', 'grant' => 'Research grant application', 'volunteer' => 'Volunteer application', 'partner' => 'Partnership request', 'clan' => 'Clan registration', 'diaspora' => 'Diaspora association'][$d['type'] ?? ''] ?? 'New application';
+            notify('application', $kind . ' from ' . $who, (string)($d['organization'] ?? ''), "admin/?m=applications&a=edit&id=$id"); break;
+        case 'donations':
+            notify('donation', 'New donation pledge: ' . ($d['currency'] ?? 'UGX') . ' ' . number_format((float)($d['amount'] ?? 0)), $who . ' · ' . ($d['method'] ?? ''), "admin/?m=donations&a=edit&id=$id"); break;
+        case 'comments':
+            notify('comment', 'New comment to moderate', $who, "admin/?m=comments&a=edit&id=$id"); break;
+        case 'professionals':
+            notify('professional', 'Directory profile to verify: ' . $who, (string)($d['industry'] ?? ''), "admin/?m=professionals&a=edit&id=$id"); break;
+        case 'event_registrations':
+            notify('event', 'New event registration: ' . $who, ((int)($d['tickets'] ?? 1)) . ' ticket(s)', "admin/?m=event_registrations&a=edit&id=$id"); break;
+        case 'users':
+            if (($d['role'] ?? 'contributor') === 'contributor') notify('user', 'New member account: ' . $who, (string)($d['email'] ?? ''), "admin/?m=users&a=edit&id=$id");
+            break;
+    }
+    if ($clanOther !== '' && in_array($table, ['contributions', 'applications', 'users', 'event_registrations', 'professionals'], true)
+        && !val("SELECT COUNT(*) FROM notifications WHERE type='clan' AND is_read=0 AND title=?", ['A clan is missing from the register: ' . $clanOther])) {
+        notify('clan', 'A clan is missing from the register: ' . $clanOther, 'Entered by ' . $who . '. Add it so others can pick it.', 'admin/?m=clan_quick&names=' . rawurlencode($clanOther));
+    }
+}
+
+/* ---------- clan selection (used by every registration form) ---------- */
+function clan_choices(): array
+{
+    static $c = null;
+    return $c ??= array_column(all("SELECT id, name FROM clans WHERE status='published' ORDER BY name"), 'name', 'id');
+}
+
+/** A clan <select> with a "my clan is not listed" escape hatch that reveals a free-text field. */
+function clan_select(string $id = 'clan', $selected = null, bool $required = false, string $other = ''): string
+{
+    $sel = (string)($selected ?? '');
+    $isOther = $sel === 'other' || ($other !== '' && $sel === '');
+    $h = '<div class="clanpick' . ($isOther ? ' other' : '') . '" data-clanpick><select name="clan_id" id="' . e($id) . '"' . ($required ? ' required' : '') . '>';
+    $h .= '<option value="">' . e(__('Select your clan…')) . '</option>';
+    foreach (clan_choices() as $cid => $name) $h .= '<option value="' . (int)$cid . '"' . ((string)$cid === $sel ? ' selected' : '') . '>' . e($name) . '</option>';
+    $h .= '<option value="other"' . ($isOther ? ' selected' : '') . '>' . e(__('My clan is not listed')) . '</option>';
+    $h .= '<option value="unknown"' . ($sel === 'unknown' ? ' selected' : '') . '>' . e(__('I am not sure of my clan')) . '</option></select>';
+    $h .= '<input type="text" name="clan_other" maxlength="120" value="' . e($other) . '" placeholder="' . e(__('Type your clan name')) . '" aria-label="' . e(__('Your clan name')) . '"></div>';
+    return $h;
+}
+
+/** Reads clan_id/clan_other from the posted form → [clan id or null, free-text clan or null]. */
+function read_clan_input(): array
+{
+    $v = post('clan_id');
+    if ($v === 'other') { $o = mb_substr(post('clan_other'), 0, 120); return [null, $o !== '' ? $o : null]; }
+    $id = (int)$v;
+    return [$id && val("SELECT id FROM clans WHERE id=? AND status='published'", [$id]) ? $id : null, null];
+}
+
+/* ---------- language & people vocabularies ---------- */
+const WORD_CATS = [
+    'animal' => 'Animals', 'bird' => 'Birds', 'plant' => 'Plants & trees', 'place' => 'Places', 'name' => 'Personal names',
+    'food' => 'Food & drink', 'body' => 'Body & health', 'family' => 'Family & kinship', 'nature' => 'Nature & weather',
+    'object' => 'Tools & household', 'culture' => 'Culture & ceremony', 'verb' => 'Actions', 'other' => 'Other',
+];
+const WORD_POS = ['noun' => 'Noun', 'verb' => 'Verb', 'adjective' => 'Adjective', 'adverb' => 'Adverb', 'phrase' => 'Phrase / saying', 'other' => 'Other'];
+const PEOPLE_CATS = [
+    'statesman' => 'Statesmen', 'military' => 'Soldiers', 'sports' => 'Sport', 'chief' => 'Chiefs & leaders', 'warrior' => 'Warriors',
+    'public-service' => 'Public service', 'education' => 'Education', 'arts' => 'Arts & culture', 'faith' => 'Faith', 'business' => 'Business',
+];
+
+/** Lowercase and fold the special Lango letters so words typed on an ordinary keyboard still match. */
+function lango_fold(string $s, bool $lower = true): string
+{
+    return strtr($lower ? mb_strtolower($s) : $s, ['ε' => 'e', 'ɛ' => 'e', 'ɔ' => 'o', 'ŋ' => 'ng', 'ë' => 'e', 'ö' => 'o', 'ï' => 'i', 'é' => 'e', 'è' => 'e', 'ó' => 'o', 'ò' => 'o', 'á' => 'a', 'à' => 'a', 'í' => 'i', 'ì' => 'i', 'ú' => 'u', 'ù' => 'u']);
+}
+
+/** Safe local path for a "next" redirect after sign-in/registration (never an external URL). */
+function safe_next(string $n): string
+{
+    return ($n !== '' && preg_match('#^[a-z0-9/_\-?=&%.]+$#i', $n) && !str_contains($n, '//') && !str_starts_with($n, 'http')) ? ltrim($n, '/') : '';
 }

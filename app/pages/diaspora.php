@@ -8,7 +8,9 @@ if (is_post()) {
     if (!throttle('diaspora', 5)) { flash(__('Too many submissions. Please wait a few minutes.'), 'error'); redirect('diaspora'); }
     $name = post('name'); $email = post('email'); $org = post('organization');
     if ($name === '' || $org === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) { flash(__('Please enter your name, association and a valid email.'), 'error'); redirect('diaspora'); }
-    insert('applications', ['type' => 'diaspora', 'name' => $name, 'email' => $email, 'phone' => post('phone') ?: null, 'organization' => $org, 'country' => post('country') ?: null, 'details' => mb_substr(post('details'), 0, 8000)]);
+    [$clanId, $clanOther] = read_clan_input();
+    insert('applications', ['type' => 'diaspora', 'name' => $name, 'email' => $email, 'phone' => post('phone') ?: null, 'organization' => $org, 'country' => post('country') ?: null,
+        'clan_id' => $clanId, 'clan_other' => $clanOther, 'details' => mb_substr(post('details'), 0, 8000)]);
     clear_old();
     flash(__('Thank you — your association has been registered. We will be in touch.'));
     redirect('diaspora');
@@ -23,7 +25,8 @@ page_start(__('Diaspora Partnership'), ['hero' => ['eyebrow' => __('Lango across
       <h3 style="margin:0"><?php _e('Register your association'); ?></h3>
       <div class="fgrid"><div class="field"><label><?php _e('Association name'); ?> *</label><input type="text" name="organization" required value="<?= e(old('organization')) ?>"></div><div class="field"><label><?php _e('Country / city'); ?></label><input type="text" name="country" value="<?= e(old('country')) ?>"></div>
         <div class="field"><label><?php _e('Contact person'); ?> *</label><input type="text" name="name" required value="<?= e(old('name')) ?>"></div><div class="field"><label><?php _e('Email'); ?> *</label><input type="email" name="email" required value="<?= e(old('email')) ?>"></div>
-        <div class="field"><label><?php _e('Phone / WhatsApp'); ?></label><input type="tel" name="phone"></div></div>
+        <div class="field"><label><?php _e('Phone / WhatsApp'); ?></label><input type="tel" name="phone"></div>
+        <div class="field"><label for="dc"><?php _e('Your clan'); ?></label><?= clan_select('dc', user()['clan_id'] ?? old('clan_id') ?: null, false, (string)old('clan_other')) ?></div></div>
       <div class="field"><label><?php _e('About your association and how you would like to help'); ?></label><textarea name="details"><?= e(old('details')) ?></textarea></div>
       <div><button class="btn btn--primary"><?= icon('globe') ?> <?php _e('Register'); ?></button></div>
     </form>
