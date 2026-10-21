@@ -10,6 +10,9 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+# Apache would add the missing trailing slash to a folder URL using the rewritten path (/admin -> /web/admin/), so do it here first.
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteRule ^(admin|pwa)$ %{REQUEST_URI}/ [R=301,L]
 # Map the request into web/ on the first pass only (an internal re-run of the rewritten URL has REDIRECT_STATUS set).
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteRule ^(.*)$ web/$1 [L]
