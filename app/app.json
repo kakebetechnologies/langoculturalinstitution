@@ -1,0 +1,101 @@
+{
+  "expo": {
+    "name": "Lango App",
+    "slug": "lango-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "lango",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "tech.kakebe.lango",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "tech.kakebe.lango",
+      "adaptiveIcon": {
+        "backgroundColor": "#FBF8EC",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single",
+      "name": "Lango App",
+      "shortName": "Lango",
+      "description": "Lango heritage, language, clans and community contributions.",
+      "themeColor": "#16181D",
+      "backgroundColor": "#FBF8EC"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      "expo-status-bar",
+      "expo-asset",
+      "expo-web-browser",
+      "expo-image",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FBF8EC",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Lango App uses the microphone so you can record an elder's story or how a word is pronounced."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/android-icon-monochrome.png",
+          "color": "#EE1A26",
+          "defaultChannel": "default"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Lango App uses your location only to tag where you saw a plant, animal, ceremony or heritage site."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Lango App needs your photos so you can add them to a contribution.",
+          "cameraPermission": "Lango App uses the camera so you can photograph what you want to contribute."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "buildArchs": ["arm64-v8a", "armeabi-v7a"]
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    },
+    "extra": {
+      "apiUrl": {
+        "development": "http://192.168.1.4/langoculturalinstitution/api",
+        "staging": "https://langoculture.org/api",
+        "production": "https://langoculture.org/api"
+      },
+      "router": {}
+    }
+  }
+}

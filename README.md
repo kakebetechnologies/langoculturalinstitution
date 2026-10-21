@@ -1,115 +1,102 @@
-# Lango Cultural Institution — Website & Admin Control Panel
+# Lango Cultural Institution
 
-Official digital home of the Lango Cultural Institution (Won Nyaci me Lango), with a
-content-managed public website, a role-based admin control panel and a JSON API that the
-future **Lango mobile app** will reuse.
+The official website, admin control panel and mobile app of the **Lango Cultural Institution** (*Won Nyaci me Lango*),
+built by [Kakebe Technologies Limited](https://kakebe.tech) — Lira City, Uganda.
 
-**Stack:** PHP 8.2 · MySQL/MariaDB · no framework, no build step (runs on XAMPP or any shared host).
+## Repository structure
 
-## Run it locally (XAMPP)
+```
+lango/
+├── web/   → PHP 8.2 + MySQL website, admin panel and JSON API (/api/v1)
+├── app/   → Lango App — Expo / React Native (Android, iOS) and the installable web app (PWA)
+├── scripts/dev.sh        → checks the API, then starts Expo
+├── lango.code-workspace  → VS Code workspace with both projects
+└── .htaccess             → keeps http://localhost/langoculturalinstitution/ working (maps requests into web/)
+```
+
+One repository, one database, one backend: the PHP site serves the public website **and** the API the app uses.
+The app and the site share the same accounts, clans, dictionary and moderation queue, so a word suggested on a phone shows up
+in *Admin → Word suggestions* and, once approved, in the dictionary and the translator on both.
+
+More detail: [`web/README.md`](web/README.md) (site, admin, content rules, going live) ·
+[`web/docs/API.md`](web/docs/API.md) (API v1) · [`app/README.md`](app/README.md) (the app, builds, offline behaviour).
+
+## What the app does
+
+| Area | Features |
+|---|---|
+| Onboarding & account | Language choice (English / Leb Lango), sign up with clan, sign in with email or phone, browse as a guest |
+| Home | Greeting, quick actions, word of the day, your points and level, a notable Lango, news, events, donation call |
+| Contribute | Seven guided forms (cultural observation, natural heritage, word, proverb, oral history, document, heritage site) with GPS, camera, gallery, audio recording and files; tracking code; **works offline** — drafts and uploads queue on the phone and send when the connection returns |
+| Explore | Clans, districts and Lira City, notable Langos, history and timeline, heritage, biodiversity, digital library |
+| Learn | Dictionary (works offline once downloaded), English ⇄ Leb Lango translator, proverbs, phrasebook, "suggest a word" |
+| Connect | Events with ticket registration, professionals directory, cultural assistant (answers only from reviewed content), news, leaderboard |
+| Support | Donation pledges, programs, transparency figures |
+| Me | Points, Bronze → Platinum levels, badges, my contributions and their status, notifications (in-app + push), settings |
+
+## Tech stack
+
+**Web (`web/`)** — PHP 8.2, MySQL / MariaDB, no framework and no build step; runs on XAMPP or any shared host.
+Role-based admin panel; stateless bearer-token API (`/api/v1`).
+
+**App (`app/`)** — Expo SDK 57 · React Native 0.86 · React 19 · Expo Router · Axios · Expo SecureStore (token) ·
+Expo Notifications (push) · Expo Audio · Expo Image Picker / Location / Document Picker · Inter + Source Serif 4. JavaScript only.
+
+## Local development
+
+### Prerequisites
+
+- XAMPP (Apache + MySQL) with PHP 8.2+
+- Node.js 20+ and npm
+- The **Expo Go** app on a phone (same Wi-Fi as the computer), or just a browser
+
+### 1. The website and API
 
 ```bash
-php database/install-cli.php          # creates DB "lci", tables, starter content, first admin
+php web/database/install-cli.php      # creates the "lci" database, tables, starter content and the first admin
 ```
 
-* Site: `http://localhost/langoculturalinstitution/`
-* Admin: `http://localhost/langoculturalinstitution/admin/`
-* First-run admin login is written to `config/first-run-credentials.txt` (git-ignored).
-  You are forced to choose a new password at first sign-in. Delete the file afterwards.
-* On a new server, open `/install.php` in a browser instead and follow the form.
-* **Existing install?** After pulling new code run `php database/upgrade-cli.php`. It adds any missing columns and
-  tables and loads starter content (districts, history, notable people, clans, sample leaders) without overwriting
-  anything an editor has changed. Safe to run repeatedly; new installs run it automatically.
+- Site: <http://localhost/langoculturalinstitution/> · Admin: <http://localhost/langoculturalinstitution/admin/>
+- The first admin login is written to `web/config/first-run-credentials.txt` (git-ignored); you must choose a new password at first sign-in.
+- Updating an existing install: `php web/database/upgrade-cli.php` (adds missing tables/columns, never overwrites edits).
+- Check the API: <http://localhost/langoculturalinstitution/api/v1/ping>
 
-## Look & feel
+### 2. The app
 
-A contained, editorial layout: content sits in a 1180px container with real side margins (and a framed page on very
-wide monitors), set in **Inter** (interface) and **Source Serif 4** (headlines). Flat bordered cards, solid 8px-radius
-buttons, no gradients or floating decoration. The colour scheme comes from the official LCI logo: black, red `#ee1a26`,
-yellow `#fddd16`, sky blue `#00adf1`, mountain grey and cream, with the logo's flag-stripe accent on the header and footer.
-
-* **Navigation:** the full menu is inline from 992px up (the wordmark hides on narrower laptops so nothing wraps);
-  below 992px it becomes a drawer with expandable sections. A slim top bar carries phone, email, language and sign-in.
-* The official logo is `assets/img/logo.png` (transparent cut-out). Replace it from *Admin -> Site settings -> Branding & photos*
-  or by overwriting that file. The homepage/About photos and the support-banner photo are replaceable there too.
-* Design tokens (colours, container width, radii, type) live in the `:root` block at the top of `assets/css/site.css`
-  and `assets/css/admin.css`.
-
-## What is built
-
-| Area | Public site | Admin |
-|---|---|---|
-| Home, About (with the Won Nyaci's portrait), Leadership | ✓ | Leadership (Won Nyaci, cabinet, elders) |
-| **History**: ten accordion chapters, table of contents, timeline, glossary, sources | ✓ | History chapters, Timeline, Glossary |
-| **Districts & Lira City**: atlas list, comparison table, map; one page per district with demography, economy, best-known-for, places, history | ✓ | Districts (all fields editable) |
-| **Notable Langos**: people pages with stories (Obote, Oyite-Ojok, Akii-Bua …) and portraits | ✓ | Notable Langos |
-| Clan Explorer (search, clan pages showing the clan leader and photo) | ✓ | Clans, **Add clans in bulk**, CSV import, clan-leader self-service |
-| Heritage: ceremonies, attire/crafts, music/dance, symbols, sites (map) | ✓ | Heritage items |
-| Biodiversity register + community sightings map | ✓ | Species |
-| Language: **dictionary** (plain-keyboard search, A–Z, topics), **AI translator** (English ⇄ Leb Lango), proverbs, greetings, lessons | ✓ | Dictionary, Proverbs, Lessons, CSV import |
-| **Word & proverb suggestions** from the public → review → approve → live in the dictionary and translator | ✓ | **Word suggestions** (edit, approve, quick-add, reject), duplicate check |
-| **Bell notifications** for every submission (contribution, word, message, application, donation, comment, directory profile, event registration, new member, clan missing from the register) | — | Bell + **Notifications** page, live count |
-| News & blog (categories, bilingual, comments, share) | ✓ | News, Categories, Comments moderation |
-| Events with online registration + printable ticket | ✓ | Events, Registrations |
-| Programs with progress + sponsor button | ✓ | Programs |
-| Media center (photo/video/audio/podcast), documents | ✓ | Media, Documents |
-| Data Center: faceted search across everything | ✓ | — |
-| **Community Contribution Engine**: one simple form, optional account creation on the spot, clan picker, GPS, uploads, tracking code | ✓ | Moderation queue, review notes, points, "Add to archive" |
-| Contributor accounts (with clan), points, badges, leaderboard | ✓ | Users & roles |
-| **Clan picker on every registration** (account, contribution, scholarship/grant/volunteer, diaspora, event tickets, professionals) with a "my clan is not listed" option that alerts the admins | ✓ | Clan shown on each record |
-| Donations (pledge flow), transparency dashboard | ✓ | Donations (confirm/fail), CSV export |
-| Scholarship / grant / volunteer / partner / clan / diaspora forms | ✓ | Applications |
-| Professionals directory | ✓ | Professionals (verify) |
-| Cultural Assistant: answers only from the register and reviewed archive, with sources, including **"Who is the clan leader of …?"**, district facts and notable people | ✓ | Knowledge base, flagged answers |
-| 360° tours (A-Frame viewer) | ✓ | Tours |
-| Open Data API + licence page | `/developers`, `/api/v1/*` | — |
-| English / Leb Lango toggle | ✓ | **Translations** screen, per-field `_lg` content |
-| Version history + restore, audit log, DB backup (.sql), CSV/JSON export | — | ✓ |
-
-## Roles
-
-`super_admin` and `admin` everything · `editor` content · `moderator` community submissions, comments, messages ·
-`clan_leader` only their own clan (cannot self-publish) · `contributor` public accounts (no admin access).
-
-## Folder map
-
-```
-index.php            public router          admin/        control panel (index, lib, modules, screens)
-app/layout.php       header, footer, icons  app/pages/    one file per public route
-app/lib/             db, helpers, i18n, auth, uploads, search, assistant, translator engine
-app/data/            translator dictionaries, textbook sentences, greetings (from the langoai project)
-database/            schema.sql, installers, upgrade.php,  assets/      css, js, logo, photos, people portraits
-                     content/ (districts, history, people)
-uploads/             user media (git-ignored)              legacy/      the old static template site (archived)
+```bash
+cd app
+npm install
+npx expo start            # press w for the browser, or scan the QR code with Expo Go
 ```
 
-Add a new managed content type by adding one entry to `admin/modules.php`.
+`app/.env.example` documents the settings. By default the app finds the website from the address of the computer running Expo
+(`http://<your-ip>/langoculturalinstitution/api`), so a phone on the same Wi-Fi works without editing anything.
+From the repo root, `npm run app:start` and `./scripts/dev.sh` do the same.
 
-## Content rules followed
+### 3. The installable web app (PWA)
 
-* Only facts LCI already published were used (Won Nyaci, 149 clans, nine districts, Okeme/Abuda, programme figures).
-* **No clan names, proverbs or Leb Lango translations were invented.** Import the 149 clans via
-  *Admin → Clans → Import CSV* (columns: `name,totem,totem_type,district,summary,leader_name,leader_title`);
-  rows arrive as drafts for verification. Leb Lango interface text is entered in *Admin → Translations*;
-  anything blank falls back to English.
-* Only five clans could be sourced and are loaded: **Otengoro Olang** (supplied by LCI) plus **Atek, Okarowok, Arak and Oki**
-  (named as Lango clans in published research). Load the rest with *Admin → Clans → Add clans in bulk* (paste names, one per line).
-* **No proverbs are pre-loaded**, because none could be sourced reliably. The public "Add a proverb" form feeds the review queue.
-* **Notable Langos have no portraits yet** (monograms are shown). Add properly licensed photographs in *Admin → Notable Langos*.
-* The four cabinet and elder entries on the Leadership page are **sample slots** ("Name to be announced"); edit them in
-  *Admin → Leadership*. The Won Nyaci's photograph is the one supplied by LCI.
-* District populations are 2024 census figures (Uganda Bureau of Statistics); areas and creation years come from published
-  sources and should be reviewed by LCI. The History chapters are compiled from published sources (listed on the page)
-  for LCI's historians to review.
-* The dictionary was imported from the LCI language project and is marked unverified until experts verify it. Words approved
-  from community suggestions are marked "Community".
-* Sample news, events and programme dates are placeholders — edit or delete them before launch.
-* Privacy and Terms pages are drafts for legal review.
+```bash
+cd app && npm run pwa
+```
 
-## Before going live
+Exports the app and publishes it inside the website at <http://localhost/langoculturalinstitution/pwa/> (the folder is generated
+and git-ignored). Open it on a phone and choose *Add to Home screen*.
 
-1. Set `'debug' => false` in `config/config.php` (the web installer does this) and serve over HTTPS.
-2. Replace placeholder contact details in *Admin → Site settings*.
-3. Connect a payment gateway (MTN MoMo / Airtel / cards / PayPal) — today pledges are recorded and confirmed manually.
-4. Add email sending (event tickets, contribution status) via SMTP.
-5. Schedule `mysqldump` + copy of `uploads/` off-site.
+## Building the app for phones
+
+`app/eas.json` defines the EAS Build profiles; see [`app/README.md`](app/README.md#building-installable-apps) for the one-time
+setup (Expo account, `eas init`, the live API address) and the commands. A debug JS bundle can be checked without any device:
+
+```bash
+cd app && npm run bundle        # expo export --platform android
+```
+
+## Content rules
+
+Cultural content is never invented. Clans, proverbs, translations and biographies come from LCI, published sources or
+community contributions that a reviewer approves. Anything missing is shown as empty, not made up — see the
+*Content rules followed* section of [`web/README.md`](web/README.md).
+
+## Contact
+
+Kakebe Technologies Limited · Rm B1 Plot 43, Renzo City House, Obote Ave., Lira City · 0393249845 · service@kakebe.tech

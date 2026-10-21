@@ -1,0 +1,20 @@
+{
+  "name": "lango",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lango Cultural Institution — website, admin panel and API (web) + the Lango App (app)",
+  "scripts": {
+    "web:install": "php web/database/install-cli.php",
+    "web:upgrade": "php web/database/upgrade-cli.php",
+    "app:start": "cd app && npx expo start",
+    "app:web": "cd app && npx expo start --web",
+    "app:android": "cd app && npx expo start --android",
+    "app:ios": "cd app && npx expo start --ios",
+    "app:tunnel": "cd app && npx expo start --tunnel",
+    "app:strings": "cd app && npm run strings",
+    "app:bundle": "cd app && npm run bundle",
+    "app:pwa": "cd app && npm run pwa",
+    "app:doctor": "cd app && npx expo-doctor",
+    "install:all": "cd app && npm install"
+  }
+}

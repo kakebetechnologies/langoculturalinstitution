@@ -1,0 +1,15 @@
+// VS Code multi-root workspace: opens the PHP website/API and the Expo app side by side.
+{
+  "folders": [
+    { "name": "🌐 Web (PHP)", "path": "web" },
+    { "name": "📱 App (Expo)", "path": "app" }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.expo": true,
+      "**/dist": true,
+      "**/dist-web": true
+    }
+  }
+}
