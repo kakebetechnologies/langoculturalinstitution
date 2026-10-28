@@ -1,6 +1,6 @@
 // Root layout: loads the fonts (Clarity City for the interface, Inter for Leb Lango letters), keeps the splash screen up until the app is ready,
 // provides language and sign-in state to every screen, starts push and the offline-contribution sync, and defines the stack.
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -16,6 +16,7 @@ import { ClarityCity_600SemiBold } from '@expo-google-fonts/clarity-city/600Semi
 import { ClarityCity_700Bold } from '@expo-google-fonts/clarity-city/700Bold';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../constants/theme';
+import { loadServerAddress } from '../lib/api';
 import { AuthProvider, useAuth } from '../lib/auth';
 import { I18nProvider } from '../lib/i18n';
 import { useOfflineSync } from '../lib/outbox';
@@ -43,7 +44,14 @@ function Navigator({ fontsLoaded }) {
 }
 
 export default function RootLayout() {
+  // A tester's server address (Settings) is read before anything asks the website for data; the splash screen stays up meanwhile.
+  const [addressReady, setAddressReady] = useState(false);
+  useEffect(() => {
+    loadServerAddress().finally(() => setAddressReady(true));
+  }, []);
   const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, ClarityCity_400Regular, ClarityCity_500Medium, ClarityCity_600SemiBold, ClarityCity_700Bold });
+
+  if (!addressReady) return null;
 
   return (
     <I18nProvider>

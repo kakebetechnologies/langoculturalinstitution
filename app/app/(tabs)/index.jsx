@@ -13,6 +13,8 @@ import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
 import Card from '../../components/Card';
 import ClanGroupCard from '../../components/clan/ClanGroupCard';
+import { ChallengeCard, ClanFeedCard, ClanOfWeekCard, PhotoCard, StoryCard } from '../../components/daily/TodayCards';
+import { MilestoneSheet, StreakChip } from '../../components/daily/Streaks';
 import HeroHeader from '../../components/HeroHeader';
 import IconTile from '../../components/IconTile';
 import Logo from '../../components/Logo';
@@ -24,6 +26,7 @@ import StateView from '../../components/StateView';
 import SyncBanner from '../../components/SyncBanner';
 import { COLORS, FONTS, GRADIENTS, RADIUS, SHADOW, SPACING } from '../../constants/theme';
 import { useAuth } from '../../lib/auth';
+import { useDailyCheckIn } from '../../lib/checkin';
 import { dayParts, firstName, fmtTime } from '../../lib/format';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
@@ -42,7 +45,8 @@ const CARD_TONES = ['red', 'sky', 'amber', 'dark'];
 
 export default function Home() {
   const { t } = useT();
-  const { user } = useAuth();
+  const { user, refresh } = useAuth();
+  const { milestone, clear } = useDailyCheckIn(user, refresh);
   const { width } = useWindowDimensions();
   const { data, loading, error, reload, retry, refreshing } = useFetch('/home');
   const home = data?.data;
@@ -75,12 +79,13 @@ export default function Home() {
                 {user ? t('Welcome back, {name}', { name: firstName(user.name) }) : t('Welcome to Lango')}
               </AppText>
             </View>
+            <StreakChip streaks={home?.streaks ?? user?.streaks} />
             {user ? <HeaderAction icon="notifications-outline" label={t('Notifications')} badge={unread} onDark onPress={() => router.push('/notifications')} /> : <Button small title={t('Sign in')} variant="glass" onPress={() => router.push('/(auth)/welcome')} />}
           </View>
 
           <View style={styles.glass}>
             {wotd ? (
-              <Pressable onPress={() => router.push({ pathname: '/dictionary', params: { q: wotd.lango } })} accessibilityRole="button" accessibilityLabel={t('Open the dictionary')}>
+              <Pressable onPress={() => router.push('/word-of-the-day')} accessibilityRole="button" accessibilityLabel={t('Word of the day quiz')}>
                 <View style={styles.liveRow}>
                   <View style={styles.tag}>
                     <Ionicons name="sunny" size={13} color={COLORS.yellow} />
@@ -94,7 +99,7 @@ export default function Home() {
                   {String(wotd.english).split(';').map((s) => s.trim()).join(' · ')}
                 </AppText>
                 <View style={styles.go}>
-                  <Ionicons name="arrow-forward" size={22} color={COLORS.primary} />
+                  <Ionicons name={home?.word_quiz?.answered ? 'checkmark' : 'arrow-forward'} size={22} color={COLORS.primary} />
                 </View>
               </Pressable>
             ) : (
@@ -176,7 +181,7 @@ export default function Home() {
                           <LinearGradient colors={GRADIENTS[CARD_TONES[i % CARD_TONES.length]]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.eventFill}>
                             <View style={styles.eventTop}>
                               <View style={styles.tag}>
-                                <AppText style={styles.tagText}>{t('Event')}</AppText>
+                                <AppText style={styles.tagText}>{e.days_left === 0 ? t('Today') : e.days_left === 1 ? t('Tomorrow') : t('In {n} days', { n: e.days_left })}</AppText>
                               </View>
                               <View style={styles.eventDate}>
                                 <AppText style={styles.eventDay}>{d.day}</AppText>
@@ -202,6 +207,13 @@ export default function Home() {
               ) : null}
 
               <View style={[styles.body, { marginTop: SPACING.lg }]}>
+                <SectionHeader title={t('Today in Lango')} style={{ marginBottom: 0 }} />
+                <ChallengeCard challenge={home.challenge} />
+                <StoryCard story={home.story} />
+                <ClanOfWeekCard clan={home.clan_of_week} />
+                <PhotoCard photo={home.photo_of_day} />
+                <ClanFeedCard feed={home.clan_feed} />
+
                 {home.featured_person ? (
                   <>
                     <SectionHeader eyebrow={t('Notable Langos')} title={t('Know where you come from')} actionLabel={t('All')} onAction={() => router.push('/people')} />
@@ -256,6 +268,7 @@ export default function Home() {
           ) : null}
         </StateView>
       </ScrollView>
+      <MilestoneSheet days={milestone} onClose={clear} />
     </View>
   );
 }

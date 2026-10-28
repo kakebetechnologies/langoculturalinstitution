@@ -12,7 +12,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { ping, SITE_URL } from './api';
 
 // While testing on a phone the sign-in page may have to live on a public https address (Google refuses private addresses).
-const AUTH_BASE = (process.env.EXPO_PUBLIC_GOOGLE_AUTH_URL || SITE_URL).replace(/\/+$/, '');
+const authBase = () => (process.env.EXPO_PUBLIC_GOOGLE_AUTH_URL || SITE_URL).replace(/\/+$/, '');
 
 export class GoogleSignInError extends Error {
   constructor(message, code = 'failed') {
@@ -30,7 +30,7 @@ export async function googleBrowserSignIn() {
   const challenge = toBase64Url(await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, verifier, { encoding: Crypto.CryptoEncoding.BASE64 }));
 
   const returnUrl = Linking.createURL('auth'); // lango://auth (exp://…/--/auth in Expo Go)
-  const startUrl = `${AUTH_BASE}/auth/google/start?redirect=${encodeURIComponent(returnUrl)}&challenge=${challenge}`;
+  const startUrl = `${authBase()}/auth/google/start?redirect=${encodeURIComponent(returnUrl)}&challenge=${challenge}`;
 
   let result;
   try {

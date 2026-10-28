@@ -1,7 +1,7 @@
 // Settings: interface language (English / Leb Lango), the offline dictionary (download, refresh, remove), notifications (push and a
 // daily word-of-the-day reminder), clearing saved pages, a connection check and the app version.
-import { useEffect, useState } from 'react';
-import { StyleSheet, Switch, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, StyleSheet, Switch, View } from 'react-native';
 import Constants from 'expo-constants';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
@@ -9,8 +9,9 @@ import Card from '../components/Card';
 import Screen from '../components/Screen';
 import SectionHeader from '../components/SectionHeader';
 import Segmented from '../components/Segmented';
+import TextField from '../components/TextField';
 import { COLORS, SPACING } from '../constants/theme';
-import { API_ROOT, errorMessage, ping } from '../lib/api';
+import { API_ROOT, errorMessage, ping, setServerAddress } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { downloadDictionary, removeOffline, useOfflineDictionary } from '../lib/dictionary';
 import { fmtDate } from '../lib/format';
@@ -27,8 +28,12 @@ export default function Settings() {
   const [note, setNote] = useState('');
   const [push, setPush] = useState(false);
   const [daily, setDaily] = useState(false);
+  const [showServer, setShowServer] = useState(__DEV__);
+  const [server, setServer] = useState('');
+  const taps = useRef(0);
 
   useEffect(() => {
+    getStored('server_url', null).then((u) => u && setServer(u.replace(/\/api$/, '')));
     getStored('push_on', false).then(setPush);
     getStored('daily_reminder', false).then(setDaily);
   }, []);
@@ -62,6 +67,18 @@ export default function Settings() {
       setDaily(false);
       setNote(t('Reminders are not available here, or notifications are blocked in your phone settings.'));
     }
+  }
+
+  // Tapping the version line five times reveals the server address, so testers can point the installed app at another website.
+  function tapVersion() {
+    taps.current += 1;
+    if (taps.current >= 5) setShowServer(true);
+  }
+
+  async function saveServer(value) {
+    const root = await setServerAddress(value);
+    setServer(String(value).trim() ? root.replace(/\/api$/, '') : '');
+    setNote(t('Now using {a}. Pull down on a screen to reload it.', { a: root }));
   }
 
   async function check() {
@@ -101,7 +118,7 @@ export default function Settings() {
         <View style={styles.sw}>
           <View style={{ flex: 1 }}>
             <AppText variant="subheading">{t('Daily word reminder')}</AppText>
-            <AppText variant="caption">{t('A reminder every morning at 8:00')}</AppText>
+            <AppText variant="caption">{t('A reminder every morning at 7:00')}</AppText>
           </View>
           <Switch value={daily} onValueChange={toggleDaily} trackColor={{ true: COLORS.primary, false: COLORS.gray300 }} />
         </View>
@@ -128,10 +145,33 @@ export default function Settings() {
         </AppText>
       ) : null}
 
-      <AppText variant="caption" style={{ marginTop: SPACING.xl, textAlign: 'center' }}>
-        Lango App {Constants.expoConfig?.version ?? ''}
-        {__DEV__ ? `\n${API_ROOT}` : ''}
-      </AppText>
+      {showServer ? (
+        <>
+          <SectionHeader title={t('Server address')} style={{ marginTop: SPACING.lg }} />
+          <Card>
+            <TextField
+              value={server}
+              onChangeText={setServer}
+              placeholder="192.168.1.4/langoculturalinstitution"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="url"
+              hint={t('For testing: the address of the Lango website this app talks to. Leave empty to use the built-in address.')}
+            />
+            <View style={{ flexDirection: 'row', gap: 10, marginTop: 4 }}>
+              <Button small title={t('Save')} onPress={() => saveServer(server)} />
+              <Button small variant="outline" title={t('Use built-in')} onPress={() => { setServer(''); saveServer(''); }} />
+            </View>
+          </Card>
+        </>
+      ) : null}
+
+      <Pressable onPress={tapVersion} accessibilityRole="text">
+        <AppText variant="caption" style={{ marginTop: SPACING.xl, textAlign: 'center' }}>
+          Lango App {Constants.expoConfig?.version ?? ''}
+          {showServer ? `\n${API_ROOT}` : ''}
+        </AppText>
+      </Pressable>
     </Screen>
   );
 }

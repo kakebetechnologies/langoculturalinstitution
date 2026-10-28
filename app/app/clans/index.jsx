@@ -39,6 +39,7 @@ export default function Clans() {
           <Button small title={user ? t('Update my clan') : t('Register')} onPress={() => router.push(user ? '/profile' : '/(auth)/register')} style={{ alignSelf: 'flex-start', marginTop: 10 }} />
         </View>
       </Card>
+      <Row icon="podium-outline" iconTone="gold" title={t('Clan leaderboard')} subtitle={t('Which clan has the most members, contributions and learners?')} onPress={() => router.push('/leaders?tab=clans')} />
       <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="people-outline" emptyTitle={q ? 'No clans match' : 'The clan register is being digitised'} emptyMessage={q ? 'No clan matching your search has been added yet.' : 'LCI is documenting all 149 clans. Each clan page will carry its history, totem and leader once verified.'}>
         {rows.map((c) => (
           <Row key={c.id} icon="people-outline" title={c.name} subtitle={c.summary || (c.totem ? `${t('Totem')}: ${c.totem}` : c.district || '')} meta={c.members ? (c.members === 1 ? t('1 member in the group') : t('{n} members in the group', { n: c.members })) : undefined} onPress={() => router.push(`/clans/${c.slug}`)}>

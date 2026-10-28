@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { getLang } from './lang';
 import { clearToken, expireSession, getToken } from './session';
+import { getStored, setStored } from './storage';
 
 const ENV = Constants.expoConfig?.extra?.apiUrl || {};
 const appEnv = process.env.EXPO_PUBLIC_APP_ENV || 'development';
@@ -36,8 +37,12 @@ function sameSiteApi() {
 // EXPO_PUBLIC_API_URL wins (set it to a real address, or leave it as "auto" / empty to use the rules above);
 // otherwise the per-environment URL from app.json.
 const configured = (process.env.EXPO_PUBLIC_API_URL || '').trim();
-export const API_ROOT = ((configured && configured !== 'auto' ? configured : sameSiteApi() || devServerApi()) || ENV[appEnv] || ENV.development || '').replace(/\/+$/, '');
-export const SITE_URL = API_ROOT.replace(/\/api$/, '');
+const BUILT_IN = ((configured && configured !== 'auto' ? configured : sameSiteApi() || devServerApi()) || ENV[appEnv] || ENV.development || '').replace(/\/+$/, '');
+
+// The address in use. A tester can change it at run time (Settings, "Server address"), so one installed build works with a computer on
+// the Wi-Fi, a staging site or the live site without being built again. Imports of these two see the change (live bindings).
+export let API_ROOT = BUILT_IN;
+export let SITE_URL = API_ROOT.replace(/\/api$/, '');
 
 const api = axios.create({
   baseURL: `${API_ROOT}/v1`,
@@ -63,6 +68,35 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+/** What a typed address means: "192.168.1.4/langoculturalinstitution", "http://host/site" and "https://example.org/api" all give the API root. Empty = the built-in address. */
+export function normalizeServerAddress(input) {
+  let s = String(input ?? '').trim().replace(/\/+$/, '');
+  if (!s) return BUILT_IN;
+  if (!/^https?:\/\//i.test(s)) s = `http://${s}`;
+  if (!/\/api(\/v1)?$/i.test(s)) s += '/api';
+  return s.replace(/\/v1$/i, '');
+}
+
+function useAddress(root) {
+  API_ROOT = root;
+  SITE_URL = root.replace(/\/api$/, '');
+  api.defaults.baseURL = `${root}/v1`;
+}
+
+/** Points the app at another website address now and remembers it. Pass '' to go back to the built-in address. */
+export async function setServerAddress(input) {
+  const root = normalizeServerAddress(input);
+  useAddress(root);
+  await setStored('server_url', String(input ?? '').trim() ? root : null);
+  return root;
+}
+
+/** Reads the remembered address once, before the app makes its first request. */
+export async function loadServerAddress() {
+  const saved = await getStored('server_url', null);
+  if (saved) useAddress(normalizeServerAddress(saved));
+}
 
 /** Health check: GET /api/v1/ping. Resolves with { status, name, version, ms }. */
 export async function ping() {

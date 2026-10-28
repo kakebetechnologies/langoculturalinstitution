@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import AppText from '../../components/AppText';
 import Avatar from '../../components/Avatar';
 import ClanGroupCard from '../../components/clan/ClanGroupCard';
+import { StreakCard } from '../../components/daily/Streaks';
 import Row from '../../components/Row';
 import Screen from '../../components/Screen';
 import SectionHeader from '../../components/SectionHeader';
@@ -53,6 +54,7 @@ export default function Me() {
           </View>
 
           <ClanGroupCard style={{ marginTop: SPACING.md }} />
+          <StreakCard streaks={user.streaks} style={{ marginTop: SPACING.md }} />
 
           <SectionHeader title={t('Badges')} style={{ marginTop: SPACING.lg }} />
           <View style={styles.badges}>

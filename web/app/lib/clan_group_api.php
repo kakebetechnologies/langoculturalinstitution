@@ -90,6 +90,11 @@ function clan_group_api(int $clanId, string $sub, array $seg, string $m): never
     $u = api_user();
 
     if ($sub === 'group' && $m === 'GET') json_out(['data' => clan_group_view($clan, $u)]);
+    if ($sub === 'stats' && $m === 'GET') {   // public: the clan's numbers and where it stands
+        $rows = clan_rank_by(clan_stats_all(), 'members');
+        $me = array_values(array_filter($rows, fn($r) => $r['id'] === $clanId))[0] ?? api_err('We could not find that clan.', 404);
+        json_out(['data' => $me + ['of' => count($rows)]]);
+    }
 
     $u = $u ?: api_err('Please sign in again.', 401);
     $reload = fn() => one('SELECT * FROM users WHERE id=?', [$u['id']]);

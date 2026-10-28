@@ -83,7 +83,7 @@ export function usePushSetup(user) {
   }, [userId]);
 }
 
-/** A notification every morning at 8:00 reminding the member to open the word of the day. */
+/** A notification every morning at 7:00 reminding the member to open the word of the day. */
 export async function setDailyReminder(on, title, body) {
   const N = notifications();
   if (!N) return false;
@@ -92,7 +92,7 @@ export async function setDailyReminder(on, title, body) {
     if (on) {
       const { status } = await N.requestPermissionsAsync();
       if (status !== 'granted') return false;
-      await N.scheduleNotificationAsync({ content: { title, body }, trigger: { type: N.SchedulableTriggerInputTypes.DAILY, hour: 8, minute: 0 } });
+      await N.scheduleNotificationAsync({ content: { title, body }, trigger: { type: N.SchedulableTriggerInputTypes.DAILY, hour: 7, minute: 0 } });
     }
     await setStored('daily_reminder', on);
     return true;

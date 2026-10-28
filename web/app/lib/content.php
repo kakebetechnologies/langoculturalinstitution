@@ -2,12 +2,24 @@
 declare(strict_types=1);
 
 /** Deterministic "word of the day": changes at midnight, same for every visitor. */
+/** English words that must not come up as a daily word or a quiz question (a family app, used in schools and churches). */
+const DAILY_SENSITIVE = 'prostitut|whore|sex|penis|vagina|vulva|testicl|genital|rape|semen|erect|anus|buttock|faec|excrement|urine|menstru|intercourse|fornicat|adulter|condom|lust|naked|nude|breast|vomit|corpse';
+
+/** SQL that keeps only dictionary entries that are short, clear and suitable for a quiz. */
+function daily_word_filter(string $t = ''): string
+{
+    static $verifiedOnly = null;   // once LCI's language experts have checked a good number of entries, only those are used
+    $verifiedOnly ??= (int)val("SELECT COUNT(*) FROM dictionary WHERE status='published' AND verified=1") >= 100;
+    $p = $t === '' ? '' : $t . '.';
+    return ($verifiedOnly ? "{$p}verified=1 AND " : '') . "{$p}status='published' AND CHAR_LENGTH({$p}english)<70 AND CHAR_LENGTH({$p}lango)<24 AND {$p}lango NOT LIKE '% %' AND {$p}english NOT REGEXP '" . DAILY_SENSITIVE . "' AND {$p}lango NOT REGEXP '[0-9]'";
+}
+
 function word_of_day(): ?array
 {
-    $n = (int)val("SELECT COUNT(*) FROM dictionary WHERE status='published' AND CHAR_LENGTH(english)<70 AND CHAR_LENGTH(lango)<24");
+    $n = (int)val('SELECT COUNT(*) FROM dictionary WHERE ' . daily_word_filter());
     if (!$n) return null;
     $off = (int)(crc32(date('Y-m-d')) % $n);
-    return one("SELECT * FROM dictionary WHERE status='published' AND CHAR_LENGTH(english)<70 AND CHAR_LENGTH(lango)<24 ORDER BY id LIMIT 1 OFFSET " . $off);
+    return one('SELECT * FROM dictionary WHERE ' . daily_word_filter() . ' ORDER BY id LIMIT 1 OFFSET ' . $off);
 }
 
 function like_escape(string $s): string { return addcslashes($s, '%_\\'); }

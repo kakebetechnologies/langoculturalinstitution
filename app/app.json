@@ -7,7 +7,9 @@
     "scheme": "lango",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "tech.kakebe.lango",
@@ -81,7 +83,10 @@
         "expo-build-properties",
         {
           "android": {
-            "buildArchs": ["arm64-v8a", "armeabi-v7a"]
+            "buildArchs": [
+              "arm64-v8a",
+              "armeabi-v7a"
+            ]
           }
         }
       ]
@@ -91,11 +96,15 @@
     },
     "extra": {
       "apiUrl": {
-        "development": "http://192.168.1.4/langoculturalinstitution/api",
+        "development": "http://192.168.1.5/langoculturalinstitution/api",
         "staging": "https://langoculture.org/api",
         "production": "https://langoculture.org/api"
       },
-      "router": {}
-    }
+      "router": {},
+      "eas": {
+        "projectId": "cd25b1cb-987d-4736-a0e9-9a43869e157f"
+      }
+    },
+    "owner": "sedrickotolo"
   }
 }

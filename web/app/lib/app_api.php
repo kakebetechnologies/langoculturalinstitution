@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/clan_group_api.php';
 require_once __DIR__ . '/google_auth.php';
+require_once __DIR__ . '/daily_api.php';
 
 /* ---------- plumbing ---------- */
 function api_abs(?string $p): ?string
@@ -119,12 +120,17 @@ function user_badges(int $uid): array
 {
     $c = fn(string $w) => (int)val("SELECT COUNT(*) FROM contributions WHERE user_id=? AND status IN ('approved','published') $w", [$uid]);
     $total = $c('');
+    $best = max((int)val('SELECT best_streak FROM users WHERE id=?', [$uid]), streak_info($uid, 'open')['current']);
     $defs = [
         ['first', 'First contribution', 'Your first approved contribution', $total >= 1],
         ['ten', '10 approved', 'Ten approved contributions', $total >= 10],
         ['language', 'Language champion', 'Five approved words or proverbs', $c("AND type='language'") >= 5],
         ['nature', 'Conservation hero', 'Three approved nature records', $c("AND type='natural'") >= 3],
         ['historian', 'Clan historian', 'Three approved oral histories or traditions', $c("AND type IN ('oral_history','cultural')") >= 3],
+        ['streak7', 'Seven-day streak', 'Open the app seven days in a row', $best >= 7],
+        ['streak30', 'Thirty-day streak', 'Open the app thirty days in a row', $best >= 30],
+        ['words', 'Word collector', 'Learn the word of the day on ten different days', (int)val("SELECT COUNT(*) FROM activity_days WHERE user_id=? AND kind='word'", [$uid]) >= 10],
+        ['challenge', 'Challenger', 'Take a weekly Language Challenge', (bool)val("SELECT COUNT(*) FROM quiz_scores WHERE user_id=? AND kind='weekly'", [$uid])],
     ];
     return array_map(fn($d) => ['key' => $d[0], 'name' => $d[1], 'description' => $d[2], 'earned' => $d[3]], $defs);
 }
@@ -138,7 +144,7 @@ function api_user_json(array $u): array
         'role' => $u['role'], 'clan' => $clan ? ['id' => (int)$clan['id'], 'name' => $clan['name'], 'slug' => $clan['slug']] : null, 'clan_other' => $u['clan_other'],
         'points' => (int)$u['points'], 'level' => contributor_level((int)$u['points']), 'badges' => user_badges((int)$u['id']),
         'counts' => ['total' => $n(''), 'approved' => $n("AND status IN ('approved','published')"), 'pending' => $n("AND status IN ('pending','under_review','needs_info')")],
-        'joined' => $u['created_at'], 'clan_group' => clan_group_summary($u),
+        'joined' => $u['created_at'], 'clan_group' => clan_group_summary($u), 'streaks' => streaks_json($u),
     ];
 }
 
@@ -253,6 +259,7 @@ function api_app(string $res, array $seg): void
     $m = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $id = $seg[3] ?? ''; $sub = $seg[4] ?? '';
     $user = api_user();
+    daily_api($res, $id, $sub, $m, $user);   // streaks, daily word, weekly challenge, leaderboards (exits when it handles the request)
 
     switch ($res) {
         case 'ping':
@@ -351,6 +358,7 @@ function api_app(string $res, array $seg): void
                     q('UPDATE contributions SET user_id=NULL WHERE user_id=?', [$u['id']]);
                     q('DELETE FROM clan_message_reports WHERE user_id=? OR message_id IN (SELECT id FROM (SELECT id FROM clan_messages WHERE user_id=?) x)', [$u['id'], $u['id']]);
                     q('DELETE FROM clan_messages WHERE user_id=?', [$u['id']]);
+                    foreach (['activity_days', 'quiz_scores'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);   // streaks and quiz results go with the account
                     foreach (['api_tokens', 'device_tokens', 'user_notifications'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);
                     q('DELETE FROM users WHERE id=? AND role=?', [$u['id'], 'contributor']);
                     json_out(['ok' => true]);
@@ -410,11 +418,11 @@ function api_app(string $res, array $seg): void
                 'word_of_the_day' => $wotd ? api_word($wotd) : null,
                 'featured_person' => $pool ? api_person($pool[(int)date('z') % count($pool)]) : null,
                 'news' => array_map('api_post', all("SELECT p.*, c.name cat FROM posts p LEFT JOIN post_categories c ON c.id=p.category_id WHERE p.status='published' AND p.published_at<=NOW() ORDER BY p.featured DESC, p.published_at DESC LIMIT 3")),
-                'events' => array_map('api_event', all("SELECT * FROM events WHERE status='published' AND starts_at>=CURDATE() ORDER BY starts_at LIMIT 3")),
+                'events' => array_map(fn($e) => api_event($e) + ['days_left' => max(0, (int)ceil((strtotime(substr((string)$e['starts_at'], 0, 10)) - strtotime('today')) / 86400))], all("SELECT * FROM events WHERE status='published' AND starts_at>=CURDATE() ORDER BY starts_at LIMIT 3")),
                 'programs' => array_map('api_program', all("SELECT * FROM programs WHERE status='published' ORDER BY featured DESC, sort, id LIMIT 4")),
                 'stats' => site_counts(),
                 'unread' => $user ? (int)val('SELECT COUNT(*) FROM user_notifications WHERE user_id=? AND is_read=0', [$user['id']]) : 0,
-            ]]);
+            ] + daily_home($user)]);
 
         /* ---------- people, places, history ---------- */
         case 'clans':

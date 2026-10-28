@@ -202,7 +202,7 @@ function screen_settings(): void
         'About' => ['mission' => 'Mission statement', 'vision' => 'Vision statement'],
         'Contact' => ['email' => 'Public email', 'phone' => 'Public phone', 'address' => 'Address', 'whatsapp' => 'WhatsApp link (https://wa.me/…)'],
         'Social media' => ['facebook' => 'Facebook URL', 'x' => 'X (Twitter) URL', 'youtube' => 'YouTube URL', 'instagram' => 'Instagram URL'],
-        'Numbers & map' => ['clan_total' => 'Total registered clans', 'map_lat' => 'Map centre latitude', 'map_lng' => 'Map centre longitude'],
+        'Numbers & map' => ['clan_total' => 'Total registered clans', 'clan_of_week_id' => 'Clan of the week (clan id; blank = rotate every Monday)', 'map_lat' => 'Map centre latitude', 'map_lng' => 'Map centre longitude'],
         'Giving' => ['donation_note' => 'Donation appeal text'],
         'Google sign-in (the app)' => ['google_client_id' => 'Google client ID', 'google_client_secret' => 'Google client secret'],
     ];

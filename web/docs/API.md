@@ -43,6 +43,23 @@ The JSON API behind the Lango App (`../app`) and the open-data page at `/develop
 
 Approving, publishing or returning a contribution in the admin panel creates a notification for the member and sends an Expo push to their registered phones.
 
+## Daily habit
+
+Everything below is built from content already in the archive (the dictionary, heritage items, notable Langos, clans, approved contributions, events). `/home` carries `story`, `clan_of_week`, `photo_of_day`, `challenge`, `word_quiz`, and for a signed-in member `streaks` and `clan_feed`; each event has `days_left`. `user.streaks` is also in `/me`.
+
+| Method | Path | Notes |
+|---|---|---|
+| POST | `/me/checkin` | The member opened the app today (once a day is enough; repeating changes nothing) → `current`, `best`, `freeze_available`, word-learning streak, and `milestone` when a streak of 3, 7, 14, 30, 60, 100, 200 or 365 days is reached. One missed day is forgiven once every seven days |
+| GET | `/daily/word` | Today's word with four meanings (same for everyone); for a signed-in member also whether they answered |
+| POST | `/daily/word/answer` | `choice` → `{ correct, answer, all_meanings, example_lg, example_en, streaks }`. Counts as "learned today" for a signed-in member |
+| GET | `/challenge` | This week's Language Challenge: ten questions, four meanings each, no answers in the response; `done` and `score` once taken |
+| POST | `/challenge/submit` | `answers: { "<word id>": "<chosen meaning>" }` → `{ score, total, rank, review[] }`. One attempt per week (409 after that) |
+| GET | `/leaderboards/challenge`, `/leaderboards/learners` | Top ten this week / this month, names as first name and initial |
+| GET | `/clans/leaderboard?sort=members|contributions|learners` | Every published clan with its numbers and rank, and `mine` for a signed-in member |
+| GET | `/clans/{id}/stats` | One clan's numbers and rank |
+
+Quiz words come from the dictionary: only entries LCI experts have verified once there are at least 100 of them (until then all published entries), never long or multi-word entries, and never the words in `DAILY_SENSITIVE` (web/app/lib/content.php).
+
 ## Clan groups
 
 A member who chose a clan can join that clan's group. `user.clan_group` (in `/me` and the sign-in answers) says whether they have joined, how many people are in the group and how many messages are new. `{id}` is the numeric clan id; `/clans` and `/clans/{slug}` also carry `members` (the group size).

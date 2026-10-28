@@ -93,6 +93,18 @@ function lci_upgrade(PDO $pdo): array
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (message_id, user_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+    // daily habit: one row per member per day per kind of activity (opened the app, learned the word of the day), quiz results, best streak
+    $pdo->exec("CREATE TABLE IF NOT EXISTS activity_days (
+        user_id INT UNSIGNED NOT NULL, day DATE NOT NULL, kind ENUM('open','word') NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, kind, day), KEY (kind, day)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS quiz_scores (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, user_id INT UNSIGNED NOT NULL, kind ENUM('word','weekly') NOT NULL, period VARCHAR(10) NOT NULL,
+        score SMALLINT UNSIGNED NOT NULL DEFAULT 0, total SMALLINT UNSIGNED NOT NULL DEFAULT 0, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY (user_id, kind, period), KEY (kind, period, score)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $addCol('users', 'best_streak', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0');
+
     // "Continue with Google": the Google account id on the member, and short-lived one-time codes handed to the app after Google signs the person in
     $addCol('users', 'google_sub', 'VARCHAR(40) NULL');
     try { $pdo->exec('ALTER TABLE users ADD UNIQUE KEY google_sub (google_sub)'); } catch (Throwable $e) { /* already there */ }
