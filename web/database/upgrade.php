@@ -79,6 +79,28 @@ function lci_upgrade(PDO $pdo): array
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $addCol('contributions', 'client_ref', 'VARCHAR(40) NULL');
 
+    // clan groups: a member opts in to the group of the clan they chose (users.clan_id), can hide from the member list, and reads/writes messages
+    $addCol('users', 'clan_joined_at', 'DATETIME NULL');
+    $addCol('users', 'clan_hidden', 'TINYINT(1) NOT NULL DEFAULT 0');
+    $addCol('users', 'clan_seen_id', 'INT UNSIGNED NOT NULL DEFAULT 0');
+    $pdo->exec("CREATE TABLE IF NOT EXISTS clan_messages (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, clan_id INT UNSIGNED NOT NULL, user_id INT UNSIGNED NULL, body VARCHAR(1000) NOT NULL,
+        status ENUM('visible','hidden') NOT NULL DEFAULT 'visible', hidden_by INT UNSIGNED NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        KEY (clan_id, id), KEY (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS clan_message_reports (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, message_id INT UNSIGNED NOT NULL, user_id INT UNSIGNED NOT NULL, reason VARCHAR(200) NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (message_id, user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+    // "Continue with Google": the Google account id on the member, and short-lived one-time codes handed to the app after Google signs the person in
+    $addCol('users', 'google_sub', 'VARCHAR(40) NULL');
+    try { $pdo->exec('ALTER TABLE users ADD UNIQUE KEY google_sub (google_sub)'); } catch (Throwable $e) { /* already there */ }
+    $pdo->exec("CREATE TABLE IF NOT EXISTS google_codes (
+        code_hash CHAR(64) NOT NULL PRIMARY KEY, challenge CHAR(43) NOT NULL, user_id INT UNSIGNED NULL, google_sub VARCHAR(40) NULL, email VARCHAR(190) NULL,
+        name VARCHAR(150) NULL, expires_at INT UNSIGNED NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
     $addCol('contributions', 'word_cat', 'VARCHAR(40) NULL');
     $addCol('contributions', 'word_pos', 'VARCHAR(40) NULL');
     $addCol('contributions', 'example_lg', 'VARCHAR(500) NULL');

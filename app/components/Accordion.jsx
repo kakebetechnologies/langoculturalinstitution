@@ -25,7 +25,7 @@ export default function Accordion({ number, eyebrow, title, summary, defaultOpen
 }
 
 const styles = StyleSheet.create({
-  box: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, marginBottom: 10, overflow: 'hidden', ...SHADOW },
+  box: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, marginBottom: 10, overflow: 'hidden', ...SHADOW },
   head: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: SPACING.md },
   num: { fontFamily: FONTS.serif, fontSize: 22, color: COLORS.primaryDark, minWidth: 30 },
   title: { fontFamily: FONTS.serif, fontSize: 17, lineHeight: 23, color: COLORS.black },

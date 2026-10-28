@@ -2,7 +2,7 @@
 import { StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import { COLORS, RADIUS, SPACING } from '../constants/theme';
+import { COLORS, RADIUS, SPACING, SHADOW } from '../constants/theme';
 import { useT } from '../lib/i18n';
 import AppText from './AppText';
 import Button from './Button';
@@ -27,6 +27,6 @@ export default function SignInPrompt({ title, text, next }) {
 }
 
 const styles = StyleSheet.create({
-  box: { alignItems: 'center', backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: SPACING.lg },
+  box: { alignItems: 'center', backgroundColor: COLORS.white, borderRadius: RADIUS.xl, padding: SPACING.lg, ...SHADOW },
   icon: { width: 68, height: 68, borderRadius: 34, backgroundColor: COLORS.primaryMist, alignItems: 'center', justifyContent: 'center' },
 });

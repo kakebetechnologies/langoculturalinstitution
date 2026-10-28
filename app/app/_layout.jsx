@@ -1,17 +1,19 @@
-// Root layout: loads the fonts (Inter + Source Serif 4, the website's typefaces), keeps the splash screen up until the app is ready,
+// Root layout: loads the fonts (Clarity City for the interface, Inter for Leb Lango letters), keeps the splash screen up until the app is ready,
 // provides language and sign-in state to every screen, starts push and the offline-contribution sync, and defines the stack.
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-// Each weight is imported from its own folder so only the six fonts the app uses are bundled (not every weight of both families).
+// Each weight is imported from its own folder so only the eight fonts the app uses are bundled (not every weight of both families).
 import { Inter_400Regular } from '@expo-google-fonts/inter/400Regular';
 import { Inter_500Medium } from '@expo-google-fonts/inter/500Medium';
 import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
 import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
-import { SourceSerif4_600SemiBold } from '@expo-google-fonts/source-serif-4/600SemiBold';
-import { SourceSerif4_700Bold } from '@expo-google-fonts/source-serif-4/700Bold';
+import { ClarityCity_400Regular } from '@expo-google-fonts/clarity-city/400Regular';
+import { ClarityCity_500Medium } from '@expo-google-fonts/clarity-city/500Medium';
+import { ClarityCity_600SemiBold } from '@expo-google-fonts/clarity-city/600SemiBold';
+import { ClarityCity_700Bold } from '@expo-google-fonts/clarity-city/700Bold';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../constants/theme';
 import { AuthProvider, useAuth } from '../lib/auth';
@@ -41,7 +43,7 @@ function Navigator({ fontsLoaded }) {
 }
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, SourceSerif4_600SemiBold, SourceSerif4_700Bold });
+  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, ClarityCity_400Regular, ClarityCity_500Medium, ClarityCity_600SemiBold, ClarityCity_700Bold });
 
   return (
     <I18nProvider>

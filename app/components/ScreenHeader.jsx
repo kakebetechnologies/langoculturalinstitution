@@ -65,11 +65,11 @@ export default function ScreenHeader({ title, subtitle, right }) {
 const styles = StyleSheet.create({
   bar: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: SPACING.md, paddingBottom: 10, backgroundColor: COLORS.canvas },
   titles: { flex: 1 },
-  title: { fontFamily: FONTS.serif, fontSize: 19, lineHeight: 25, color: COLORS.black },
+  title: { fontFamily: FONTS.bold, fontSize: 18, lineHeight: 24, color: COLORS.black },
   right: { minWidth: 40, alignItems: 'flex-end' },
   round: { width: 40, height: 40, borderRadius: RADIUS.full, alignItems: 'center', justifyContent: 'center' },
-  onLight: { backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.line, ...SHADOW, shadowOpacity: 0.04, elevation: 1 },
-  onDark: { backgroundColor: 'rgba(22,24,29,0.55)' },
+  onLight: { backgroundColor: COLORS.white, ...SHADOW, shadowOpacity: 0.07, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
+  onDark: { backgroundColor: 'rgba(255,255,255,0.16)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.28)' },
   badge: { position: 'absolute', top: -2, right: -2, minWidth: 18, height: 18, borderRadius: 9, paddingHorizontal: 4, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: COLORS.canvas },
   badgeText: { fontFamily: FONTS.bold, fontSize: 10, color: COLORS.white },
 });

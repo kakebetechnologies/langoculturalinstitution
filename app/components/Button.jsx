@@ -1,4 +1,4 @@
-// Button: solid red (primary), dark, gold, outlined or light, with an optional icon and a built-in loading spinner.
+// Button: a pill in solid red (primary), dark, gold, outlined, light or text-only, with an optional icon and a built-in loading spinner.
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { COLORS, FONTS, RADIUS, SPACING } from '../constants/theme';
@@ -9,7 +9,8 @@ const LOOKS = {
   dark: { bg: COLORS.navy, fg: COLORS.white, border: COLORS.navy },
   gold: { bg: COLORS.yellow, fg: COLORS.navy, border: COLORS.yellow },
   light: { bg: COLORS.white, fg: COLORS.navy, border: COLORS.white },
-  outline: { bg: COLORS.white, fg: COLORS.navy, border: COLORS.gray300 },
+  glass: { bg: 'rgba(255,255,255,0.14)', fg: COLORS.white, border: 'rgba(255,255,255,0.45)' },
+  outline: { bg: 'transparent', fg: COLORS.primaryDark, border: COLORS.primary },
   ghost: { bg: 'transparent', fg: COLORS.primaryDark, border: 'transparent' },
 };
 
@@ -38,7 +39,7 @@ export default function Button({ title, onPress, variant = 'primary', icon, load
 }
 
 const styles = StyleSheet.create({
-  base: { minHeight: 50, paddingHorizontal: SPACING.lg, borderRadius: RADIUS.md, borderWidth: 1.5, flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center' },
+  base: { minHeight: 52, paddingHorizontal: SPACING.lg, borderRadius: RADIUS.full, borderWidth: 1.5, flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center' },
   small: { minHeight: 38, paddingHorizontal: SPACING.md },
   inactive: { opacity: 0.55 },
 });

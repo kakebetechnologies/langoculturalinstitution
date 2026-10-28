@@ -1,7 +1,7 @@
 // One dictionary entry: the Leb Lango word big in serif, its part of speech and topic, the English meanings separated by dots,
 // an example sentence when there is one, and a "Checked" / "Community" tag (offline entries say so quietly).
 import { StyleSheet, View } from 'react-native';
-import { COLORS, FONTS, RADIUS, SPACING } from '../constants/theme';
+import { COLORS, FONTS, RADIUS, SPACING, SHADOW } from '../constants/theme';
 import { useT } from '../lib/i18n';
 import AppText from './AppText';
 import Pill from './Pill';
@@ -42,7 +42,7 @@ export default function WordCard({ word }) {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, borderLeftWidth: 4, borderLeftColor: COLORS.yellow, padding: SPACING.md, marginBottom: 10 },
+  card: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, ...SHADOW, borderLeftWidth: 4, borderLeftColor: COLORS.yellow, padding: SPACING.md, marginBottom: 10 },
   top: { flexDirection: 'row', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' },
   word: { fontFamily: FONTS.serif, fontSize: 22, lineHeight: 28, color: COLORS.black },
   pos: { fontFamily: FONTS.medium, fontStyle: 'italic', fontSize: 13, color: COLORS.primaryDark },

@@ -1,0 +1,64 @@
+/* Platform Preview: extra styles on top of style2.css (device frames, captions, flow). */
+
+/* browser / laptop frame */
+.bf { border: .6pt solid #bccde2; border-radius: 2.6mm; overflow: hidden; background: #fff; box-shadow: 0 1.4mm 3.6mm rgba(22,69,116,.2); }
+.bf .bar { height: 6mm; background: #e7eef7; display: flex; align-items: center; gap: 1.4mm; padding: 0 3mm; border-bottom: .6pt solid #bccde2; }
+.bf .bar i { width: 1.9mm; height: 1.9mm; border-radius: 50%; background: #c9d3df; }
+.bf .bar i:nth-child(1) { background: #ec7d76; } .bf .bar i:nth-child(2) { background: #f1c25c; } .bf .bar i:nth-child(3) { background: #7cc58b; }
+.bf .bar span { margin-left: 3mm; font: 600 7.6pt Montserrat, sans-serif; color: #5c6b7a; }
+.bf.sm .bar { height: 4.4mm; padding: 0 2.2mm; gap: 1.1mm; }
+.bf.sm .bar i { width: 1.4mm; height: 1.4mm; }
+.bf.sm .bar span { display: none; }
+.scr { position: relative; display: block; overflow: hidden; }
+.scr img { display: block; width: 100%; }
+.scr.c { aspect-ratio: var(--r); }
+.scr.c img { height: 100%; object-fit: cover; object-position: top; }
+.base { height: 2.4mm; margin: 0 -4mm; background: linear-gradient(#d3dce7, #aebbca); border-radius: 0 0 3.4mm 3.4mm; }
+
+/* phone */
+.dev { background: #111d2b; border-radius: 6.4mm; padding: 1.6mm; box-shadow: 0 1.6mm 4.2mm rgba(22,69,116,.3); }
+.dev .scr { border-radius: 4.9mm; background: #fff; }
+
+/* captions */
+.cap2 { margin-top: 2.4mm; font: 400 9.6pt/1.35 Inter, sans-serif; color: var(--grey); }
+.cap2 b { display: block; font: 800 10pt Montserrat, sans-serif; color: var(--navy); margin-bottom: .6mm; }
+.cap2.mid { text-align: center; }
+
+/* grids */
+.g2, .g3, .g4 { display: grid; margin: 0 0 5mm; }
+.g2 { grid-template-columns: 1fr 1fr; gap: 7mm 6mm; }
+.g3 { grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+.g4 { grid-template-columns: repeat(4, 1fr); gap: 5mm 4mm; margin-bottom: 4mm; }
+.stack > div { margin-bottom: 5mm; }
+
+/* numbered dots over a screenshot, and their legend */
+.dotn { position: absolute; width: 6.4mm; height: 6.4mm; border-radius: 50%; background: var(--red); color: #fff; font: 800 9.4pt/5.2mm Montserrat, sans-serif; text-align: center; border: .7mm solid #fff; box-shadow: 0 .6mm 1.8mm rgba(0,0,0,.4); transform: translate(-50%, -50%); }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 3.4mm 8mm; margin-top: 5mm; }
+.lg { display: flex; gap: 3mm; align-items: flex-start; font-size: 9.8pt; line-height: 1.35; color: var(--grey); }
+.lg .n { flex: 0 0 6mm; height: 6mm; border-radius: 50%; background: var(--red); color: #fff; font: 800 9pt/6mm Montserrat, sans-serif; text-align: center; margin-top: .4mm; }
+.lg b { display: block; color: var(--navy); font: 800 10pt Montserrat, sans-serif; }
+
+/* hero composite: laptop + laptop + phone */
+.hero { position: relative; width: 170mm; height: 122mm; }
+.hero .la { position: absolute; left: 0; top: 2mm; width: 112mm; }
+.hero .lb { position: absolute; right: 0; top: 36mm; width: 100mm; }
+.hero .pp { position: absolute; left: 22mm; top: 40mm; width: 38mm; }
+
+/* flow of devices with arrows */
+.flow { display: flex; align-items: center; justify-content: space-between; margin: 2mm 0 1mm; }
+.flow .arrow { flex: 0 0 8mm; display: flex; justify-content: center; }
+.flow .arrow svg { width: 7mm; height: 7mm; }
+.flow .col { text-align: center; }
+
+/* cover */
+.cover .panel { position: absolute; left: 0; right: 0; top: 108mm; height: 132mm; background: linear-gradient(to bottom, #fff 0%, var(--tint) 20%, var(--tint) 100%); overflow: hidden; }
+.cover .panel::before { content: ""; position: absolute; right: -30mm; top: 30mm; width: 90mm; height: 90mm; border-radius: 50%; background: rgba(31,95,168,.08); }
+.cover .panel::after { content: ""; position: absolute; left: -24mm; bottom: -22mm; width: 70mm; height: 70mm; border-radius: 50%; background: rgba(224,30,38,.07); }
+.cover .hero { position: absolute; left: 20mm; top: 116mm; z-index: 2; }
+.cover .band2 .big strong { font-size: 25pt; }
+.cover .band2 .meta { width: 84mm; font-size: 9.6pt; }
+
+/* page 12 step cards and page 13 */
+.pg .steps { margin-bottom: 5mm; }
+.nolist { list-style: none; padding: 0; margin: 0; }
+.cover .band2 .meta b { width: 29mm; }

@@ -9,7 +9,7 @@ import AppText from '../components/AppText';
 import Chip from '../components/Chip';
 import RichText from '../components/RichText';
 import ScreenHeader from '../components/ScreenHeader';
-import { COLORS, FONTS, MAX_FONT_SCALE, RADIUS, SPACING } from '../constants/theme';
+import { COLORS, FONTS, MAX_FONT_SCALE, RADIUS, SPACING, SHADOW } from '../constants/theme';
 import api, { errorMessage } from '../lib/api';
 import { useT } from '../lib/i18n';
 
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: COLORS.canvas },
   bubble: { maxWidth: '92%', borderRadius: RADIUS.lg, padding: 12 },
   me: { alignSelf: 'flex-end', backgroundColor: COLORS.navy, borderBottomRightRadius: 4 },
-  bot: { alignSelf: 'flex-start', backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.line, borderBottomLeftRadius: 4 },
+  bot: { alignSelf: 'flex-start', backgroundColor: COLORS.white, borderBottomLeftRadius: 4, ...SHADOW, shadowOpacity: 0.05, elevation: 1 },
   sources: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 6, paddingTop: 6, borderTopWidth: 1, borderTopColor: COLORS.gray100 },
   sugg: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
   bar: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: SPACING.md, backgroundColor: COLORS.white, borderTopWidth: 1, borderTopColor: COLORS.line },

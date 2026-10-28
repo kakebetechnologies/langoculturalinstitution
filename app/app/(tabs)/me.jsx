@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import AppText from '../../components/AppText';
 import Avatar from '../../components/Avatar';
+import ClanGroupCard from '../../components/clan/ClanGroupCard';
 import Row from '../../components/Row';
 import Screen from '../../components/Screen';
 import SectionHeader from '../../components/SectionHeader';
@@ -51,6 +52,8 @@ export default function Me() {
             <AppText variant="caption">{user.level.next_name ? t('{n} points to {next}', { n: Math.max(0, user.level.next_at - user.points), next: t(user.level.next_name) }) : t('Top level reached')}</AppText>
           </View>
 
+          <ClanGroupCard style={{ marginTop: SPACING.md }} />
+
           <SectionHeader title={t('Badges')} style={{ marginTop: SPACING.lg }} />
           <View style={styles.badges}>
             {user.badges.map((b) => (
@@ -84,13 +87,13 @@ export default function Me() {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: SPACING.md, ...SHADOW },
+  card: { backgroundColor: COLORS.white, borderRadius: RADIUS.xl, padding: SPACING.md + 2, ...SHADOW },
   head: { flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: SPACING.md },
   levelRow: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
-  level: { fontFamily: FONTS.serif, fontSize: 22, color: COLORS.primaryDark },
-  bar: { height: 8, backgroundColor: COLORS.gray100, borderRadius: 4, overflow: 'hidden', marginVertical: 8 },
-  fill: { height: 8, backgroundColor: COLORS.yellow },
+  level: { fontFamily: FONTS.bold, fontSize: 22, color: COLORS.primaryDark },
+  bar: { height: 8, backgroundColor: COLORS.track, borderRadius: 4, overflow: 'hidden', marginVertical: 8 },
+  fill: { height: 8, backgroundColor: COLORS.primary, borderRadius: 4 },
   badges: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  badge: { width: '31%', flexGrow: 1, alignItems: 'center', gap: 4, backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: 10 },
+  badge: { width: '31%', flexGrow: 1, alignItems: 'center', gap: 4, backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: 10, ...SHADOW },
   badgeName: { fontFamily: FONTS.semibold, fontSize: 12.5, textAlign: 'center', color: COLORS.black },
 });

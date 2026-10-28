@@ -352,7 +352,7 @@ function notify_on_insert(string $table, array $d, int $id): void
     }
     if ($clanOther !== '' && in_array($table, ['contributions', 'applications', 'users', 'event_registrations', 'professionals'], true)
         && !val("SELECT COUNT(*) FROM notifications WHERE type='clan' AND is_read=0 AND title=?", ['A clan is missing from the register: ' . $clanOther])) {
-        notify('clan', 'A clan is missing from the register: ' . $clanOther, 'Entered by ' . $who . '. Add it so others can pick it.', 'admin/?m=clan_quick&names=' . rawurlencode($clanOther));
+        notify('clan', 'A clan is missing from the register: ' . $clanOther, 'Entered by ' . $who . '. Add it so others can pick it.', 'admin/?m=clan_requests&names=' . rawurlencode($clanOther));
     }
 }
 

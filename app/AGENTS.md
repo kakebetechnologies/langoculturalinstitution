@@ -24,8 +24,8 @@ npm run pwa                  # build the web app into ../web/pwa
   outside it: `components/`, `lib/`, `constants/`.
 - JavaScript only (`.js` / `.jsx`). Every file starts with a short comment saying what it is for.
 - Every screen handles loading, error and empty states — use `components/StateView.jsx`.
-- Brand: the colours come from the official LCI logo (`COLORS` in `constants/theme.js`); fonts are Inter and Source Serif 4 via `AppText`.
-  Take colours, spacing and radii from `constants/theme.js`. Keep the design restrained: flat bordered cards, no gradients.
+- Brand: the colours come from the official LCI logo (`COLORS` in `constants/theme.js`); the layout follows the FaithFellows app (soft canvas, white rounded cards with a soft shadow, pill buttons, deep gradient headers). Fonts are Clarity City, with Inter for any text holding ɛ ɔ ŋ (Clarity City has no such glyphs): `AppText` switches by itself, text inputs use Inter.
+  Take colours, spacing and radii from `constants/theme.js`. Use the shared components (`Card`, `Row`, `Button`, `GradientTile`, `HeroHeader`…) rather than new one-off card styles; gradients are for headers and feature tiles only.
 - All API calls go through `lib/api.js` (Bearer token from secure storage, friendly `errorMessage()`); use `lib/useFetch.js` for GETs.
 - All visible text goes through `t('English phrase')`; run `npm run strings` after adding any. Never write Leb Lango yourself —
   translations are entered by language experts in the website's admin panel.

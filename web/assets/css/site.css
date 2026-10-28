@@ -1,18 +1,25 @@
 /* ==========================================================================
    Lango Cultural Institution — public website
-   Contained layout · Inter + Source Serif 4 · palette from the official logo
+   Contained layout · Clarity City (+ Inter for Leb Lango letters) · palette from the official logo
+   Soft canvas, rounded white cards, pill buttons and deep gradient panels, as in the FaithFellows web and app.
    ========================================================================== */
+/* Clarity City has no ɛ ɔ ŋ: the browser takes those letters from Inter (next in the font stacks). */
+@font-face{font-family:'Clarity City';font-weight:400;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_400Regular.ttf) format('truetype')}
+@font-face{font-family:'Clarity City';font-weight:500;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_500Medium.ttf) format('truetype')}
+@font-face{font-family:'Clarity City';font-weight:600;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_600SemiBold.ttf) format('truetype')}
+@font-face{font-family:'Clarity City';font-weight:700;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_700Bold.ttf) format('truetype')}
 :root{
   /* logo palette: black, red, yellow, sky blue, mountain grey, cream */
   --navy:#16181d; --navy-2:#262a32; --ink:#1b1e25; --text:#4f5662; --muted:#7b8390;
   --red:#ee1a26; --red-d:#c9111c; --yellow:#fddd16; --sky:#00adf1; --sky-d:#0786b8; --grey:#8e9c9d;
-  --paper:#fbf8ec; --paper-2:#f4efd9; --line:#e5e7eb; --white:#fff;
+  --paper:#fbf8ec; --paper-2:#f2eee3; --line:#ece9e1; --white:#fff; --canvas:#f7f5f0;
+  --deep:linear-gradient(135deg,#14161b 0%,#2b1015 55%,#7a0f18 100%);
   --container:1180px; --gutter:clamp(18px,4vw,32px);
-  --radius:12px; --radius-s:8px;
-  --shadow:0 1px 2px rgba(22,24,29,.05),0 12px 30px rgba(22,24,29,.08);
-  --shadow-s:0 1px 2px rgba(22,24,29,.04),0 4px 14px rgba(22,24,29,.05);
-  --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --radius:20px; --radius-s:14px;
+  --shadow:0 2px 4px rgba(22,24,29,.04),0 14px 34px rgba(22,24,29,.10);
+  --shadow-s:0 1px 2px rgba(22,24,29,.04),0 6px 20px rgba(22,24,29,.07);
+  --sans:'Clarity City','Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --serif:'Clarity City','Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --header-h:76px;
   /* aliases kept for older markup */
   --orange:var(--red); --orange-d:var(--red-d); --orange-l:var(--yellow); --teal:var(--sky); --teal-d:var(--sky-d); --blue:var(--sky);
@@ -661,3 +668,83 @@ input[type=file]{width:100%;padding:12px;border:1.5px dashed #cfd3da;border-radi
 .clanleader__ph img{width:100%;height:100%;object-fit:cover}.clanleader__in b{font:700 1.05rem var(--serif);color:var(--ink)}.clanleader__in p{margin:4px 0 0;font-size:.84rem}
 .msg__img{float:left;width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 12px 6px 0;border:2px solid var(--yellow)}
 @media(max-width:620px){.hlead__p{font-size:1.05rem}.hlead{padding:22px 18px}.hlead__facts dt{font-size:1.2rem}}
+
+
+/* ==========================================================================
+   FaithFellows layer (October 2026) — written last so it wins over the older rules above:
+   soft canvas, rounded white cards without borders, pill buttons, deep black-to-red gradient panels.
+   ========================================================================== */
+body{background:#ebe8df}
+.site{background:var(--canvas)}
+h1,h2,h3{letter-spacing:-.015em}
+
+/* buttons: pills */
+.btn{border-radius:999px;padding:.8em 1.5em}
+.btn--sm{padding:.58em 1.1em}
+.btn--outline{border-color:transparent;background:#fff;box-shadow:var(--shadow-s)}
+.btn--outline:hover{border-color:transparent;box-shadow:var(--shadow);color:var(--red-d)}
+.btn--ghost{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.1)}
+.btn--ghost:hover{background:#fff;color:var(--navy)}
+input:focus,select:focus,textarea:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(238,26,38,.12)}
+
+/* top bar and header */
+.topbar{background:#101216}
+/* no backdrop-filter here: it would make the header the containing block of the fixed mobile menu */
+.header{background:#fff;border-bottom:0;box-shadow:0 8px 28px rgba(22,24,29,.06)}
+.brand__mark{border-radius:15px}
+.nav>li>a{isolation:isolate}
+.nav>li>a::after{left:2px;right:2px;top:17px;bottom:17px;height:auto;border-radius:999px;background:#fde8e9;transform:none;opacity:0;z-index:-1;transition:opacity .18s}
+.nav>li:hover>a::after,.nav>li>a.on::after{opacity:1;transform:none}
+@media(min-width:992px){.nav ul{border:0;border-radius:0 0 20px 20px;box-shadow:var(--shadow);padding:10px}}
+.nav ul a{border-radius:12px}
+.nav__foot .btn--primary{color:#fff}
+.nav__foot .btn{justify-content:center}
+.nav__foot .nav__acct{justify-content:flex-start}
+
+/* hero (home): the deep gradient panel with soft circles */
+.hero__panel{background:var(--deep);border-radius:28px;color:#fff;isolation:isolate}
+.hero__panel::before,.hero__panel::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.06);z-index:-1;pointer-events:none}
+.hero__panel::before{width:430px;height:430px;right:-130px;top:-160px}
+.hero__panel::after{width:300px;height:300px;left:-90px;bottom:-130px}
+.hero h1{color:#fff}.hero h1 em{color:var(--yellow)}
+.hero .eyebrow{color:var(--yellow)}
+.hero .lead{color:rgba(255,255,255,.86)}
+.hero__facts li{border-left-color:rgba(255,255,255,.22)}
+.hero__facts b{color:#fff}.hero__facts span{color:rgba(255,255,255,.72)}
+.hero .btn--outline{background:rgba(255,255,255,.12);box-shadow:none;border-color:rgba(255,255,255,.45);color:#fff}
+.hero .btn--outline:hover{background:#fff;color:var(--navy)}
+.hm__main{border-radius:26px}
+.hm__inset{border-color:#22121a;border-radius:22px}
+.hm__event{border-radius:20px;border-left:0}
+.qstrip__in{border:0;border-radius:26px}
+.qi .ico{border-radius:15px}
+
+/* cards: white, no border, soft shadow */
+.card,.tile,.pillar,.box,.evrow,.formcard,.proverb,.leader-hero,.chat,.pcard,.lhub__card,.greet,.dsearch,.trans,.chap,.facts,.atlas,.pn a,.ncard,.lcard,.wn,.table-wrap,.msg.bot,.date{border-color:transparent;box-shadow:var(--shadow-s)}
+.word,.entry,.gloss__i{border-top-color:transparent;border-right-color:transparent;border-bottom-color:transparent;box-shadow:var(--shadow-s);border-radius:16px}
+.card,.tile,.pillar,.box,.evrow,.proverb,.pcard,.lcard,.ncard,.chap,.facts,.atlas,.table-wrap{border-radius:var(--radius)}
+.formcard,.leader-hero,.chat,.lhub__card,.dsearch,.trans,.wn{border-radius:26px}
+.pn a{border-radius:16px}
+.card:hover,.tile:hover,.pillar:hover,.evrow:hover,.ncard:hover,.pcard:hover{box-shadow:var(--shadow)}
+.tile:hover{border-color:transparent}
+.pillar{border-top:0}
+.pillar::before{content:"";display:block;width:38px;height:5px;border-radius:5px;background:var(--c,var(--red));margin-bottom:16px}
+.wn{border-top:0}
+.chipcloud a{border-color:transparent;box-shadow:var(--shadow-s)}
+.chipcloud a:hover,.chipcloud a.on{border-color:transparent}
+
+/* dark panels: the same black-to-red gradient as the app header */
+.section--dark,.statband,.cta-band,.darkpanel,.langband,.box--dark,.lhub__card--dark,.wotd{background:var(--deep)}
+.statband,.cta-band{border-radius:26px}
+.darkpanel,.langband{border-radius:30px}
+.box--dark,.lhub__card--dark{border-color:transparent}
+.wotd{border-top:0;border-radius:24px}
+
+/* page headers (inner pages) */
+.pagehero__panel{border-radius:28px}
+.pagehero__panel::before{background:linear-gradient(100deg,rgba(20,22,27,.94) 30%,rgba(122,15,24,.58))}
+
+/* footer */
+.footer{background:linear-gradient(160deg,#101216 0%,#25100f 70%,#4a0d14 100%);border-radius:34px 34px 0 0;margin-top:56px}
+.footer__news{border-radius:999px}
+.footer__social a{border-radius:50%}

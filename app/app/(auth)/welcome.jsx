@@ -32,7 +32,7 @@ export default function Welcome() {
         <AppText style={styles.headline}>{t('Your culture, your clan, your language — in your pocket')}</AppText>
         <AppText style={styles.sub}>{t('Join the Lango community to contribute heritage, learn Leb Lango and connect with your clan.')}</AppText>
         <Button title={t('Create an account')} onPress={() => router.push({ pathname: '/(auth)/register', params })} />
-        <Button title={t('Sign in')} variant="light" onPress={() => router.push({ pathname: '/(auth)/login', params })} />
+        <Button title={t('Sign in')} variant="glass" onPress={() => router.push({ pathname: '/(auth)/login', params })} />
         <Button title={t('Keep browsing')} variant="ghost" onPress={() => router.replace('/(tabs)')} style={{ minHeight: 40 }} />
       </View>
     </View>
@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: COLORS.navy },
   top: { paddingHorizontal: SPACING.lg },
   bottom: { flex: 1, justifyContent: 'flex-end', paddingHorizontal: SPACING.lg, gap: 12 },
-  headline: { fontFamily: FONTS.serif, fontSize: 31, lineHeight: 37, color: COLORS.white },
+  headline: { fontFamily: FONTS.bold, fontSize: 30, lineHeight: 37, color: COLORS.white },
   sub: { fontFamily: FONTS.regular, fontSize: 15.5, lineHeight: 23, color: 'rgba(255,255,255,0.86)', marginBottom: 6 },
 });

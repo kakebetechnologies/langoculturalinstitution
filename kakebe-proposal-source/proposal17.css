@@ -1,0 +1,60 @@
+/* 17-page edition: tighter type and spacing, one chapter per page, compact figures */
+body { font-size: 8.5pt; line-height: 1.4; }
+@page { margin: 18mm 15mm 15mm 15mm; }
+@page { @top-left { padding-bottom: 2.2mm; } @top-right { padding-bottom: 2.2mm; } @bottom-left { padding-top: 3mm; } @bottom-right { padding-top: 3mm; } }
+
+.opener { margin: 0 0 7pt; padding-bottom: 6pt; border-bottom-width: 1.3pt; }
+.opener .label { font-size: 7.4pt; }
+.opener h1 { font-size: 18pt; margin-top: 2pt; }
+.opener .lead { font-size: 9.2pt; line-height: 1.4; margin-top: 4pt; }
+
+h2.sec { margin: 9pt 0 3pt; font-size: 10pt; padding-left: 7pt; border-left-width: 2.5pt; }
+h2.sec.plain { margin-top: 8pt; }
+h3.sub { font-size: 9.2pt; margin: 8pt 0 2pt; padding-top: 4pt; }
+p { margin: 0 0 4pt; }
+ul, ol { margin: 2pt 0 5pt; padding-left: 13pt; }
+li { margin: 1pt 0; }
+blockquote.callout { margin: 5pt 0; padding: 5pt 9pt; }
+
+.tw { margin: 3pt 0 6pt; }
+table { font-size: 7.7pt; line-height: 1.34; }
+table.mid { font-size: 7.4pt; }
+table.dense { font-size: 7pt; }
+th { padding: 2.6pt 5pt; }
+td { padding: 2.4pt 5pt; }
+table.kv { font-size: 8pt; }
+table.kv th { width: 30mm; }
+
+.fig { margin: 5pt 0 6pt; }
+.fig .svgfig { width: 84%; margin: 0 auto; }
+figcaption { font-size: 6.8pt; margin-top: 3pt; }
+
+.shot { width: 100%; margin: 0; }
+.shots2 { gap: 8pt; margin: 5pt 0 7pt; }
+.shot .bar { height: 10pt; padding-left: 6pt; }
+.shot .bar i { width: 3.6pt; height: 3.6pt; }
+.shot img { aspect-ratio: 1200 / 560; }
+
+.phones { gap: 5pt; margin: 5pt 0 7pt; }
+.phone { width: 17%; }
+.phone .dev { border-width: 1.8pt; border-radius: 9pt; }
+.phone figcaption { font-size: 6.4pt; margin-top: 3pt; }
+
+/* contents and document control */
+.toc { margin-top: 2pt; }
+.t1 { font-size: 9.2pt; margin-top: 4.5pt !important; }
+.fine { font-size: 7.8pt; line-height: 1.38; color: #333; margin: 4pt 0; }
+
+/* chapter 1 fills its page; chapter 10 runs over two pages and may break inside tables */
+.chapter { break-before: page; }
+.tw.keep { break-inside: auto; }
+tr { break-inside: avoid; }
+
+/* per-chapter fitting */
+.c5 .fig .svgfig { width: 70%; }
+.c5 .phone { width: 14.5%; }
+.c7 .fig .svgfig { width: 66%; }
+
+#more-delivered-work { break-before: page; margin-top: 0; }
+.c9 ul { columns: 2; column-gap: 16pt; padding-left: 12pt; }
+.c9 li { break-inside: avoid; }

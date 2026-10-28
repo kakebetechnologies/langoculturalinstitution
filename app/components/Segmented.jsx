@@ -3,14 +3,14 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { COLORS, FONTS, RADIUS } from '../constants/theme';
 import AppText from './AppText';
 
-export default function Segmented({ options, value, onChange, style }) {
+export default function Segmented({ options, value, onChange, style, dark = false }) {
   return (
     <View style={[styles.row, style]} accessibilityRole="tablist">
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressable key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }} style={[styles.item, on && styles.on]}>
-            <AppText numberOfLines={1} style={[styles.text, on && { color: COLORS.white }]}>
+          <Pressable key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }} style={[styles.item, on && (dark ? styles.onDarkSurface : styles.on)]}>
+            <AppText numberOfLines={1} style={[styles.text, dark && { color: 'rgba(255,255,255,0.88)' }, on && { color: dark ? COLORS.navy : COLORS.white }]}>
               {o.label}
             </AppText>
           </Pressable>
@@ -21,8 +21,9 @@ export default function Segmented({ options, value, onChange, style }) {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', backgroundColor: COLORS.paper2, borderRadius: RADIUS.full, padding: 3 },
+  row: { flexDirection: 'row', backgroundColor: COLORS.track, borderRadius: RADIUS.full, padding: 4 },
   item: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 8, paddingHorizontal: 8, borderRadius: RADIUS.full },
   on: { backgroundColor: COLORS.navy },
+  onDarkSurface: { backgroundColor: COLORS.white },
   text: { fontFamily: FONTS.semibold, fontSize: 13, color: COLORS.black },
 });

@@ -31,6 +31,7 @@ More detail: [`web/README.md`](web/README.md) (site, admin, content rules, going
 | Explore | Clans, districts and Lira City, notable Langos, history and timeline, heritage, biodiversity, digital library |
 | Learn | Dictionary (works offline once downloaded), English ⇄ Leb Lango translator, proverbs, phrasebook, "suggest a word" |
 | Connect | Events with ticket registration, professionals directory, cultural assistant (answers only from reviewed content), news, leaderboard |
+| Clan group | People of the same clan join their group: see how many are in it and who (members can hide their name), write to each other, browse the clan's approved contributions. Sign up with email or **Continue with Google** (once Google is set up in Admin → Site settings) |
 | Support | Donation pledges, programs, transparency figures |
 | Me | Points, Bronze → Platinum levels, badges, my contributions and their status, notifications (in-app + push), settings |
 
@@ -71,7 +72,25 @@ npx expo start            # press w for the browser, or scan the QR code with Ex
 
 `app/.env.example` documents the settings. By default the app finds the website from the address of the computer running Expo
 (`http://<your-ip>/langoculturalinstitution/api`), so a phone on the same Wi-Fi works without editing anything.
-From the repo root, `npm run app:start` and `./scripts/dev.sh` do the same.
+From the repo root, `npm run app:start` and `./scripts/dev.sh` do the same. On Windows, double-click **`run.bat`**: it starts MySQL and
+Apache (XAMPP) if they are not running, prints this computer's address, then starts Expo.
+
+**Testing on an Android phone**
+
+1. Install **Expo Go** from Google Play. Put the phone on the same Wi-Fi (or hotspot) as the computer.
+2. Run `run.bat` (or start XAMPP, then `npm run app:start`). Scan the QR code with Expo Go.
+3. If the app opens but shows "No internet connection": on the phone's browser open `http://<computer-ip>/langoculturalinstitution/api/v1/ping`.
+   It should answer `{"status":"ok"…}`. If not, allow **Apache** and **Node.js** through Windows Firewall on private networks.
+   *Me → Settings → Check connection* in the app shows which address it is using.
+4. No Wi-Fi in common? `npm run app:tunnel` works over the internet (it asks to install `@expo/ngrok`), but the website must then be reachable too:
+   set `EXPO_PUBLIC_API_URL` in `app/.env` to the live address.
+
+Expo Go does not include push notifications on Android. They need an installed build (see below); everything else works in Expo Go.
+
+**Switching on "Continue with Google".** In Google Cloud Console create an OAuth client of type *Web application*, add the redirect address shown in
+*Admin → Site settings → Google sign-in (the app)* (Google accepts only https addresses and localhost, so this works on phones once the site is on its live
+address), then paste the client ID and secret into those two fields. The button appears in the app by itself (the site's `/api/v1/ping` says `google: true`).
+A new Google person still chooses a clan before the account is created. On iPhone, Apple's rules also require "Sign in with Apple" next to Google in store builds.
 
 ### 3. The installable web app (PWA)
 

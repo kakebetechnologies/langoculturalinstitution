@@ -7,7 +7,7 @@ import Button from '../components/Button';
 import Pill from '../components/Pill';
 import Screen from '../components/Screen';
 import StateView from '../components/StateView';
-import { COLORS, FONTS, RADIUS, SPACING } from '../constants/theme';
+import { COLORS, FONTS, RADIUS, SPACING, SHADOW } from '../constants/theme';
 import { useT } from '../lib/i18n';
 import { useFetch } from '../lib/useFetch';
 
@@ -71,7 +71,7 @@ export default function Proverbs() {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: SPACING.md + 2, paddingTop: 30, marginBottom: 12 },
+  card: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: SPACING.md + 2, paddingTop: 30, marginBottom: 12, ...SHADOW },
   quote: { position: 'absolute', top: -4, left: 14, fontFamily: FONTS.serif, fontSize: 56, lineHeight: 64, color: COLORS.yellow },
   text: { fontFamily: FONTS.serifSemi, fontSize: 18, lineHeight: 26, color: COLORS.black },
   begin: { backgroundColor: COLORS.paper, borderRadius: RADIUS.xl, borderWidth: 1, borderColor: '#EFE7BF', padding: SPACING.lg },

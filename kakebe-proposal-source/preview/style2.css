@@ -1,0 +1,151 @@
+/* Edition 2: light, airy pages in the style of a concept note. Kakebe blue and red, Montserrat headings, 10.5pt body. */
+:root { --navy: #164574; --blue: #1F5FA8; --red: #E01E26; --ink: #1d2b3a; --grey: #5c6b7a; --tint: #EAF1FA; --line: #d6e3f2; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+@page { size: A4; margin: 0; }
+body { margin: 0; font: 400 11pt/1.56 Inter, 'Segoe UI', sans-serif; color: var(--ink); }
+
+.pg { position: relative; width: 210mm; height: 297mm; overflow: hidden; background: #fff; break-after: page; page-break-after: always; }
+.pg .body { position: absolute; left: 20mm; right: 20mm; top: 20mm; bottom: 27mm; }
+.pg.hasband .body { bottom: calc(27mm + var(--band, 60mm)); }
+
+/* footer: page pill, copyright line */
+.foot { position: absolute; left: 0; right: 0; bottom: 0; height: 24mm; z-index: 5; pointer-events: none; }
+.pill { position: absolute; left: 14mm; bottom: 9mm; background: var(--blue); color: #fff; font: 600 10pt Montserrat, sans-serif; padding: 2.6mm 8mm; border-radius: 999px; }
+.copy { position: absolute; right: 16mm; bottom: 9mm; width: 112mm; padding-top: 2mm; border-top: .5pt solid var(--blue); font: 500 7.6pt Inter, sans-serif; color: var(--grey); text-align: right; }
+.hasband .copy { color: #fff; border-top-color: #fff; }
+
+/* headings */
+.ph { margin: 0; font: 300 27pt/1.12 Montserrat, sans-serif; color: var(--navy); text-transform: uppercase; letter-spacing: .01em; }
+.ph .b { font-weight: 800; color: var(--blue); }
+.ph-bar { width: 24mm; height: 1.7mm; background: var(--red); border-radius: 2mm; margin: 3.5mm 0 7mm; }
+.sub { margin: 6mm 0 2.5mm; font: 800 11.5pt Montserrat, sans-serif; color: var(--navy); text-transform: uppercase; letter-spacing: .02em; }
+p { margin: 0 0 4mm; text-align: justify; hyphens: auto; }
+b, strong { font-weight: 650; color: #0f1f30; }
+
+/* check lists */
+ul.checks { list-style: none; margin: 0 0 4mm; padding: 0; }
+ul.checks li { position: relative; padding-left: 8mm; margin: 0 0 2.1mm; }
+ul.checks li::before { content: ""; position: absolute; left: 0; top: .55mm; width: 5mm; height: 5mm; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='none' stroke='%231F5FA8' stroke-width='2'/><path d='M7 12.5l3.2 3.2L17 8.8' stroke='%231F5FA8' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain; }
+ul.checks.cols2 { columns: 2; column-gap: 8mm; }
+ul.checks.cols2 li { break-inside: avoid; }
+
+/* key box (dark label on the left edge, white card) */
+.key { display: flex; align-items: stretch; margin: 5mm 0 6mm -20mm; }
+.key .lab { flex: 0 0 56mm; background: var(--navy); color: #fff; font: 800 15pt/1.2 Montserrat, sans-serif; display: flex; align-items: center; padding: 0 16mm 0 20mm; border-radius: 0 14mm 14mm 0; }
+.key .card { flex: 1; margin-left: -10mm; border: 1.3pt solid var(--blue); border-radius: 6mm; background: #fff; padding: 5mm 6mm 3.2mm 15mm; box-shadow: 0 2mm 4mm rgba(22,69,116,.12); }
+.key .card ul.checks { margin: 0; }
+
+/* theme call-out */
+.theme { border-left: 3.2mm solid var(--blue); background: var(--tint); padding: 4.5mm 6mm; margin: 5mm 0; border-radius: 0 4mm 4mm 0; font-size: 11pt; }
+.theme b { color: var(--navy); }
+
+/* tiles */
+.tiles { display: grid; gap: 4mm; margin: 4mm 0; }
+.tile { border: 1pt solid var(--line); border-radius: 3mm; padding: 4mm 4mm 3.4mm; background: #fff; }
+.tile .k { font: 800 19pt/1.1 Montserrat, sans-serif; color: var(--blue); }
+.tile .v { font-size: 9.6pt; color: var(--grey); line-height: 1.35; margin-top: 1mm; }
+.tiles.small .tile .k { font-size: 11pt; color: var(--navy); }
+
+.chips { margin: 2mm 0 4mm; }
+.chip { display: inline-block; background: var(--tint); color: var(--navy); font: 600 9.6pt Montserrat, sans-serif; padding: 1.8mm 4.2mm; border-radius: 999px; margin: 0 2mm 2.4mm 0; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; margin: 0 0 5mm; font-size: 10.2pt; line-height: 1.4; table-layout: fixed; }
+th { background: var(--navy); color: #fff; text-align: left; font: 600 9.8pt Montserrat, sans-serif; padding: 2.6mm 3.6mm; }
+th:first-child { border-radius: 2.4mm 0 0 0; } th:last-child { border-radius: 0 2.4mm 0 0; }
+td { padding: 2.5mm 3.6mm; border-bottom: .6pt solid var(--line); vertical-align: top; }
+tbody tr:nth-child(even) td { background: #f6f9fd; }
+td:first-child { width: 30%; }
+table.ref td:first-child { width: 27%; } table.ref td:nth-child(2) { width: 44%; }
+table.ref { font-size: 10pt; } table.ref td { padding: 2.2mm 3.2mm; }
+table.ref td i { display: block; font-style: normal; font-size: 8.4pt; color: var(--blue); font-weight: 600; margin-top: .6mm; }
+table.sign td { height: 11.5mm; vertical-align: middle; }
+table.sign td:first-child { width: 22%; }
+
+/* figures */
+.fig { margin: 3mm auto 4mm; text-align: center; }
+.fig svg { display: block; margin: 0 auto; height: auto; }
+.fig .cap { margin-top: 1.6mm; font-size: 8.8pt; color: var(--grey); }
+
+/* team */
+.team { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; margin: 2mm 0 5mm; }
+.person { text-align: center; }
+.person img { width: 27mm; height: 27mm; border-radius: 50%; object-fit: cover; border: 1.4mm solid #fff; box-shadow: 0 0 0 .7mm var(--blue); }
+.person .n { font: 700 9.4pt Montserrat, sans-serif; color: var(--navy); margin-top: 2.2mm; }
+.person .r { font: 600 8.4pt Inter, sans-serif; color: var(--blue); }
+.person .d { font-size: 8.4pt; color: var(--grey); line-height: 1.35; margin-top: .6mm; }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; margin: 2mm 0 6mm; }
+.step { background: var(--tint); border-radius: 3mm; padding: 4mm 3mm 3.4mm; position: relative; }
+.step .no { width: 8mm; height: 8mm; border-radius: 50%; background: var(--red); color: #fff; font: 800 10pt/8mm Montserrat, sans-serif; text-align: center; margin-bottom: 2.2mm; }
+.step .t { font: 800 10.4pt Montserrat, sans-serif; color: var(--navy); }
+.step .x { font-size: 9.2pt; line-height: 1.35; color: var(--grey); margin-top: .8mm; }
+
+/* contact */
+.contact { border: 1.3pt solid var(--blue); border-radius: 5mm; padding: 5mm 7mm; display: grid; grid-template-columns: 24mm 1fr; gap: 1.4mm 4mm; margin: 4mm 0; box-shadow: 0 2mm 4mm rgba(22,69,116,.1); }
+.contact .name { grid-column: 1 / 3; font: 800 14pt Montserrat, sans-serif; color: var(--navy); }
+.contact .ttl { grid-column: 1 / 3; font: 600 10pt Inter, sans-serif; color: var(--blue); margin-bottom: 2mm; }
+.contact .k { font: 700 8.6pt Montserrat, sans-serif; color: var(--grey); text-transform: uppercase; letter-spacing: .05em; padding-top: .5mm; }
+.contact .v { font-size: 11pt; }
+
+/* photo band with quote */
+.band { position: absolute; left: 0; right: 0; bottom: 0; height: var(--band, 60mm); background-size: cover; background-position: center 35%; z-index: 1; }
+.band::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(22,69,116,.94) 0%, rgba(22,69,116,.62) 45%, rgba(22,69,116,.12) 80%, rgba(255,255,255,0) 100%); }
+.band::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12mm; background: linear-gradient(to bottom, #fff, rgba(255,255,255,0)); }
+.band .q { position: absolute; left: 30mm; right: 26mm; bottom: 25mm; color: #fff; font: 700 15pt/1.3 Montserrat, sans-serif; z-index: 2; }
+.band .qm { position: absolute; left: 14mm; bottom: 33mm; color: #fff; font: 800 52pt/1 Georgia, serif; z-index: 2; opacity: .9; }
+
+/* cover */
+.cover .logo { position: absolute; left: 20mm; top: 16mm; width: 48mm; }
+.cover .tag { position: absolute; right: 20mm; top: 18mm; border: 1.2pt solid var(--red); color: var(--red); font: 800 9.5pt Montserrat, sans-serif; letter-spacing: .22em; padding: 2mm 5mm; border-radius: 999px; }
+.cover .title { position: absolute; left: 20mm; right: 20mm; top: 44mm; }
+.cover .title .l { display: block; font: 300 30pt/1.1 Montserrat, sans-serif; color: var(--navy); text-transform: uppercase; }
+.cover .title .b { display: block; font: 800 30pt/1.1 Montserrat, sans-serif; color: var(--blue); text-transform: uppercase; }
+.cover .title .bar { width: 78mm; height: 3.4mm; border-radius: 2mm; background: var(--red); margin: 6mm 0 6mm; }
+.cover .title .sub2 { font: 600 12.4pt/1.4 Montserrat, sans-serif; color: var(--navy); }
+.cover .photo { position: absolute; left: 0; right: 0; top: 118mm; height: 122mm; background-size: cover; background-position: center 45%; }
+.cover .photo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, #fff 0%, rgba(255,255,255,0) 32%); }
+.cover .inset { position: absolute; width: 56mm; height: 38mm; background-size: cover; background-position: center; border: 1.6mm solid #fff; border-radius: 3mm; box-shadow: 0 2mm 5mm rgba(0,0,0,.25); z-index: 2; }
+.cover .band2 { position: absolute; left: 0; right: 0; bottom: 0; height: 57mm; background: var(--blue); color: #fff; z-index: 3; }
+.cover .band2 .big { position: absolute; left: 20mm; top: 13mm; }
+.cover .band2 .big small { display: block; font: 600 9.5pt Montserrat, sans-serif; letter-spacing: .24em; text-transform: uppercase; opacity: .9; }
+.cover .band2 .big strong { display: block; font: 800 34pt/1.05 Montserrat, sans-serif; color: #fff; }
+.cover .band2 .meta { position: absolute; right: 20mm; top: 13mm; width: 88mm; font-size: 9.8pt; line-height: 1.5; }
+.cover .band2 .meta b { color: #fff; font-weight: 700; display: inline-block; width: 24mm; opacity: .85; font-weight: 600; }
+
+/* contents */
+.toc { list-style: none; margin: 0; padding: 0; }
+.toc li { display: flex; align-items: baseline; gap: 2mm; padding: 2.8mm 0; font: 600 11.4pt Montserrat, sans-serif; color: var(--navy); }
+.toc li .n { color: var(--red); width: 8mm; font-weight: 800; }
+.toc li i { flex: 1; border-bottom: .8pt dotted #9fb6d3; transform: translateY(-1mm); }
+.toc li b { color: var(--blue); font-weight: 800; }
+.glance { background: var(--tint); border-radius: 5mm; padding: 6mm 7mm; }
+.glance h4 { margin: 0 0 3mm; font: 800 11.5pt Montserrat, sans-serif; color: var(--navy); text-transform: uppercase; }
+.glance .row { padding: 2.2mm 0; border-bottom: .6pt solid #c9dbef; }
+.glance .row:last-child { border-bottom: 0; }
+.glance .row span { display: block; font: 700 8.4pt Montserrat, sans-serif; color: var(--blue); text-transform: uppercase; letter-spacing: .05em; }
+.glance .row div { font-size: 10.6pt; }
+.twocol { display: grid; grid-template-columns: 1fr 66mm; gap: 10mm; }
+
+.steps .step { min-height: 0; }
+.steps[style*="repeat(3"] .step, .steps[style*="repeat(4"] .step { padding: 4mm 4mm 3.6mm; }
+.steps[style*="repeat(3"] { margin-bottom: 4mm; }
+.steps[style*="repeat(3"] .x, .steps[style*="repeat(4"] .x { font-size: 9.8pt; }
+.steps[style*="repeat(3"] .t, .steps[style*="repeat(4"] .t { font-size: 11pt; }
+
+/* roomier pages: a little more air where the content is lighter */
+.roomy p { margin-bottom: 5.5mm; }
+.roomy td { padding-top: 3.6mm; padding-bottom: 3.6mm; }
+.roomy .sub { margin-top: 9mm; }
+.roomy ul.checks li { margin-bottom: 3mm; }
+.roomy .tile { padding: 5mm 4.5mm 4.4mm; }
+.roomy .key { margin: 8mm 0 9mm -20mm; }
+.roomy .theme { margin: 8mm 0; }
+.roomy .chips { margin-top: 3mm; }
+
+.team { gap: 3mm 2mm; margin: 4mm 0 6mm; }
+.person img { width: 29mm; height: 29mm; }
+.person .n { font-size: 10pt; margin-top: 3mm; line-height: 1.25; }
+.person .r { font-size: 9.2pt; line-height: 1.3; margin-top: .6mm; }

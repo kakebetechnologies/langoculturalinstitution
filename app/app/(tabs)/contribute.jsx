@@ -10,7 +10,7 @@ import Row from '../../components/Row';
 import Screen from '../../components/Screen';
 import SectionHeader from '../../components/SectionHeader';
 import SignInPrompt from '../../components/SignInPrompt';
-import { COLORS, FONTS, RADIUS, SPACING } from '../../constants/theme';
+import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../../constants/theme';
 import { CONTRIBUTION_TYPES, STATUS_TONE } from '../../constants/contribute';
 import { useAuth } from '../../lib/auth';
 import { fmtDate } from '../../lib/format';
@@ -83,8 +83,8 @@ export default function Contribute() {
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: SPACING.md, marginBottom: 10 },
-  icon: { width: 48, height: 48, borderRadius: RADIUS.lg, alignItems: 'center', justifyContent: 'center' },
-  title: { fontFamily: FONTS.serif, fontSize: 17, lineHeight: 22, color: COLORS.black },
-  board: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.yellowMist, borderRadius: RADIUS.lg, padding: SPACING.md, marginTop: SPACING.lg },
+  card: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: SPACING.md, marginBottom: 10, ...SHADOW },
+  icon: { width: 50, height: 50, borderRadius: RADIUS.lg - 2, alignItems: 'center', justifyContent: 'center' },
+  title: { fontFamily: FONTS.bold, fontSize: 16.5, lineHeight: 22, color: COLORS.black },
+  board: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.yellowMist, borderRadius: RADIUS.xl, padding: SPACING.md, marginTop: SPACING.lg },
 });

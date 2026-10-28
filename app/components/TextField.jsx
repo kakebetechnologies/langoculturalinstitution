@@ -55,11 +55,12 @@ export default function TextField({ label, error, hint, secureTextEntry, multili
 const styles = StyleSheet.create({
   wrap: { marginBottom: SPACING.md },
   label: { marginBottom: 6 },
-  field: { flexDirection: 'row', alignItems: 'center', minHeight: 50, paddingHorizontal: SPACING.md, borderRadius: RADIUS.md, borderWidth: 1.5, borderColor: COLORS.gray300, backgroundColor: COLORS.white },
+  field: { flexDirection: 'row', alignItems: 'center', minHeight: 52, paddingHorizontal: SPACING.md, borderRadius: RADIUS.lg, borderWidth: 1.5, borderColor: COLORS.gray300, backgroundColor: COLORS.white },
   multi: { alignItems: 'flex-start' },
-  focused: { borderColor: COLORS.sky },
+  focused: { borderColor: COLORS.primary },
   invalid: { borderColor: COLORS.danger },
-  input: { flex: 1, fontFamily: FONTS.regular, fontSize: 15, color: COLORS.black, paddingVertical: 10, ...Platform.select({ web: { outlineStyle: 'none' } }) },
+  // Inter, not Clarity City: people type Leb Lango letters (ɛ ɔ ŋ) here.
+  input: { flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15, color: COLORS.black, paddingVertical: 10, ...Platform.select({ web: { outlineStyle: 'none' } }) },
   inputMulti: { minHeight: 110, textAlignVertical: 'top' },
   error: { color: COLORS.danger, marginTop: 4 },
   hint: { marginTop: 4 },

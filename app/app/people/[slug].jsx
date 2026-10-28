@@ -7,7 +7,7 @@ import Button from '../../components/Button';
 import DetailScreen from '../../components/DetailScreen';
 import Pill from '../../components/Pill';
 import RichText from '../../components/RichText';
-import { COLORS, FONTS, RADIUS, SPACING } from '../../constants/theme';
+import { COLORS, FONTS, RADIUS, SPACING, SHADOW } from '../../constants/theme';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
 
@@ -52,5 +52,5 @@ export default function Person() {
 const styles = StyleSheet.create({
   head: { flexDirection: 'row', gap: 14, alignItems: 'center', backgroundColor: COLORS.paper, borderRadius: RADIUS.lg, padding: SPACING.md, marginBottom: SPACING.md },
   lead: { fontFamily: FONTS.serifSemi, fontSize: 16.5, lineHeight: 23, color: COLORS.black, marginTop: 2 },
-  cta: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: SPACING.md, marginTop: SPACING.lg },
+  cta: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: SPACING.md, marginTop: SPACING.lg, ...SHADOW },
 });

@@ -204,6 +204,7 @@ function screen_settings(): void
         'Social media' => ['facebook' => 'Facebook URL', 'x' => 'X (Twitter) URL', 'youtube' => 'YouTube URL', 'instagram' => 'Instagram URL'],
         'Numbers & map' => ['clan_total' => 'Total registered clans', 'map_lat' => 'Map centre latitude', 'map_lng' => 'Map centre longitude'],
         'Giving' => ['donation_note' => 'Donation appeal text'],
+        'Google sign-in (the app)' => ['google_client_id' => 'Google client ID', 'google_client_secret' => 'Google client secret'],
     ];
     $images = [
         'logo' => ['Replace logo', 'PNG, WebP or JPG, ideally with a transparent background. Shown in the header, footer, admin and browser tab.'],
@@ -244,6 +245,8 @@ function screen_settings(): void
         <?php endforeach; ?>
       </div>
       <?php foreach ($groups as $title => $fields): ?><h3 style="margin-top:26px"><?= e($title) ?></h3><div class="formgrid"><?php foreach ($fields as $k => $l): $long = in_array($k, ['address', 'donation_note', 'site_tagline', 'mission', 'vision']); ?><div class="field <?= $long ? 'full' : '' ?>"><label><?= e($l) ?></label><?php if (in_array($k, ['mission', 'vision'])): ?><textarea name="<?= e($k) ?>" rows="3"><?= e(setting($k)) ?></textarea><?php else: ?><input type="text" name="<?= e($k) ?>" value="<?= e(setting($k)) ?>"><?php endif; ?></div><?php endforeach; ?></div><?php endforeach; ?>
+      <?php require_once ROOT . '/app/lib/app_api.php'; ?>
+      <p class="dim" style="margin-top:14px"><b>Google sign-in:</b> <?= google_enabled() ? 'switched on.' : 'off until both fields above are filled.' ?> In Google Cloud Console (Credentials, OAuth client ID, Web application) add this authorised redirect URI: <code><?= e(google_callback_url()) ?></code>. Google accepts only https addresses (and localhost), so phones can use it once the site is on its live address.</p>
       <div class="formfoot" style="margin-top:22px"><button class="btn btn--primary">Save settings</button></div></form>
     <?php admin_end();
 }

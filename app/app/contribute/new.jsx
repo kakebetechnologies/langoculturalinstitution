@@ -17,7 +17,7 @@ import ScreenHeader from '../../components/ScreenHeader';
 import Select from '../../components/Select';
 import SignInPrompt from '../../components/SignInPrompt';
 import TextField from '../../components/TextField';
-import { COLORS, FONTS, RADIUS, SPACING } from '../../constants/theme';
+import { COLORS, FONTS, RADIUS, SPACING, SHADOW } from '../../constants/theme';
 import { CONTRIBUTION_TYPES, WORD_CATS, WORD_POS } from '../../constants/contribute';
 import { errorMessage, fieldErrors } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   segOn: { backgroundColor: COLORS.primary },
   body: { padding: SPACING.md, paddingBottom: SPACING.xl },
   banner: { backgroundColor: COLORS.primaryMist, borderRadius: RADIUS.md, padding: SPACING.md, marginBottom: SPACING.md },
-  summary: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, padding: SPACING.md, marginBottom: SPACING.md, gap: 4 },
+  summary: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: SPACING.md, marginBottom: SPACING.md, gap: 4, ...SHADOW },
   meta: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 6 },
   agree: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', marginBottom: 12 },
   box: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: COLORS.gray300, alignItems: 'center', justifyContent: 'center', marginTop: 1, backgroundColor: COLORS.white },

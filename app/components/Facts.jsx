@@ -1,6 +1,6 @@
 // A strip of key facts at the top of a detail screen (population, area, created…): big number or word, small label under it.
 import { StyleSheet, View } from 'react-native';
-import { COLORS, FONTS, RADIUS, SPACING } from '../constants/theme';
+import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../constants/theme';
 import AppText from './AppText';
 
 export default function Facts({ items }) {
@@ -24,7 +24,7 @@ export default function Facts({ items }) {
 }
 
 const styles = StyleSheet.create({
-  box: { flexDirection: 'row', flexWrap: 'wrap', backgroundColor: COLORS.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.line, overflow: 'hidden' },
+  box: { flexDirection: 'row', flexWrap: 'wrap', backgroundColor: COLORS.white, borderRadius: RADIUS.lg, overflow: 'hidden', ...SHADOW },
   cell: { width: '50%', flexGrow: 1, padding: SPACING.md - 2, borderRightWidth: 1, borderBottomWidth: 1, borderColor: COLORS.line },
-  value: { fontFamily: FONTS.serif, fontSize: 21, lineHeight: 27, color: COLORS.black },
+  value: { fontFamily: FONTS.bold, fontSize: 20, lineHeight: 26, color: COLORS.black },
 });

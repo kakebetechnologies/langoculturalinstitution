@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { Platform } from 'react-native';
 import api from './api';
 import { readJson, removeDir, removeFile, writeJson } from './localFiles';
+import { googleBrowserSignIn, setPendingGoogle } from './google';
 import { forgetOutbox } from './outbox';
 import { disablePush } from './push';
 import { clearToken, getToken, onSessionExpired, setToken } from './session';
@@ -99,6 +100,36 @@ export function AuthProvider({ children }) {
     [start],
   );
 
+  // "Continue with Google": resolves { user } for a member who is signed in, { pending } for a new person who still has to choose a clan,
+  // or null if the person closed the browser. Throws for the button to show.
+  const signInWithGoogle = useCallback(async () => {
+    const got = await googleBrowserSignIn();
+    if (!got) return null;
+    const { data } = await api.post('/auth/google/exchange', { code: got.code, verifier: got.verifier, device_name: device() });
+    if (data.needs_clan) {
+      setPendingGoogle({ code: got.code, verifier: got.verifier, profile: data.profile });
+      return { pending: data.profile };
+    }
+    return { user: await start(data) };
+  }, [start]);
+
+  // Finishes a new Google person's account once they have chosen a clan.
+  const completeGoogle = useCallback(
+    async (pending, form) =>
+      start(
+        (
+          await api.post('/auth/google/complete', {
+            code: pending.code,
+            verifier: pending.verifier,
+            clan_id: form.clan_id,
+            clan_other: form.clan_other?.trim() || undefined,
+            device_name: device(),
+          })
+        ).data,
+      ),
+    [start],
+  );
+
   // Re-reads the profile (points, level and badges change when contributions are approved).
   const refresh = useCallback(async () => {
     try {
@@ -125,7 +156,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const value = useMemo(() => ({ ready, token, user, signIn, signUp, signOut, refresh, setUser: remember }), [ready, token, user, signIn, signUp, signOut, refresh, remember]);
+  const value = useMemo(() => ({ ready, token, user, signIn, signUp, signInWithGoogle, completeGoogle, signOut, refresh, setUser: remember }), [ready, token, user, signIn, signUp, signInWithGoogle, completeGoogle, signOut, refresh, remember]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

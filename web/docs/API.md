@@ -23,6 +23,8 @@ The JSON API behind the Lango App (`../app`) and the open-data page at `/develop
 | Method | Path | Notes |
 |---|---|---|
 | POST | `/auth/register` | `name, email, password (8+), clan_id (id or "other" + clan_other)`, optional `phone, country` → `{ token, user }` |
+| POST | `/auth/google/exchange` | **Continue with Google.** The app opens `<site>/auth/google/start` in the phone's browser; Google signs the person in; the browser returns to the app with a one-time `code`. Send `code` + the PKCE `verifier` → `{ token, user, is_new_user: false }` for a member, or `{ needs_clan: true, profile }` for a new person (see `/auth/google/complete`). Only if Google credentials are set in Admin → Site settings; `/ping` says `google: true` when they are |
+| POST | `/auth/google/complete` | A new Google person chooses a clan: `code`, `verifier`, `clan_id` (id or "other" + `clan_other`) → `201 { token, user, is_new_user: true }`. Staff accounts never sign in through Google |
 | POST | `/auth/login` | `login` (email or phone) + `password` → `{ token, user }` |
 | DELETE | `/auth/token` | Signs out (revokes this token) |
 | GET / PATCH | `/me` | Profile with `points`, `level`, `counts`, `badges` |
@@ -40,6 +42,21 @@ The JSON API behind the Lango App (`../app`) and the open-data page at `/develop
 | GET | `/contributions/track?code=` | Status of one contribution by its tracking code |
 
 Approving, publishing or returning a contribution in the admin panel creates a notification for the member and sends an Expo push to their registered phones.
+
+## Clan groups
+
+A member who chose a clan can join that clan's group. `user.clan_group` (in `/me` and the sign-in answers) says whether they have joined, how many people are in the group and how many messages are new. `{id}` is the numeric clan id; `/clans` and `/clans/{slug}` also carry `members` (the group size).
+
+| Method | Path | Notes |
+|---|---|---|
+| GET | `/clans/{id}/group` | Public: member count; for a signed-in person also `is_my_clan`, `joined`, `hidden` |
+| POST | `/clans/{id}/join`, `/clans/{id}/leave` | Only the person's own clan. Changing clan on the profile leaves the old group |
+| POST | `/clans/{id}/visibility` | `hidden: true/false`: keep the name off the member list (still counted) |
+| GET | `/clans/{id}/members` | Group members only; `meta.group_size` and `meta.hidden` give the totals |
+| GET / POST | `/clans/{id}/messages` | Group members only. GET: latest 40, or `?after=ID` (poll for new), `?before=ID` (older). POST `{ body }`: plain text up to 1000 characters; 15 messages per 5 minutes; the same text twice in a minute is not repeated |
+| DELETE | `/clans/{id}/messages/{mid}` | Own message, or a clan leader / moderator |
+| POST | `/clans/{id}/messages/{mid}/report` | `reason` optional. Three different reporters hide a message until a moderator looks at it in Admin → Clan messages |
+| GET | `/clans/{id}/archive` | Group members only: approved contributions made for that clan (a name is shown only when the contributor asked to be credited) |
 
 ## Content (read only)
 

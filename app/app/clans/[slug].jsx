@@ -2,18 +2,22 @@
 // members. If no leader has been recorded yet the page says so.
 import { StyleSheet, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import AppText from '../../components/AppText';
 import Avatar from '../../components/Avatar';
+import Button from '../../components/Button';
 import Card from '../../components/Card';
 import DetailScreen from '../../components/DetailScreen';
 import Pill from '../../components/Pill';
 import RichText from '../../components/RichText';
 import { COLORS, FONTS, SPACING } from '../../constants/theme';
+import { useAuth } from '../../lib/auth';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
 
 export default function Clan() {
   const { t } = useT();
+  const { user } = useAuth();
   const { slug } = useLocalSearchParams();
   const { data, loading, error, retry } = useFetch(`/clans/${slug}`);
   const c = data?.data;
@@ -45,7 +49,14 @@ export default function Clan() {
             {c.totem ? <Pill label={`${t('Totem')}: ${c.totem}`} tone="gold" /> : null}
             {c.district ? <Pill label={c.district} tone="sky" /> : null}
             <Pill label={c.verified ? t('Verified by LCI') : t('Awaiting verification')} icon={c.verified ? 'checkmark' : undefined} tone={c.verified ? 'green' : 'grey'} />
+            {c.members ? <Pill label={c.members === 1 ? t('1 member in the group') : t('{n} members in the group', { n: c.members })} icon="people" tone="red" /> : null}
           </View>
+
+          {user?.clan?.id === c.id ? (
+            <Button title={t('Open your clan group')} icon="people" onPress={() => router.push('/clan-group')} style={{ marginTop: SPACING.md }} />
+          ) : !user ? (
+            <Button title={t('Register to join this clan group')} icon="people-outline" variant="outline" onPress={() => router.push('/(auth)/register')} style={{ marginTop: SPACING.md }} />
+          ) : null}
 
           {c.history_html ? (
             <>

@@ -101,7 +101,7 @@ function page_start(string $title, array $o = []): void
 <script>document.documentElement.className="js"</script>
 <link rel="icon" href="<?= e($logo ?: asset('assets/img/favicon.svg')) ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= e(asset('assets/css/site.css')) ?>">
 <?php if (!empty($o['leaflet'])): ?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"><?php endif; ?>
 </head>

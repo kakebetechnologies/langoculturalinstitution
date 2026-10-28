@@ -1,5 +1,9 @@
-/* LCI admin control panel — matches the public site: charcoal, red, Inter + Source Serif */
-:root{--navy:#16181d;--navy-2:#262a32;--ink:#1b1e25;--text:#59606b;--muted:#8b929c;--orange:#ee1a26;--orange-d:#c9111c;--orange-l:#fddd16;--teal:#00adf1;--teal-d:#0786b8;--yellow:#fddd16;--cream:#fffbe6;--line:#e8eaee;--bg:#f4f5f7;--radius:14px;--grad:linear-gradient(135deg,#f5333d,#d3121d);--font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--serif:'Source Serif 4',Georgia,serif;
+/* LCI admin control panel — matches the public site: charcoal, red, Clarity City (Inter takes the Leb Lango letters ɛ ɔ ŋ it lacks) */
+@font-face{font-family:'Clarity City';font-weight:400;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_400Regular.ttf) format('truetype')}
+@font-face{font-family:'Clarity City';font-weight:500;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_500Medium.ttf) format('truetype')}
+@font-face{font-family:'Clarity City';font-weight:600;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_600SemiBold.ttf) format('truetype')}
+@font-face{font-family:'Clarity City';font-weight:700;font-style:normal;font-display:swap;src:url(../fonts/ClarityCity_700Bold.ttf) format('truetype')}
+:root{--navy:#16181d;--navy-2:#262a32;--ink:#1b1e25;--text:#59606b;--muted:#8b929c;--orange:#ee1a26;--orange-d:#c9111c;--orange-l:#fddd16;--teal:#00adf1;--teal-d:#0786b8;--yellow:#fddd16;--cream:#fffbe6;--line:#e8eaee;--bg:#f4f5f7;--radius:14px;--grad:linear-gradient(135deg,#f5333d,#d3121d);--font:'Clarity City','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--serif:'Clarity City','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 --shadow:0 8px 26px rgba(22,24,29,.07);
 /* aliases for markup shared with earlier versions */
 --clay:var(--orange-d);--clay-d:#a50d17;--ochre:var(--orange);--gold:var(--orange-l);--sand:#f8f1cf;--leaf:var(--teal);--fd:var(--font);--fb:var(--font)}
@@ -134,3 +138,39 @@ body.login::after{content:"";position:absolute;left:-60px;bottom:-60px;width:220
 .nlist .nrow{display:flex;gap:14px;align-items:center;padding:13px 18px;border-bottom:1px solid #f1f3f6}.nlist .nrow.new{background:#fffbe6}.nlist .nrow .grow{flex:1;min-width:0}.nlist form{margin:0}
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}.btn.danger{color:#b0121c}.btn.danger:hover{border-color:#b0121c;color:#b0121c}
 .check{display:flex;gap:9px;align-items:center;font-weight:700;margin:6px 0 12px}
+
+
+/* ==========================================================================
+   FaithFellows layer (October 2026) — written last so it wins over the older rules above:
+   a deep gradient sidebar with pill links, soft white cards without borders, rounded everything.
+   ========================================================================== */
+:root{--deep:linear-gradient(160deg,#101216 0%,#25100f 70%,#4a0d14 100%);--bg:#f6f4ef}
+body{background:var(--bg)}
+.side{background:var(--deep);border-radius:0 30px 30px 0;border-top:0;margin:0;padding-top:6px}
+.side::before{content:"";display:block;height:5px;margin:0 22px 0;border-radius:0 0 6px 6px;background:linear-gradient(90deg,#1a1a1a 0 25%,#ee1a26 25% 50%,#fddd16 50% 75%,#00adf1 75% 100%)}
+.side nav a{margin:2px 12px;padding:10px 14px;border-left:0;border-radius:999px}
+.side nav a.on{background:rgba(255,255,255,.14);color:#fff;border-left:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.side nav a.on .icon{color:var(--yellow)}
+.top{background:rgba(246,244,239,.9);border-bottom:0}
+.top h1{letter-spacing:-.015em}
+.panel,.card,.cards .card{border-color:transparent;border-radius:24px;box-shadow:0 1px 2px rgba(22,24,29,.04),0 8px 26px rgba(22,24,29,.07)}
+.panel.flush{border-radius:24px}
+.card .ico{border-radius:16px}
+.welcome{background:linear-gradient(135deg,#14161b 0%,#2b1015 55%,#7a0f18 100%);border-radius:28px}
+.welcome__dot{border-color:rgba(255,255,255,.14)}
+.bars i{background:linear-gradient(#f5b800,#ee1a26)}
+.table th{background:transparent}
+.table tr:hover td{background:#fbf6ee}
+.chip,.mini,.chipbtn,.bell__btn,.pager a,.pager span{border-color:transparent}
+.mini,.chipbtn{box-shadow:0 1px 2px rgba(22,24,29,.05),0 3px 10px rgba(22,24,29,.07)}
+.btn--line{border-color:transparent;box-shadow:0 1px 2px rgba(22,24,29,.05),0 3px 10px rgba(22,24,29,.08)}
+.btn--line:hover{border-color:transparent;box-shadow:0 1px 2px rgba(22,24,29,.06),0 8px 18px rgba(22,24,29,.12)}
+.bell__btn{box-shadow:0 1px 2px rgba(22,24,29,.05),0 3px 10px rgba(22,24,29,.08)}
+.bell__menu{border-color:transparent;border-radius:22px}
+.alert{border-radius:16px}
+input:focus,select:focus,textarea:focus,.rte__body:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(238,26,38,.12)}
+body.login{background:linear-gradient(135deg,#101216 0%,#25100f 60%,#7a0f18 100%)}
+body.login::before{border-color:rgba(255,255,255,.07)}
+body.login::after{background:rgba(255,255,255,.06)}
+.login__box{border-radius:30px}
+@media(max-width:900px){.side{border-radius:0 26px 26px 0}}

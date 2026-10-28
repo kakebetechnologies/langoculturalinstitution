@@ -17,5 +17,5 @@ export default function Skeleton({ width = '100%', height = 16, radius = RADIUS.
     return () => loop.stop();
   }, [pulse]);
 
-  return <Animated.View style={[{ width, height, borderRadius: radius, backgroundColor: '#E7E3D6', opacity: pulse }, style]} />;
+  return <Animated.View style={[{ width, height, borderRadius: radius, backgroundColor: '#E9E5DA', opacity: pulse }, style]} />;
 }

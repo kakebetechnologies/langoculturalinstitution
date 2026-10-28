@@ -26,6 +26,8 @@ function special_modules(): array
         'contributions' => ['Contributions', 'camera', array_merge(ADM_MOD, ['clan_leader']), 'Moderation'],
         'words'         => ['Word suggestions', 'book', ADM_STAFF, 'Moderation'],
         'clan_quick'    => ['Add clans in bulk', 'plus', ADM_CONTENT, 'Heritage'],
+        'clan_requests' => ['Clan requests', 'users', ADM_CONTENT, 'Heritage'],
+        'clan_messages' => ['Clan messages', 'chat', ADM_STAFF, 'Moderation'],
         'settings'      => ['Site settings', 'settings', ADM_ALL, 'System'],
         'translations'  => ['Translations', 'globe', ['super_admin', 'admin', 'editor'], 'System'],
         'audit'         => ['Audit log', 'list', ADM_ALL, 'System'],
@@ -56,6 +58,8 @@ function badge_count(string $key): int
             'donations' => (int)val("SELECT COUNT(*) FROM donations WHERE status='pledged'"),
             'words' => (int)val("SELECT COUNT(*) FROM contributions WHERE type='language' AND status IN ('pending','under_review','needs_info')"),
             'notifications' => (int)val('SELECT COUNT(*) FROM notifications WHERE is_read=0'),
+            'clan_requests' => function_exists('clan_request_groups') ? count(clan_request_groups()) : 0,
+            'clan_messages' => (int)val("SELECT COUNT(DISTINCT m.id) FROM clan_messages m JOIN clan_message_reports r ON r.message_id=m.id WHERE m.status='visible'"),
         ];
     }
     return $c[$key] ?? 0;
@@ -79,7 +83,7 @@ function admin_start(string $title, string $active, string $actions = ''): void
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= e($title) ?> · LCI Admin</title><meta name="robots" content="noindex">
 <link rel="icon" href="<?= e(logo_url() ?: asset('assets/img/favicon.svg')) ?>">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= e(asset('assets/css/admin.css')) ?>">
 </head><body>
 <aside class="side" id="side">

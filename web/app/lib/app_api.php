@@ -8,6 +8,9 @@ declare(strict_types=1);
    { message, errors? } with the usual HTTP status codes, so the Expo app can treat them like any REST API.
    ========================================================================== */
 
+require_once __DIR__ . '/clan_group_api.php';
+require_once __DIR__ . '/google_auth.php';
+
 /* ---------- plumbing ---------- */
 function api_abs(?string $p): ?string
 {
@@ -135,7 +138,7 @@ function api_user_json(array $u): array
         'role' => $u['role'], 'clan' => $clan ? ['id' => (int)$clan['id'], 'name' => $clan['name'], 'slug' => $clan['slug']] : null, 'clan_other' => $u['clan_other'],
         'points' => (int)$u['points'], 'level' => contributor_level((int)$u['points']), 'badges' => user_badges((int)$u['id']),
         'counts' => ['total' => $n(''), 'approved' => $n("AND status IN ('approved','published')"), 'pending' => $n("AND status IN ('pending','under_review','needs_info')")],
-        'joined' => $u['created_at'],
+        'joined' => $u['created_at'], 'clan_group' => clan_group_summary($u),
     ];
 }
 
@@ -253,7 +256,7 @@ function api_app(string $res, array $seg): void
 
     switch ($res) {
         case 'ping':
-            json_out(['status' => 'ok', 'name' => setting('site_name', 'Lango Cultural Institution'), 'version' => 'v1', 'time' => date('c')]);
+            json_out(['status' => 'ok', 'name' => setting('site_name', 'Lango Cultural Institution'), 'version' => 'v1', 'google' => google_enabled(), 'time' => date('c')]);
 
         /* ---------- accounts ---------- */
         case 'auth':
@@ -297,6 +300,33 @@ function api_app(string $res, array $seg): void
                 if ($tok = api_header_token()) q('DELETE FROM api_tokens WHERE token_hash=?', [hash('sha256', $tok)]);
                 json_out(['ok' => true]);
             }
+            if ($id === 'google' && in_array($sub, ['exchange', 'complete'], true) && $m === 'POST') {
+                api_throttle('google', 30, 900);
+                $in = api_in();
+                $row = google_code_check((string)($in['code'] ?? ''), (string)($in['verifier'] ?? ''));
+                $device = (string)($in['device_name'] ?? 'Lango app');
+                if ($row['user_id']) {   // already a member: the code is used up
+                    q('DELETE FROM google_codes WHERE code_hash=?', [$row['code_hash']]);
+                    $member = one('SELECT * FROM users WHERE id=? AND is_active=1', [$row['user_id']]) ?? api_err('This account is not available.', 403);
+                    q('UPDATE users SET last_login=NOW() WHERE id=?', [$member['id']]);
+                    json_out(['token' => api_issue_token((int)$member['id'], $device), 'user' => api_user_json($member), 'is_new_user' => false]);
+                }
+                if ($sub === 'exchange') {   // a new person: the code stays valid a little longer while they choose their clan
+                    q('UPDATE google_codes SET expires_at=? WHERE code_hash=?', [time() + 900, $row['code_hash']]);
+                    json_out(['needs_clan' => true, 'profile' => ['name' => $row['name'], 'email' => $row['email']]]);
+                }
+                $e = [];
+                if (($in['clan_id'] ?? '') === '') $e['clan_id'] = 'Please choose your clan.';
+                [$clanId, $clanOther] = read_clan_input();
+                if (($in['clan_id'] ?? '') === 'other' && !$clanOther) $e['clan_other'] = 'Please type the name of your clan.';
+                if ($e) api_err(reset($e), 422, $e);
+                if (val('SELECT COUNT(*) FROM users WHERE email=? OR google_sub=?', [$row['email'], $row['google_sub']])) api_err('There is already an account for this Google address. Please continue with Google again.', 409);
+                $name = trim((string)($in['name'] ?? '')) ?: (string)$row['name'] ?: (string)strstr((string)$row['email'], '@', true);
+                $uid = insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $row['email'], 'password_hash' => password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT), 'role' => 'contributor',
+                    'clan_id' => $clanId, 'clan_other' => $clanOther, 'google_sub' => $row['google_sub'], 'country' => mb_substr((string)($in['country'] ?? ''), 0, 80) ?: null]);
+                q('DELETE FROM google_codes WHERE code_hash=?', [$row['code_hash']]);
+                json_out(['token' => api_issue_token($uid, $device), 'user' => api_user_json(one('SELECT * FROM users WHERE id=?', [$uid])), 'is_new_user' => true], 201);
+            }
             api_err('Unknown request.', 404);
 
         case 'me':
@@ -308,7 +338,10 @@ function api_app(string $res, array $seg): void
                     if (isset($in['name'])) { $nm = trim((string)$in['name']); if ($nm === '') api_err('Please enter your name.', 422, ['name' => 'Please enter your name.']); $data['name'] = mb_substr($nm, 0, 150); }
                     if (array_key_exists('phone', $in)) $data['phone'] = mb_substr(trim((string)$in['phone']), 0, 40) ?: null;
                     if (array_key_exists('country', $in)) $data['country'] = mb_substr(trim((string)$in['country']), 0, 80) ?: null;
-                    if (array_key_exists('clan_id', $in)) { [$cid, $cother] = read_clan_input(); $data['clan_id'] = $cid; $data['clan_other'] = $cother; }
+                    if (array_key_exists('clan_id', $in)) {
+                        [$cid, $cother] = read_clan_input(); $data['clan_id'] = $cid; $data['clan_other'] = $cother;
+                        if ((int)$cid !== (int)$u['clan_id']) { $data['clan_joined_at'] = null; $data['clan_hidden'] = 0; $data['clan_seen_id'] = 0; }   // a new clan means joining its group again
+                    }
                     if ($data) update('users', $data, (int)$u['id']);
                     json_out(['data' => api_user_json(one('SELECT * FROM users WHERE id=?', [$u['id']]))]);
                 }
@@ -316,6 +349,8 @@ function api_app(string $res, array $seg): void
                     $in = api_in();
                     if (!password_verify((string)($in['password'] ?? ''), $u['password_hash'])) api_err('That password is not right.', 422, ['password' => 'That password is not right.']);
                     q('UPDATE contributions SET user_id=NULL WHERE user_id=?', [$u['id']]);
+                    q('DELETE FROM clan_message_reports WHERE user_id=? OR message_id IN (SELECT id FROM (SELECT id FROM clan_messages WHERE user_id=?) x)', [$u['id'], $u['id']]);
+                    q('DELETE FROM clan_messages WHERE user_id=?', [$u['id']]);
                     foreach (['api_tokens', 'device_tokens', 'user_notifications'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);
                     q('DELETE FROM users WHERE id=? AND role=?', [$u['id'], 'contributor']);
                     json_out(['ok' => true]);
@@ -383,12 +418,13 @@ function api_app(string $res, array $seg): void
 
         /* ---------- people, places, history ---------- */
         case 'clans':
+            if ($sub !== '' && ctype_digit($id)) clan_group_api((int)$id, $sub, $seg, $m);
             if ($id === 'options') json_out(['data' => array_map(fn($c) => ['id' => (int)$c['id'], 'name' => $c['name']], all("SELECT id, name FROM clans WHERE status='published' ORDER BY name"))]);
             if ($id !== '') {
                 $c = one("SELECT c.*, d.name district, d.slug district_slug FROM clans c LEFT JOIN districts d ON d.id=c.district_id WHERE c.slug=? AND c.status='published'", [$id]);
                 if (!$c) api_err('We could not find that clan.', 404);
                 $ld = clan_leader_of($c);
-                json_out(['data' => ['id' => (int)$c['id'], 'slug' => $c['slug'], 'name' => $c['name'], 'totem' => $c['totem'], 'district' => $c['district'], 'district_slug' => $c['district_slug'], 'summary' => $c['summary'],
+                json_out(['data' => ['members' => clan_group_members((int)$c['id']), 'id' => (int)$c['id'], 'slug' => $c['slug'], 'name' => $c['name'], 'totem' => $c['totem'], 'district' => $c['district'], 'district_slug' => $c['district_slug'], 'summary' => $c['summary'],
                     'history_html' => rich(t($c, 'history')), 'lineage_html' => rich($c['lineage']), 'notable_members_html' => rich($c['notable_members']), 'verified' => (bool)$c['verified'], 'image' => api_abs($c['image']),
                     'leader' => $ld ? ['name' => $ld['name'], 'title' => $ld['title'], 'photo' => api_abs($ld['photo']), 'bio' => $ld['bio']] : null]]);
             }
@@ -399,7 +435,8 @@ function api_app(string $res, array $seg): void
             $w = implode(' AND ', $where);
             $total = (int)val("SELECT COUNT(*) FROM clans c LEFT JOIN districts d ON d.id=c.district_id WHERE $w", $par);
             $rows = all("SELECT c.id, c.name, c.slug, c.totem, c.summary, c.verified, d.name district FROM clans c LEFT JOIN districts d ON d.id=c.district_id WHERE $w ORDER BY c.name LIMIT $limit OFFSET $off", $par);
-            foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['verified'] = (bool)$r['verified']; }
+            $sizes = clan_group_counts();
+            foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['verified'] = (bool)$r['verified']; $r['members'] = $sizes[$r['id']] ?? 0; }
             json_out(['data' => $rows, 'page' => $page, 'meta' => api_meta($page, $limit, $total), 'registered_total' => (int)setting('clan_total', '149')]);
 
         case 'districts':

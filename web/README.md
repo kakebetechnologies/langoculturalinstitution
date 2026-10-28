@@ -26,17 +26,20 @@ php web/database/install-cli.php      # from the repo root (or: php database/ins
 
 ## Look & feel
 
-A contained, editorial layout: content sits in a 1180px container with real side margins (and a framed page on very
-wide monitors), set in **Inter** (interface) and **Source Serif 4** (headlines). Flat bordered cards, solid 8px-radius
-buttons, no gradients or floating decoration. The colour scheme comes from the official LCI logo: black, red `#ee1a26`,
-yellow `#fddd16`, sky blue `#00adf1`, mountain grey and cream, with the logo's flag-stripe accent on the header and footer.
+The FaithFellows look (also used by the Lango App), in the Lango colours: a contained layout (content in a 1180px container with
+real side margins, and a framed page on very wide monitors) on a soft canvas, white rounded cards with a gentle shadow and no
+borders, pill buttons, and deep black-to-red gradient panels (home hero, dark bands, footer, inner-page headers). Type is
+**Clarity City** (files in `assets/fonts/`, SIL Open Font Licence); it has no ɛ ɔ ŋ, so the browser takes those letters from **Inter**,
+which is next in the font stacks. The colour scheme comes from the official LCI logo: black, red `#ee1a26`, yellow `#fddd16`,
+sky blue `#00adf1`, mountain grey and cream, with the logo's flag-stripe accent on the header and footer.
 
 * **Navigation:** the full menu is inline from 992px up (the wordmark hides on narrower laptops so nothing wraps);
   below 992px it becomes a drawer with expandable sections. A slim top bar carries phone, email, language and sign-in.
 * The official logo is `assets/img/logo.png` (transparent cut-out). Replace it from *Admin -> Site settings -> Branding & photos*
   or by overwriting that file. The homepage/About photos and the support-banner photo are replaceable there too.
 * Design tokens (colours, container width, radii, type) live in the `:root` block at the top of `assets/css/site.css`
-  and `assets/css/admin.css`.
+  and `assets/css/admin.css`. The FaithFellows restyle is the last block of each file ("FaithFellows layer"), so it can be
+  found and tuned in one place. Do not put `backdrop-filter` on `.header`: it would trap the fixed mobile menu inside it.
 
 ## What is built
 
