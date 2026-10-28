@@ -1,0 +1,428 @@
+[
+ {
+  "group": "First run",
+  "title": "Intro: preserve your heritage",
+  "file": "01-intro-1.jpg",
+  "tall": false
+ },
+ {
+  "group": "First run",
+  "title": "Intro: contribute your knowledge",
+  "file": "02-intro-2.jpg",
+  "tall": false
+ },
+ {
+  "group": "First run",
+  "title": "Intro: connect with your clan",
+  "file": "03-intro-3.jpg",
+  "tall": false
+ },
+ {
+  "group": "First run",
+  "title": "Choose your language",
+  "file": "04-language.jpg",
+  "tall": false
+ },
+ {
+  "group": "Sign in and sign up",
+  "title": "Welcome",
+  "file": "05-welcome.jpg",
+  "tall": false
+ },
+ {
+  "group": "Sign in and sign up",
+  "title": "Sign in",
+  "file": "06-login.jpg",
+  "tall": false
+ },
+ {
+  "group": "Sign in and sign up",
+  "title": "Create an account",
+  "file": "07-register.jpg",
+  "tall": true
+ },
+ {
+  "group": "Signed-out visitor",
+  "title": "Home",
+  "file": "08-visitor-home.jpg",
+  "tall": true
+ },
+ {
+  "group": "Signed-out visitor",
+  "title": "Contribute asks to sign in",
+  "file": "09-visitor-contribute.jpg",
+  "tall": false
+ },
+ {
+  "group": "Signed-out visitor",
+  "title": "Me asks to sign in",
+  "file": "10-visitor-me.jpg",
+  "tall": false
+ },
+ {
+  "group": "Signed-out visitor",
+  "title": "Clan group asks to sign in",
+  "file": "11-visitor-clan-group.jpg",
+  "tall": false
+ },
+ {
+  "group": "Main tabs",
+  "title": "Home",
+  "file": "12-home.jpg",
+  "tall": true
+ },
+ {
+  "group": "Main tabs",
+  "title": "Explore",
+  "file": "13-explore.jpg",
+  "tall": true
+ },
+ {
+  "group": "Main tabs",
+  "title": "Learn",
+  "file": "14-learn.jpg",
+  "tall": true
+ },
+ {
+  "group": "Main tabs",
+  "title": "Contribute",
+  "file": "15-contribute.jpg",
+  "tall": true
+ },
+ {
+  "group": "Main tabs",
+  "title": "Me",
+  "file": "16-me.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Cultural observation form",
+  "file": "17-form-cultural.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Suggest a word",
+  "file": "18-form-word.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Add a proverb",
+  "file": "19-form-proverb.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Oral history",
+  "file": "20-form-oral.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Natural heritage",
+  "file": "21-form-natural.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Historical document",
+  "file": "22-form-document.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Heritage site",
+  "file": "23-form-heritage-site.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "My contributions",
+  "file": "24-my-contributions.jpg",
+  "tall": false
+ },
+ {
+  "group": "Contribute",
+  "title": "Tracking one contribution",
+  "file": "25-track.jpg",
+  "tall": true
+ },
+ {
+  "group": "Contribute",
+  "title": "Notifications",
+  "file": "26-notifications.jpg",
+  "tall": false
+ },
+ {
+  "group": "Clan group",
+  "title": "Clan group: messages",
+  "file": "27-group-messages.jpg",
+  "tall": false
+ },
+ {
+  "group": "Clan group",
+  "title": "Clan group: members",
+  "file": "28-group-members.jpg",
+  "tall": false
+ },
+ {
+  "group": "Clan group",
+  "title": "Clan group: archive",
+  "file": "29-group-archive.jpg",
+  "tall": false
+ },
+ {
+  "group": "Clans",
+  "title": "Clan Explorer",
+  "file": "30-clans.jpg",
+  "tall": true
+ },
+ {
+  "group": "Clans",
+  "title": "One clan",
+  "file": "31-clan.jpg",
+  "tall": true
+ },
+ {
+  "group": "Clans",
+  "title": "Leaderboards: clans",
+  "file": "32-leaders-clans.jpg",
+  "tall": true
+ },
+ {
+  "group": "Daily habit",
+  "title": "Word of the day",
+  "file": "33-word-before.jpg",
+  "tall": false
+ },
+ {
+  "group": "Daily habit",
+  "title": "Word of the day: answered",
+  "file": "34-word-after.jpg",
+  "tall": true
+ },
+ {
+  "group": "Daily habit",
+  "title": "Language Challenge",
+  "file": "35-challenge-intro.jpg",
+  "tall": false
+ },
+ {
+  "group": "Daily habit",
+  "title": "Challenge: a question",
+  "file": "36-challenge-question.jpg",
+  "tall": false
+ },
+ {
+  "group": "Daily habit",
+  "title": "Challenge: result",
+  "file": "37-challenge-result.jpg",
+  "tall": true
+ },
+ {
+  "group": "Daily habit",
+  "title": "Leaderboards: challenge",
+  "file": "38-leaders-challenge.jpg",
+  "tall": false
+ },
+ {
+  "group": "Daily habit",
+  "title": "Leaderboards: learners",
+  "file": "39-leaders-learners.jpg",
+  "tall": false
+ },
+ {
+  "group": "Daily habit",
+  "title": "Top contributors",
+  "file": "40-leaderboard.jpg",
+  "tall": false
+ },
+ {
+  "group": "Learn the language",
+  "title": "Dictionary",
+  "file": "41-dictionary.jpg",
+  "tall": true
+ },
+ {
+  "group": "Learn the language",
+  "title": "Dictionary search",
+  "file": "42-dictionary-search.jpg",
+  "tall": true
+ },
+ {
+  "group": "Learn the language",
+  "title": "Translator",
+  "file": "43-translate.jpg",
+  "tall": true
+ },
+ {
+  "group": "Learn the language",
+  "title": "Proverbs",
+  "file": "44-proverbs.jpg",
+  "tall": false
+ },
+ {
+  "group": "Learn the language",
+  "title": "Phrasebook",
+  "file": "45-phrasebook.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "Our history",
+  "file": "46-history.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "Heritage",
+  "file": "47-heritage.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "A heritage item",
+  "file": "48-heritage-item.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "Notable Langos",
+  "file": "49-people.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "A notable Lango",
+  "file": "50-person.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "Districts and Lira City",
+  "file": "51-districts.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "One district",
+  "file": "52-district.jpg",
+  "tall": true
+ },
+ {
+  "group": "Culture and history",
+  "title": "Biodiversity",
+  "file": "53-species.jpg",
+  "tall": false
+ },
+ {
+  "group": "Culture and history",
+  "title": "Digital library",
+  "file": "54-library.jpg",
+  "tall": false
+ },
+ {
+  "group": "Events and news",
+  "title": "Events",
+  "file": "55-events.jpg",
+  "tall": true
+ },
+ {
+  "group": "Events and news",
+  "title": "One event",
+  "file": "56-event.jpg",
+  "tall": true
+ },
+ {
+  "group": "Events and news",
+  "title": "News",
+  "file": "57-news.jpg",
+  "tall": true
+ },
+ {
+  "group": "Events and news",
+  "title": "A news story",
+  "file": "58-news-story.jpg",
+  "tall": true
+ },
+ {
+  "group": "Events and news",
+  "title": "Programs",
+  "file": "59-programs.jpg",
+  "tall": true
+ },
+ {
+  "group": "Events and news",
+  "title": "One program",
+  "file": "60-program.jpg",
+  "tall": true
+ },
+ {
+  "group": "Community",
+  "title": "Connect",
+  "file": "61-connect.jpg",
+  "tall": false
+ },
+ {
+  "group": "Community",
+  "title": "Professionals directory",
+  "file": "62-professionals.jpg",
+  "tall": false
+ },
+ {
+  "group": "Community",
+  "title": "Cultural assistant",
+  "file": "63-assistant.jpg",
+  "tall": false
+ },
+ {
+  "group": "Support and settings",
+  "title": "Support LCI",
+  "file": "64-support.jpg",
+  "tall": true
+ },
+ {
+  "group": "Support and settings",
+  "title": "Donate",
+  "file": "65-donate.jpg",
+  "tall": true
+ },
+ {
+  "group": "Support and settings",
+  "title": "Edit profile",
+  "file": "66-profile.jpg",
+  "tall": true
+ },
+ {
+  "group": "Support and settings",
+  "title": "Settings",
+  "file": "67-settings.jpg",
+  "tall": true
+ },
+ {
+  "group": "Support and settings",
+  "title": "About",
+  "file": "68-about.jpg",
+  "tall": true
+ },
+ {
+  "group": "Support and settings",
+  "title": "Privacy",
+  "file": "69-privacy.jpg",
+  "tall": true
+ },
+ {
+  "group": "Support and settings",
+  "title": "Terms of use",
+  "file": "70-terms.jpg",
+  "tall": true
+ },
+ {
+  "group": "Clan group",
+  "title": "Clan group: join",
+  "file": "71-group-join.jpg",
+  "tall": false
+ }
+]
