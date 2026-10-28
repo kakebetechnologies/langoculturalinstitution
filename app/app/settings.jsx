@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Switch, View } from 'react-native';
 import Constants from 'expo-constants';
+import { useLocalSearchParams } from 'expo-router';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -23,12 +24,13 @@ import { getStored } from '../lib/storage';
 export default function Settings() {
   const { t, lang, setLang } = useT();
   const { user } = useAuth();
+  const params = useLocalSearchParams();
   const offline = useOfflineDictionary();
   const [busy, setBusy] = useState('');
   const [note, setNote] = useState('');
   const [push, setPush] = useState(false);
   const [daily, setDaily] = useState(false);
-  const [showServer, setShowServer] = useState(__DEV__);
+  const [showServer, setShowServer] = useState(__DEV__ || params.server === '1');   // the error screen of a test build links here with ?server=1
   const [server, setServer] = useState('');
   const taps = useRef(0);
 

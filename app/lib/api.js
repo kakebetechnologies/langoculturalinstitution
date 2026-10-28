@@ -69,6 +69,9 @@ api.interceptors.response.use(
   },
 );
 
+/** True while the app talks to a computer on the home network or to this device (a test build), so an error screen can offer "Change server address". Members of a build that uses the live website never see it. */
+export const isTestServer = () => /^https?:\/\/(localhost|(127|10)(\.\d{1,3}){3}|192\.168(\.\d{1,3}){2}|172\.(1[6-9]|2\d|3[01])(\.\d{1,3}){2}|[^/:]+\.local)(?=[:/]|$)/i.test(API_ROOT);
+
 /** What a typed address means: "192.168.1.4/langoculturalinstitution", "http://host/site" and "https://example.org/api" all give the API root. Empty = the built-in address. */
 export function normalizeServerAddress(input) {
   let s = String(input ?? '').trim().replace(/\/+$/, '');

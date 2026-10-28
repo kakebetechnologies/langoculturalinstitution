@@ -96,10 +96,10 @@ Profiles in `eas.json`:
 | `preview`, `production-apk` | APK | `https://langoculture.org/api` |
 | `production` | Android App Bundle | `https://langoculture.org/api` |
 | `preview-ios` | iOS ad-hoc build | `https://langoculture.org/api` |
-| `local-wifi` | APK for testing against the XAMPP site on the home network | `http://192.168.1.5/langoculturalinstitution/api` (cleartext allowed for this profile only) |
+| `local-wifi` | APK for testing against the XAMPP site on the home network | `http://192.168.1.4/langoculturalinstitution/api` (cleartext allowed for this profile only) |
 
 **Before a store build:** replace `https://langoculture.org/api` in `eas.json` with the real address of the live site (it is a
-placeholder), and change `192.168.1.5` to your computer's address for the `local-wifi` profile. Over-the-air updates
+placeholder), and change `192.168.1.4` to your computer's address for the `local-wifi` profile. Over-the-air updates
 (`expo-updates`) are installed but deliberately left unconfigured until an EAS project exists.
 
 ## The web app (PWA)

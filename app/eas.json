@@ -13,7 +13,7 @@
       "distribution": "internal",
       "autoIncrement": true,
       "android": { "buildType": "apk" },
-      "env": { "EXPO_PUBLIC_API_URL": "http://192.168.1.5/langoculturalinstitution/api", "EXPO_PUBLIC_APP_ENV": "development", "ALLOW_CLEARTEXT": "1" }
+      "env": { "EXPO_PUBLIC_API_URL": "http://192.168.1.4/langoculturalinstitution/api", "EXPO_PUBLIC_APP_ENV": "development", "ALLOW_CLEARTEXT": "1" }
     },
     "production-apk": {
       "distribution": "internal",

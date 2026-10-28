@@ -1,8 +1,10 @@
 // Shared loading / error / empty states. Every screen wraps its content in <StateView> so
 // the three states look and behave the same everywhere.
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { COLORS, RADIUS, SPACING } from '../constants/theme';
+import { isTestServer } from '../lib/api';
 import { isConnectionMessage } from '../lib/errors';
 import { useT } from '../lib/i18n';
 import AppText from './AppText';
@@ -20,6 +22,7 @@ export default function StateView({
   children,
 }) {
   const { t } = useT();
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -42,6 +45,14 @@ export default function StateView({
         </AppText>
         <AppText style={styles.message}>{error}</AppText>
         {onRetry ? <Button title={t('Try again')} variant="outline" small onPress={onRetry} style={styles.action} /> : null}
+        {offline && isTestServer() ? (
+          <>
+            <AppText variant="caption" style={styles.hint}>
+              {t('This test version gets its data from a computer on the same Wi-Fi. If that computer’s address changed, enter the new one.')}
+            </AppText>
+            <Button title={t('Change server address')} variant="outline" small onPress={() => router.push('/settings?server=1')} style={styles.action} />
+          </>
+        ) : null}
       </View>
     );
   }
@@ -70,4 +81,5 @@ const styles = StyleSheet.create({
   title: { textAlign: 'center', marginBottom: 4 },
   message: { textAlign: 'center', color: COLORS.gray700 },
   action: { marginTop: SPACING.md },
+  hint: { textAlign: 'center', marginTop: SPACING.md },
 });

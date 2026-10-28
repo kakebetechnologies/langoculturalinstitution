@@ -96,7 +96,7 @@
     },
     "extra": {
       "apiUrl": {
-        "development": "http://192.168.1.5/langoculturalinstitution/api",
+        "development": "http://192.168.1.4/langoculturalinstitution/api",
         "staging": "https://langoculture.org/api",
         "production": "https://langoculture.org/api"
       },
