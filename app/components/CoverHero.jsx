@@ -1,44 +1,50 @@
-// The top of a detail screen: a picture (or the logo-coloured placeholder) under a dark gradient, with the title, a line of
-// small tags and a round back button on top.
+// The top of a detail screen: a round back button, then a large rounded picture card (or the Lango photo as the placeholder) with a
+// small yellow label on it, and the title and a line of text under the picture. The three flag colours run along the picture's foot.
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS, FONTS, SPACING } from '../constants/theme';
+import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../constants/theme';
 import { mediaUrl } from '../lib/api';
 import AppText from './AppText';
 import { BackButton } from './ScreenHeader';
 
-export default function CoverHero({ image, eyebrow, title, subtitle, fallback = require('../assets/welcome/hill.jpg'), height = 250 }) {
+export default function CoverHero({ image, eyebrow, title, subtitle, fallback = require('../assets/welcome/hill.jpg'), height = 230 }) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ height: height + insets.top, backgroundColor: COLORS.navy }}>
-      <Image source={image ? { uri: mediaUrl(image) } : fallback} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
-      <LinearGradient colors={['rgba(22,24,29,0.55)', 'rgba(22,24,29,0.15)', 'rgba(22,24,29,0.92)']} locations={[0, 0.35, 1]} style={StyleSheet.absoluteFill} />
-      <View style={[styles.back, { top: insets.top + 8 }]}>
-        <BackButton onDark />
+    <View style={{ paddingTop: insets.top + 8, paddingHorizontal: SPACING.md, backgroundColor: COLORS.canvas }}>
+      <View style={styles.bar}>
+        <BackButton />
       </View>
-      <View style={styles.text}>
-        {eyebrow ? <AppText variant="eyebrow" style={{ color: COLORS.yellow }}>{eyebrow}</AppText> : null}
-        <AppText style={styles.title} numberOfLines={3}>
-          {title}
-        </AppText>
-        {subtitle ? <AppText style={styles.sub} numberOfLines={2}>{subtitle}</AppText> : null}
+      <View style={[styles.card, { height }]}>
+        <Image source={image ? { uri: mediaUrl(image) } : fallback} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
+        <LinearGradient colors={['rgba(22,24,29,0)', 'rgba(22,24,29,0.35)']} locations={[0.5, 1]} style={StyleSheet.absoluteFill} />
+        {eyebrow ? (
+          <View style={styles.tag}>
+            <AppText style={styles.tagText} numberOfLines={1}>
+              {eyebrow}
+            </AppText>
+          </View>
+        ) : null}
+        <View style={styles.flag}>
+          <View style={{ flex: 1, backgroundColor: COLORS.primary }} />
+          <View style={{ flex: 1, backgroundColor: COLORS.yellow }} />
+          <View style={{ flex: 1, backgroundColor: COLORS.sky }} />
+        </View>
       </View>
-      <View style={styles.flag}>
-        <View style={{ flex: 1, backgroundColor: COLORS.primary }} />
-        <View style={{ flex: 1, backgroundColor: COLORS.yellow }} />
-        <View style={{ flex: 1, backgroundColor: COLORS.sky }} />
-      </View>
+      <AppText style={styles.title}>{title}</AppText>
+      {subtitle ? <AppText style={styles.sub}>{subtitle}</AppText> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  back: { position: 'absolute', left: SPACING.md },
-  text: { position: 'absolute', left: SPACING.md, right: SPACING.md, bottom: SPACING.md + 6 },
-  title: { fontFamily: FONTS.serif, fontSize: 27, lineHeight: 33, color: COLORS.white, marginTop: 2 },
-  sub: { fontFamily: FONTS.regular, fontSize: 14, lineHeight: 20, color: 'rgba(255,255,255,0.85)', marginTop: 4 },
+  bar: { marginBottom: SPACING.sm + 2 },
+  card: { borderRadius: RADIUS.xl, overflow: 'hidden', backgroundColor: COLORS.navy, ...SHADOW },
+  tag: { position: 'absolute', left: 12, top: 12, maxWidth: '80%', backgroundColor: COLORS.yellow, paddingHorizontal: 12, paddingVertical: 6, borderRadius: RADIUS.full },
+  tagText: { fontFamily: FONTS.bold, fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase', color: COLORS.navy },
   flag: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 4, flexDirection: 'row' },
+  title: { fontFamily: FONTS.bold, fontSize: 26, lineHeight: 32, color: COLORS.black, marginTop: SPACING.md },
+  sub: { fontFamily: FONTS.regular, fontSize: 14.5, lineHeight: 21, color: COLORS.gray900, marginTop: 4 },
 });

@@ -22,7 +22,7 @@ The JSON API behind the Lango App (`../app`) and the open-data page at `/develop
 
 | Method | Path | Notes |
 |---|---|---|
-| POST | `/auth/register` | `name, email, password (8+), clan_id (id or "other" + clan_other)`, optional `phone, country` → `{ token, user }` |
+| POST | `/auth/register` | `name, email, password (8+)` → `{ token, user }`: the person is signed in at once, with no verification step. The clan is optional (`clan_id` as an id or "other" + `clan_other`, and it can be set later with `PATCH /me`); also optional `phone, country` |
 | POST | `/auth/google/exchange` | **Continue with Google.** The app opens `<site>/auth/google/start` in the phone's browser; Google signs the person in; the browser returns to the app with a one-time `code`. Send `code` + the PKCE `verifier` → `{ token, user, is_new_user: false }` for a member, or `{ needs_clan: true, profile }` for a new person (see `/auth/google/complete`). Only if Google credentials are set in Admin → Site settings; `/ping` says `google: true` when they are |
 | POST | `/auth/google/complete` | A new Google person chooses a clan: `code`, `verifier`, `clan_id` (id or "other" + `clan_other`) → `201 { token, user, is_new_user: true }`. Staff accounts never sign in through Google |
 | POST | `/auth/login` | `login` (email or phone) + `password` → `{ token, user }` |
@@ -60,6 +60,22 @@ Everything below is built from content already in the archive (the dictionary, h
 
 Quiz words come from the dictionary: only entries LCI experts have verified once there are at least 100 of them (until then all published entries), never long or multi-word entries, and never the words in `DAILY_SENSITIVE` (web/app/lib/content.php).
 
+## Listen & read
+
+Nothing here is written by the app or the code: LCI adds recordings and Bible text in *Admin → Listen & read*, so every list is empty until then. A channel with nothing to play, a draft and a future-dated episode never appear.
+
+| Method | Path | Notes |
+|---|---|---|
+| GET | `/podcasts` | The Lango Podcast: published episodes, newest first, `?q=` (title, storyteller, summary) and `?series=` → `{ data: [ { id, title, storyteller, storyteller_note, series, clan, district, recorded_year, summary, minutes, cover, audio_url, published_at, plays } ], series: [names] }` |
+| GET | `/podcasts/{id}` | One episode with its `transcript`, and `more` from the same series or storyteller |
+| POST | `/podcasts/{id}/play` | Counts one play (rate limited) |
+| GET | `/radio` | Lango Radio channels that can play: `{ id, name, description, source, cover, count, stream_url }`. `source` is `playlist` (tracks LCI picked), `podcast` (every published episode) or `stream` (a live stream, `stream_url`) |
+| GET | `/radio/{id}` | The channel with its `tracks: [ { id, title, credit, minutes, audio_url, cover } ]` in play order (empty for a live stream) |
+| GET | `/bible` | `{ title, copyright, ready, books: [ { id (1 to 66), code, testament, name, name_en, name_lg, chapters, verses } ] }`. The 66 books are the standard canon; `name` is the Leb Lango name when LCI entered it. `ready` is false until verses are imported |
+| GET | `/bible/{book}` | The chapters of that book that have text: `{ book, available: [1, 2, …] }` |
+| GET | `/bible/{book}/{chapter}` | `{ book, chapter, verses: [ { n, text } ], prev, next, title, copyright }`; `prev` and `next` are `{ book_id, chapter }` (the nearest chapter with text, across books) or null; 404 when the chapter has no text |
+| GET | `/bible/search?q=` | Verses containing the phrase (2+ characters), the first 40 → `{ data: [ { book_id, book, chapter, verse, text } ], more }` |
+| GET | `/giving` | `{ note, app_text, methods: [ { key, label, instructions, url } ] }`: how to pay with each method, from Site settings (`instructions` is empty and `url` null when LCI has not entered them) |
 ## Clan groups
 
 A member who chose a clan can join that clan's group. `user.clan_group` (in `/me` and the sign-in answers) says whether they have joined, how many people are in the group and how many messages are new. `{id}` is the numeric clan id; `/clans` and `/clans/{slug}` also carry `members` (the group size).
@@ -104,7 +120,7 @@ A member who chose a clan can join that clan's group. `user.clan_group` (in `/me
 | Method | Path | Notes |
 |---|---|---|
 | POST | `/events/{slug}/register` | `name, email, tickets`; returns the ticket code |
-| POST | `/donations` | Records a pledge; the finance office confirms it. No payment gateway is connected yet. |
+| POST | `/donations` | Records a pledge; the finance office confirms it. `purpose: "app"` marks a gift for keeping the app running. The answer carries `pay: { instructions, url }`, how to pay with the chosen method as LCI wrote it in Site settings (empty when it has not). No payment gateway is connected. |
 | POST | `/i18n/register` | The app lists its English phrases (`keys: []`) so they appear in *Admin → Translations* |
 | GET | `/i18n` | The Leb Lango phrases entered so far (`{ "English phrase": "Leb Lango" }`) |
 

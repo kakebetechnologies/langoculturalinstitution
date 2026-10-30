@@ -32,10 +32,12 @@ export const COLORS = {
   warningMist: '#FFF3E0',
   danger: '#D63031',
   dangerMist: '#FDECEC',
-  // Screen background behind the white cards, and the thin lines inside them.
-  canvas: '#F7F5F0',
-  line: '#ECE9E1',
-  track: '#EAE6DB',
+  // Screen background behind the white cards, and the thin lines inside them. A cool, light grey so the white cards and the logo
+  // colours stand out; `field` is the soft grey that text boxes are filled with.
+  canvas: '#F4F5F7',
+  line: '#E8EAEE',
+  track: '#E5E7EB',
+  field: '#EDEFF3',
 };
 
 // The deep header gradient (logo black into a dark red) and the feature tile gradients. Every tile takes white text.
@@ -72,12 +74,42 @@ export const MAX_FONT_SCALE = 1.1;
 
 export const SPACING = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32, xxl: 48 };
 
-export const RADIUS = { sm: 6, md: 10, lg: 16, xl: 24, full: 9999 };
+export const RADIUS = { sm: 8, md: 14, lg: 20, xl: 26, full: 9999 };
 
+// Soft, wide shadows: cards and tiles float a little above the grey canvas.
 export const SHADOW = {
-  shadowColor: '#16181D',
-  shadowOpacity: 0.08,
-  shadowRadius: 14,
-  shadowOffset: { width: 0, height: 5 },
+  shadowColor: '#0F172A',
+  shadowOpacity: 0.07,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 8 },
   elevation: 3,
+};
+
+// A smaller version for chips, round buttons and small tiles.
+export const SHADOW_SM = {
+  shadowColor: '#0F172A',
+  shadowOpacity: 0.08,
+  shadowRadius: 9,
+  shadowOffset: { width: 0, height: 3 },
+  elevation: 2,
+};
+
+// The red glow under the main buttons.
+export const SHADOW_RED = {
+  shadowColor: '#EE1A26',
+  shadowOpacity: 0.28,
+  shadowRadius: 12,
+  shadowOffset: { width: 0, height: 6 },
+  elevation: 4,
+};
+
+// Icon tones for tiles and rows: a light tint behind the icon and the icon's own colour.
+export const TONES = {
+  red: { bg: '#FDE8E9', fg: '#C9111C' },
+  amber: { bg: '#FFF1D6', fg: '#B46B00' },
+  gold: { bg: '#FFF6C4', fg: '#7D6200' },
+  sky: { bg: '#E3F6FE', fg: '#0786B8' },
+  green: { bg: '#E3F6EC', fg: '#146B3C' },
+  slate: { bg: '#ECEEF2', fg: '#262A32' },
+  dark: { bg: '#ECEEF2', fg: '#262A32' },
 };

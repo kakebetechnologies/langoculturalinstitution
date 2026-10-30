@@ -310,7 +310,7 @@ return [
     ],
     'donations' => [
         'label' => 'Donations', 'icon' => 'dollar', 'group' => 'Community', 'table' => 'donations', 'roles' => ADM_ALL, 'title' => 'reference', 'order' => 'created_at DESC',
-        'list' => ['reference', 'donor_name', 'amount', 'currency', 'method', 'status', 'created_at'], 'search' => ['reference', 'donor_name', 'email', 'phone'], 'filters' => ['status', 'method', 'program_id'],
+        'list' => ['reference', 'donor_name', 'amount', 'currency', 'method', 'purpose', 'status', 'created_at'], 'search' => ['reference', 'donor_name', 'email', 'phone'], 'filters' => ['status', 'method', 'purpose', 'program_id'],
         'actions' => ['confirm' => ['Confirm', 'status', 'confirmed'], 'fail' => ['Failed', 'status', 'failed']],
         'before' => function (array &$d, bool $new) { if ($new) { $d['reference'] = 'LCI' . new_code(7); } },
         'fields' => [
@@ -318,9 +318,73 @@ return [
             'donor_name' => ['required' => true], 'email' => ['type' => 'email'], 'phone' => [], 'country' => [],
             'amount' => ['type' => 'number', 'step' => '0.01', 'required' => true], 'currency' => ['type' => 'select', 'options' => ['UGX' => 'UGX', 'USD' => 'USD'], 'required' => true, 'default' => 'UGX'],
             'method' => ['type' => 'select', 'options' => ['mtn_momo' => 'MTN Mobile Money', 'airtel_money' => 'Airtel Money', 'visa' => 'Visa', 'mastercard' => 'Mastercard', 'paypal' => 'PayPal', 'bank' => 'Bank transfer', 'cash' => 'Cash'], 'required' => true],
+            'purpose' => ['type' => 'select', 'options' => ['general' => 'Where it is needed most', 'app' => 'Keeping the Lango App running'], 'required' => true, 'default' => 'general', 'label' => 'Given for'],
             'program_id' => ['type' => 'select', 'options' => 'programs:id:title', 'label' => 'Program'], 'recurring' => ['type' => 'select', 'options' => ['once' => 'Once', 'monthly' => 'Monthly', 'yearly' => 'Yearly'], 'required' => true, 'default' => 'once'],
             'anonymous' => $bool, 'message' => ['type' => 'textarea', 'rows' => 2],
             'status' => ['type' => 'select', 'options' => ['pledged' => 'Pledged (awaiting payment)', 'confirmed' => 'Confirmed (received)', 'failed' => 'Failed'], 'required' => true, 'default' => 'pledged'],
+        ],
+    ],
+
+    /* ------------------------------ LISTEN & READ ------------------------------ */
+    // What the app's Listen and Bible screens show. Nothing is pre-filled: LCI adds the recordings and the Bible text it has the right to publish.
+    'podcast_episodes' => [
+        'label' => 'Podcast episodes', 'icon' => 'mic', 'group' => 'Listen & read', 'table' => 'podcast_episodes', 'roles' => $cont, 'title' => 'title', 'order' => 'COALESCE(published_at, created_at) DESC, id DESC',
+        'list' => ['title', 'storyteller', 'series', 'recorded_year', 'plays', 'status'], 'search' => ['title', 'storyteller', 'summary'], 'filters' => ['status'],
+        'actions' => ['publish' => ['Publish', 'status', 'published'], 'unpublish' => ['Move to draft', 'status', 'draft']],
+        'before' => function (array &$d, bool $new, ?array $old) {
+            if (($d['status'] ?? '') === 'published' && empty($d['published_at']) && empty($old['published_at'])) $d['published_at'] = date('Y-m-d H:i:s');
+        },
+        'fields' => [
+            'title' => ['required' => true, 'full' => true],
+            'storyteller' => ['label' => 'Storyteller (the elder telling the story)'], 'series' => ['label' => 'Series', 'help' => 'Episodes with the same series name are grouped in the app, for example "Stories of the old days".'],
+            'storyteller_note' => ['label' => 'About the storyteller', 'full' => true, 'help' => 'For example: elder from Ogur, born 1941. Write only what the storyteller agreed to share.'],
+            'clan_id' => $clanSel, 'district_id' => $distSel, 'recorded_year' => ['type' => 'number', 'min' => 1900, 'max' => 2100, 'label' => 'Year recorded'],
+            'summary' => ['type' => 'textarea', 'rows' => 3, 'label' => 'What the episode is about'],
+            'audio_file' => ['type' => 'file', 'kind' => 'audio', 'label' => 'Audio file', 'help' => 'MP3, M4A, WAV or OGG, up to 40 MB. An MP3 at 64 to 96 kbps keeps a 30-minute story small.'],
+            'audio_url' => ['type' => 'url', 'label' => 'Or a link to the audio (https)'], 'minutes' => ['type' => 'number', 'min' => 0, 'label' => 'Length in minutes (optional)'],
+            'cover_image' => ['type' => 'image', 'label' => 'Picture (optional)'],
+            'transcript' => ['type' => 'textarea', 'rows' => 10, 'label' => 'Written version of the story (optional)'],
+            'featured' => $bool, 'published_at' => ['type' => 'datetime', 'label' => 'Publish on (leave empty to publish now)'],
+            'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'draft'],
+        ],
+    ],
+    'radio_channels' => [
+        'label' => 'Radio channels', 'icon' => 'music', 'group' => 'Listen & read', 'table' => 'radio_channels', 'roles' => $cont, 'title' => 'name', 'order' => 'sort, id',
+        'list' => ['name', 'source', 'sort', 'status'], 'search' => ['name'], 'filters' => ['status'],
+        'fields' => [
+            'name' => ['required' => true], 'description' => ['type' => 'textarea', 'rows' => 2, 'help' => 'One or two lines shown under the name in the app.'],
+            'source' => ['type' => 'select', 'options' => ['playlist' => 'A playlist I build (add tracks under "Radio tracks")', 'podcast' => 'Every published podcast episode', 'stream' => 'A live stream from another station'], 'required' => true, 'default' => 'playlist'],
+            'stream_url' => ['type' => 'url', 'label' => 'Live stream address (live streams only)', 'help' => 'The https address of the station\'s MP3 or AAC stream. A channel with no tracks or no address stays hidden in the app.'],
+            'cover_image' => ['type' => 'image'], 'sort' => ['type' => 'number', 'default' => 0, 'help' => 'Smaller numbers come first.'],
+            'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'draft'],
+        ],
+    ],
+    'radio_items' => [
+        'label' => 'Radio tracks', 'icon' => 'play', 'group' => 'Listen & read', 'table' => 'radio_items', 'roles' => $cont, 'title' => 'title', 'order' => 'channel_id, sort, id',
+        'list' => ['title', 'channel_id', 'credit', 'sort', 'status'], 'search' => ['title', 'credit'], 'filters' => ['channel_id', 'status'],
+        'fields' => [
+            'channel_id' => ['type' => 'select', 'options' => 'radio_channels:id:name', 'label' => 'Channel', 'required' => true],
+            'title' => ['required' => true, 'full' => true], 'credit' => ['label' => 'Who it is by or who performs it'],
+            'audio_file' => ['type' => 'file', 'kind' => 'audio', 'label' => 'Audio file', 'help' => 'MP3, M4A, WAV or OGG, up to 40 MB.'], 'audio_url' => ['type' => 'url', 'label' => 'Or a link to the audio (https)'],
+            'minutes' => ['type' => 'number', 'min' => 0, 'label' => 'Length in minutes (optional)'], 'sort' => ['type' => 'number', 'default' => 0, 'help' => 'The order the channel plays in; smaller numbers first.'],
+            'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
+    'bible_books' => [
+        'label' => 'Bible books', 'icon' => 'book', 'group' => 'Listen & read', 'table' => 'bible_books', 'roles' => $cont, 'title' => 'name_en', 'order' => 'id', 'create' => false, 'delete' => false,
+        'list' => ['name_en', 'name_lg', 'testament'], 'search' => ['name_en', 'name_lg'], 'filters' => ['testament'],
+        'fields' => [
+            'name_en' => ['readonly' => true, 'label' => 'Book (English)'], 'code' => ['readonly' => true, 'label' => 'Code'],
+            'testament' => ['type' => 'select', 'options' => ['old' => 'Old Testament', 'new' => 'New Testament'], 'readonly' => true],
+            'name_lg' => ['label' => 'Book name in Leb Lango', 'help' => 'Type the name exactly as the Lango Bible writes it. The app shows the English name until you do.'],
+        ],
+    ],
+    'bible_verses' => [
+        'label' => 'Bible verses', 'icon' => 'list', 'group' => 'Listen & read', 'table' => 'bible_verses', 'roles' => $cont, 'title' => 'text', 'order' => 'book_id, chapter, verse', 'create' => false,
+        'list' => ['book_id', 'chapter', 'verse', 'text'], 'search' => ['text'], 'filters' => ['book_id'],
+        'fields' => [
+            'book_id' => ['type' => 'select', 'options' => 'bible_books:id:name_en', 'label' => 'Book', 'readonly' => true], 'chapter' => ['type' => 'number', 'readonly' => true], 'verse' => ['type' => 'number', 'readonly' => true],
+            'text' => ['type' => 'textarea', 'rows' => 4, 'required' => true, 'label' => 'Verse text', 'help' => 'To add or replace many verses at once use "Import Bible text".'],
         ],
     ],
 

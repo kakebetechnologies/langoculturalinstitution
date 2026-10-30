@@ -154,7 +154,7 @@ export default function Settings() {
             <TextField
               value={server}
               onChangeText={setServer}
-              placeholder="192.168.1.4/langoculturalinstitution"
+              placeholder="192.168.0.167/langoculturalinstitution"
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="url"

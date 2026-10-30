@@ -9,6 +9,7 @@ require __DIR__ . '/lib.php';
 require __DIR__ . '/screens.php';
 require __DIR__ . '/screens_community.php';
 require __DIR__ . '/screens_clans.php';
+require __DIR__ . '/screens_media.php';
 
 header('Cache-Control: no-store');
 $m = get('m', 'dashboard');
@@ -58,7 +59,7 @@ if (isset($mods[$m])) {
     crud_run($m, $mods[$m]);
     exit;
 }
-$special = ['dashboard', 'notifications', 'contributions', 'words', 'clan_quick', 'clan_requests', 'clan_messages', 'settings', 'translations', 'audit', 'backup', 'profile'];
+$special = ['dashboard', 'notifications', 'contributions', 'words', 'clan_quick', 'clan_requests', 'clan_messages', 'bible_import', 'settings', 'translations', 'audit', 'backup', 'profile'];
 if (!in_array($m, $special, true)) { http_response_code(404); admin_start('Not found', ''); echo '<div class="panel"><h2>Page not found</h2></div>'; admin_end(); exit; }
 if (!can_module($m)) deny();
 ('screen_' . $m)();

@@ -8,6 +8,18 @@ const UPLOAD_KINDS = [
     'document' => ['mimes' => ['application/pdf' => 'pdf', 'application/msword' => 'doc', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx', 'text/plain' => 'txt', 'application/vnd.ms-excel' => 'xls', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx'], 'max' => 25],
 ];
 
+/** finfo does not recognise every MP3 (for example one with a large ID3 tag), so audio is also recognised by its first bytes. */
+function sniff_audio_mime(string $file): ?string
+{
+    $h = (string)file_get_contents($file, false, null, 0, 12);
+    if (str_starts_with($h, 'ID3')) return 'audio/mpeg';                                                 // an MP3 with an ID3 tag
+    if (strlen($h) >= 2 && ord($h[0]) === 0xFF && (ord($h[1]) & 0xE0) === 0xE0) return 'audio/mpeg';      // an MP3 frame
+    if (str_starts_with($h, 'OggS')) return 'audio/ogg';
+    if (str_starts_with($h, 'RIFF') && substr($h, 8, 4) === 'WAVE') return 'audio/wav';
+    if (substr($h, 4, 4) === 'ftyp') return 'audio/mp4';
+    return null;
+}
+
 /**
  * Validate and store an uploaded file. Returns the relative path or null when nothing was uploaded.
  * @throws RuntimeException with a user-friendly message
@@ -26,6 +38,7 @@ function save_upload(string $field, string $kind = 'image'): ?string
     if (!is_uploaded_file($f['tmp_name'])) throw new RuntimeException('Invalid upload.');
 
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
+    if ($kind === 'audio' && !isset($spec['mimes'][$mime])) $mime = sniff_audio_mime($f['tmp_name']) ?? $mime;
     $ext = $spec['mimes'][$mime] ?? null;
     if (!$ext) throw new RuntimeException('This file type is not allowed for ' . $kind . ' uploads.');
 

@@ -105,6 +105,38 @@ function lci_upgrade(PDO $pdo): array
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $addCol('users', 'best_streak', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0');
 
+    // Listen & read. The Lango Podcast (elders' stories), Lango Radio (channels: a live stream, a playlist LCI builds, or every podcast episode)
+    // and the Lango Bible (the 66 books are the standard canon; the verses are imported from a text LCI has the right to publish).
+    $pdo->exec("CREATE TABLE IF NOT EXISTS podcast_episodes (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(200) NOT NULL, storyteller VARCHAR(150) NULL, storyteller_note VARCHAR(255) NULL, series VARCHAR(120) NULL,
+        clan_id INT UNSIGNED NULL, district_id INT UNSIGNED NULL, recorded_year SMALLINT UNSIGNED NULL, summary TEXT NULL, transcript MEDIUMTEXT NULL,
+        audio_file VARCHAR(255) NULL, audio_url VARCHAR(500) NULL, minutes SMALLINT UNSIGNED NULL, cover_image VARCHAR(255) NULL,
+        status ENUM('published','draft') NOT NULL DEFAULT 'draft', featured TINYINT(1) NOT NULL DEFAULT 0, plays INT UNSIGNED NOT NULL DEFAULT 0,
+        published_at DATETIME NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, KEY (status, published_at), KEY (series)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS radio_channels (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, name VARCHAR(120) NOT NULL, description VARCHAR(300) NULL, source ENUM('playlist','podcast','stream') NOT NULL DEFAULT 'playlist',
+        stream_url VARCHAR(500) NULL, cover_image VARCHAR(255) NULL, sort SMALLINT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'draft'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS radio_items (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, channel_id INT UNSIGNED NOT NULL, title VARCHAR(200) NOT NULL, credit VARCHAR(190) NULL, audio_file VARCHAR(255) NULL,
+        audio_url VARCHAR(500) NULL, minutes SMALLINT UNSIGNED NULL, sort SMALLINT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published', KEY (channel_id, sort)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS bible_books (
+        id TINYINT UNSIGNED NOT NULL PRIMARY KEY, code CHAR(3) NOT NULL UNIQUE, testament ENUM('old','new') NOT NULL, name_en VARCHAR(60) NOT NULL, name_lg VARCHAR(80) NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS bible_verses (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, book_id TINYINT UNSIGNED NOT NULL, chapter SMALLINT UNSIGNED NOT NULL, verse SMALLINT UNSIGNED NOT NULL, text TEXT NOT NULL,
+        UNIQUE KEY ref (book_id, chapter, verse)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    if (!(int)$val('SELECT COUNT(*) FROM bible_books')) {
+        $canon = 'GEN Genesis|EXO Exodus|LEV Leviticus|NUM Numbers|DEU Deuteronomy|JOS Joshua|JDG Judges|RUT Ruth|1SA 1 Samuel|2SA 2 Samuel|1KI 1 Kings|2KI 2 Kings|1CH 1 Chronicles|2CH 2 Chronicles|EZR Ezra|NEH Nehemiah|EST Esther|JOB Job|PSA Psalms|PRO Proverbs|ECC Ecclesiastes|SNG Song of Solomon|ISA Isaiah|JER Jeremiah|LAM Lamentations|EZK Ezekiel|DAN Daniel|HOS Hosea|JOL Joel|AMO Amos|OBA Obadiah|JON Jonah|MIC Micah|NAM Nahum|HAB Habakkuk|ZEP Zephaniah|HAG Haggai|ZEC Zechariah|MAL Malachi|'
+            . 'MAT Matthew|MRK Mark|LUK Luke|JHN John|ACT Acts|ROM Romans|1CO 1 Corinthians|2CO 2 Corinthians|GAL Galatians|EPH Ephesians|PHP Philippians|COL Colossians|1TH 1 Thessalonians|2TH 2 Thessalonians|1TI 1 Timothy|2TI 2 Timothy|TIT Titus|PHM Philemon|HEB Hebrews|JAS James|1PE 1 Peter|2PE 2 Peter|1JN 1 John|2JN 2 John|3JN 3 John|JUD Jude|REV Revelation';
+        foreach (explode('|', $canon) as $i => $b) $ins('bible_books', ['id' => $i + 1, 'code' => substr($b, 0, 3), 'testament' => $i < 39 ? 'old' : 'new', 'name_en' => substr($b, 4)]);
+        $log[] = 'seeded the 66 books of the Bible';
+    }
+    $addCol('donations', 'purpose', "VARCHAR(12) NOT NULL DEFAULT 'general'");
+
     // "Continue with Google": the Google account id on the member, and short-lived one-time codes handed to the app after Google signs the person in
     $addCol('users', 'google_sub', 'VARCHAR(40) NULL');
     try { $pdo->exec('ALTER TABLE users ADD UNIQUE KEY google_sub (google_sub)'); } catch (Throwable $e) { /* already there */ }

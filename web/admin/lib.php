@@ -28,6 +28,7 @@ function special_modules(): array
         'clan_quick'    => ['Add clans in bulk', 'plus', ADM_CONTENT, 'Heritage'],
         'clan_requests' => ['Clan requests', 'users', ADM_CONTENT, 'Heritage'],
         'clan_messages' => ['Clan messages', 'chat', ADM_STAFF, 'Moderation'],
+        'bible_import'  => ['Import Bible text', 'upload', ADM_CONTENT, 'Listen & read'],
         'settings'      => ['Site settings', 'settings', ADM_ALL, 'System'],
         'translations'  => ['Translations', 'globe', ['super_admin', 'admin', 'editor'], 'System'],
         'audit'         => ['Audit log', 'list', ADM_ALL, 'System'],
@@ -75,7 +76,7 @@ function admin_start(string $title, string $active, string $actions = ''): void
     foreach (modules() as $k => $m) {
         if (can_module($k)) $groups[$m['group']][] = [$k, $m['label'], $m['icon']];
     }
-    $order = ['Overview', 'Moderation', 'Content', 'Heritage', 'Language', 'Community', 'System'];
+    $order = ['Overview', 'Moderation', 'Content', 'Heritage', 'Language', 'Listen & read', 'Community', 'System'];
     $bellOn = in_array($u['role'], ADM_STAFF, true);
     $bellItems = $bellOn ? notif_items(7) : [];
     $bellN = $bellOn ? badge_count('notifications') : 0;

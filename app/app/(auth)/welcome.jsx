@@ -33,7 +33,7 @@ export default function Welcome() {
         <AppText style={styles.sub}>{t('Join the Lango community to contribute heritage, learn Leb Lango and connect with your clan.')}</AppText>
         <Button title={t('Create an account')} onPress={() => router.push({ pathname: '/(auth)/register', params })} />
         <Button title={t('Sign in')} variant="glass" onPress={() => router.push({ pathname: '/(auth)/login', params })} />
-        <Button title={t('Keep browsing')} variant="ghost" onPress={() => router.replace('/(tabs)')} style={{ minHeight: 40 }} />
+        <Button title={t('Keep browsing')} variant="ghostLight" onPress={() => router.replace('/(tabs)')} style={{ minHeight: 40 }} />
       </View>
     </View>
   );

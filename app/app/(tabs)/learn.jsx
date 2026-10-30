@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import AppText from '../../components/AppText';
 import GradientTile from '../../components/GradientTile';
 import Screen from '../../components/Screen';
 import SectionHeader from '../../components/SectionHeader';
-import { COLORS, GRADIENTS, MAX_FONT_SCALE, RADIUS, SHADOW, SPACING } from '../../constants/theme';
+import { COLORS, MAX_FONT_SCALE, RADIUS, SHADOW, SPACING } from '../../constants/theme';
 import { useOfflineDictionary } from '../../lib/dictionary';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
@@ -44,23 +43,22 @@ export default function Learn() {
       </View>
 
       {wotd ? (
-        <Pressable onPress={() => router.push({ pathname: '/dictionary', params: { q: wotd.lango } })} accessibilityRole="button" style={styles.wotdWrap}>
-          <LinearGradient colors={GRADIENTS.deep} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.wotd}>
-            <View style={{ flex: 1 }}>
-              <AppText variant="eyebrow" style={{ color: COLORS.yellow }}>
-                {t('Word of the day')}
-              </AppText>
-              <AppText lango style={styles.word}>
-                {wotd.lango}
-              </AppText>
-              <AppText lango style={styles.meaning} numberOfLines={2}>
-                {String(wotd.english).split(';').map((s) => s.trim()).join(' · ')}
-              </AppText>
-            </View>
-            <View style={styles.go}>
-              <Ionicons name="arrow-forward" size={20} color={COLORS.primary} />
-            </View>
-          </LinearGradient>
+        <Pressable onPress={() => router.push({ pathname: '/dictionary', params: { q: wotd.lango } })} accessibilityRole="button" style={styles.wotd}>
+          <View style={styles.sun}>
+            <Ionicons name="sunny" size={22} color="#B46B00" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <AppText variant="eyebrow">{t('Word of the day')}</AppText>
+            <AppText lango style={styles.word}>
+              {wotd.lango}
+            </AppText>
+            <AppText lango style={styles.meaning} numberOfLines={2}>
+              {String(wotd.english).split(';').map((s) => s.trim()).join(' · ')}
+            </AppText>
+          </View>
+          <View style={styles.go}>
+            <Ionicons name="arrow-forward" size={20} color={COLORS.white} />
+          </View>
         </Pressable>
       ) : null}
 
@@ -70,7 +68,7 @@ export default function Learn() {
           <GradientTile icon="book" tone="amber" title={t('Dictionary')} text={t('Lango–English and English–Lango, with examples')} onPress={() => router.push('/dictionary')} />
           <GradientTile icon="language" tone="sky" title={t('AI Lango translator')} text={t('Words, phrases and sentences, both ways')} onPress={() => router.push('/translate')} />
           <GradientTile icon="ribbon" tone="red" title={t('Proverbs & sayings')} text={t('The wisdom of the elders')} onPress={() => router.push('/proverbs')} />
-          <GradientTile icon="chatbubble-ellipses" tone="dark" title={t('Phrasebook')} text={t('Everyday greetings and replies')} onPress={() => router.push('/phrasebook')} />
+          <GradientTile icon="chatbubble-ellipses" tone="slate" title={t('Phrasebook')} text={t('Everyday greetings and replies')} onPress={() => router.push('/phrasebook')} />
           <GradientTile icon="add-circle" tone="green" full style={{ marginTop: 0 }} title={t('Suggest a word')} text={t('Add a word or a name; our language team reviews it')} onPress={() => router.push({ pathname: '/contribute/new', params: { type: 'language', kind: 'word' } })} />
         </View>
       </View>
@@ -88,14 +86,14 @@ export default function Learn() {
 }
 
 const styles = StyleSheet.create({
-  search: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: COLORS.white, borderRadius: RADIUS.full, paddingLeft: 18, paddingRight: 6, ...SHADOW },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: COLORS.white, borderRadius: RADIUS.full, paddingLeft: 18, paddingRight: 6, ...SHADOW, shadowOpacity: 0.1 },
   input: { flex: 1, minHeight: 52, fontFamily: 'Inter_400Regular', fontSize: 16, color: COLORS.black },
   searchGo: { width: 42, height: 42, borderRadius: 21, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' },
-  go: { width: 42, height: 42, borderRadius: 21, backgroundColor: COLORS.white, alignItems: 'center', justifyContent: 'center' },
-  wotdWrap: { marginTop: SPACING.md, borderRadius: RADIUS.xl, ...SHADOW },
-  wotd: { flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: RADIUS.xl, padding: SPACING.md + 4 },
-  word: { fontFamily: 'Inter_700Bold', fontSize: 32, lineHeight: 40, color: COLORS.yellow },
-  meaning: { fontFamily: 'Inter_400Regular', fontSize: 15, lineHeight: 22, color: COLORS.white },
+  go: { width: 42, height: 42, borderRadius: 21, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' },
+  wotd: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: SPACING.md, backgroundColor: COLORS.white, borderRadius: RADIUS.lg + 2, padding: 14, ...SHADOW },
+  sun: { width: 48, height: 48, borderRadius: 16, backgroundColor: '#FFF1D6', alignItems: 'center', justifyContent: 'center' },
+  word: { fontFamily: 'Inter_700Bold', fontSize: 28, lineHeight: 35, color: COLORS.primaryDark },
+  meaning: { fontFamily: 'Inter_400Regular', fontSize: 14.5, lineHeight: 21, color: COLORS.gray900 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   offline: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: SPACING.md, marginTop: SPACING.lg, ...SHADOW },
 });

@@ -1,8 +1,9 @@
 // Donate (POST /api/v1/donations): choose an amount and currency, a payment method (MTN MoMo, Airtel Money, Visa, Mastercard,
-// PayPal, bank transfer), once / monthly / yearly, and optionally a program. The pledge is recorded and the LCI finance office
-// confirms it and sends payment instructions — the screen says so, and gives the reference to quote when paying.
+// PayPal, bank transfer), once / monthly / yearly, and where it goes: a program, "where it is needed most" or keeping the app running.
+// The pledge is recorded and the LCI finance office confirms it once it arrives. How to pay with each method is what LCI wrote in Site
+// settings (GET /giving); the screen shows it, and gives the reference to quote when paying.
 import { useMemo, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
@@ -25,23 +26,28 @@ const PRESETS = { UGX: [10000, 20000, 50000, 100000, 200000], USD: [5, 10, 25, 5
 export default function Donate() {
   const { t } = useT();
   const { user } = useAuth();
-  const { program } = useLocalSearchParams();
+  const { program, purpose } = useLocalSearchParams();
   const programs = useFetch('/programs');
+  const giving = useFetch('/giving'); // how to pay with each method, as LCI wrote it in the admin panel
+  const info = giving.data?.data;
   const [cur, setCur] = useState('UGX');
-  const [f, setF] = useState({ amount: '', method: 'mtn_momo', recurring: 'once', program_id: typeof program === 'string' ? program : '', donor_name: user?.name ?? '', email: user?.email ?? '', phone: user?.phone ?? '', message: '', anonymous: false });
+  // "Give to" is a program, "where it is needed most", or the running of the app itself (program_id "app")
+  const [f, setF] = useState({ amount: '', method: 'mtn_momo', recurring: 'once', program_id: purpose === 'app' ? 'app' : typeof program === 'string' ? program : '', donor_name: user?.name ?? '', email: user?.email ?? '', phone: user?.phone ?? '', message: '', anonymous: false });
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState({});
   const [banner, setBanner] = useState('');
   const [done, setDone] = useState(null);
   const set = (k) => (v) => setF((x) => ({ ...x, [k]: v }));
-  const progOptions = useMemo(() => [{ value: '', label: t('Where it is needed most') }, ...(programs.data?.data ?? []).filter((p) => p.accepts_donations).map((p) => ({ value: String(p.id), label: p.title }))], [programs.data, t]);
+  const how = info?.methods?.find((m) => m.key === f.method);
+  const progOptions = useMemo(() => [{ value: '', label: t('Where it is needed most') }, { value: 'app', label: t('Keeping the Lango App running') }, ...(programs.data?.data ?? []).filter((p) => p.accepts_donations).map((p) => ({ value: String(p.id), label: p.title }))], [programs.data, t]);
 
   async function submit() {
     setBusy(true);
     setBanner('');
     setErrors({});
     try {
-      const { data } = await api.post('/donations', { ...f, currency: cur, amount: f.amount.replace(/,/g, ''), anonymous: f.anonymous ? 1 : 0 });
+      const forApp = f.program_id === 'app';
+      const { data } = await api.post('/donations', { ...f, program_id: forApp ? '' : f.program_id, purpose: forApp ? 'app' : 'general', currency: cur, amount: f.amount.replace(/,/g, ''), anonymous: f.anonymous ? 1 : 0 });
       setDone(data.data);
     } catch (e) {
       setErrors(fieldErrors(e));
@@ -69,7 +75,16 @@ export default function Donate() {
               {done.reference}
             </AppText>
           </Card>
-          <Button title={t('Done')} onPress={() => router.replace('/(tabs)')} style={{ alignSelf: 'stretch', marginTop: SPACING.lg }} />
+          {done.pay?.instructions ? (
+            <Card style={{ alignSelf: 'stretch', marginTop: SPACING.md }}>
+              <AppText variant="label">{t('How to pay')}</AppText>
+              <AppText selectable style={{ marginTop: 4 }}>
+                {done.pay.instructions}
+              </AppText>
+            </Card>
+          ) : null}
+          {done.pay?.url ? <Button title={t('Open the payment page')} icon="open-outline" onPress={() => Linking.openURL(done.pay.url).catch(() => {})} style={{ alignSelf: 'stretch', marginTop: SPACING.md }} /> : null}
+          <Button title={t('Done')} variant={done.pay?.url ? 'outline' : 'primary'} onPress={() => router.replace('/(tabs)')} style={{ alignSelf: 'stretch', marginTop: SPACING.md }} />
         </View>
       </View>
     );
@@ -94,11 +109,24 @@ export default function Donate() {
         </View>
         <TextField label={t('Amount ({c})', { c: cur })} value={f.amount} onChangeText={(v) => set('amount')(v.replace(/[^\d.,]/g, ''))} error={errors.amount} keyboardType="decimal-pad" placeholder={cur === 'UGX' ? '50000' : '25'} />
         <Select label={t('Payment method')} value={f.method} options={METHODS.map(([v, l]) => ({ value: v, label: l }))} onChange={set('method')} />
+        {how?.instructions ? (
+          <Card style={{ marginBottom: 12 }}>
+            <AppText variant="label">{t('How to pay')}</AppText>
+            <AppText selectable style={{ marginTop: 4 }}>
+              {how.instructions}
+            </AppText>
+          </Card>
+        ) : null}
         <AppText variant="label" style={{ marginBottom: 6 }}>
           {t('How often?')}
         </AppText>
         <Segmented value={f.recurring} onChange={set('recurring')} options={[{ value: 'once', label: t('Once') }, { value: 'monthly', label: t('Monthly') }, { value: 'yearly', label: t('Yearly') }]} style={{ marginBottom: 16 }} />
         <Select label={t('Give to')} value={f.program_id} options={progOptions} onChange={set('program_id')} />
+        {f.program_id === 'app' && info?.app_text ? (
+          <AppText variant="caption" style={{ marginBottom: 12 }}>
+            {info.app_text}
+          </AppText>
+        ) : null}
         <TextField label={t('Your name')} value={f.donor_name} onChangeText={set('donor_name')} error={errors.donor_name} />
         <TextField label={t('Email')} value={f.email} onChangeText={set('email')} error={errors.email} autoCapitalize="none" keyboardType="email-address" />
         <TextField label={t('Phone (for mobile money instructions)')} value={f.phone} onChangeText={set('phone')} keyboardType="phone-pad" />
@@ -109,7 +137,9 @@ export default function Donate() {
         </Pressable>
         <Button title={t('Record my pledge')} icon="heart" onPress={submit} loading={busy} />
         <AppText variant="caption" style={{ marginTop: 10 }}>
-          {t('Online payment is being connected. Your pledge is recorded now and the LCI finance office will contact you with payment instructions for your chosen method.')}
+          {how?.instructions || how?.url
+            ? t('Your pledge is recorded now. Pay as shown above and quote your reference; LCI confirms your gift when it arrives.')
+            : t('Online payment is being connected. Your pledge is recorded now and the LCI finance office will contact you with payment instructions for your chosen method.')}
         </AppText>
       </KeyboardScroll>
     </KeyboardAvoidingView>

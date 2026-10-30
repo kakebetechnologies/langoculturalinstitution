@@ -1,17 +1,18 @@
-// A big rounded tile on a vivid gradient with a translucent icon badge, a white title and a line under it: the feature grids of the
-// Explore tab (the FaithFellows "Community" look). `tone` picks a gradient from GRADIENTS; `full` makes it span the whole row.
+// A feature card for the Explore, Learn and Contribute grids: white with a soft shadow, a coloured icon on a light tint, the title and a
+// line under it, and a small arrow. `tone` picks the colour (see TONES); `full` makes it span the whole row. (The file keeps its old name.)
 import { Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, FONTS, GRADIENTS, RADIUS, SHADOW } from '../constants/theme';
+import { COLORS, FONTS, RADIUS, SHADOW, TONES } from '../constants/theme';
 import AppText from './AppText';
 
 export default function GradientTile({ icon, title, text, tone = 'red', onPress, full = false, badge = 0, style }) {
+  const c = TONES[tone] ?? TONES.red;
+
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={title} style={({ pressed }) => [styles.wrap, full && styles.full, pressed && { opacity: 0.92, transform: [{ scale: 0.985 }] }, style]}>
-      <LinearGradient colors={GRADIENTS[tone] ?? GRADIENTS.red} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.fill}>
-        <View style={styles.badge}>
-          <Ionicons name={icon} size={22} color={COLORS.white} />
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={title} style={({ pressed }) => [styles.wrap, full && styles.full, style, pressed && { opacity: 0.92, transform: [{ scale: 0.985 }] }]}>
+      <View style={styles.top}>
+        <View style={[styles.badge, { backgroundColor: c.bg }]}>
+          <Ionicons name={icon} size={24} color={c.fg} />
           {badge > 0 ? (
             <View style={styles.dot}>
               <AppText allowFontScaling={false} style={styles.dotText}>
@@ -20,28 +21,32 @@ export default function GradientTile({ icon, title, text, tone = 'red', onPress,
             </View>
           ) : null}
         </View>
-        <View style={{ marginTop: 'auto' }}>
-          <AppText style={styles.title} numberOfLines={2}>
-            {title}
-          </AppText>
-          {text ? (
-            <AppText style={styles.text} numberOfLines={2}>
-              {text}
-            </AppText>
-          ) : null}
+        <View style={[styles.arrow, { backgroundColor: c.bg }]}>
+          <Ionicons name="arrow-forward" size={14} color={c.fg} />
         </View>
-      </LinearGradient>
+      </View>
+      <View style={{ marginTop: 'auto', paddingTop: 12 }}>
+        <AppText style={styles.title} numberOfLines={2}>
+          {title}
+        </AppText>
+        {text ? (
+          <AppText style={styles.text} numberOfLines={2}>
+            {text}
+          </AppText>
+        ) : null}
+      </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { width: '48%', flexGrow: 1, borderRadius: RADIUS.xl, ...SHADOW },
-  full: { width: '100%' },
-  fill: { minHeight: 150, borderRadius: RADIUS.xl, padding: 16 },
-  badge: { width: 46, height: 46, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' },
-  dot: { position: 'absolute', top: -5, right: -5, minWidth: 20, height: 20, borderRadius: 10, paddingHorizontal: 5, backgroundColor: COLORS.yellow, alignItems: 'center', justifyContent: 'center' },
-  dotText: { fontFamily: FONTS.bold, fontSize: 11, color: COLORS.navy },
-  title: { fontFamily: FONTS.bold, fontSize: 17, lineHeight: 22, color: COLORS.white },
-  text: { fontFamily: FONTS.medium, fontSize: 12.5, lineHeight: 17, color: 'rgba(255,255,255,0.86)', marginTop: 2 },
+  wrap: { width: '48%', flexGrow: 1, minHeight: 142, borderRadius: RADIUS.lg + 2, padding: 14, backgroundColor: COLORS.white, ...SHADOW },
+  full: { width: '100%', minHeight: 0 },
+  top: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
+  badge: { width: 48, height: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
+  arrow: { width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  dot: { position: 'absolute', top: -5, right: -5, minWidth: 20, height: 20, borderRadius: 10, paddingHorizontal: 5, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: COLORS.white },
+  dotText: { fontFamily: FONTS.bold, fontSize: 11, color: COLORS.white },
+  title: { fontFamily: FONTS.bold, fontSize: 15.5, lineHeight: 20, color: COLORS.black },
+  text: { fontFamily: FONTS.regular, fontSize: 12, lineHeight: 16.5, color: COLORS.gray700, marginTop: 2 },
 });

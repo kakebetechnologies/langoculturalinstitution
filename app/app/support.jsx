@@ -31,6 +31,10 @@ export default function Support() {
         <Button title={t('Donate now')} variant="gold" icon="heart" onPress={() => router.push('/donate')} style={{ alignSelf: 'flex-start', marginTop: 10 }} />
       </View>
 
+      <View style={{ marginTop: SPACING.md }}>
+        <Row icon="phone-portrait-outline" iconTone="red" title={t('Keep the Lango App running')} subtitle={t('Help pay for the servers, storage and updates behind this app')} onPress={() => router.push({ pathname: '/donate', params: { purpose: 'app' } })} />
+      </View>
+
       {tt ? (
         <Card style={{ marginTop: SPACING.md }}>
           <AppText variant="eyebrow">{t('Transparency')}</AppText>

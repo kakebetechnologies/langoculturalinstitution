@@ -6,14 +6,13 @@ import { useCallback, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useFocusEffect } from 'expo-router';
-import { setStatusBarStyle } from 'expo-status-bar';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import ClanArchive from '../components/clan/ClanArchive';
 import ClanMembers from '../components/clan/ClanMembers';
 import ClanMessages from '../components/clan/ClanMessages';
-import HeroHeader from '../components/HeroHeader';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Segmented from '../components/Segmented';
 import { BackButton } from '../components/ScreenHeader';
 import SignInPrompt from '../components/SignInPrompt';
@@ -26,6 +25,7 @@ import { useFetch } from '../lib/useFetch';
 
 export default function ClanGroup() {
   const { t } = useT();
+  const insets = useSafeAreaInsets();
   const { user, refresh } = useAuth();
   const clan = user?.clan;
   const group = useFetch(clan ? `/clans/${clan.id}/group` : '/ping', { enabled: !!clan, cache: false });
@@ -36,9 +36,7 @@ export default function ClanGroup() {
 
   useFocusEffect(
     useCallback(() => {
-      setStatusBarStyle('light');
       refresh();
-      return () => setStatusBarStyle('dark');
     }, [refresh]),
   );
 
@@ -63,9 +61,9 @@ export default function ClanGroup() {
 
   return (
     <View style={styles.screen}>
-      <HeroHeader style={styles.hero}>
+      <View style={[styles.hero, { paddingTop: insets.top + 8 }]}>
         <View style={styles.top}>
-          <BackButton onDark />
+          <BackButton />
           <View style={{ flex: 1 }}>
             <AppText style={styles.eyebrow}>{t('Clan group')}</AppText>
             <AppText style={styles.title} numberOfLines={1}>
@@ -74,13 +72,13 @@ export default function ClanGroup() {
           </View>
           {joined ? (
             <View style={styles.count}>
-              <Ionicons name="people" size={15} color={COLORS.white} />
+              <Ionicons name="people" size={15} color={COLORS.primaryDark} />
               <AppText style={styles.countText}>{view.members}</AppText>
             </View>
           ) : null}
         </View>
-        {joined ? <Segmented dark value={tab} onChange={setTab} options={[{ value: 'messages', label: t('Messages') }, { value: 'members', label: t('Members') }, { value: 'archive', label: t('Archive') }]} style={styles.tabs} /> : null}
-      </HeroHeader>
+        {joined ? <Segmented value={tab} onChange={setTab} options={[{ value: 'messages', label: t('Messages') }, { value: 'members', label: t('Members') }, { value: 'archive', label: t('Archive') }]} style={styles.tabs} /> : null}
+      </View>
 
       {!user ? (
         <View style={styles.pad}>
@@ -145,13 +143,13 @@ export default function ClanGroup() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: COLORS.canvas },
-  hero: { paddingBottom: SPACING.md },
+  hero: { paddingHorizontal: SPACING.md, paddingBottom: SPACING.md },
   top: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  eyebrow: { fontFamily: FONTS.bold, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: COLORS.yellow },
-  title: { fontFamily: FONTS.bold, fontSize: 21, lineHeight: 27, color: COLORS.white },
-  count: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.16)', paddingHorizontal: 12, paddingVertical: 7, borderRadius: 999 },
-  countText: { fontFamily: FONTS.bold, fontSize: 14, color: COLORS.white },
-  tabs: { marginTop: SPACING.md, backgroundColor: 'rgba(255,255,255,0.14)' },
+  eyebrow: { fontFamily: FONTS.bold, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: COLORS.primaryDark },
+  title: { fontFamily: FONTS.bold, fontSize: 21, lineHeight: 27, color: COLORS.black },
+  count: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: COLORS.white, paddingHorizontal: 12, height: 40, borderRadius: 999 },
+  countText: { fontFamily: FONTS.bold, fontSize: 14, color: COLORS.black },
+  tabs: { marginTop: SPACING.md },
   pad: { padding: SPACING.md },
   icon: { width: 64, height: 64, borderRadius: 22, backgroundColor: COLORS.primaryMist, alignItems: 'center', justifyContent: 'center' },
   point: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', marginTop: 10 },

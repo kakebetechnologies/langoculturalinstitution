@@ -1,70 +1,29 @@
-// The bottom bar (the FaithFellows pill, in the Lango logo colours): a floating dark pill with a round red button that rises out of a
-// soft notch over the tab you are on, and glides to the next tab when you change. Every tab keeps its name under its icon.
-// Contribute, the star feature, always shows as a red "+" so it is easy to find even when another tab is active.
-// It draws the tabs the navigator describes: Home, Explore, Contribute, Learn and Me.
-import { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
+// The bottom bar: a floating white bar with soft shadow, five tabs (Home, Explore, Contribute, Learn, Me). The tab you are on gets a red
+// icon on a light red tint; Contribute, the star feature, is always the raised red button in the middle, in a white ring.
+// The "now playing" bar (MiniPlayer) sits above it while Lango Radio or a podcast episode plays.
+import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Circle, Defs, LinearGradient as SvgGradient, Mask, Rect, Stop } from 'react-native-svg';
-import { COLORS, FONTS } from '../constants/theme';
+import { COLORS, FONTS, RADIUS, SHADOW } from '../constants/theme';
 import AppText from './AppText';
-
-const HEIGHT = 74; // the pill
-const RISE = 24; // how far the round button rises above the pill
-const SIDE = 14; // space left and right of the pill
-
-const SCOOP_R = 36; // radius of the circular bite the raised button sits in
-const SCOOP_DEPTH = 21; // how deep the bite goes into the pill
+import MiniPlayer from './MiniPlayer';
 
 export default function AppTabBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
   const { width: screen } = useWindowDimensions();
-  const width = Math.min(screen, 560) - SIDE * 2;
-  const tab = width / state.routes.length;
-  const slide = useRef(new Animated.Value(state.index)).current;
-  const place = (value) => Math.max(SCOOP_R + 6, Math.min(width - SCOOP_R - 6, value * tab + tab / 2));
-  const [cx, setCx] = useState(place(state.index));
-
-  useEffect(() => {
-    const id = slide.addListener(({ value }) => setCx(place(value)));
-    Animated.timing(slide, { toValue: state.index, duration: 280, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start();
-
-    return () => slide.removeListener(id);
-  }, [state.index, tab, slide]);
+  const width = Math.min(screen, 560) - 28;
 
   return (
-    <View style={[styles.wrap, { paddingBottom: Math.max(insets.bottom, 8) }]}>
-      <View style={{ width, height: HEIGHT + RISE, marginHorizontal: SIDE, alignSelf: 'center' }}>
-        <View style={[styles.pill, { height: HEIGHT }]}>
-          <Svg width={width} height={HEIGHT}>
-            <Defs>
-              <SvgGradient id="deep" x1="0" y1="0" x2="1" y2="1">
-                <Stop offset="0" stopColor="#14161B" />
-                <Stop offset="1" stopColor="#3A1217" />
-              </SvgGradient>
-              <Mask id="bite" x="0" y="0" width={width} height={HEIGHT}>
-                <Rect x="0" y="0" width={width} height={HEIGHT} fill="#fff" />
-                <Circle cx={cx} cy={SCOOP_DEPTH - SCOOP_R} r={SCOOP_R} fill="#000" />
-              </Mask>
-            </Defs>
-            <Rect x="0" y="0" width={width} height={HEIGHT} rx="30" fill="url(#deep)" mask="url(#bite)" />
-          </Svg>
-        </View>
-
-        <View style={[styles.bubble, { left: cx - 29 }]} pointerEvents="none">
-          <LinearGradient colors={['#FF5B64', COLORS.primary, '#A60D17']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.bubbleFill}>
-            {descriptors[state.routes[state.index].key].options.tabBarIcon?.({ focused: true, color: '#fff', size: 25 })}
-          </LinearGradient>
-        </View>
-
-        <View style={[styles.row, { height: HEIGHT }]}>
+    <>
+      <MiniPlayer />
+      <View style={[styles.wrap, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+        <View style={[styles.bar, { width }]}>
           {state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
             const focused = state.index === index;
             const label = options.title ?? route.name;
-            const star = route.name === 'contribute';
+            const center = route.name === 'contribute';
 
             const onPress = () => {
               const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
@@ -81,14 +40,16 @@ export default function AppTabBar({ state, descriptors, navigation }) {
                 accessibilityLabel={label}
                 style={styles.tab}
               >
-                {focused ? null : star ? (
-                  <View style={styles.star}>
-                    <Ionicons name="add" size={22} color="#fff" />
+                {center ? (
+                  <View style={styles.centerRing}>
+                    <LinearGradient colors={['#FF4B55', COLORS.primary, '#B30E18']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.centerBtn}>
+                      <Ionicons name="add" size={32} color="#fff" />
+                    </LinearGradient>
                   </View>
                 ) : (
-                  options.tabBarIcon?.({ focused: false, color: 'rgba(255,255,255,0.72)', size: 22 })
+                  <View style={[styles.iconWrap, focused && styles.iconOn]}>{options.tabBarIcon?.({ focused, color: focused ? COLORS.primaryDark : COLORS.gray700, size: 23 })}</View>
                 )}
-                <AppText allowFontScaling={false} numberOfLines={1} style={[styles.label, focused && styles.labelOn]}>
+                <AppText allowFontScaling={false} numberOfLines={1} style={[styles.label, focused && styles.labelOn, center && { marginTop: 1 }]}>
                   {label}
                 </AppText>
               </Pressable>
@@ -96,18 +57,18 @@ export default function AppTabBar({ state, descriptors, navigation }) {
           })}
         </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { backgroundColor: COLORS.canvas },
-  pill: { position: 'absolute', left: 0, right: 0, bottom: 0, borderRadius: 30, shadowColor: '#14161B', shadowOpacity: 0.35, shadowRadius: 18, shadowOffset: { width: 0, height: 10 }, elevation: 12 },
-  bubble: { position: 'absolute', top: 0, width: 58, height: 58, borderRadius: 29, padding: 4, backgroundColor: COLORS.canvas, shadowColor: COLORS.primary, shadowOpacity: 0.5, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 14 },
-  bubbleFill: { flex: 1, borderRadius: 25, alignItems: 'center', justifyContent: 'center' },
-  row: { position: 'absolute', left: 0, right: 0, bottom: 0, flexDirection: 'row' },
-  tab: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 3, paddingBottom: 10 },
-  star: { width: 30, height: 30, borderRadius: 15, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' },
-  label: { fontFamily: FONTS.semibold, fontSize: 11, color: 'rgba(255,255,255,0.72)' },
-  labelOn: { fontFamily: FONTS.bold, color: '#FFFFFF' },
+  wrap: { backgroundColor: COLORS.canvas, alignItems: 'center', paddingTop: 6 },
+  bar: { flexDirection: 'row', alignItems: 'flex-end', height: 70, borderRadius: 32, backgroundColor: 'rgba(255,255,255,0.98)', borderWidth: 1, borderColor: '#FFFFFF', paddingHorizontal: 6, paddingBottom: 8, ...SHADOW, shadowOpacity: 0.12, shadowRadius: 22, shadowOffset: { width: 0, height: 10 } },
+  tab: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 2 },
+  iconWrap: { width: 48, height: 32, borderRadius: RADIUS.full, alignItems: 'center', justifyContent: 'center' },
+  iconOn: { backgroundColor: COLORS.primaryMist },
+  centerRing: { width: 66, height: 66, borderRadius: 33, marginTop: -26, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', shadowColor: '#0F172A', shadowOpacity: 0.12, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 6 },
+  centerBtn: { width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center', shadowColor: COLORS.primary, shadowOpacity: 0.45, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 8 },
+  label: { fontFamily: FONTS.semibold, fontSize: 10.5, color: COLORS.gray700 },
+  labelOn: { fontFamily: FONTS.bold, color: COLORS.primaryDark },
 });

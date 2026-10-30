@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import AppText from '../../components/AppText';
+import GradientTile from '../../components/GradientTile';
 import Pill from '../../components/Pill';
 import Row from '../../components/Row';
 import Screen from '../../components/Screen';
@@ -18,7 +19,8 @@ import { useT } from '../../lib/i18n';
 import { useOutbox } from '../../lib/outbox';
 import { useFetch } from '../../lib/useFetch';
 
-const TONES = { red: [COLORS.primaryMist, COLORS.primaryDark], sky: [COLORS.skyMist, COLORS.skyDark], gold: [COLORS.yellowMist, COLORS.yellowInk], dark: [COLORS.gray100, COLORS.navy] };
+// the tone names the contribution types use, as the tile tones
+const TONE_OF = { red: 'red', sky: 'sky', gold: 'amber', dark: 'slate', green: 'green' };
 
 export default function Contribute() {
   const { t } = useT();
@@ -33,21 +35,18 @@ export default function Contribute() {
       ) : (
         <>
           <SectionHeader eyebrow={t('Step 1')} title={t('What would you like to share?')} />
-          {CONTRIBUTION_TYPES.map((c) => {
-            const tone = TONES[c.tone];
-            return (
-              <Pressable key={`${c.type}${c.kind ?? ''}`} onPress={() => router.push({ pathname: '/contribute/new', params: { type: c.type, kind: c.kind ?? '' } })} accessibilityRole="button" style={({ pressed }) => [styles.card, pressed && { opacity: 0.9 }]}>
-                <View style={[styles.icon, { backgroundColor: tone[0] }]}>
-                  <Ionicons name={c.icon} size={24} color={tone[1]} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <AppText style={styles.title}>{t(c.title)}</AppText>
-                  <AppText variant="caption">{t(c.text)}</AppText>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color={COLORS.gray500} />
-              </Pressable>
-            );
-          })}
+          <View style={styles.grid}>
+            {CONTRIBUTION_TYPES.map((c) => (
+              <GradientTile
+                key={`${c.type}${c.kind ?? ''}`}
+                icon={c.icon}
+                tone={TONE_OF[c.tone] ?? 'red'}
+                title={t(c.title)}
+                text={t(c.text)}
+                onPress={() => router.push({ pathname: '/contribute/new', params: { type: c.type, kind: c.kind ?? '' } })}
+              />
+            ))}
+          </View>
 
           {items.length ? (
             <View style={{ marginTop: SPACING.lg }}>
@@ -83,8 +82,6 @@ export default function Contribute() {
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.white, borderRadius: RADIUS.lg, padding: SPACING.md, marginBottom: 10, ...SHADOW },
-  icon: { width: 50, height: 50, borderRadius: RADIUS.lg - 2, alignItems: 'center', justifyContent: 'center' },
-  title: { fontFamily: FONTS.bold, fontSize: 16.5, lineHeight: 22, color: COLORS.black },
-  board: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.yellowMist, borderRadius: RADIUS.xl, padding: SPACING.md, marginTop: SPACING.lg },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  board: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: COLORS.white, borderRadius: RADIUS.lg + 2, padding: SPACING.md, marginTop: SPACING.lg, ...SHADOW },
 });

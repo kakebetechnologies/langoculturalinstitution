@@ -33,7 +33,8 @@ More detail: [`web/README.md`](web/README.md) (site, admin, content rules, going
 | Connect | Events with ticket registration, professionals directory, cultural assistant (answers only from reviewed content), news, leaderboard |
 | Every day | Word of the day as a ten-second quiz with a learning streak and share button; opening-streak with milestones and a weekly streak freeze; weekly Language Challenge with a leaderboard; clan leaderboard; Clan of the week; today's story from the archive; photo of the day; your clan's standing and latest additions; countdown to the next event |
 | Clan group | People of the same clan join their group: see how many are in it and who (members can hide their name), write to each other, browse the clan's approved contributions. Sign up with email or **Continue with Google** (once Google is set up in Admin → Site settings) |
-| Support | Donation pledges, programs, transparency figures |
+| Listen & read | Lango Radio (channels: a live stream, a playlist LCI builds, or every podcast episode), the Lango Podcast (elders’ stories) and the Lango Bible (reader, search, share). A player keeps playing between screens and with the screen off. All of it is added in *Admin → Listen & read*; the Bible text is imported from a CSV LCI has the right to publish |
+| Support | Donation pledges for LCI or for keeping the app running, with pay-to instructions per method from Site settings, programs, transparency figures |
 | Me | Points, Bronze → Platinum levels, badges, my contributions and their status, notifications (in-app + push), settings |
 
 ## Tech stack

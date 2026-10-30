@@ -15,7 +15,7 @@ export function StreakChip({ streaks }) {
 
   return (
     <View style={styles.chip} accessibilityLabel={t('{n}-day streak', { n: streaks.current })}>
-      <Ionicons name="flame" size={16} color={COLORS.yellow} />
+      <Ionicons name="flame" size={17} color="#F08A00" />
       <AppText style={styles.chipText}>{streaks.current}</AppText>
     </View>
   );
@@ -73,8 +73,8 @@ export function MilestoneSheet({ days, onClose }) {
 }
 
 const styles = StyleSheet.create({
-  chip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.14)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
-  chipText: { fontFamily: FONTS.bold, fontSize: 14, color: COLORS.white },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: COLORS.white, paddingHorizontal: 11, height: 40, borderRadius: 999, shadowColor: '#0F172A', shadowOpacity: 0.08, shadowRadius: 9, shadowOffset: { width: 0, height: 3 }, elevation: 2 },
+  chipText: { fontFamily: FONTS.bold, fontSize: 14, color: COLORS.black },
   top: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   flame: { width: 52, height: 52, borderRadius: 18, backgroundColor: '#F26A1B', alignItems: 'center', justifyContent: 'center' },
   big: { fontFamily: FONTS.bold, fontSize: 19, lineHeight: 25, color: COLORS.black },

@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Lango App: concept paper for partners and donors</title><style>
+@font-face { font-family: 'Clarity City'; font-weight: 400; src: url('file:///C:/xampp/htdocs/langoculturalinstitution/app/node_modules/@expo-google-fonts/clarity-city/400Regular/ClarityCity_400Regular.ttf'); }
+@font-face { font-family: 'Clarity City'; font-weight: 600; src: url('file:///C:/xampp/htdocs/langoculturalinstitution/app/node_modules/@expo-google-fonts/clarity-city/600SemiBold/ClarityCity_600SemiBold.ttf'); }
+@font-face { font-family: 'Clarity City'; font-weight: 700; src: url('file:///C:/xampp/htdocs/langoculturalinstitution/app/node_modules/@expo-google-fonts/clarity-city/700Bold/ClarityCity_700Bold.ttf'); }
+@font-face { font-family: 'Inter'; font-weight: 400; src: url('file:///C:/xampp/htdocs/langoculturalinstitution/app/node_modules/@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf'); }
+@font-face { font-family: 'Ionicons'; src: url('file:///C:/xampp/htdocs/langoculturalinstitution/app/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'); }
+:root { --red:#EE1A26; --red-d:#C9111C; --red-mist:#FDE8E9; --yellow:#FDDD16; --yellow-mist:#FFF6C4; --sky:#00ADF1; --sky-mist:#E3F6FE; --green:#1E9E5A; --green-mist:#E3F6EC;
+        --amber:#E8A317; --ink:#1B1E25; --body:#3C414B; --muted:#7B8390; --line:#E4E0D6; --canvas:#F7F5F0; --night:#14161B; }
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Clarity City', 'Inter', Arial, sans-serif; font-size: 9.4pt; line-height: 1.5; color: var(--body); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.ion { font-family: 'Ionicons'; font-style: normal; font-weight: normal; line-height: 1; display: inline-block; }
+.page { width: 210mm; height: 297mm; position: relative; overflow: hidden; page-break-after: always; background: #fff; }
+.page:last-child { page-break-after: auto; }
+.in { position: absolute; inset: 0; padding: 14mm 15mm 12mm; display: flex; flex-direction: column; }
+.in > * { flex-shrink: 0; }
+h1, h2, h3, p { margin: 0; }
+b, strong { color: var(--ink); font-weight: 600; }
+.dark b, .dark strong { color: #fff; }
+.eyebrow { font-size: 7.6pt; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--red-d); }
+.dark .eyebrow, .eyebrow.y { color: var(--yellow); }
+h2.big { font-size: 25pt; line-height: 1.08; font-weight: 700; color: var(--ink); letter-spacing: -.01em; margin-top: 2.2mm; }
+.dark h2.big { color: #fff; }
+.lead { font-size: 10pt; line-height: 1.5; color: var(--body); margin-top: 3mm; }
+.dark .lead { color: rgba(255,255,255,.82); }
+.top { display: flex; align-items: center; gap: 3mm; font-size: 7.6pt; color: var(--muted); }
+.top .r { margin-left: auto; }
+.top img { width: 6.4mm; }
+.top b { font-size: 8.6pt; color: var(--ink); letter-spacing: .04em; }
+.dark .top, .dark .top b { color: rgba(255,255,255,.78); }
+.foot { margin-top: auto; padding-top: 2.4mm; border-top: .3mm solid var(--line); display: flex; justify-content: space-between; font-size: 6.9pt; color: var(--muted); }
+.dark .foot { border-top-color: rgba(255,255,255,.18); color: rgba(255,255,255,.6); }
+
+/* ---------- cover ---------- */
+.p1 .bg { position: absolute; inset: 0; background: url('photos/hero-ridge.jpg') 62% center / cover; }
+.p1 .shade { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(10,11,14,.96) 0%, rgba(10,11,14,.82) 38%, rgba(10,11,14,.30) 72%, rgba(10,11,14,.10) 100%), linear-gradient(0deg, rgba(10,11,14,.85) 0%, rgba(10,11,14,0) 30%); }
+.p1 .in { color: #fff; }
+.p1 .logo { display: flex; align-items: center; gap: 3.4mm; }
+.p1 .logo img { width: 12mm; background: #fff; border-radius: 2.4mm; padding: 1mm; }
+.p1 .logo b { color: #fff; font-size: 11pt; letter-spacing: .08em; display: block; }
+.p1 .logo span { font-size: 7.4pt; color: rgba(255,255,255,.7); letter-spacing: .06em; }
+.p1 .logo .r { margin-left: auto; text-align: right; font-size: 7.6pt; color: rgba(255,255,255,.75); letter-spacing: .04em; }
+.p1 .head { margin-top: 34mm; width: 118mm; }
+.p1 h1 { font-size: 42pt; line-height: 1.0; font-weight: 700; letter-spacing: -.02em; color: #fff; margin: 3.6mm 0 5.6mm; }
+.p1 h1 em { font-style: normal; color: var(--yellow); }
+.p1 .sub { font-size: 11.2pt; line-height: 1.55; color: rgba(255,255,255,.88); max-width: 100mm; }
+.chips { display: flex; flex-wrap: wrap; gap: 2mm; margin-top: 6mm; max-width: 98mm; }
+.chip { display: inline-flex; align-items: center; gap: 1.8mm; padding: 1.6mm 3.4mm; border-radius: 6mm; font-size: 7.8pt; font-weight: 600; background: rgba(255,255,255,.14); border: .3mm solid rgba(255,255,255,.3); color: #fff; }
+.chip .ion { color: var(--yellow); font-size: 9pt; }
+.p1 .handwrap { position: absolute; right: 7mm; bottom: 0; width: 94mm; isolation: isolate; }
+.p1 .handwrap::before { content: ''; position: absolute; left: 4%; top: 6%; width: 92%; height: 70%; z-index: -1; background: radial-gradient(circle, rgba(238,26,38,.34), rgba(238,26,38,0) 66%); }
+.p1 .covfoot { margin-top: auto; display: flex; align-items: flex-end; gap: 5mm; font-size: 7.6pt; color: rgba(255,255,255,.72); position: relative; z-index: 2; }
+.p1 .covfoot b { color: #fff; }
+.p1 .badge { border-left: 1.2mm solid var(--red); padding-left: 3mm; max-width: 78mm; line-height: 1.4; }
+
+/* ---------- cards, grids ---------- */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3.6mm; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.4mm; }
+.card { border: .3mm solid var(--line); border-radius: 3.6mm; padding: 3.6mm 4.2mm; background: var(--canvas); }
+.card h3 { font-size: 10pt; color: var(--ink); font-weight: 700; margin: 2.2mm 0 1mm; line-height: 1.2; }
+.card p { font-size: 8.3pt; line-height: 1.45; }
+.ic { width: 9.2mm; height: 9.2mm; border-radius: 2.8mm; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 14pt; }
+.bg-red { background: var(--red); } .bg-amber { background: var(--amber); } .bg-sky { background: var(--sky); } .bg-green { background: var(--green); } .bg-night { background: #3A3F4A; } .bg-yellow { background: var(--yellow); color: var(--ink); }
+.dcard { border: .3mm solid rgba(255,255,255,.16); border-radius: 3.6mm; padding: 3.4mm 4mm; background: rgba(255,255,255,.07); }
+.dcard h3 { font-size: 10pt; color: #fff; font-weight: 700; margin: 2.2mm 0 1mm; }
+.dcard p { font-size: 8.2pt; line-height: 1.45; color: rgba(255,255,255,.78); }
+
+/* ---------- page 2 ---------- */
+.p2 .band { margin-top: 4.2mm; border-radius: 4.6mm; overflow: hidden; display: flex; background: var(--night); color: #fff; }
+.p2 .band .txt { flex: 1.4; padding: 5mm 6mm; }
+.p2 .band .ph { flex: 1; background: url('photos/hero-field.jpg') center / cover; position: relative; }
+.p2 .band .ph::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #14161B 0%, rgba(20,22,27,0) 45%); }
+.p2 .band b { color: #fff; }
+.p2 .band h3 { font-size: 15pt; line-height: 1.15; color: #fff; margin: 1.6mm 0 2.4mm; }
+.p2 .band ul { margin: 3mm 0 0; padding: 0; list-style: none; }
+.p2 .band li { display: flex; gap: 2.6mm; margin-bottom: 1.8mm; font-size: 8.6pt; line-height: 1.4; color: rgba(255,255,255,.88); }
+.p2 .band li .ion { color: var(--yellow); font-size: 11pt; margin-top: .3mm; }
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.6mm; margin-top: 4.6mm; }
+.stat { border-radius: 3.2mm; padding: 3.2mm 3.2mm 3mm; background: var(--canvas); border: .3mm solid var(--line); text-align: left; }
+.stat b { display: block; font-size: 17pt; line-height: 1.05; color: var(--red-d); font-weight: 700; letter-spacing: -.01em; }
+.stat span { display: block; margin-top: 1mm; font-size: 7.3pt; line-height: 1.3; color: var(--body); }
+.note { font-size: 6.9pt; color: var(--muted); margin-top: 2mm; }
+
+/* ---------- page 3 ---------- */
+.p3 .hero { position: relative; height: 70mm; margin: -14mm -15mm 0; background: url('photos/hero-hill.jpg') center 38% / cover; }
+.p3 .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,11,14,.88) 0%, rgba(10,11,14,.35) 55%, rgba(10,11,14,.55) 100%); }
+.p3 .hero .q { position: absolute; left: 15mm; right: 40mm; bottom: 8mm; z-index: 2; color: #fff; }
+.p3 .hero .q p { font-size: 16.5pt; line-height: 1.22; font-weight: 700; color: #fff; }
+.p3 .hero .q span { display: block; margin-top: 2mm; font-size: 7.8pt; color: rgba(255,255,255,.78); }
+.p3 .hero .top { position: absolute; left: 15mm; right: 15mm; top: 14mm; z-index: 2; }
+.obj { display: grid; grid-template-columns: 1fr 1fr; gap: 3.2mm; margin-top: 5mm; }
+.obj .o { border: .3mm solid var(--line); border-radius: 3.4mm; padding: 3.6mm 4mm 3.4mm; background: #fff; display: flex; gap: 3.2mm; position: relative; }
+.obj .o .n { position: absolute; right: 3.4mm; top: 1.8mm; font-size: 17pt; font-weight: 700; color: #EFEBE0; line-height: 1; }
+.obj .o h3 { font-size: 9.8pt; color: var(--ink); font-weight: 700; margin: 0 0 .8mm; }
+.obj .o p { font-size: 8pt; line-height: 1.42; }
+.obj .o .m { margin-top: 1.4mm; font-size: 7pt; color: var(--red-d); font-weight: 600; }
+.obj .o.wide { grid-column: 1 / 3; background: var(--canvas); }
+.serve { display: flex; gap: 2.4mm; margin-top: 4.6mm; }
+.serve div { flex: 1; text-align: center; font-size: 7.6pt; font-weight: 600; color: var(--ink); line-height: 1.25; }
+.serve .ion { display: block; margin: 0 auto 1.4mm; width: 10mm; height: 10mm; border-radius: 50%; background: var(--red-mist); color: var(--red-d); font-size: 13pt; line-height: 10mm; text-align: center; }
+
+/* ---------- page 4 ---------- */
+.p4 { background: linear-gradient(160deg, #14161B 0%, #2B1015 62%, #7A0F18 140%); }
+.fan { display: flex; justify-content: center; align-items: flex-end; gap: 3.4mm; margin: 4mm -4mm 0; height: 96mm; }
+.fan .ph { width: 33.5mm; border: .5mm solid #0B0C0F; border-radius: 4.6mm; overflow: hidden; box-shadow: 0 2mm 6mm rgba(0,0,0,.5); background: #F7F5F0; }
+.fan .ph img { display: block; width: 100%; }
+.fan .ph:nth-child(1), .fan .ph:nth-child(5) { margin-bottom: 0; transform: translateY(0); }
+.fan .ph:nth-child(2), .fan .ph:nth-child(4) { margin-bottom: 7mm; }
+.fan .ph:nth-child(3) { margin-bottom: 14mm; width: 37mm; }
+.fan figure { margin: 0; text-align: center; }
+.fan figcaption { margin-top: 2mm; font-size: 7pt; color: rgba(255,255,255,.7); line-height: 1.25; }
+.fan figcaption b { display: block; font-size: 7.6pt; color: #fff; }
+.pills { display: flex; flex-wrap: wrap; gap: 1.8mm; margin-top: 4mm; }
+.pill { display: inline-flex; align-items: center; gap: 1.6mm; padding: 1.5mm 3.2mm; border-radius: 6mm; font-size: 7.6pt; font-weight: 600; color: #fff; background: rgba(255,255,255,.1); border: .3mm solid rgba(255,255,255,.22); }
+.pill .ion { color: var(--yellow); font-size: 9pt; }
+
+/* ---------- page 5 ---------- */
+.p5 .panel { margin-top: 4mm; border-radius: 4.6mm; background: var(--night); padding: 2.4mm 4mm 2mm; position: relative; overflow: hidden; }
+.p5 .panel::before { content: ''; position: absolute; right: -30mm; top: -30mm; width: 90mm; height: 90mm; border-radius: 50%; background: radial-gradient(circle, rgba(238,26,38,.35), rgba(238,26,38,0) 70%); }
+.p5 .panel svg { width: 90%; height: auto; position: relative; display: block; margin: 0 auto; }
+.two { display: grid; grid-template-columns: 1.08fr 1fr; gap: 4.4mm; margin-top: 4mm; }
+.mini { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8mm; }
+.mini .card { padding: 3.2mm 3.4mm; }
+.mini .card h3 { font-size: 8.8pt; margin-top: 1.6mm; }
+.mini .card p { font-size: 7.6pt; line-height: 1.38; }
+.mini .ic { width: 7.6mm; height: 7.6mm; font-size: 11.5pt; border-radius: 2.4mm; }
+.gov { border-radius: 3.6mm; background: var(--green-mist); border: .3mm solid #BDE5CD; padding: 4mm 4.4mm; }
+.gov h3 { font-size: 10pt; color: var(--ink); display: flex; align-items: center; gap: 2mm; margin-bottom: 2mm; }
+.gov ul { list-style: none; margin: 0; padding: 0; }
+.gov li { display: flex; gap: 2.2mm; font-size: 8pt; line-height: 1.4; margin-bottom: 1.7mm; }
+.gov li .ion { color: var(--green); font-size: 10.5pt; margin-top: .2mm; }
+.stage { display: flex; margin-top: 3.6mm; border-radius: 3.4mm; overflow: hidden; border: .3mm solid var(--line); }
+.stage div { flex: 1; padding: 3mm 4mm; font-size: 8pt; line-height: 1.4; }
+.stage div:first-child { background: var(--canvas); }
+.stage div:last-child { background: var(--red-mist); }
+.stage b { display: block; font-size: 8.4pt; text-transform: uppercase; letter-spacing: .08em; color: var(--red-d); margin-bottom: .6mm; }
+
+/* ---------- page 6 ---------- */
+.p6 .split { display: grid; grid-template-columns: 1.06fr 1fr; gap: 4.6mm; margin-top: 4.6mm; align-items: stretch; }
+.p6 .hubbox { border-radius: 4.4mm; background: var(--canvas); border: .3mm solid var(--line); padding: 3mm; display: flex; flex-direction: column; justify-content: center; }
+.p6 .hubbox svg { width: 100%; height: auto; display: block; }
+.p6 .hubbox .cap { text-align: center; font-size: 7.2pt; color: var(--muted); margin-top: 1mm; }
+.share { display: flex; flex-direction: column; gap: 3mm; }
+.share .box { border-radius: 3.4mm; padding: 3.6mm 4.2mm; border: .3mm solid var(--line); }
+.share .box h3 { font-size: 9.4pt; color: var(--ink); margin-bottom: 1.4mm; display: flex; gap: 2mm; align-items: center; }
+.share ul { margin: 0; padding: 0; list-style: none; }
+.share li { font-size: 7.9pt; line-height: 1.38; padding-left: 4mm; position: relative; margin-bottom: .8mm; }
+.share li::before { content: ''; position: absolute; left: .4mm; top: 1.6mm; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--red); }
+.share .a { background: var(--sky-mist); border-color: #C4E8F7; } .share .b { background: var(--yellow-mist); border-color: #F1E39A; }
+.steps { display: flex; gap: 0; margin-top: 4.6mm; }
+.steps div { flex: 1; position: relative; background: var(--night); color: #fff; padding: 3.4mm 5mm 3.4mm 5.4mm; font-size: 7.8pt; line-height: 1.38; clip-path: polygon(0 0, calc(100% - 4mm) 0, 100% 50%, calc(100% - 4mm) 100%, 0 100%, 4mm 50%); margin-right: -1mm; }
+.steps div:first-child { clip-path: polygon(0 0, calc(100% - 4mm) 0, 100% 50%, calc(100% - 4mm) 100%, 0 100%); border-radius: 3mm 0 0 3mm; }
+.steps div:last-child { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 4mm 50%); border-radius: 0 3mm 3mm 0; background: var(--red); }
+.steps b { display: block; color: var(--yellow); font-size: 8.4pt; margin-bottom: .6mm; }
+.steps div:last-child b { color: #fff; }
+.road { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.6mm; margin-top: 3mm; }
+.road .ph { border-radius: 3.2mm; padding: 3.4mm 3.6mm; border: .3mm solid var(--line); background: #fff; position: relative; border-top: 1.2mm solid var(--c); }
+.road .ph small { display: block; font-size: 6.9pt; letter-spacing: .12em; text-transform: uppercase; color: var(--c); font-weight: 700; }
+.road .ph h3 { font-size: 9pt; color: var(--ink); margin: .8mm 0 1mm; line-height: 1.2; }
+.road .ph p { font-size: 7.6pt; line-height: 1.38; }
+
+/* ---------- page 7 ---------- */
+.p7 { background: var(--night); color: #fff; }
+.p7 .hero { position: absolute; left: 0; right: 0; top: 0; height: 84mm; background: url('photos/hero-aerial.jpg') center 30% / cover; }
+.p7 .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, #14161B 0%, rgba(20,22,27,.72) 42%, rgba(20,22,27,.55) 100%); }
+.p7 .head { margin-top: 15mm; width: 118mm; position: relative; z-index: 2; }
+.p7 h2.big { font-size: 28pt; }
+.p7 .handwrap { position: absolute; right: 6mm; top: 16mm; width: 48mm; z-index: 2; }
+.p7 .top .r { display: none; }
+.partners { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin-top: 11mm; position: relative; z-index: 2; }
+.targets { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4mm; margin-top: 4mm; position: relative; z-index: 2; }
+.tbox { border-radius: 3.6mm; padding: 3.4mm 4.2mm; background: rgba(255,255,255,.07); border: .3mm solid rgba(255,255,255,.16); }
+.tbox h3 { font-size: 10pt; color: #fff; margin-bottom: 2mm; display: flex; align-items: center; gap: 2mm; }
+.tbox h3 .ion { color: var(--yellow); }
+.tbox ul { list-style: none; margin: 0; padding: 0; }
+.tbox li { display: flex; gap: 2.2mm; font-size: 8pt; line-height: 1.4; margin-bottom: 1.6mm; color: rgba(255,255,255,.86); }
+.tbox li .ion { color: var(--yellow); font-size: 10pt; margin-top: .2mm; }
+.tbox small { display: block; margin-top: 1mm; font-size: 6.9pt; color: rgba(255,255,255,.55); }
+.contact { margin-top: 4mm; border-radius: 4.2mm; background: var(--red); padding: 4mm 6mm; display: flex; align-items: center; gap: 6mm; position: relative; z-index: 2; }
+.contact h3 { font-size: 13pt; color: #fff; line-height: 1.2; }
+.contact p { font-size: 8.4pt; color: rgba(255,255,255,.9); margin-top: 1mm; }
+.contact .c { margin-left: auto; text-align: right; font-size: 8.8pt; line-height: 1.6; color: #fff; white-space: nowrap; }
+.contact .c b { color: #fff; }
+</style></head>
+<body>
+<section class="page p1">
+  <div class="bg"></div><div class="shade"></div>
+  <div class="in">
+    <div class="logo"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><div><b>LANGO APP</b><span>Won Nyaci me Lango</span></div><div class="r">CONCEPT PAPER FOR PARTNERS AND DONORS<br>2026</div></div>
+    <div class="head">
+      <div class="eyebrow y">A platform for Uganda&rsquo;s cultures</div>
+      <h1>Every tribe.<br>Every voice.<br><em>One platform.</em></h1>
+      <p class="sub">A mobile home for culture. It preserves language and heritage, connects people of the same clan and community, and builds the community-owned data that teaches AI to speak our languages.</p>
+      <div class="chips">
+        <span class="chip"><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i> Tested first with Lango</span>
+        <span class="chip"><i class="ion" style="font-size:1em;color:currentColor">&#62146;</i> Built for every community in Uganda</span>
+        <span class="chip"><i class="ion" style="font-size:1em;color:currentColor">&#62042;</i> Works offline</span>
+      </div>
+    </div>
+    <div class="handwrap">
+<svg class="hand" viewBox="52 14 424 790" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="scrcov"><rect x="139" y="38" width="240" height="520" rx="26"/></clipPath>
+    <linearGradient id="skincov" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9C6740"/><stop offset="1" stop-color="#6B4226"/></linearGradient>
+    <linearGradient id="glasscov" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <filter id="shcov" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <ellipse cx="270" cy="772" rx="190" ry="16" fill="#000" opacity=".28" filter="url(#shcov)"/>
+  <g transform="rotate(-5 260 420)">
+    <!-- forearm and sleeve (behind everything) -->
+    <path d="M168 560 C150 640 150 700 160 800 L368 800 C380 700 392 640 372 560 Z" fill="url(#skincov)"/>
+    <path d="M150 700 L386 700 L408 800 L130 800 Z" fill="#EE1A26"/>
+    <path d="M150 700 L386 700" stroke="#fff" stroke-opacity=".35" stroke-width="5"/>
+    <!-- palm behind the phone -->
+    <path d="M122 420 C112 500 130 560 170 600 L372 600 C410 560 420 500 404 420 Z" fill="url(#skincov)"/>
+    <!-- four fingers wrapping the right edge -->
+    <g fill="url(#skincov)">
+      <rect x="352" y="318" width="86" height="31" rx="15.5" transform="rotate(-3 352 318)"/>
+      <rect x="352" y="358" width="92" height="31" rx="15.5" transform="rotate(-2 352 358)"/>
+      <rect x="352" y="398" width="88" height="31" rx="15.5" transform="rotate(0 352 398)"/>
+      <rect x="352" y="438" width="74" height="30" rx="15" transform="rotate(2 352 438)"/>
+    </g>
+    <g stroke="#6B4226" stroke-opacity=".45" stroke-width="2" fill="none" stroke-linecap="round">
+      <path d="M418 326 q8 6 0 16"/><path d="M424 366 q8 6 0 16"/><path d="M420 406 q8 6 0 16"/><path d="M406 445 q8 6 0 16"/>
+    </g>
+    <!-- the phone -->
+    <rect x="131" y="30" width="256" height="536" rx="36" fill="#14161B"/>
+    <rect x="131" y="30" width="256" height="536" rx="36" fill="none" stroke="#3A3F4A" stroke-width="2"/>
+    <rect x="387" y="150" width="4" height="62" rx="2" fill="#2B2F38"/>
+    <image href="shots/explore.png" xlink:href="shots/explore.png" x="139" y="38" width="240" height="520" preserveAspectRatio="xMidYMin slice" clip-path="url(#scrcov)"/>
+    <rect x="139" y="38" width="240" height="520" rx="26" fill="url(#glasscov)"/>
+    <rect x="236" y="46" width="46" height="12" rx="6" fill="#0B0C0F"/>
+    <!-- thumb over the left edge -->
+    <g transform="translate(118 520) rotate(-58)">
+      <rect x="-24" y="-18" width="150" height="36" rx="18" fill="url(#skincov)"/>
+      <rect x="86" y="-11" width="34" height="22" rx="10" fill="#D8AE8E" opacity=".92"/>
+      <path d="M40 -10 q10 10 0 20" stroke="#6B4226" stroke-opacity=".4" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg></div>
+    <div class="covfoot">
+      <div class="badge"><b>Testing edition: Lango.</b> Every screen in this paper is the real app, running on real Lango content.</div>
+      <div style="margin-left:auto;text-align:right;position:relative;z-index:2"><b>Kakebe Technologies Limited</b><br>Lira City, Uganda &middot; www.kakebe.tech</div>
+    </div>
+  </div>
+</section>
+<section class="page p2">
+  <div class="in">
+    <div class="top"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><b>LANGO APP</b><span>The challenge and our answer</span><span class="r">Concept paper &middot; 2026</span></div>
+    <div class="eyebrow" style="margin-top:7mm">01 &middot; Why this, why now</div>
+    <h2 class="big" style="font-size:22pt">Culture lives in people, and most of it was never written down.</h2>
+    <p class="lead">Uganda has more than 50 indigenous communities and around 40 living languages. Their proverbs, clans, histories and songs are carried in memory and spoken from one generation to the next, and that chain is under strain.</p>
+
+    <div class="grid2" style="margin-top:4.2mm">
+      <div class="card"><span class="ic bg-red"><i class="ion" style="font-size:1em;color:currentColor">&#62341;</i></span><h3>Knowledge is oral and fragile</h3><p>Languages, clans and stories are held by elders. When one passes, a library closes, and little of it is recorded or searchable.</p></div>
+      <div class="card"><span class="ic bg-sky"><i class="ion" style="font-size:1em;color:currentColor">&#61705;</i></span><h3>Young people and the diaspora are far from home</h3><p>Many have no easy way to learn the language, find their clan or hear the stories their grandparents know.</p></div>
+      <div class="card"><span class="ic bg-amber"><i class="ion" style="font-size:1em;color:currentColor">&#61975;</i></span><h3>Our languages are missing from AI</h3><p>Most Ugandan languages have almost no digital text or speech data, so translators, voice assistants and learning tools do not work in them.</p></div>
+      <div class="card"><span class="ic bg-green"><i class="ion" style="font-size:1em;color:currentColor">&#61894;</i></span><h3>Institutions lack the tools</h3><p>Cultural institutions hold the mandate and the trust of their people, but not the software to gather, check and share what the community knows.</p></div>
+    </div>
+
+    <div class="band">
+      <div class="txt">
+        <div class="eyebrow y">Our answer</div>
+        <h3>One app that every community can own.</h3>
+        <p style="font-size:8.8pt;color:rgba(255,255,255,.82)">Lango App puts a community&rsquo;s dictionary, clans, heritage, history, radio, podcast and Bible in one phone app and lets its people add what they know. Its own language experts review every entry.</p>
+        <ul>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span><b>Preserves</b> language, clans, history and oral tradition</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span><b>Collects</b> words, proverbs, stories, audio and photos from the community</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span><b>Connects</b> people of the same clan and culture, at home and abroad</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span><b>Teaches</b> the next generation, a few minutes a day</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span><b>Feeds AI</b> with consented, expert-checked language data</span></li>
+        </ul>
+      </div>
+      <div class="ph"></div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:4.6mm">The Lango testing edition today</div>
+    <div class="stats">
+      <div class="stat"><b>2,829</b><span>dictionary entries, queued for expert verification</span></div>
+      <div class="stat"><b>149</b><span>Lango clans to document (5 verified so far)</span></div>
+      <div class="stat"><b>10</b><span>districts mapped, including Lira City</span></div>
+      <div class="stat"><b>10</b><span>heritage items: dances, ceremonies, sites</span></div>
+      <div class="stat"><b>1,524</b><span>app phrases ready for translation into Leb Lango</span></div>
+    </div>
+    <p class="note">Figures from the running Lango testing edition. Community figures are approximate.</p>
+    <div class="foot"><span><b>Kakebe Technologies Limited</b> &middot; Lira City &middot; www.kakebe.tech</span><span>Lango App &middot; concept paper &middot; page 2 of 7</span></div>
+  </div>
+</section>
+<section class="page p3">
+  <div class="in">
+    <div class="hero">
+      <div class="top" style="color:rgba(255,255,255,.8)"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><b>LANGO APP</b><span>Objectives</span><span class="r">Concept paper &middot; 2026</span></div>
+      <div class="q"><p>&ldquo;In Africa, when an old man dies, a library burns.&rdquo;</p><span>Amadou Hamp&acirc;t&eacute; B&acirc;, speaking at UNESCO, 1960</span></div>
+    </div>
+    <div class="eyebrow" style="margin-top:6mm">02 &middot; Objectives</div>
+    <h2 class="big" style="font-size:22pt">Why we are building it: seven objectives</h2>
+    <div class="obj"><div class="o"><span class="ic bg-red" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#62389;</i></span><div><h3>Preserve</h3><p>Document language, clans, history and oral tradition before they are lost, in the community's own words.</p><div class="m">Measure: entries documented and verified, hours of audio recorded</div></div><span class="n">1</span></div><div class="o"><span class="ic bg-amber" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#62548;</i></span><div><h3>Collect</h3><p>Turn everyday knowledge into structured, reviewed data: words, proverbs, stories, audio, photos and places.</p><div class="m">Measure: contributions received, reviewed and published</div></div><span class="n">2</span></div><div class="o"><span class="ic bg-sky" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#62860;</i></span><div><h3>Power AI</h3><p>Build consented, expert-verified text and speech datasets so translation, speech recognition and voice tools can serve Ugandan languages.</p><div class="m">Measure: hours of verified speech, size of parallel text</div></div><span class="n">3</span></div><div class="o"><span class="ic bg-green" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#62623;</i></span><div><h3>Connect</h3><p>Bring people of the same culture, clan and heritage together, in the village, in town and across the diaspora.</p><div class="m">Measure: members in clan groups, messages exchanged</div></div><span class="n">4</span></div><div class="o"><span class="ic bg-red" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#62812;</i></span><div><h3>Teach</h3><p>Give young people a daily habit of learning their language: dictionary, quizzes, weekly challenges and streaks.</p><div class="m">Measure: daily learners, streaks, challenge scores</div></div><span class="n">5</span></div><div class="o"><span class="ic bg-night" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#61894;</i></span><div><h3>Empower institutions</h3><p>Give every cultural institution its own edition, its own admin tools and ownership of its data.</p><div class="m">Measure: editions launched, editors trained</div></div><span class="n">6</span></div><div class="o wide"><span class="ic bg-amber" style="flex:none"><i class="ion" style="font-size:1em;color:currentColor">&#62314;</i></span><div><h3>Sustain</h3><p>Create lasting funding and partnerships (gifts, programs, research collaboration) so that the work continues long after the first launch and every edition can look after itself.</p><div class="m">Measure: partners engaged, recurring gifts, editions that fund their own running costs</div></div><span class="n">7</span></div></div>
+    <div class="eyebrow" style="margin-top:5mm">Who it serves</div>
+    <div class="serve">
+      <div><i class="ion" style="font-size:1em;color:currentColor">&#62629;</i>Elders and<br>custodians</div><div><i class="ion" style="font-size:1em;color:currentColor">&#62812;</i>Youth and<br>students</div><div><i class="ion" style="font-size:1em;color:currentColor">&#61705;</i>The<br>diaspora</div>
+      <div><i class="ion" style="font-size:1em;color:currentColor">&#62623;</i>Clans and<br>families</div><div><i class="ion" style="font-size:1em;color:currentColor">&#61894;</i>Cultural<br>institutions</div><div><i class="ion" style="font-size:1em;color:currentColor">&#62239;</i>Researchers and<br>AI builders</div>
+    </div>
+    <div class="foot"><span><b>Kakebe Technologies Limited</b> &middot; Lira City &middot; www.kakebe.tech</span><span>Lango App &middot; concept paper &middot; page 3 of 7</span></div>
+  </div>
+</section>
+<section class="page p4 dark">
+  <div class="in">
+    <div class="top"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><b>LANGO APP</b><span>The product</span><span class="r">Concept paper &middot; 2026</span></div>
+    <div class="eyebrow y" style="margin-top:7mm">03 &middot; What has been built</div>
+    <h2 class="big">A complete culture app, already working.</h2>
+    <p class="lead" style="max-width:165mm">The Lango testing edition is a full Android app. These are real screens, not mock-ups.</p>
+    <div class="fan">
+      <figure><div class="ph"><img src="shots/home.png"></div><figcaption><b>Home</b>Word of the day, shortcuts</figcaption></figure>
+      <figure><div class="ph"><img src="shots/dictionary.png"></div><figcaption><b>Dictionary</b>Leb Lango and English</figcaption></figure>
+      <figure><div class="ph"><img src="shots/proverbs.png"></div><figcaption><b>Proverbs</b>With meanings</figcaption></figure>
+      <figure><div class="ph"><img src="shots/clans.png"></div><figcaption><b>Clan Explorer</b>Verified clans</figcaption></figure>
+      <figure><div class="ph"><img src="shots/podcast5.png"></div><figcaption><b>Podcast</b>Elders&rsquo; stories</figcaption></figure>
+    </div>
+    <div class="grid3" style="margin-top:4.6mm"><div class="dcard"><span class="ic bg-amber"><i class="ion" style="font-size:1em;color:currentColor">&#62377;</i></span><h3>Learn</h3><p>A dictionary of 2,829 entries that works offline, an AI translator, proverbs, a phrasebook and a daily word quiz.</p></div><div class="dcard"><span class="ic bg-green"><i class="ion" style="font-size:1em;color:currentColor">&#62083;</i></span><h3>Explore</h3><p>Clan Explorer, districts and Lira City, heritage, history, notable people, events and news.</p></div><div class="dcard"><span class="ic bg-red"><i class="ion" style="font-size:1em;color:currentColor">&#61700;</i></span><h3>Contribute</h3><p>Add words, proverbs, oral stories, nature records, documents and heritage sites with photo, audio or video. Works offline; every entry is reviewed.</p></div><div class="dcard"><span class="ic bg-sky"><i class="ion" style="font-size:1em;color:currentColor">&#62623;</i></span><h3>Connect</h3><p>Clan groups: see who is in yours, write to each other, browse the clan archive. Streaks, weekly challenges and leaderboards keep people coming back.</p></div><div class="dcard"><span class="ic bg-red"><i class="ion" style="font-size:1em;color:currentColor">&#62719;</i></span><h3>Listen and read</h3><p>Lango Radio, a podcast of elders&rsquo; stories and the Lango Bible, with a player that keeps going when the screen is off.</p></div><div class="dcard"><span class="ic bg-amber"><i class="ion" style="font-size:1em;color:currentColor">&#62314;</i></span><h3>Support</h3><p>Give to the institution or to keeping the app running, back programs, and see transparency figures.</p></div></div>
+    <div class="pills">
+      <span class="pill"><i class="ion" style="font-size:1em;color:currentColor">&#62422;</i> Android first</span><span class="pill"><i class="ion" style="font-size:1em;color:currentColor">&#62042;</i> Offline dictionary and queued contributions</span>
+      <span class="pill"><i class="ion" style="font-size:1em;color:currentColor">&#62377;</i> English and local-language interface</span><span class="pill"><i class="ion" style="font-size:1em;color:currentColor">&#62840;</i> Expert review before publication</span>
+    </div>
+    <div class="foot"><span><b>Kakebe Technologies Limited</b> &middot; Lira City &middot; www.kakebe.tech</span><span>Lango App &middot; concept paper &middot; page 4 of 7</span></div>
+  </div>
+</section>
+<section class="page p5">
+  <div class="in">
+    <div class="top"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><b>LANGO APP</b><span>Data and AI</span><span class="r">Concept paper &middot; 2026</span></div>
+    <div class="eyebrow" style="margin-top:7mm">04 &middot; Data and AI</div>
+    <h2 class="big">From a phone in the village to data that teaches AI.</h2>
+    <p class="lead">Every word, proverb and story added to the app can become part of a clean, consented, expert-checked dataset that belongs to the community. That is what low-resource language AI is missing.</p>
+    <div class="panel"><svg class="flywheel" viewBox="-150 -6 800 536" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#fff"/></marker></defs><circle cx="250.0" cy="250.0" r="162.5" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="2" stroke-dasharray="3 7"/><path d="M297.5 94.6 A162.5 162.5 0 0 1 360.8 131.2" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" marker-end="url(#arr)"/><path d="M408.3 213.4 A162.5 162.5 0 0 1 408.3 286.6" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" marker-end="url(#arr)"/><path d="M360.8 368.8 A162.5 162.5 0 0 1 297.5 405.4" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" marker-end="url(#arr)"/><path d="M202.5 405.4 A162.5 162.5 0 0 1 139.2 368.8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" marker-end="url(#arr)"/><path d="M91.7 286.6 A162.5 162.5 0 0 1 91.7 213.4" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" marker-end="url(#arr)"/><path d="M139.2 131.2 A162.5 162.5 0 0 1 202.5 94.6" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" marker-end="url(#arr)"/><circle cx="250.0" cy="87.5" r="37.0" fill="#EE1A26"/><circle cx="250.0" cy="87.5" r="42.0" fill="none" stroke="#EE1A26" stroke-opacity=".4" stroke-width="2"/><text x="250.0" y="100.8" text-anchor="middle" font-family="Ionicons" font-size="38.9" fill="#fff"></text><text x="250.0" y="18.5" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14.5" fill="#fff">1. Community contributes</text><text x="250.0" y="34.5" text-anchor="middle" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">Words, proverbs, stories,</text><text x="250.0" y="48.0" text-anchor="middle" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">audio, photos</text><circle cx="390.7" cy="168.8" r="37.0" fill="#E8A317"/><circle cx="390.7" cy="168.8" r="42.0" fill="none" stroke="#E8A317" stroke-opacity=".4" stroke-width="2"/><text x="390.7" y="182.1" text-anchor="middle" font-family="Ionicons" font-size="38.9" fill="#fff"></text><text x="434.9" y="143.2" text-anchor="start" font-family="Clarity City, Inter" font-weight="700" font-size="14.5" fill="#fff">2. Experts review</text><text x="434.9" y="159.2" text-anchor="start" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">The community's language</text><text x="434.9" y="172.8" text-anchor="start" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">experts check every entry</text><circle cx="390.7" cy="331.2" r="37.0" fill="#00ADF1"/><circle cx="390.7" cy="331.2" r="42.0" fill="none" stroke="#00ADF1" stroke-opacity=".4" stroke-width="2"/><text x="390.7" y="344.6" text-anchor="middle" font-family="Ionicons" font-size="38.9" fill="#fff"></text><text x="434.9" y="356.8" text-anchor="start" font-family="Clarity City, Inter" font-weight="700" font-size="14.5" fill="#fff">3. Rights are recorded</text><text x="434.9" y="372.8" text-anchor="start" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">Each contributor chooses</text><text x="434.9" y="386.2" text-anchor="start" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">how it may be used</text><circle cx="250.0" cy="412.5" r="37.0" fill="#1E9E5A"/><circle cx="250.0" cy="412.5" r="42.0" fill="none" stroke="#1E9E5A" stroke-opacity=".4" stroke-width="2"/><text x="250.0" y="425.8" text-anchor="middle" font-family="Ionicons" font-size="38.9" fill="#fff"></text><text x="250.0" y="477.5" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14.5" fill="#fff">4. Datasets are built</text><text x="250.0" y="493.5" text-anchor="middle" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">Clean text and speech,</text><text x="250.0" y="507.0" text-anchor="middle" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">owned by the institution</text><circle cx="109.3" cy="331.2" r="37.0" fill="#EE1A26"/><circle cx="109.3" cy="331.2" r="42.0" fill="none" stroke="#EE1A26" stroke-opacity=".4" stroke-width="2"/><text x="109.3" y="344.6" text-anchor="middle" font-family="Ionicons" font-size="38.9" fill="#fff"></text><text x="65.1" y="356.8" text-anchor="end" font-family="Clarity City, Inter" font-weight="700" font-size="14.5" fill="#fff">5. AI is trained</text><text x="65.1" y="372.8" text-anchor="end" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">Translation, speech</text><text x="65.1" y="386.2" text-anchor="end" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">recognition, voices</text><circle cx="109.3" cy="168.8" r="37.0" fill="#E8A317"/><circle cx="109.3" cy="168.8" r="42.0" fill="none" stroke="#E8A317" stroke-opacity=".4" stroke-width="2"/><text x="109.3" y="182.1" text-anchor="middle" font-family="Ionicons" font-size="38.9" fill="#fff"></text><text x="65.1" y="125.2" text-anchor="end" font-family="Clarity City, Inter" font-weight="700" font-size="14.5" fill="#fff">6. Tools return home</text><text x="65.1" y="141.2" text-anchor="end" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">Better learning, search</text><text x="65.1" y="154.7" text-anchor="end" font-family="Clarity City, Inter" font-size="10.8" fill="#fff" fill-opacity=".78">and voice tools for all</text><circle cx="250.0" cy="250.0" r="84.5" fill="#fff" fill-opacity=".07"/><circle cx="250.0" cy="250.0" r="84.5" fill="none" stroke="#FDDD16" stroke-width="2"/><text x="250.0" y="244.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="17" fill="#FDDD16">Community-</text><text x="250.0" y="264.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="17" fill="#FDDD16">owned data</text></svg></div>
+    <div class="two">
+      <div>
+        <div class="eyebrow">What the data can power</div>
+        <div class="mini" style="margin-top:2mm"><div class="card"><span class="ic bg-amber"><i class="ion" style="font-size:1em;color:currentColor">&#62377;</i></span><h3>Machine translation</h3><p>Local language to English and back, from verified word and sentence pairs.</p></div><div class="card"><span class="ic bg-red"><i class="ion" style="font-size:1em;color:currentColor">&#62548;</i></span><h3>Speech recognition</h3><p>Voice to text for languages that today have almost no recordings.</p></div><div class="card"><span class="ic bg-sky"><i class="ion" style="font-size:1em;color:currentColor">&#62995;</i></span><h3>Text to speech</h3><p>Natural voices for learning, radio and accessibility.</p></div><div class="card"><span class="ic bg-green"><i class="ion" style="font-size:1em;color:currentColor">&#61975;</i></span><h3>Assistants and learning tools</h3><p>Chat, search and teaching tools that answer in the community&rsquo;s own language.</p></div></div>
+      </div>
+      <div class="gov">
+        <h3><i class="ion" style="font-size:1.2em;color:#1E9E5A">&#62840;</i> Responsible by design</h3>
+        <ul>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62371;</i><span><b>Consent first.</b> Each contribution carries the contributor&rsquo;s choice: keep ownership, share openly with credit, or give it to the institution.</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span><b>Experts in the loop.</b> Nothing is published, or used as data, before the community&rsquo;s language experts review it.</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61894;</i><span><b>Community ownership.</b> Each institution governs its own data and decides who may use it.</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62407;</i><span><b>Privacy.</b> Names show as first name and initial, and members can delete their account.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="stage">
+      <div><b>Today</b>A dictionary-based translator and assistant that answer from the verified archive, plus the contribution and review workflow that produces the data.</div>
+      <div><b>Next, with research partners</b>Train and evaluate translation and speech models on the verified data, and return them to the app and to the community.</div>
+    </div>
+    <div class="foot"><span><b>Kakebe Technologies Limited</b> &middot; Lira City &middot; www.kakebe.tech</span><span>Lango App &middot; concept paper &middot; page 5 of 7</span></div>
+  </div>
+</section>
+<section class="page p6">
+  <div class="in">
+    <div class="top"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><b>LANGO APP</b><span>One platform, every community</span><span class="r">Concept paper &middot; 2026</span></div>
+    <div class="eyebrow" style="margin-top:7mm">05 &middot; Beyond Lango</div>
+    <h2 class="big">Built for Lango. Ready for every community in Uganda.</h2>
+    <p class="lead">Lango is where we test and prove the idea. The platform is designed so that Buganda, Acholi, Teso, Ankole and every other community can have its own edition: its own name, language, clans and content, on shared technology.</p>
+    <div class="split">
+      <div class="hubbox"><svg class="hub" viewBox="0 0 470 470" xmlns="http://www.w3.org/2000/svg"><circle cx="235.0" cy="235.0" r="180.95000000000002" fill="none" stroke="#1B1E25" stroke-opacity=".12" stroke-width="1.6" stroke-dasharray="3 6"/><line x1="235.0" y1="235.0" x2="235.0" y2="54.0" stroke="#EE1A26" stroke-opacity="0.7" stroke-width="2.4"/><line x1="235.0" y1="235.0" x2="351.3" y2="96.4" stroke="#B9BEC8" stroke-opacity="0.45" stroke-width="1.4"/><line x1="235.0" y1="235.0" x2="413.2" y2="203.6" stroke="#E8A317" stroke-opacity="0.7" stroke-width="2.4"/><line x1="235.0" y1="235.0" x2="391.7" y2="325.5" stroke="#B9BEC8" stroke-opacity="0.45" stroke-width="1.4"/><line x1="235.0" y1="235.0" x2="296.9" y2="405.0" stroke="#B9BEC8" stroke-opacity="0.45" stroke-width="1.4"/><line x1="235.0" y1="235.0" x2="173.1" y2="405.0" stroke="#FDDD16" stroke-opacity="0.7" stroke-width="2.4"/><line x1="235.0" y1="235.0" x2="78.3" y2="325.5" stroke="#B9BEC8" stroke-opacity="0.45" stroke-width="1.4"/><line x1="235.0" y1="235.0" x2="56.8" y2="203.6" stroke="#B9BEC8" stroke-opacity="0.45" stroke-width="1.4"/><line x1="235.0" y1="235.0" x2="118.7" y2="96.4" stroke="#B9BEC8" stroke-opacity="0.45" stroke-width="1.4"/><circle cx="235.0" cy="235.0" r="72.85" fill="#14161B"/><circle cx="235.0" cy="235.0" r="72.85" fill="none" stroke="#FDDD16" stroke-width="3"/><text x="235.0" y="221.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#fff">One shared</text><text x="235.0" y="238.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#fff">platform</text><text x="235.0" y="257.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="9.8" fill="#FDDD16">app · admin · API</text><rect x="186.5" y="36.0" width="97.0" height="36" rx="18" fill="#EE1A26" stroke="#EE1A26" stroke-width="1.6"/><text x="235.0" y="52.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#fff">Lango</text><text x="235.0" y="65.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="600" font-size="8.6" fill="#fff" fill-opacity=".9">Testing edition</text><rect x="305.4" y="78.4" width="91.8" height="36" rx="18" fill="#fff" stroke="#C9CED8" stroke-width="1.6"/><text x="351.3" y="101.4" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Buganda</text><rect x="372.0" y="185.6" width="82.4" height="36" rx="18" fill="#E8A317" stroke="#E8A317" stroke-width="1.6"/><text x="413.2" y="201.6" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#fff">Acholi</text><text x="413.2" y="214.6" text-anchor="middle" font-family="Clarity City, Inter" font-weight="600" font-size="8.6" fill="#fff" fill-opacity=".9">Prototype</text><rect x="354.7" y="307.5" width="74.0" height="36" rx="18" fill="#fff" stroke="#C9CED8" stroke-width="1.6"/><text x="391.7" y="330.5" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Teso</text><rect x="255.7" y="387.0" width="82.4" height="36" rx="18" fill="#fff" stroke="#C9CED8" stroke-width="1.6"/><text x="296.9" y="410.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Ankole</text><rect x="94.3" y="387.0" width="157.6" height="36" rx="18" fill="#FDDD16" stroke="#FDDD16" stroke-width="1.6"/><text x="173.1" y="403.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Your community</text><text x="173.1" y="416.0" text-anchor="middle" font-family="Clarity City, Inter" font-weight="600" font-size="8.6" fill="#1B1E25" fill-opacity=".9">Next edition</text><rect x="37.1" y="307.5" width="82.4" height="36" rx="18" fill="#fff" stroke="#C9CED8" stroke-width="1.6"/><text x="78.3" y="330.5" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Busoga</text><rect x="6.2" y="185.6" width="101.2" height="36" rx="18" fill="#fff" stroke="#C9CED8" stroke-width="1.6"/><text x="56.8" y="208.6" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Karamoja</text><rect x="81.7" y="78.4" width="74.0" height="36" rx="18" fill="#fff" stroke="#C9CED8" stroke-width="1.6"/><text x="118.7" y="101.4" text-anchor="middle" font-family="Clarity City, Inter" font-weight="700" font-size="14" fill="#1B1E25">Alur</text></svg><div class="cap">Examples of communities the platform is built to serve. A prototype Acholi edition has already been built from the same code base.</div></div>
+      <div class="share">
+        <div class="box a"><h3><i class="ion" style="font-size:1.15em;color:#00ADF1">&#62278;</i> Shared by every edition</h3><ul><li>The app, admin panel and API</li><li>Contribution, review and verification workflow</li><li>Dictionary, translator, quizzes, clan groups</li><li>Radio, podcast and Bible player</li><li>The AI data pipeline and its safeguards</li></ul></div>
+        <div class="box b"><h3><i class="ion" style="font-size:1.15em;color:#E8A317">&#62224;</i> Owned by each community</h3><ul><li>Name, logo and colours</li><li>Language, and the experts who verify it</li><li>Clan or chiefdom register, districts, history</li><li>All content and all data it collects</li><li>Its administrators and its institution&rsquo;s voice</li></ul></div>
+      </div>
+    </div>
+    <div class="eyebrow" style="margin-top:5mm">How a new edition launches</div>
+    <div class="steps">
+      <div><b>1. Partner</b>A cultural institution or foundation sponsors its edition</div>
+      <div><b>2. Configure</b>Name, colours, language, clans and districts</div>
+      <div><b>3. Fill and verify</b>Seed content, train editors, start expert review</div>
+      <div><b>4. Launch</b>Release on Android with the community</div>
+    </div>
+    <div class="eyebrow" style="margin-top:5mm">Proposed roadmap</div>
+    <div class="road">
+      <div class="ph" style="--c:#EE1A26"><small>Now</small><h3>Lango testing edition</h3><p>Build 4 in the hands of testers. Field feedback with the Lango institution.</p></div>
+      <div class="ph" style="--c:#E8A317"><small>First 6 months</small><h3>Lango public launch</h3><p>Live website, store release, expert verification, first elders&rsquo; stories.</p></div>
+      <div class="ph" style="--c:#00ADF1"><small>6 to 18 months</small><h3>More editions</h3><p>Two or three new communities. Shared datasets. First model evaluations.</p></div>
+      <div class="ph" style="--c:#1E9E5A"><small>Beyond</small><h3>A national network</h3><p>Every community, one platform, with research partners across Uganda.</p></div>
+    </div>
+    <div class="foot"><span><b>Kakebe Technologies Limited</b> &middot; Lira City &middot; www.kakebe.tech</span><span>Lango App &middot; concept paper &middot; page 6 of 7</span></div>
+  </div>
+</section>
+<section class="page p7 dark">
+  <div class="hero"></div>
+  <div class="in">
+    <div class="top"><img src="file:///C:/xampp/htdocs/langoculturalinstitution/app/assets/logo-mark.png" alt=""><b>LANGO APP</b><span>Partner with us</span><span class="r">Concept paper &middot; 2026</span></div>
+    <div class="head">
+      <div class="eyebrow y">06 &middot; Partner with us</div>
+      <h2 class="big">Help every Ugandan community keep its voice.</h2>
+      <p class="lead">Lango App turns a phone into a place where a culture is kept, shared and taught. We are looking for partners to take it from a tested edition to a national platform.</p>
+    </div>
+    <div class="handwrap">
+<svg class="hand" viewBox="52 14 424 790" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="scrend"><rect x="139" y="38" width="240" height="520" rx="26"/></clipPath>
+    <linearGradient id="skinend" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9C6740"/><stop offset="1" stop-color="#6B4226"/></linearGradient>
+    <linearGradient id="glassend" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <filter id="shend" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <ellipse cx="270" cy="772" rx="190" ry="16" fill="#000" opacity=".28" filter="url(#shend)"/>
+  <g transform="rotate(4 260 420)">
+    <!-- forearm and sleeve (behind everything) -->
+    <path d="M168 560 C150 640 150 700 160 800 L368 800 C380 700 392 640 372 560 Z" fill="url(#skinend)"/>
+    <path d="M150 700 L386 700 L408 800 L130 800 Z" fill="#E8A317"/>
+    <path d="M150 700 L386 700" stroke="#fff" stroke-opacity=".35" stroke-width="5"/>
+    <!-- palm behind the phone -->
+    <path d="M122 420 C112 500 130 560 170 600 L372 600 C410 560 420 500 404 420 Z" fill="url(#skinend)"/>
+    <!-- four fingers wrapping the right edge -->
+    <g fill="url(#skinend)">
+      <rect x="352" y="318" width="86" height="31" rx="15.5" transform="rotate(-3 352 318)"/>
+      <rect x="352" y="358" width="92" height="31" rx="15.5" transform="rotate(-2 352 358)"/>
+      <rect x="352" y="398" width="88" height="31" rx="15.5" transform="rotate(0 352 398)"/>
+      <rect x="352" y="438" width="74" height="30" rx="15" transform="rotate(2 352 438)"/>
+    </g>
+    <g stroke="#6B4226" stroke-opacity=".45" stroke-width="2" fill="none" stroke-linecap="round">
+      <path d="M418 326 q8 6 0 16"/><path d="M424 366 q8 6 0 16"/><path d="M420 406 q8 6 0 16"/><path d="M406 445 q8 6 0 16"/>
+    </g>
+    <!-- the phone -->
+    <rect x="131" y="30" width="256" height="536" rx="36" fill="#14161B"/>
+    <rect x="131" y="30" width="256" height="536" rx="36" fill="none" stroke="#3A3F4A" stroke-width="2"/>
+    <rect x="387" y="150" width="4" height="62" rx="2" fill="#2B2F38"/>
+    <image href="shots/podcast5.png" xlink:href="shots/podcast5.png" x="139" y="38" width="240" height="520" preserveAspectRatio="xMidYMin slice" clip-path="url(#scrend)"/>
+    <rect x="139" y="38" width="240" height="520" rx="26" fill="url(#glassend)"/>
+    <rect x="236" y="46" width="46" height="12" rx="6" fill="#0B0C0F"/>
+    <!-- thumb over the left edge -->
+    <g transform="translate(118 520) rotate(-58)">
+      <rect x="-24" y="-18" width="150" height="36" rx="18" fill="url(#skinend)"/>
+      <rect x="86" y="-11" width="34" height="22" rx="10" fill="#D8AE8E" opacity=".92"/>
+      <path d="M40 -10 q10 10 0 20" stroke="#6B4226" stroke-opacity=".4" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg></div>
+    <div class="partners"><div class="dcard"><span class="ic bg-red"><i class="ion" style="font-size:1em;color:currentColor">&#62788;</i></span><h3>Founding partner</h3><p>Fund the Lango launch and the next community editions, hosting and security.</p></div><div class="dcard"><span class="ic bg-sky"><i class="ion" style="font-size:1em;color:currentColor">&#62239;</i></span><h3>Language and AI research partner</h3><p>Co-design the datasets, train and evaluate models, publish results.</p></div><div class="dcard"><span class="ic bg-amber"><i class="ion" style="font-size:1em;color:currentColor">&#62542;</i></span><h3>Community and media partner</h3><p>Record elders, bring in schools, radio stations and clan associations.</p></div><div class="dcard"><span class="ic bg-green"><i class="ion" style="font-size:1em;color:currentColor">&#62824;</i></span><h3>Technology partner</h3><p>Cloud hosting, mobile data, devices, payments and push messaging.</p></div><div class="dcard"><span class="ic bg-night"><i class="ion" style="font-size:1em;color:currentColor">&#61894;</i></span><h3>Cultural institutions</h3><p>Sponsor your own edition and become part of the national network.</p></div><div class="dcard"><span class="ic bg-red"><i class="ion" style="font-size:1em;color:currentColor">&#62146;</i></span><h3>Diaspora and advocates</h3><p>Champion the app abroad, give, and connect your clan to home.</p></div></div>
+    <div class="targets">
+      <div class="tbox">
+        <h3><i class="ion" style="font-size:1em;color:currentColor">&#62224;</i> Proposed pilot targets: first 12 months, Lango</h3>
+        <ul>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span>Verify all <b>2,829</b> dictionary entries with language experts</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span>Document and verify the <b>149</b> Lango clans</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span>Record and publish the first <b>100</b> elders&rsquo; stories as audio</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span>Translate the whole app (<b>1,524</b> phrases) into Leb Lango</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span>Reach <b>5,000</b> members across all ten districts</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#61982;</i><span>Launch a <b>second community edition</b></span></li>
+        </ul>
+        <small>Targets are proposals, to be agreed with partners.</small>
+      </div>
+      <div class="tbox">
+        <h3><i class="ion" style="font-size:1em;color:currentColor">&#62791;</i> What support makes possible</h3>
+        <ul>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62548;</i><span>Recording teams and expert verification in the community</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62047;</i><span>Hosting, security and offline reach for rural users</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62095;</i><span>New community editions, launched with their institutions</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62860;</i><span>Open, consented datasets and AI research in Ugandan languages</span></li>
+          <li><i class="ion" style="font-size:1em;color:currentColor">&#62812;</i><span>Training for editors, teachers and youth ambassadors</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="contact">
+      <div><h3>Let us talk.</h3><p>A detailed work plan and financial proposal are available on request.</p></div>
+      <div class="c"><b>Kakebe Technologies Limited</b><br>Lira City, Uganda<br>service@kakebe.tech &middot; +256 777 676 206<br>www.kakebe.tech</div>
+    </div>
+    <div class="foot"><span><b>Kakebe Technologies Limited</b> &middot; Lira City &middot; www.kakebe.tech</span><span>Lango App &middot; concept paper &middot; page 7 of 7</span></div>
+  </div>
+</section></body></html>

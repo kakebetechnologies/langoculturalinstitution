@@ -75,9 +75,9 @@ export default function Select({ label, value, options, onChange, placeholder, e
 
 const styles = StyleSheet.create({
   wrap: { marginBottom: SPACING.md },
-  field: { flexDirection: 'row', alignItems: 'center', minHeight: 50, paddingHorizontal: SPACING.md, borderRadius: RADIUS.md, borderWidth: 1.5, borderColor: COLORS.gray300, backgroundColor: COLORS.white, gap: 8 },
+  field: { flexDirection: 'row', alignItems: 'center', minHeight: 54, paddingHorizontal: SPACING.md, borderRadius: 18, borderWidth: 1.5, borderColor: 'transparent', backgroundColor: COLORS.field, gap: 8 },
   value: { flex: 1, fontFamily: FONTS.regular, fontSize: 15, color: COLORS.black },
-  search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1.5, borderColor: COLORS.gray300, borderRadius: RADIUS.md, paddingHorizontal: 12, marginBottom: 8 },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: COLORS.field, borderRadius: 16, paddingHorizontal: 14, marginBottom: 8 },
   searchInput: { flex: 1, minHeight: 44, fontFamily: FONTS.regular, fontSize: 15, color: COLORS.black },
   option: { flexDirection: 'row', alignItems: 'center', paddingVertical: 13, borderBottomWidth: 1, borderBottomColor: COLORS.gray100 },
   optionText: { fontFamily: FONTS.medium, fontSize: 15.5, color: COLORS.black },

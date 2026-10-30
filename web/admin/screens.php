@@ -203,7 +203,11 @@ function screen_settings(): void
         'Contact' => ['email' => 'Public email', 'phone' => 'Public phone', 'address' => 'Address', 'whatsapp' => 'WhatsApp link (https://wa.me/…)'],
         'Social media' => ['facebook' => 'Facebook URL', 'x' => 'X (Twitter) URL', 'youtube' => 'YouTube URL', 'instagram' => 'Instagram URL'],
         'Numbers & map' => ['clan_total' => 'Total registered clans', 'clan_of_week_id' => 'Clan of the week (clan id; blank = rotate every Monday)', 'map_lat' => 'Map centre latitude', 'map_lng' => 'Map centre longitude'],
-        'Giving' => ['donation_note' => 'Donation appeal text'],
+        'Giving' => ['donation_note' => 'Donation appeal text', 'give_app_text' => 'Why to support the app ("Keep the Lango App running")',
+            'give_mtn_momo' => 'MTN Mobile Money: how to pay (number and account name)', 'give_airtel_money' => 'Airtel Money: how to pay (number and account name)',
+            'give_bank' => 'Bank transfer: how to pay (bank, account name and number)', 'give_paypal' => 'PayPal: how to pay (the PayPal email)', 'give_paypal_url' => 'PayPal link (https://…, optional)',
+            'give_card' => 'Visa / Mastercard: how to pay', 'give_card_url' => 'Card payment link (https://…, from your payment provider, optional)'],
+        'Lango Bible (the app)' => ['bible_title' => 'Name of the Bible shown in the app (default: Lango Bible)', 'bible_copyright' => 'Copyright and permission line shown under every chapter'],
         'Google sign-in (the app)' => ['google_client_id' => 'Google client ID', 'google_client_secret' => 'Google client secret'],
     ];
     $images = [
@@ -244,7 +248,7 @@ function screen_settings(): void
           </div>
         <?php endforeach; ?>
       </div>
-      <?php foreach ($groups as $title => $fields): ?><h3 style="margin-top:26px"><?= e($title) ?></h3><div class="formgrid"><?php foreach ($fields as $k => $l): $long = in_array($k, ['address', 'donation_note', 'site_tagline', 'mission', 'vision']); ?><div class="field <?= $long ? 'full' : '' ?>"><label><?= e($l) ?></label><?php if (in_array($k, ['mission', 'vision'])): ?><textarea name="<?= e($k) ?>" rows="3"><?= e(setting($k)) ?></textarea><?php else: ?><input type="text" name="<?= e($k) ?>" value="<?= e(setting($k)) ?>"><?php endif; ?></div><?php endforeach; ?></div><?php endforeach; ?>
+      <?php foreach ($groups as $title => $fields): ?><h3 style="margin-top:26px"><?= e($title) ?></h3><div class="formgrid"><?php foreach ($fields as $k => $l): $long = in_array($k, ['address', 'donation_note', 'site_tagline', 'mission', 'vision', 'give_app_text', 'give_mtn_momo', 'give_airtel_money', 'give_bank', 'give_paypal', 'give_card', 'bible_copyright']); ?><div class="field <?= $long ? 'full' : '' ?>"><label><?= e($l) ?></label><?php if (in_array($k, ['mission', 'vision'])): ?><textarea name="<?= e($k) ?>" rows="3"><?= e(setting($k)) ?></textarea><?php else: ?><input type="text" name="<?= e($k) ?>" value="<?= e(setting($k)) ?>"><?php endif; ?></div><?php endforeach; ?></div><?php endforeach; ?>
       <?php require_once ROOT . '/app/lib/app_api.php'; ?>
       <p class="dim" style="margin-top:14px"><b>Google sign-in:</b> <?= google_enabled() ? 'switched on.' : 'off until both fields above are filled.' ?> In Google Cloud Console (Credentials, OAuth client ID, Web application) add this authorised redirect URI: <code><?= e(google_callback_url()) ?></code>. Google accepts only https addresses (and localhost), so phones can use it once the site is on its live address.</p>
       <div class="formfoot" style="margin-top:22px"><button class="btn btn--primary">Save settings</button></div></form>

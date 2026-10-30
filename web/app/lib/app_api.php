@@ -11,6 +11,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/clan_group_api.php';
 require_once __DIR__ . '/google_auth.php';
 require_once __DIR__ . '/daily_api.php';
+require_once __DIR__ . '/media_api.php';
 
 /* ---------- plumbing ---------- */
 function api_abs(?string $p): ?string
@@ -260,6 +261,7 @@ function api_app(string $res, array $seg): void
     $id = $seg[3] ?? ''; $sub = $seg[4] ?? '';
     $user = api_user();
     daily_api($res, $id, $sub, $m, $user);   // streaks, daily word, weekly challenge, leaderboards (exits when it handles the request)
+    media_api($res, $id, $sub, $m, $user);   // podcast, radio, Bible and how to give (same)
 
     switch ($res) {
         case 'ping':
@@ -277,8 +279,7 @@ function api_app(string $res, array $seg): void
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $e['email'] = 'Please enter a valid email address.';
                 elseif (val('SELECT COUNT(*) FROM users WHERE email=?', [$email])) $e['email'] = 'An account with this email already exists. Try signing in.';
                 if (strlen($pw) < 8) $e['password'] = 'Choose a password of at least 8 characters.';
-                if (($in['clan_id'] ?? '') === '') $e['clan_id'] = 'Please choose your clan.';
-                [$clanId, $clanOther] = read_clan_input();
+                [$clanId, $clanOther] = read_clan_input();   // the clan is optional here: a person can join now and choose it later (Me, then Edit profile)
                 if (($in['clan_id'] ?? '') === 'other' && !$clanOther) $e['clan_other'] = 'Please type the name of your clan.';
                 if ($e) api_err(reset($e), 422, $e);
                 $uid = insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'clan_id' => $clanId, 'clan_other' => $clanOther,
@@ -650,9 +651,14 @@ function api_app(string $res, array $seg): void
             $ref = 'LCI' . new_code(7);
             insert('donations', ['reference' => $ref, 'donor_name' => $name !== '' ? mb_substr($name, 0, 150) : 'Anonymous', 'email' => $email ?: null, 'phone' => $phone ?: null, 'country' => ($in['country'] ?? $user['country'] ?? null) ?: null,
                 'amount' => $amount, 'currency' => $cur, 'method' => isset($methods[$in['method'] ?? '']) ? $in['method'] : 'mtn_momo', 'program_id' => (int)($in['program_id'] ?? 0) ?: null,
-                'recurring' => in_array($in['recurring'] ?? '', ['monthly', 'yearly'], true) ? $in['recurring'] : 'once', 'anonymous' => $anon ? 1 : 0, 'message' => mb_substr((string)($in['message'] ?? ''), 0, 500) ?: null]);
-            json_out(['data' => ['reference' => $ref, 'amount' => $amount, 'currency' => $cur, 'method' => $methods[$in['method'] ?? ''] ?? 'MTN Mobile Money',
-                'message' => 'Your pledge has been recorded. Online payment is being connected; until then, the LCI finance office will contact you with payment instructions. Keep your reference and quote it if you pay by mobile money or bank transfer.']], 201);
+                'recurring' => in_array($in['recurring'] ?? '', ['monthly', 'yearly'], true) ? $in['recurring'] : 'once', 'anonymous' => $anon ? 1 : 0, 'message' => mb_substr((string)($in['message'] ?? ''), 0, 500) ?: null,
+                'purpose' => ($in['purpose'] ?? '') === 'app' ? 'app' : 'general']);
+            $method = isset($methods[$in['method'] ?? '']) ? $in['method'] : 'mtn_momo';
+            $pay = give_pay($method);   // how to pay, as LCI wrote it in Site settings (may be empty)
+            json_out(['data' => ['reference' => $ref, 'amount' => $amount, 'currency' => $cur, 'method' => $methods[$method], 'pay' => $pay,
+                'message' => $pay['instructions'] !== '' || $pay['url']
+                    ? 'Your pledge has been recorded. Pay as shown below and quote your reference; LCI confirms every gift once it arrives.'
+                    : 'Your pledge has been recorded. The LCI finance office will contact you with payment instructions. Keep your reference and quote it if you pay by mobile money or bank transfer.']], 201);
 
         case 'transparency':
             $d = donation_totals();

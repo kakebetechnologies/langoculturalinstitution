@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import AppText from '../AppText';
 import Pill from '../Pill';
-import { COLORS, FONTS, GRADIENTS, RADIUS, SHADOW, SPACING } from '../../constants/theme';
+import { COLORS, FONTS, GRADIENTS, RADIUS, SHADOW, SPACING, TONES } from '../../constants/theme';
 import { mediaUrl } from '../../lib/api';
 import { fmtDate } from '../../lib/format';
 import { useT } from '../../lib/i18n';
@@ -22,26 +22,33 @@ function Cta({ label, light = true }) {
   );
 }
 
+function LightCta({ label }) {
+  return (
+    <View style={styles.lightCta}>
+      <AppText style={styles.lightCtaText}>{label}</AppText>
+      <Ionicons name="arrow-forward" size={15} color={COLORS.white} />
+    </View>
+  );
+}
+
 export function ChallengeCard({ challenge, style }) {
   const { t } = useT();
   if (!challenge || !challenge.total) return null;
   const left = challenge.days_left <= 1 ? t('last day') : t('{n} days left', { n: challenge.days_left });
 
   return (
-    <Pressable onPress={() => router.push('/challenge')} accessibilityRole="button" style={({ pressed }) => [styles.wrap, style, pressed && styles.pressed]}>
-      <LinearGradient colors={GRADIENTS.amber} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.fill}>
-        <View style={styles.row}>
-          <View style={styles.icon}>
-            <Ionicons name="trophy" size={24} color={COLORS.white} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <AppText style={styles.eyebrow}>{t('Weekly Language Challenge')}</AppText>
-            <AppText style={styles.title}>{challenge.done ? t('You scored {score} out of {total}', { score: challenge.score, total: challenge.total }) : t('Test your Leb Lango')}</AppText>
-            <AppText style={styles.sub}>{challenge.done ? t('See where you stand this week') : `${t('{n} questions', { n: challenge.total })} · ${left}`}</AppText>
-          </View>
+    <Pressable onPress={() => router.push('/challenge')} accessibilityRole="button" style={({ pressed }) => [styles.light, style, pressed && styles.pressed]}>
+      <View style={styles.row}>
+        <View style={[styles.lightIcon, { backgroundColor: TONES.amber.bg }]}>
+          <Ionicons name="trophy" size={24} color={TONES.amber.fg} />
         </View>
-        <Cta label={challenge.done ? t('Leaderboard') : t('Play now')} />
-      </LinearGradient>
+        <View style={{ flex: 1 }}>
+          <AppText variant="eyebrow">{t('Weekly Language Challenge')}</AppText>
+          <AppText style={styles.lightTitle}>{challenge.done ? t('You scored {score} out of {total}', { score: challenge.score, total: challenge.total }) : t('Test your Leb Lango')}</AppText>
+          <AppText style={styles.lightSub}>{challenge.done ? t('See where you stand this week') : `${t('{n} questions', { n: challenge.total })} · ${left}`}</AppText>
+        </View>
+      </View>
+      <LightCta label={challenge.done ? t('Leaderboard') : t('Play now')} />
     </Pressable>
   );
 }
@@ -79,28 +86,26 @@ export function ClanOfWeekCard({ clan, style }) {
   const line = clan.totem ? `${t('Totem')}: ${clan.totem}` : clan.summary;
 
   return (
-    <Pressable onPress={() => router.push(clan.is_mine ? '/clan-group' : `/clans/${clan.slug}`)} accessibilityRole="button" style={({ pressed }) => [styles.wrap, style, pressed && styles.pressed]}>
-      <LinearGradient colors={GRADIENTS.green} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.fill}>
-        <View style={styles.row}>
-          <View style={styles.icon}>
-            <Ionicons name="people" size={24} color={COLORS.white} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <AppText style={styles.eyebrow}>{t('Clan of the week')}</AppText>
-            <AppText style={styles.title}>{clan.name}</AppText>
-            {line ? (
-              <AppText style={styles.sub} numberOfLines={2}>
-                {line}
-              </AppText>
-            ) : null}
-          </View>
+    <Pressable onPress={() => router.push(clan.is_mine ? '/clan-group' : `/clans/${clan.slug}`)} accessibilityRole="button" style={({ pressed }) => [styles.light, style, pressed && styles.pressed]}>
+      <View style={styles.row}>
+        <View style={[styles.lightIcon, { backgroundColor: TONES.green.bg }]}>
+          <Ionicons name="people" size={24} color={TONES.green.fg} />
         </View>
-        <AppText style={[styles.sub, { marginTop: 10 }]}>
-          {clan.members === 1 ? t('1 registered member') : t('{n} registered members', { n: clan.members })}
-          {clan.is_mine ? ` · ${t('this is your clan')}` : ''}
-        </AppText>
-        <Cta label={clan.is_mine ? t('Open your clan group') : t('Meet the clan')} />
-      </LinearGradient>
+        <View style={{ flex: 1 }}>
+          <AppText variant="eyebrow">{t('Clan of the week')}</AppText>
+          <AppText style={styles.lightTitle}>{clan.name}</AppText>
+          {line ? (
+            <AppText style={styles.lightSub} numberOfLines={2}>
+              {line}
+            </AppText>
+          ) : null}
+        </View>
+      </View>
+      <AppText variant="caption" style={{ marginTop: 10 }}>
+        {clan.members === 1 ? t('1 registered member') : t('{n} registered members', { n: clan.members })}
+        {clan.is_mine ? ` · ${t('this is your clan')}` : ''}
+      </AppText>
+      <LightCta label={clan.is_mine ? t('Open your clan group') : t('Meet the clan')} />
     </Pressable>
   );
 }
@@ -199,6 +204,12 @@ export function ClanFeedCard({ feed, style }) {
 const styles = StyleSheet.create({
   wrap: { borderRadius: RADIUS.xl, ...SHADOW, marginTop: SPACING.md },
   pressed: { opacity: 0.93, transform: [{ scale: 0.99 }] },
+  light: { backgroundColor: COLORS.white, borderRadius: RADIUS.lg + 2, padding: 16, marginTop: SPACING.md, ...SHADOW },
+  lightIcon: { width: 50, height: 50, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
+  lightTitle: { fontFamily: FONTS.bold, fontSize: 18, lineHeight: 24, color: COLORS.black, marginTop: 1 },
+  lightSub: { fontFamily: FONTS.regular, fontSize: 13, lineHeight: 18, color: COLORS.gray700, marginTop: 2 },
+  lightCta: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 14, marginTop: 12 },
+  lightCtaText: { fontFamily: FONTS.semibold, fontSize: 13, color: COLORS.white },
   fill: { borderRadius: RADIUS.xl, padding: 16, overflow: 'hidden', backgroundColor: COLORS.navy },
   row: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   icon: { width: 48, height: 48, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' },

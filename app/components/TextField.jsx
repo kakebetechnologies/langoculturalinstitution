@@ -55,9 +55,9 @@ export default function TextField({ label, error, hint, secureTextEntry, multili
 const styles = StyleSheet.create({
   wrap: { marginBottom: SPACING.md },
   label: { marginBottom: 6 },
-  field: { flexDirection: 'row', alignItems: 'center', minHeight: 52, paddingHorizontal: SPACING.md, borderRadius: RADIUS.lg, borderWidth: 1.5, borderColor: COLORS.gray300, backgroundColor: COLORS.white },
+  field: { flexDirection: 'row', alignItems: 'center', minHeight: 54, paddingHorizontal: SPACING.md, borderRadius: 18, borderWidth: 1.5, borderColor: 'transparent', backgroundColor: COLORS.field },
   multi: { alignItems: 'flex-start' },
-  focused: { borderColor: COLORS.primary },
+  focused: { borderColor: COLORS.yellow, backgroundColor: COLORS.white },
   invalid: { borderColor: COLORS.danger },
   // Inter, not Clarity City: people type Leb Lango letters (ɛ ɔ ŋ) here.
   input: { flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15, color: COLORS.black, paddingVertical: 10, ...Platform.select({ web: { outlineStyle: 'none' } }) },
