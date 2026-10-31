@@ -10,6 +10,13 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+# On a live domain always use https. Not for this computer or a phone testing on the home network, and not behind a proxy that already did it.
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.) [NC]
+RewriteCond %{HTTP_HOST} !\.(local|test)(:[0-9]+)?$ [NC]
+RewriteCond %{THE_REQUEST} \s(\S+)\s
+RewriteRule ^ https://%{HTTP_HOST}%1 [R=301,L]
 # Apache would add the missing trailing slash to a folder URL using the rewritten path (/admin -> /web/admin/), so do it here first.
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteRule ^(admin|pwa)$ %{REQUEST_URI}/ [R=301,L]

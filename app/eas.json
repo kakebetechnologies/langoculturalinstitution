@@ -7,7 +7,7 @@
       "distribution": "internal",
       "autoIncrement": true,
       "android": { "buildType": "apk" },
-      "env": { "EXPO_PUBLIC_API_URL": "https://langoculture.org/api", "EXPO_PUBLIC_APP_ENV": "production" }
+      "env": { "EXPO_PUBLIC_API_URL": "https://myculture.online/api", "EXPO_PUBLIC_APP_ENV": "production" }
     },
     "local-wifi": {
       "distribution": "internal",
@@ -19,18 +19,18 @@
       "distribution": "internal",
       "autoIncrement": true,
       "android": { "buildType": "apk" },
-      "env": { "EXPO_PUBLIC_API_URL": "https://langoculture.org/api", "EXPO_PUBLIC_APP_ENV": "production" }
+      "env": { "EXPO_PUBLIC_API_URL": "https://myculture.online/api", "EXPO_PUBLIC_APP_ENV": "production" }
     },
     "production": {
       "autoIncrement": true,
       "android": { "buildType": "app-bundle" },
-      "env": { "EXPO_PUBLIC_API_URL": "https://langoculture.org/api", "EXPO_PUBLIC_APP_ENV": "production" }
+      "env": { "EXPO_PUBLIC_API_URL": "https://myculture.online/api", "EXPO_PUBLIC_APP_ENV": "production" }
     },
     "preview-ios": {
       "distribution": "internal",
       "autoIncrement": true,
       "ios": { "simulator": false },
-      "env": { "EXPO_PUBLIC_API_URL": "https://langoculture.org/api", "EXPO_PUBLIC_APP_ENV": "production" }
+      "env": { "EXPO_PUBLIC_API_URL": "https://myculture.online/api", "EXPO_PUBLIC_APP_ENV": "production" }
     }
   },
   "submit": {

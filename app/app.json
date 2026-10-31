@@ -97,8 +97,8 @@
     "extra": {
       "apiUrl": {
         "development": "http://192.168.0.167/langoculturalinstitution/api",
-        "staging": "https://langoculture.org/api",
-        "production": "https://langoculture.org/api"
+        "staging": "https://myculture.online/api",
+        "production": "https://myculture.online/api"
       },
       "router": {},
       "eas": {

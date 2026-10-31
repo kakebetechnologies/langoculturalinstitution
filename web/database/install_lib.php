@@ -11,10 +11,17 @@ require_once __DIR__ . '/upgrade.php';
 
 function lci_install(array $db, array $admin, string $base, bool $withSamples = true): void
 {
-    $pdo = new PDO(sprintf('mysql:host=%s;port=%d;charset=utf8mb4', $db['host'], $db['port']), $db['user'], $db['pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $name = preg_replace('/[^A-Za-z0-9_]/', '', $db['name']);
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$name` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-    $pdo->exec("USE `$name`");
+    $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+    try {
+        // Shared hosting hands over a ready-made database whose user may not create databases, so use it directly when it exists.
+        $pdo = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $db['host'], $db['port'], $name), $db['user'], $db['pass'], $opts);
+    } catch (PDOException $e) {
+        if ((int)($e->errorInfo[1] ?? $e->getCode()) !== 1049) throw $e;   // 1049 = unknown database; anything else (wrong password, no server) is reported as it is
+        $pdo = new PDO(sprintf('mysql:host=%s;port=%d;charset=utf8mb4', $db['host'], $db['port']), $db['user'], $db['pass'], $opts);
+        $pdo->exec("CREATE DATABASE IF NOT EXISTS `$name` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $pdo->exec("USE `$name`");
+    }
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
     foreach (array_filter(array_map('trim', explode(';', (string)file_get_contents(__DIR__ . '/schema.sql')))) as $stmt) {
@@ -45,7 +52,7 @@ function lci_install(array $db, array $admin, string $base, bool $withSamples = 
             'site_name'    => 'Lango Cultural Institution',
             'site_tagline' => 'Our Culture. Our People. Our Future.',
             'org_subtitle' => 'Won Nyaci me Lango',
-            'email'        => 'info@langoculture.org',
+            'email'        => 'info@myculture.online',
             'phone'        => '+256 772 123 456',
             'address'      => 'Lira City, Northern Uganda',
             'clan_total'   => '149',

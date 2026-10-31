@@ -93,13 +93,14 @@ Profiles in `eas.json`:
 
 | Profile | Output | API address |
 |---|---|---|
-| `preview`, `production-apk` | APK | `https://langoculture.org/api` |
-| `production` | Android App Bundle | `https://langoculture.org/api` |
-| `preview-ios` | iOS ad-hoc build | `https://langoculture.org/api` |
+| `preview`, `production-apk` | APK | `https://myculture.online/api` |
+| `production` | Android App Bundle | `https://myculture.online/api` |
+| `preview-ios` | iOS ad-hoc build | `https://myculture.online/api` |
 | `local-wifi` | APK for testing against the XAMPP site on the home network | `http://192.168.0.167/langoculturalinstitution/api` (cleartext allowed for this profile only) |
 
-**Before a store build:** replace `https://langoculture.org/api` in `eas.json` with the real address of the live site (it is a
-placeholder), and change `192.168.0.167` to your computer's address for the `local-wifi` profile. Over-the-air updates
+The live website is <https://myculture.online>. Its address is set in `eas.json` (store and preview builds) and in `app.json` →
+`extra.apiUrl` (the fallback by environment); `app/.env` stays pointed at the development computer, so local work never touches
+the live site. Change `192.168.0.167` to your computer's address for the `local-wifi` profile. Over-the-air updates
 (`expo-updates`) are installed but deliberately left unconfigured until an EAS project exists.
 
 ## The web app (PWA)

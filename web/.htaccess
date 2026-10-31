@@ -4,6 +4,13 @@ AddDefaultCharset UTF-8
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+# On a live domain always use https (same rule as the repository root, for when the domain points straight at this folder).
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.) [NC]
+RewriteCond %{HTTP_HOST} !\.(local|test)(:[0-9]+)?$ [NC]
+RewriteCond %{THE_REQUEST} \s(\S+)\s
+RewriteRule ^ https://%{HTTP_HOST}%1 [R=301,L]
 # Bearer tokens from the mobile app: some Apache/CGI setups drop the Authorization header unless it is passed on
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteRule ^(app|config|database|legacy)(/|$) - [F,L]

@@ -2,7 +2,10 @@
 
 # ===== Web (PHP) =====
 web/config/config.php
+web/config/config.live.php
 web/config/first-run-credentials.txt
+# Upload packages for the live server (contain the live database password)
+deploy/
 web/uploads/*
 !web/uploads/.htaccess
 # The installable web app (PWA) exported from app/ by `npm run app:pwa`
