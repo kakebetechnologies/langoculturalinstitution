@@ -910,3 +910,9 @@ a.mc-card{transition:transform .2s,box-shadow .2s}a.mc-card:hover{transform:tran
 .mc-aside .btn--outline{border:1.5px solid #dfe2e7;box-shadow:none}.mc-aside .btn--outline:hover{border-color:var(--red)}
 body.auth .footer,body.mc .footer{margin-top:0}
 body.auth .au{padding-bottom:64px}body.mc .mc-body{padding-bottom:64px}
+
+/* Continue with Google */
+.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;border-radius:999px;background:#fff;border:1.5px solid #dadce0;color:#1f1f1f;font:600 .98rem var(--sans);box-shadow:var(--shadow-s);transition:box-shadow .15s,background .15s}
+.btn-google:hover{background:#f8f9fa;box-shadow:var(--shadow);color:#1f1f1f}
+.au__or{display:flex;align-items:center;gap:14px;margin:18px 0 6px;color:var(--muted);font:500 .8rem var(--sans)}
+.au__or:before,.au__or:after{content:"";flex:1;height:1px;background:var(--line)}

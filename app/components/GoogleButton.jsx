@@ -1,7 +1,7 @@
 // "Continue with Google": opens Google sign-in in the browser. Shows nothing until the website says Google sign-in is set up.
 // A member who is already registered goes straight in; a new person is asked for their clan first (app/(auth)/google-clan.jsx).
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../constants/theme';
@@ -11,14 +11,16 @@ import { GoogleSignInError, useGoogleAvailable } from '../lib/google';
 import { useT } from '../lib/i18n';
 import AppText from './AppText';
 
-export default function GoogleButton({ next, title }) {
+export default function GoogleButton({ next, title, onDark }) {
   const { t } = useT();
   const { signInWithGoogle } = useAuth();
   const available = useGoogleAvailable();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  if (!available) return null;
+  // The sign-in comes back to the app through a phone link (lango://), so the web version of the app does not offer it (the website itself does).
+  // Development keeps it visible on the web so the layout can be checked.
+  if (!available || (Platform.OS === 'web' && !__DEV__)) return null;
 
   async function press() {
     setLoading(true);
@@ -50,9 +52,9 @@ export default function GoogleButton({ next, title }) {
         </View>
       ) : null}
       <View style={styles.or}>
-        <View style={styles.line} />
-        <AppText variant="caption">{t('or with your email')}</AppText>
-        <View style={styles.line} />
+        <View style={[styles.line, onDark && { backgroundColor: 'rgba(255,255,255,0.28)' }]} />
+        <AppText variant="caption" style={onDark ? { color: 'rgba(255,255,255,0.75)' } : undefined}>{t('or with your email')}</AppText>
+        <View style={[styles.line, onDark && { backgroundColor: 'rgba(255,255,255,0.28)' }]} />
       </View>
     </View>
   );

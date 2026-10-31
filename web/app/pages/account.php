@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once ROOT . '/app/lib/app_api.php';   // brings in the Google sign-in helpers
+
 $sub = $seg[1] ?? '';
 
 if ($sub === 'logout') {
@@ -17,6 +19,15 @@ function auth_page_start(string $title, string $eyebrow, string $heading, string
     foreach ($perks as $p) echo '<li>' . icon('check') . '<span>' . e($p) . '</span></li>';
     echo '</ul></aside><div class="au__card">';
 }
+/** "Continue with Google" with an "or with your email" line; empty until the site has Google keys (Admin → Site settings). */
+function google_button(string $label): string
+{
+    if (!google_enabled()) return '';
+    $next = safe_next((string)get('next'));
+    $g = '<svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+    return '<a class="btn-google" href="' . e(url('auth/google/web', $next !== '' ? ['next' => $next] : [])) . '">' . $g . '<span>' . e($label) . '</span></a><div class="au__or"><span>' . e(__('or with your email')) . '</span></div>';
+}
+
 function auth_page_end(): void
 {
     echo '</div></div></section>';
@@ -37,6 +48,7 @@ if ($sub === 'login') {
     ?>
       <h2><?php _e('Sign in'); ?></h2>
       <p class="au__sub"><?php _e('New here?'); ?> <a href="<?= e(url('account/register', get('next') ? ['next' => get('next')] : [])) ?>"><?php _e('Create a free account'); ?></a></p>
+      <?= google_button(__('Sign in with Google')) ?>
       <form class="form" method="post"><?= csrf_field() ?>
         <div class="field"><label for="au-email"><?php _e('Email'); ?></label><input id="au-email" type="email" name="email" required autofocus autocomplete="username"></div>
         <div class="field"><label for="au-pw"><?php _e('Password'); ?></label><input id="au-pw" type="password" name="password" required autocomplete="current-password"></div>
@@ -74,6 +86,7 @@ if ($sub === 'register') {
     ?>
       <h2><?php _e('Create your account'); ?></h2>
       <p class="au__sub"><?php _e('Already have an account?'); ?> <a href="<?= e(url('account/login', get('next') ? ['next' => get('next')] : [])) ?>"><?php _e('Sign in'); ?></a></p>
+      <?= google_button(__('Sign up with Google')) ?>
       <form class="form" method="post"><?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
         <div class="field"><label><?php _e('Full name'); ?></label><input type="text" name="name" required autocomplete="name" value="<?= e(old('name')) ?>"></div>
         <div class="field"><label><?php _e('Email'); ?></label><input type="email" name="email" required autocomplete="email" value="<?= e(old('email')) ?>"></div>
@@ -82,6 +95,41 @@ if ($sub === 'register') {
           <div class="field"><label><?php _e('Phone (optional)'); ?></label><input type="tel" name="phone" autocomplete="tel" value="<?= e(old('phone')) ?>"></div></div>
         <div class="field"><label><?php _e('Password'); ?></label><input type="password" name="password" required minlength="8" autocomplete="new-password"><small><?php _e('At least 8 characters.'); ?></small></div>
         <button class="btn btn--primary btn--lg btn--block"><?php _e('Create account'); ?></button>
+        <p class="au__fine"><?php _e('By creating an account you agree to our'); ?> <a href="<?= e(url('terms')) ?>"><?php _e('Terms'); ?></a> <?php _e('and'); ?> <a href="<?= e(url('privacy')) ?>"><?php _e('Privacy policy'); ?></a>.</p>
+      </form>
+    <?php auth_page_end(); return;
+}
+
+if ($sub === 'google') {
+    if (user()) redirect('account');
+    $g = $_SESSION['gw_new'] ?? null;
+    if (!is_array($g) || (int)$g['e'] < time()) { unset($_SESSION['gw_new']); flash(__('Your Google sign-in has expired. Please try again.'), 'error'); redirect('account/login'); }
+    if (is_post()) {
+        csrf_check();
+        if (!throttle('google_finish', 8, 900)) { flash(__('Too many attempts. Please try later.'), 'error'); redirect('account/google'); }
+        [$clanId, $clanOther] = read_clan_input();
+        $err = null;
+        if (post('clan_id') === '') $err = __('Please choose your clan, or “My clan is not listed”.');
+        elseif (post('clan_id') === 'other' && !$clanOther) $err = __('Please type the name of your clan.');
+        elseif (val('SELECT COUNT(*) FROM users WHERE email=? OR google_sub=?', [$g['email'], $g['sub']])) $err = __('There is already an account for this Google address. Please continue with Google again.');
+        if ($err) { flash($err, 'error'); redirect('account/google'); }
+        $name = trim(post('name')) ?: (string)$g['name'] ?: (string)strstr((string)$g['email'], '@', true);
+        $uid = insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $g['email'], 'password_hash' => password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT), 'role' => 'contributor',
+            'clan_id' => $clanId, 'clan_other' => $clanOther, 'google_sub' => $g['sub']]);
+        unset($_SESSION['gw_new']);
+        login_member(one('SELECT * FROM users WHERE id=?', [$uid]));
+        flash(__('Welcome to the Lango community!'));
+        redirect((string)$g['x'] ?: 'account');
+    }
+    auth_page_start(__('Choose your clan'), __('One more step'), __('Choose your clan'), __('Every member belongs to a clan. Choose yours to finish creating your account.'),
+        [__('Your own “My culture” page'), __('Register under your clan'), __('Suggest words, share photos and stories')]);
+    ?>
+      <h2><?php _e('Almost there'); ?></h2>
+      <p class="au__sub"><?= e($g['email']) ?></p>
+      <form class="form" method="post"><?= csrf_field() ?>
+        <div class="field"><label><?php _e('Full name'); ?></label><input type="text" name="name" required autocomplete="name" value="<?= e($g['name']) ?>"></div>
+        <div class="field"><label for="rc"><?php _e('Your clan'); ?> *</label><?= clan_select('rc', null, true) ?><small><?php _e('Not in the list? Choose “My clan is not listed” and type its name — we will add it.'); ?></small></div>
+        <button class="btn btn--primary btn--lg btn--block"><?php _e('Finish creating my account'); ?></button>
         <p class="au__fine"><?php _e('By creating an account you agree to our'); ?> <a href="<?= e(url('terms')) ?>"><?php _e('Terms'); ?></a> <?php _e('and'); ?> <a href="<?= e(url('privacy')) ?>"><?php _e('Privacy policy'); ?></a>.</p>
       </form>
     <?php auth_page_end(); return;

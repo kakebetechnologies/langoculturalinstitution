@@ -57,7 +57,9 @@ public/               PWA manifest, service worker, icons
   plain-keyboard folding as the website (`e` finds `ε`, `ng` finds `ŋ`).
 - **Tickets and tracking codes** are saved on the phone so they open offline.
 - **Sign-in:** a bearer token kept in the secure store (Keychain / Keystore; local storage in the browser). A rejected token signs the
-  person out cleanly.
+  person out cleanly. **An account is required:** until there is a saved session only the welcome, sign-in and sign-up screens, the
+  introduction, the legal pages and Settings open (`OPEN_ROUTES` in `app/_layout.jsx`); every other route sends the person to the welcome
+  screen, and signing out does too. "Continue with Google" is offered on the phone apps, not in the web version.
 - **Language:** English or Leb Lango. `t('English phrase')` looks the phrase up in the translations entered by language experts
   (*Admin → Translations*); anything not translated shows in English. On first run the app registers its phrases with the server
   so they appear in the admin screen ready to translate. Nothing is machine-translated or invented.

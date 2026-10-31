@@ -1,5 +1,5 @@
-// Entry route ("/"): waits for the saved session to load, then shows the first-run introduction (never seen it) or the tabs.
-// Browsing never needs an account: signing in is asked for only when someone contributes or opens their profile.
+// Entry route ("/"): waits for the saved session to load, then goes to the tabs when someone is signed in, to the first-run introduction
+// when they have never seen it, and otherwise to the welcome screen: the app needs an account for everything else.
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { Redirect } from 'expo-router';
@@ -8,7 +8,7 @@ import { useAuth } from '../lib/auth';
 import { getStored } from '../lib/storage';
 
 export default function Index() {
-  const { ready } = useAuth();
+  const { ready, token } = useAuth();
   const [onboarded, setOnboarded] = useState(null);
 
   useEffect(() => {
@@ -23,5 +23,5 @@ export default function Index() {
     );
   }
 
-  return <Redirect href={onboarded ? '/(tabs)' : '/onboarding'} />;
+  return <Redirect href={token ? '/(tabs)' : onboarded ? '/(auth)/welcome' : '/onboarding'} />;
 }

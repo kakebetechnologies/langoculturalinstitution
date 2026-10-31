@@ -1,6 +1,6 @@
-// The way in for people who are not signed in: the logo over a photograph, "Create an account" and "Sign in" (with the page the
-// person was heading for carried along as ?next=), and "Keep browsing", because the dictionary, clans, history and districts
-// never need an account.
+// The way in. The app needs an account, so this is the first screen of anyone who is not signed in: the logo over a photograph,
+// "Continue with Google" (when the website has it set up), "Create an account" and "Sign in" (with the page the person was heading for
+// carried along as ?next=). Test builds also get a link to change the server address.
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,8 +8,10 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppText from '../../components/AppText';
 import Button from '../../components/Button';
+import GoogleButton from '../../components/GoogleButton';
 import Logo from '../../components/Logo';
 import { COLORS, FONTS, SPACING } from '../../constants/theme';
+import { isTestServer } from '../../lib/api';
 import { useT } from '../../lib/i18n';
 
 export default function Welcome() {
@@ -30,10 +32,11 @@ export default function Welcome() {
           Everything about Lango
         </AppText>
         <AppText style={styles.headline}>{t('Your culture, your clan, your language — in your pocket')}</AppText>
-        <AppText style={styles.sub}>{t('Join the Lango community to contribute heritage, learn Leb Lango and connect with your clan.')}</AppText>
+        <AppText style={styles.sub}>{t('Sign in or create a free account to learn Leb Lango, find your clan and share what you know.')}</AppText>
+        <GoogleButton next={params.next} onDark />
         <Button title={t('Create an account')} onPress={() => router.push({ pathname: '/(auth)/register', params })} />
         <Button title={t('Sign in')} variant="glass" onPress={() => router.push({ pathname: '/(auth)/login', params })} />
-        <Button title={t('Keep browsing')} variant="ghostLight" onPress={() => router.replace('/(tabs)')} style={{ minHeight: 40 }} />
+        {isTestServer() ? <Button title={t('Change server address')} variant="ghostLight" onPress={() => router.push('/settings?server=1')} style={{ minHeight: 40 }} /> : null}
       </View>
     </View>
   );

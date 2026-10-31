@@ -149,6 +149,10 @@ Add a new managed content type by adding one entry to `admin/modules.php`.
 * PHP 8.2 or newer, with `pdo_mysql`, `mbstring`, `fileinfo` and `gd`; `uploads/` must be writable. Raise `upload_max_filesize` and
   `post_max_size` to at least 128 MB if videos (up to 120 MB) will be uploaded.
 * `.htaccess` sends every http request on a real domain to https (not localhost or home-network addresses).
+* **Continue with Google** (website and app): create an OAuth client of type *Web application* in Google Cloud Console, add the redirect
+  address shown in *Admin → Site settings → Google sign-in* (`https://myculture.online/auth/google/callback`), then paste the client ID and
+  secret there. The buttons appear by themselves once both are saved. A new person chooses a clan before the account is created; staff
+  accounts cannot sign in with Google.
 
 ## Before going live
 

@@ -11,6 +11,7 @@ import Button from '../components/Button';
 import Illustration from '../components/Illustration';
 import Logo from '../components/Logo';
 import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../constants/theme';
+import { useAuth } from '../lib/auth';
 import { useT } from '../lib/i18n';
 import { setStored } from '../lib/storage';
 
@@ -25,6 +26,7 @@ export default function Onboarding() {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const list = useRef(null);
+  const { token } = useAuth();
   const [page, setPage] = useState(0);
   const last = SLIDES.length; // the language page
   const illustration = Math.min(300, width - 80, height * 0.38);
@@ -36,7 +38,7 @@ export default function Onboarding() {
 
   async function finish() {
     await setStored('onboarded_v1', true);
-    router.replace('/(tabs)');
+    router.replace(token ? '/(tabs)' : '/(auth)/welcome');
   }
 
   const data = [...SLIDES, { key: 'lang' }];

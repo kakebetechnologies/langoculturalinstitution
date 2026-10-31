@@ -14,12 +14,19 @@ declare(strict_types=1);
 
    Nothing secret travels in the app link: the code works once, for fifteen minutes at most, and only with the verifier the app kept.
    A new person must still choose a clan (every member belongs to one), so the account is created at "complete", not at the callback.
+   The WEBSITE uses the same keys and the same callback, with a session instead of an app link: /auth/google/web?next=… → Google →
+   /auth/google/callback (the state says "web", and the browser's session must hold the nonce that started it) → signed in, or, for a new
+   person, /account/google to choose a clan before the account is created.
    Set up: Google Cloud Console → Credentials → OAuth client ID → "Web application"; authorised redirect URI = the callback address
    shown in Admin → Site settings → Google sign-in. Put the client ID and secret there (or in config/config.php under 'google').
    ========================================================================== */
 
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
+
+/** Google's two addresses; config/config.php may point them elsewhere ('google' => ['auth_url' => …, 'token_url' => …]), which is how the sign-in is rehearsed without Google. */
+function google_auth_url(): string { global $CFG; return (string)($CFG['google']['auth_url'] ?? GOOGLE_AUTH_URL); }
+function google_token_url(): string { global $CFG; return (string)($CFG['google']['token_url'] ?? GOOGLE_TOKEN_URL); }
 
 function google_cfg(): array
 {
@@ -75,7 +82,7 @@ function google_state_read(string $state): ?array
     [$body, $sig] = array_pad(explode('.', $state, 2), 2, '');
     if ($body === '' || !hash_equals(b64url(hash_hmac('sha256', $body, google_secret(), true)), $sig)) return null;
     $p = json_decode(b64url_decode($body), true);
-    return is_array($p) && (int)($p['e'] ?? 0) > time() && google_allowed_return((string)($p['r'] ?? '')) ? $p : null;
+    return is_array($p) && (int)($p['e'] ?? 0) > time() && (!empty($p['w']) || google_allowed_return((string)($p['r'] ?? ''))) ? $p : null;   // 'w': the website's own sign-in
 }
 
 /** Trades Google's authorisation code for the ID token. Returns the token's claims, or null. */
@@ -84,12 +91,12 @@ function google_claims_from_code(string $code): ?array
     $cfg = google_cfg();
     $post = http_build_query(['code' => $code, 'client_id' => $cfg['client_id'], 'client_secret' => $cfg['client_secret'], 'redirect_uri' => google_callback_url(), 'grant_type' => 'authorization_code']);
     if (function_exists('curl_init')) {
-        $ch = curl_init(GOOGLE_TOKEN_URL);
+        $ch = curl_init(google_token_url());
         curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_POSTFIELDS => $post, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10, CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded']]);
         $res = curl_exec($ch);
         curl_close($ch);
     } else {
-        $res = @file_get_contents(GOOGLE_TOKEN_URL, false, stream_context_create(['http' => ['method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded', 'content' => $post, 'timeout' => 10]]));
+        $res = @file_get_contents(google_token_url(), false, stream_context_create(['http' => ['method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded', 'content' => $post, 'timeout' => 10]]));
     }
     $j = is_string($res) ? json_decode($res, true) : null;
     return is_array($j) && !empty($j['id_token']) ? google_id_token_claims((string)$j['id_token']) : null;

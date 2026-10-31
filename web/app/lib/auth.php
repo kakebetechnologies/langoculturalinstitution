@@ -38,6 +38,16 @@ function login_user(string $email, string $password): ?array
     return $row;
 }
 
+/** Signs a member in on the website without a password (they proved who they are with Google). */
+function login_member(array $row): void
+{
+    session_regenerate_id(true);
+    $_SESSION['uid'] = (int)$row['id'];
+    $_SESSION['csrf'] = bin2hex(random_bytes(24));
+    user(true);
+    q('UPDATE users SET last_login=NOW() WHERE id=?', [$row['id']]);
+}
+
 function logout_user(): void
 {
     unset($_SESSION['uid']);
