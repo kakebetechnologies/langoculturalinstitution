@@ -69,6 +69,7 @@ export default function Learn() {
           <GradientTile icon="language" tone="sky" title={t('AI Lango translator')} text={t('Words, phrases and sentences, both ways')} onPress={() => router.push('/translate')} />
           <GradientTile icon="ribbon" tone="red" title={t('Proverbs & sayings')} text={t('The wisdom of the elders')} onPress={() => router.push('/proverbs')} />
           <GradientTile icon="chatbubble-ellipses" tone="slate" title={t('Phrasebook')} text={t('Everyday greetings and replies')} onPress={() => router.push('/phrasebook')} />
+          <GradientTile icon="help-circle" tone="amber" full title={t('Lango quizzes')} text={t('Test what you know about the Lango people, their land and famous Langos')} onPress={() => router.push('/quiz')} />
           <GradientTile icon="add-circle" tone="green" full style={{ marginTop: 0 }} title={t('Suggest a word')} text={t('Add a word or a name; our language team reviews it')} onPress={() => router.push({ pathname: '/contribute/new', params: { type: 'language', kind: 'word' } })} />
         </View>
       </View>

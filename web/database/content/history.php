@@ -147,6 +147,45 @@ HTML,
 <p>The sub-region's population grew from about 1.5 million in 2002 to 2,061,694 in 2014 and 2,546,118 in 2024. Explore each district on the <a href="{base}/districts">districts</a> page.</p>
 HTML,
 ],
+[
+ 'slug' => 'lango-at-a-glance', 'icon' => 'star', 'era' => 'Quick facts', 'sort' => 10,
+ 'title' => 'The Lango at a glance',
+ 'summary' => 'Quick facts about the Lango people, adapted from Wikipedia (CC BY-SA 4.0). They are also the basis of the quizzes in the app.',
+ 'body' => <<<'HTML'
+<h3>Land and language</h3>
+<ul>
+<li>The Lango are an ethnic group of <strong>north-central Uganda</strong>. Their region was the <em>Lango District</em> until <strong>1974</strong>, when it was split into <strong>Apac</strong> and <strong>Lira</strong> districts, and later into more.</li>
+<li>Today the Lango region, which matches the Lango Kingdom, includes <strong>Amolatar, Alebtong, Apac, Dokolo, Kole, Lira, Oyam, Otuke and Kwania</strong> districts.</li>
+<li>They speak <strong>Leb Lango</strong>, an Eastern Sudanic language. It is classified as related to the Luo languages, but several authors reject ethnic ties between the Lango and the Luo peoples. The Lango are also reported to belong to the Ateker peoples, and their origins are still debated.</li>
+<li>On <strong>27&ndash;29 November 2024</strong> the Lango took part in a reunion of the Ateker peoples hosted by the Government of Uganda.</li>
+</ul>
+<h3>Clans and leadership</h3>
+<ul>
+<li>The Lango have <strong>more than 149 registered clans</strong>.</li>
+<li>The clans are united in the <strong>Lango Kingdom</strong>, a traditional institution headed by the <strong>Won Nyaci</strong> of Lango.</li>
+</ul>
+<h3>Faith, work and land</h3>
+<ul>
+<li>Many Lango today are Christians or Muslims, but traditional beliefs still matter. In traditional belief every person has a <strong>guardian spirit</strong> and a soul, ancestors are honoured, and the supreme god is <strong>Jok</strong>.</li>
+<li>The main occupations are <strong>hunting, farming and keeping livestock</strong>.</li>
+<li>Before colonial rule land was held in common: unused land belonged to the <strong>first family to till it</strong>, and passed to the eldest son. Traditional land tenure is still widely used in rural areas.</li>
+</ul>
+<h3>Dance</h3>
+<p>The Lango have many traditional dances. <strong>Okeme</strong> and <strong>Abuda</strong> are very popular and are performed at cultural functions, weddings and other ceremonies.</p>
+<h3>Warriors and chiefs</h3>
+<ul>
+<li>The Lango army was united under <strong>one military leader chosen by agreement</strong>; his authority ended when the war was over. Famous leaders were <strong>Ongora Okubal</strong>, <strong>Opyen</strong>, <strong>Arim Oroba</strong> and <strong>Agoro Abwango</strong>.</li>
+<li><strong>Rwot Icaya (Isaya) Ogwangguji</strong>, born in 1875, was county chief of Erute from 1918 to 1951 and was awarded the M.B.E. in 1956.</li>
+</ul>
+<h3>Read more</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Lango_people" target="_blank" rel="noopener">Lango people</a>, Wikipedia (the article this chapter is adapted from)</li>
+<li><a href="https://www.britannica.com/topic/Lango" target="_blank" rel="noopener">Lango</a>, Encyclopaedia Britannica</li>
+<li>Books the article cites: John Tosh, <em>Clan Leaders and Colonial Chiefs in Lango: The Political History of an East African Stateless Society, 1800&ndash;1939</em> (1979); Richard T. Curley, <em>Elders, Shades, and Women: Ceremonial Change in Lango, Uganda</em> (1973); Angelo Tarantino, <em>Lango i kare acon</em> (Fountain Publishers, 2004)</li>
+</ul>
+<p><em>Source and licence: this chapter is adapted from the Wikipedia article &ldquo;Lango people&rdquo; (its authors are listed in the article&rsquo;s page history), available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0</a> licence. We reworded and shortened the text and left out some parts. This chapter may be reused under the same licence.</em></p>
+HTML,
+],
 ],
 
 'timeline' => [

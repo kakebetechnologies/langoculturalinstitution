@@ -641,7 +641,12 @@ input[type=file]{width:100%;padding:12px;border:1.5px dashed #cfd3da;border-radi
 .pbio__ph{aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--paper-2);display:grid;place-items:center}.pbio__ph img{width:100%;height:100%;object-fit:cover;object-position:top}.pbio__ph .ncard__mono{font-size:3.4rem}
 .pbio__y{font:700 .85rem var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--red-d);margin:0 0 6px}
 .pbio__lead{font:600 1.18rem/1.5 var(--serif);color:var(--ink);margin:0}.pbio__note{font-size:.8rem;color:var(--muted);margin:10px 0 0}
-@media(max-width:620px){.pbio{grid-template-columns:1fr}.pbio__ph{max-width:200px}}
+.pbio__note a{color:var(--red-d);font-weight:600;white-space:nowrap}
+.reading{margin-top:34px;padding:22px 24px;background:var(--paper);border-radius:14px}.reading h3{margin:0 0 10px}
+.reading ul{list-style:none;margin:0;padding:0}.reading li{padding:9px 0;border-top:1px solid var(--line)}.reading li:first-child{border-top:0}
+.reading__k{display:inline-block;min-width:92px;font:700 .66rem var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--red-d)}
+.reading li a{font-weight:600}.reading__note{font-size:.8rem;color:var(--muted);margin:12px 0 0}
+@media(max-width:620px){.pbio{grid-template-columns:1fr}.pbio__ph{max-width:200px}.reading__k{display:block;min-width:0;margin-bottom:2px}}
 
 /* ---------- leadership & about ---------- */
 .leader-hero{grid-template-columns:320px 1fr;align-items:start}.leader-hero .ph{aspect-ratio:3/4}.leader-hero .ph img{object-position:top}

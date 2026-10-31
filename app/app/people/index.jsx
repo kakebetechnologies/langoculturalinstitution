@@ -35,6 +35,7 @@ export default function People() {
             <Row key={p.id} avatar={{ name: p.short_name, photo: p.photo }} title={p.short_name} subtitle={p.title} meta={p.born ? `${p.born}${p.died ? ' – ' + p.died : ''}` : undefined} onPress={() => router.push(`/people/${p.slug}`)} />
           ))}
         </View>
+        <Row icon="help-circle" iconTone="gold" title={t('Lango quizzes')} subtitle={t('Test what you know about the Lango people and their famous sons and daughters')} onPress={() => router.push('/quiz')} style={{ marginTop: SPACING.md }} />
       </StateView>
     </Screen>
   );

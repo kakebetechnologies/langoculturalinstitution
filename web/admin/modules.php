@@ -214,7 +214,42 @@ return [
             'born' => ['help' => 'Year, e.g. 1925'], 'died' => ['help' => 'Leave empty if living'], 'place' => ['label' => 'Home place'], 'district_id' => $distSel,
             'summary' => ['type' => 'textarea', 'rows' => 3, 'help' => 'One or two sentences for the card.'], 'body' => ['type' => 'rich', 'label' => 'Their story'],
             'photo' => ['type' => 'image', 'label' => 'Portrait', 'help' => 'Use a photograph you own or that is properly licensed (for example public domain or Creative Commons), and keep the credit with the story.'],
+            'photo_credit' => ['full' => true, 'label' => 'Photo credit', 'help' => 'Who took it and under which licence, e.g. “Photo: Name, via Wikimedia Commons. CC BY 4.0.” Shown under the portrait.'],
+            'photo_source' => ['full' => true, 'label' => 'Photo page address', 'help' => 'Where the photo and its licence can be checked (for example the Wikimedia Commons file page).'],
             'featured' => $bool + ['label' => 'Feature at the top of the page'], 'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
+    'notable_links' => [
+        'label' => 'Notable Langos: further reading', 'icon' => 'external', 'group' => 'Heritage', 'table' => 'notable_links', 'roles' => $cont, 'title' => 'title', 'order' => 'notable_id, sort, id',
+        'list' => ['notable_id', 'kind', 'title', 'source', 'status'], 'search' => ['title', 'source', 'url'], 'filters' => ['kind', 'status'],
+        'fields' => [
+            'notable_id' => ['type' => 'select', 'options' => 'notables:id:name', 'label' => 'Person', 'required' => true],
+            'kind' => ['type' => 'select', 'options' => ['wikipedia' => 'Wikipedia', 'article' => 'News article', 'profile' => 'Profile', 'documentary' => 'Documentary or video', 'record' => 'Record or database', 'research' => 'Research paper'], 'required' => true, 'default' => 'article'],
+            'title' => ['required' => true, 'full' => true], 'source' => ['label' => 'Website or publisher', 'help' => 'For example Daily Monitor, BBC News or Wikipedia.'],
+            'url' => ['required' => true, 'full' => true, 'label' => 'Address (link)', 'help' => 'Open the page first and check it is about this person. We only link to other websites; never copy their text or photos.'],
+            'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
+    'quiz_sets' => [
+        'label' => 'Quizzes', 'icon' => 'award', 'group' => 'Heritage', 'table' => 'quiz_sets', 'roles' => $cont, 'title' => 'title', 'order' => 'sort, id',
+        'list' => ['title', 'sort', 'status'], 'search' => ['title', 'summary'], 'filters' => ['status'],
+        'fields' => [
+            'title' => ['required' => true, 'full' => true], 'slug' => ['type' => 'slug', 'from' => 'title'],
+            'icon' => ['type' => 'select', 'options' => ['users' => 'People', 'heart' => 'Heart', 'shield' => 'Shield', 'award' => 'Award', 'star' => 'Star', 'book' => 'Book', 'globe' => 'Globe', 'flag' => 'Flag']],
+            'summary' => ['type' => 'textarea', 'rows' => 2, 'help' => 'One line shown on the quiz list in the app.'],
+            'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
+    'quiz_questions' => [
+        'label' => 'Quiz questions', 'icon' => 'list', 'group' => 'Heritage', 'table' => 'quiz_questions', 'roles' => $cont, 'title' => 'question', 'order' => 'set_id, sort, id',
+        'list' => ['question', 'set_id', 'answer', 'status'], 'search' => ['question', 'answer'], 'filters' => ['set_id', 'status'],
+        'fields' => [
+            'set_id' => ['type' => 'select', 'options' => 'quiz_sets:id:title', 'label' => 'Quiz', 'required' => true],
+            'question' => ['required' => true, 'full' => true], 'answer' => ['required' => true, 'label' => 'Right answer', 'full' => true],
+            'wrong' => ['type' => 'textarea', 'rows' => 3, 'required' => true, 'label' => 'Wrong answers', 'help' => 'Exactly three wrong answers that sound possible, one per line. The app mixes the four answers into a different order each time.'],
+            'why' => ['type' => 'textarea', 'rows' => 2, 'label' => 'What to tell the player afterwards', 'help' => 'One or two sentences that give the fact behind the answer.'],
+            'source' => ['label' => 'Source', 'help' => 'Where the fact comes from. Only ask what a reliable source states; never guess.'], 'source_url' => ['label' => 'Source address (link)'],
+            'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
         ],
     ],
     'history_sections' => [

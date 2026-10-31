@@ -116,7 +116,8 @@ Add a new managed content type by adding one entry to `admin/modules.php`.
 * Only five clans could be sourced and are loaded: **Otengoro Olang** plus **Atek, Okarowok, Arak and Oki**
   (named as Lango clans in published research). Load the rest with *Admin → Clans → Add clans in bulk* (paste names, one per line).
 * **No proverbs are pre-loaded**, because none could be sourced reliably. The public "Add a proverb" form feeds the review queue.
-* **Notable Langos have no portraits yet** (monograms are shown). Add properly licensed photographs in *Admin → Notable Langos*.
+* **Notable Langos:** five of the ten have portraits, all from Wikimedia Commons files that allow reuse (public domain, CC0 or CC BY); the credit and licence page are stored with each photo (*Admin → Notable Langos*) and shown beside it. The rest show monograms: add a properly licensed photograph, with its credit, in the same screen. Every person also has *further reading* (*Admin → Notable Langos: further reading*): links to articles, profiles and documentaries on other websites, each opened and checked before it was added; add only what you have read, and never copy their text or photos.
+* **Quizzes** (*Admin → Quizzes* and *Quiz questions*): 37 multiple-choice questions in four quizzes, each with the fact behind the answer and its source (mostly the Wikipedia article on the Lango people, CC BY-SA 4.0). Ask only what a reliable source states. The chapter *The Lango at a glance* on the History page carries the Wikipedia credit and licence.
 * The four cabinet and elder entries on the Leadership page are **sample slots** ("Name to be announced"); edit them in
   *Admin → Leadership*. 
 * District populations are 2024 census figures (Uganda Bureau of Statistics); areas and creation years come from published

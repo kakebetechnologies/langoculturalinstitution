@@ -48,6 +48,26 @@ function lci_upgrade(PDO $pdo): array
         featured TINYINT(1) NOT NULL DEFAULT 0, sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published',
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $addCol('notables', 'photo_credit', 'VARCHAR(255) NULL');
+    $addCol('notables', 'photo_source', 'VARCHAR(255) NULL');
+    // further reading about a notable person: articles, profiles, documentaries and records on other websites (we link, never copy)
+    $pdo->exec("CREATE TABLE IF NOT EXISTS notable_links (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, notable_id INT UNSIGNED NOT NULL, kind VARCHAR(20) NOT NULL DEFAULT 'article', title VARCHAR(255) NOT NULL,
+        source VARCHAR(120) NULL, url VARCHAR(500) NOT NULL, sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published', KEY (notable_id, sort)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // knowledge quizzes about the Lango people: sets of multiple-choice questions, and each member's best score per set
+    $pdo->exec("CREATE TABLE IF NOT EXISTS quiz_sets (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(80) NOT NULL UNIQUE, title VARCHAR(190) NOT NULL, summary VARCHAR(300) NULL, icon VARCHAR(30) NULL,
+        sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS quiz_questions (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, set_id INT UNSIGNED NOT NULL, question VARCHAR(400) NOT NULL, answer VARCHAR(200) NOT NULL, wrong VARCHAR(600) NOT NULL,
+        why VARCHAR(600) NULL, source VARCHAR(190) NULL, source_url VARCHAR(255) NULL, sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published', KEY (set_id, sort)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS quiz_results (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, user_id INT UNSIGNED NOT NULL, set_id INT UNSIGNED NOT NULL, best SMALLINT UNSIGNED NOT NULL DEFAULT 0, total SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+        plays INT UNSIGNED NOT NULL DEFAULT 0, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (user_id, set_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $pdo->exec("CREATE TABLE IF NOT EXISTS history_sections (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(120) NOT NULL UNIQUE, title VARCHAR(190) NOT NULL, era VARCHAR(60) NULL, icon VARCHAR(30) NULL,
         summary VARCHAR(400) NULL, body MEDIUMTEXT NULL, body_lg MEDIUMTEXT NULL, sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published'
@@ -226,6 +246,45 @@ function lci_upgrade(PDO $pdo): array
         if ($val('SELECT id FROM notables WHERE slug=?', [$n['slug']])) continue;
         $ins('notables', $n + ['status' => 'published']);
         $log[] = "notable {$n['slug']}";
+    }
+
+    // more about the notable Langos: one new person, licensed portraits with their credit, home districts, further reading, and fuller stories for rows seeded short
+    $extra = require $dir . '/people_extra.php';
+    foreach ($extra['new'] as $n) {
+        if ($val('SELECT id FROM notables WHERE slug=?', [$n['slug']])) continue;
+        $ins('notables', $n + ['status' => 'published']);
+        $log[] = "notable {$n['slug']}";
+    }
+    foreach ($extra['photos'] as $slug => [$file, $credit, $page]) {
+        $upd('notables', ['photo' => $file, 'photo_credit' => $credit, 'photo_source' => $page], "slug=? AND (photo IS NULL OR photo='')", [$slug]);
+    }
+    foreach ($extra['districts'] as $slug => $dslug) {
+        if ($did = $districtId($dslug)) $upd('notables', ['district_id' => $did], 'slug=? AND district_id IS NULL', [$slug]);
+    }
+    $added = 0;
+    foreach ($extra['links'] as $slug => $rows) {
+        if (!($nid = $val('SELECT id FROM notables WHERE slug=?', [$slug]))) continue;
+        foreach ($rows as $i => [$kind, $title, $source, $url]) {
+            if ($val('SELECT id FROM notable_links WHERE notable_id=? AND url=?', [$nid, $url])) continue;
+            $ins('notable_links', ['notable_id' => $nid, 'kind' => $kind, 'title' => $title, 'source' => $source, 'url' => $url, 'sort' => $i + 1]);
+            $added++;
+        }
+    }
+    if ($added) $log[] = "$added further-reading links";
+    if ($val("SELECT v FROM settings WHERE k='people_rev'") !== 'wiki-1') {   // once: a story an editor has already written at length is never replaced
+        foreach ($extra['refresh'] as $slug => $fields) $upd('notables', $fields, 'slug=? AND (body IS NULL OR CHAR_LENGTH(body) < 1500)', [$slug]);
+        if ($val("SELECT COUNT(*) FROM settings WHERE k='people_rev'")) $upd('settings', ['v' => 'wiki-1'], "k='people_rev'", []); else $ins('settings', ['k' => 'people_rev', 'v' => 'wiki-1']);
+        $log[] = 'people stories refreshed';
+    }
+
+    // knowledge quizzes
+    foreach (require $dir . '/quiz.php' as $s) {
+        $sid = $val('SELECT id FROM quiz_sets WHERE slug=?', [$s['slug']]);
+        if (!$sid) { $sid = $ins('quiz_sets', ['slug' => $s['slug'], 'title' => $s['title'], 'summary' => $s['summary'], 'icon' => $s['icon'], 'sort' => $s['sort'], 'status' => 'published']); $log[] = "quiz {$s['slug']}"; }
+        foreach ($s['questions'] as $i => [$q, $right, $wrong, $why, $src, $srcUrl]) {
+            if ($val('SELECT id FROM quiz_questions WHERE set_id=? AND question=?', [$sid, $q])) continue;
+            $ins('quiz_questions', ['set_id' => $sid, 'question' => $q, 'answer' => $right, 'wrong' => implode("\n", $wrong), 'why' => $why, 'source' => $src, 'source_url' => $srcUrl, 'sort' => $i + 1]);
+        }
     }
 
     // history

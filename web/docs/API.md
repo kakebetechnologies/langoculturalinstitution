@@ -54,6 +54,9 @@ Everything below is built from content already in the archive (the dictionary, h
 | POST | `/daily/word/answer` | `choice` → `{ correct, answer, all_meanings, example_lg, example_en, streaks }`. Counts as "learned today" for a signed-in member |
 | GET | `/challenge` | This week's Language Challenge: ten questions, four meanings each, no answers in the response; `done` and `score` once taken |
 | POST | `/challenge/submit` | `answers: { "<word id>": "<chosen meaning>" }` → `{ score, total, rank, review[] }`. One attempt per week (409 after that) |
+| GET | `/quiz` | The knowledge quizzes about the Lango people: `[ { slug, title, summary, icon, questions, best, plays } ]` (`best` is the signed-in member's best score) |
+| GET | `/quiz/{slug}` | One quiz: `{ title, total, best, questions: [ { id, question, options[] } ] }`; the options are mixed in a new order each time and carry no answers |
+| POST | `/quiz/{slug}/submit` | `answers: { "<question id>": "<chosen answer>" }` → `{ score, total, best, review[] }`; each review item has `answer`, `why`, `source`, `source_url`. Any number of attempts; the best score is kept for signed-in members |
 | GET | `/leaderboards/challenge`, `/leaderboards/learners` | Top ten this week / this month, names as first name and initial |
 | GET | `/clans/leaderboard?sort=members|contributions|learners` | Every published clan with its numbers and rank, and `mine` for a signed-in member |
 | GET | `/clans/{id}/stats` | One clan's numbers and rank |
@@ -99,7 +102,7 @@ A member who chose a clan can join that clan's group. `user.clan_group` (in `/me
 | `/home` | Word of the day, a featured notable Lango, latest news, upcoming events, programs, site counts, unread count |
 | `/clans`, `/clans/options`, `/clans/{slug}` | Clan register (`?q=`, `?district=`), id/name pairs for pickers, one clan with its leader |
 | `/districts`, `/districts/{slug}` | The nine districts and Lira City |
-| `/people`, `/people/{slug}` | Notable Langos (`?category=`) |
+| `/people`, `/people/{slug}` | Notable Langos (`?category=`). Each has `photo_credit`; the full record adds `photo_source` (where the licence can be checked) and `links: [ { kind, title, source, url } ]` (articles, profiles, documentaries and records on other websites; we link, never copy) |
 | `/history` | History chapters, timeline, glossary |
 | `/heritage`, `/heritage/{slug}` | Ceremonies, crafts, music, symbols, sites (`?category=`, `?q=`) |
 | `/species`, `/species/{slug}` | Biodiversity register |

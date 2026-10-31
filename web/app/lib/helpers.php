@@ -24,6 +24,12 @@ function media_url(?string $p, string $fallback = 'assets/img/photos/hero-road.j
     return url($p);
 }
 
+/** Articles, profiles, documentaries and records about a notable person on other websites (we only link to them). */
+function person_links(int $id): array
+{
+    return all("SELECT kind, title, source, url FROM notable_links WHERE notable_id=? AND status='published' ORDER BY sort, id", [$id]);
+}
+
 function redirect(string $to): never
 {
     if (!preg_match('#^https?://#', $to) && !str_starts_with($to, BASE . '/') && $to !== BASE) $to = url($to);

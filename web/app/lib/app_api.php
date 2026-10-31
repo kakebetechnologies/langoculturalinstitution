@@ -153,8 +153,9 @@ function api_user_json(array $u): array
 function api_person(array $n, bool $full = false): array
 {
     $r = ['id' => (int)$n['id'], 'slug' => $n['slug'], 'name' => $n['name'], 'short_name' => $n['short_name'] ?: $n['name'], 'category' => $n['category'], 'category_label' => PEOPLE_CATS[$n['category']] ?? $n['category'],
-        'title' => $n['title'], 'born' => $n['born'], 'died' => $n['died'], 'place' => $n['place'], 'summary' => $n['summary'], 'photo' => api_abs($n['photo']), 'featured' => (bool)$n['featured']];
-    if ($full) $r['body_html'] = rich($n['body']);
+        'title' => $n['title'], 'born' => $n['born'], 'died' => $n['died'], 'place' => $n['place'], 'summary' => $n['summary'], 'photo' => api_abs($n['photo']), 'photo_credit' => $n['photo'] ? ($n['photo_credit'] ?? null) : null,
+        'featured' => (bool)$n['featured']];
+    if ($full) $r += ['body_html' => rich($n['body']), 'photo_source' => $n['photo'] ? ($n['photo_source'] ?? null) : null, 'links' => person_links((int)$n['id'])];
     return $r;
 }
 

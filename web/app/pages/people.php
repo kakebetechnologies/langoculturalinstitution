@@ -21,9 +21,17 @@ if (!empty($seg[1])) {
         <div class="pbio">
           <div class="pbio__ph"><?= $n['photo'] ? '<img src="' . e(media_url($n['photo'])) . '" alt="' . e($n['name']) . '">' : '<span class="ncard__mono m' . ((int)$n['id'] % 4) . '" aria-hidden="true">' . e($ini) . '</span>' ?></div>
           <div><?php if ($years): ?><p class="pbio__y"><?= e($years) ?></p><?php endif; ?><p class="pbio__lead"><?= e((string)$n['summary']) ?></p>
-            <?php if (!$n['photo']): ?><p class="pbio__note"><?php _e('A portrait will be added once a properly licensed photograph is confirmed.'); ?></p><?php endif; ?></div>
+            <?php if (!$n['photo']): ?><p class="pbio__note"><?php _e('A portrait will be added once a properly licensed photograph is confirmed.'); ?></p>
+            <?php elseif (!empty($n['photo_credit'])): ?><p class="pbio__note"><?= e((string)$n['photo_credit']) ?><?php if (!empty($n['photo_source'])): ?> <a href="<?= e((string)$n['photo_source']) ?>" target="_blank" rel="noopener"><?php _e('Photo page and licence'); ?></a><?php endif; ?></p><?php endif; ?></div>
         </div>
         <div class="prose"><?= rich($n['body']) ?></div>
+        <?php $links = person_links((int)$n['id']); if ($links): ?>
+        <div class="reading"><h3><?php _e('Read and watch more'); ?></h3>
+          <ul><?php foreach ($links as $l): ?><li><span class="reading__k"><?= e(__(['wikipedia' => 'Wikipedia', 'article' => 'Article', 'profile' => 'Profile', 'documentary' => 'Documentary', 'record' => 'Record', 'research' => 'Research'][$l['kind']] ?? 'Link')) ?></span>
+            <a href="<?= e($l['url']) ?>" target="_blank" rel="noopener nofollow"><?= e($l['title']) ?></a><?php if ($l['source']): ?> <small class="dim">· <?= e($l['source']) ?></small><?php endif; ?></li><?php endforeach; ?></ul>
+          <p class="reading__note"><?php _e('These links open other websites, which are not ours. The story above is written in our own words from these sources; Wikipedia text is available under the Creative Commons Attribution-ShareAlike 4.0 licence.'); ?></p>
+        </div>
+        <?php endif; ?>
         <div class="pn" style="margin-top:36px"><?php $pv = $all[($idx - 1 + count($all)) % count($all)]; $nx = $all[($idx + 1) % count($all)]; ?>
           <a href="<?= e(url('people/' . $pv['slug'])) ?>"><small>← <?php _e('Previous'); ?></small><b><?= e($pv['short_name'] ?: $pv['name']) ?></b></a><a class="pn__r" href="<?= e(url('people/' . $nx['slug'])) ?>"><small><?php _e('Next'); ?> →</small><b><?= e($nx['short_name'] ?: $nx['name']) ?></b></a></div>
       </div>

@@ -229,8 +229,70 @@ function daily_home(?array $u): array
 
 /* ---------- the routes ---------- */
 /** Handles the daily-habit endpoints; returns normally for any other request. */
+/* ---------- knowledge quizzes about the Lango people (sets of multiple-choice questions) ---------- */
+/** Published quiz sets that have questions, with the member's best score on each. */
+function quiz_sets_view(?array $u): array
+{
+    $mine = $u ? array_column(all('SELECT set_id, best, total, plays FROM quiz_results WHERE user_id=?', [$u['id']]), null, 'set_id') : [];
+    $out = [];
+    foreach (all("SELECT s.*, (SELECT COUNT(*) FROM quiz_questions q WHERE q.set_id=s.id AND q.status='published') n FROM quiz_sets s WHERE s.status='published' ORDER BY s.sort, s.id") as $s) {
+        if (!(int)$s['n']) continue;
+        $r = $mine[$s['id']] ?? null;
+        $out[] = ['slug' => $s['slug'], 'title' => $s['title'], 'summary' => $s['summary'], 'icon' => $s['icon'], 'questions' => (int)$s['n'],
+            'best' => $r ? (int)$r['best'] : null, 'plays' => $r ? (int)$r['plays'] : 0];
+    }
+    return $out;
+}
+
+function quiz_set_row(string $slug): array
+{
+    return one("SELECT * FROM quiz_sets WHERE slug=? AND status='published'", [$slug]) ?? api_err('We could not find that quiz.', 404);
+}
+
+function quiz_questions_of(int $setId): array
+{
+    return all("SELECT * FROM quiz_questions WHERE set_id=? AND status='published' ORDER BY sort, id", [$setId]);
+}
+
 function daily_api(string $res, string $id, string $sub, string $m, ?array $u): void
 {
+    if ($res === 'quiz') {
+        if ($m === 'GET' && $id === '') json_out(['data' => quiz_sets_view($u)]);
+        if ($m === 'GET' && $sub === '') {
+            $s = quiz_set_row($id);
+            $qs = quiz_questions_of((int)$s['id']);
+            if (!$qs) api_err('This quiz has no questions yet.', 404);
+            $mine = $u ? one('SELECT best, total, plays FROM quiz_results WHERE user_id=? AND set_id=?', [$u['id'], $s['id']]) : null;
+            json_out(['data' => ['slug' => $s['slug'], 'title' => $s['title'], 'summary' => $s['summary'], 'total' => count($qs), 'best' => $mine ? (int)$mine['best'] : null,
+                'questions' => array_map(function ($q) {
+                    $o = array_merge([$q['answer']], array_values(array_filter(array_map('trim', explode("\n", (string)$q['wrong'])))));
+                    shuffle($o);   // a new order each time, so the right answer is not always in the same place
+                    return ['id' => (int)$q['id'], 'question' => $q['question'], 'options' => $o];
+                }, $qs)]]);
+        }
+        if ($m === 'POST' && $sub === 'submit') {
+            api_throttle('quiz', 200, 3600);
+            $s = quiz_set_row($id);
+            $qs = quiz_questions_of((int)$s['id']);
+            if (!$qs) api_err('This quiz has no questions yet.', 404);
+            $answers = (array)(api_in()['answers'] ?? []);
+            $score = 0; $review = [];
+            foreach ($qs as $q) {
+                $choice = trim((string)($answers[(string)$q['id']] ?? ''));
+                $ok = $choice !== '' && mb_strtolower($choice) === mb_strtolower($q['answer']);
+                $score += $ok ? 1 : 0;
+                $review[] = ['id' => (int)$q['id'], 'question' => $q['question'], 'answer' => $q['answer'], 'choice' => $choice, 'correct' => $ok, 'why' => $q['why'], 'source' => $q['source'], 'source_url' => $q['source_url']];
+            }
+            $best = $score;
+            if ($u) {
+                q('INSERT INTO quiz_results (user_id, set_id, best, total, plays) VALUES (?, ?, ?, ?, 1) ON DUPLICATE KEY UPDATE best=GREATEST(best, VALUES(best)), total=VALUES(total), plays=plays+1, updated_at=NOW()',
+                    [$u['id'], $s['id'], $score, count($qs)]);
+                $best = (int)val('SELECT best FROM quiz_results WHERE user_id=? AND set_id=?', [$u['id'], $s['id']]);
+            }
+            json_out(['data' => ['score' => $score, 'total' => count($qs), 'best' => $best, 'review' => $review,
+                'share_text' => sprintf('I scored %d/%d on the “%s” quiz in the Lango App!', $score, count($qs), $s['title'])]], 201);
+        }
+    }
     if ($res === 'me' && $id === 'checkin' && $m === 'POST') {
         $u ??= api_need_user();
         $fresh = activity_mark((int)$u['id'], 'open');
