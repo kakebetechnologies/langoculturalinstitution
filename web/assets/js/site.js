@@ -247,3 +247,11 @@
   lb.addEventListener('click', function () { lb.classList.remove('on'); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('on'); });
 })();
+
+/* home: the menu bar sits over the photo and turns white once the page is scrolled */
+(function () {
+  var h = document.getElementById('top');
+  if (!h || !document.body.classList.contains('home')) return;
+  var on = function () { h.classList.toggle('is-stuck', window.scrollY > 60); };
+  on(); window.addEventListener('scroll', on, { passive: true });
+})();

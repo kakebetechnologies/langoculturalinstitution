@@ -6,8 +6,8 @@ page_start(__('About Lango'), ['hero' => ['eyebrow' => __('About'), 'title' => _
 <section class="section">
   <div class="container split">
     <div class="collage reveal">
-      <div class="collage__a"><img loading="lazy" src="<?= e(site_img('about_image_1', 'assets/img/photos/hero-aerial.jpg')) ?>" alt=""></div>
-      <div class="collage__b"><img loading="lazy" src="<?= e(site_img('about_image_2', 'assets/img/photos/hero-field.jpg')) ?>" alt=""></div>
+      <div class="collage__a"><img loading="lazy" src="<?= e(site_img('about_image_1', 'assets/img/lango/lango-house.jpg')) ?>" alt=""></div>
+      <div class="collage__b"><img loading="lazy" src="<?= e(site_img('about_image_2', 'assets/img/lango/abuda-dancers.jpg')) ?>" alt=""></div>
       <div class="collage__badge"><b><?= (int)$counts['districts'] ?></b><small><?php _e('Districts'); ?></small></div>
     </div>
     <div class="reveal">

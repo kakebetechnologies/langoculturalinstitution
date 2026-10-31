@@ -192,7 +192,7 @@ return [
         'list' => ['name', 'kind', 'headquarters', 'population', 'status'], 'search' => ['name'], 'filters' => ['kind', 'status'], 'view_url' => fn($r) => url('districts/' . $r['slug']),
         'fields' => [
             'name' => ['required' => true], 'slug' => ['type' => 'slug', 'from' => 'name'], 'kind' => ['type' => 'select', 'options' => ['district' => 'District', 'city' => 'City'], 'required' => true, 'default' => 'district'],
-            'headquarters' => [], 'image' => ['type' => 'image', 'label' => 'Photo (optional)'],
+            'headquarters' => [], 'image' => ['type' => 'image', 'label' => 'Photo (optional)'], 'image_credit' => ['full' => true, 'label' => 'Photo credit', 'help' => 'Who took it and under which licence. Shown under the photo.'],
             'population' => ['type' => 'number', 'min' => 0], 'pop_year' => ['type' => 'number', 'label' => 'Census year', 'min' => 1900, 'max' => 2100],
             'area_km2' => ['type' => 'number', 'step' => '0.1', 'label' => 'Area (km²)'], 'created_year' => ['type' => 'number', 'label' => 'Year created'],
             'parent' => ['label' => 'Carved out of'], 'neighbours' => ['label' => 'Neighbouring districts', 'full' => true], 'distance' => ['label' => 'Distances', 'full' => true],

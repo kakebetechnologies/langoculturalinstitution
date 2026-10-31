@@ -22,7 +22,7 @@ page_start(__('Media Center'), ['hero' => ['eyebrow' => __('Media center'), 'tit
   </div>
   <?php if ($rows): ?>
     <?php $photos = array_filter($rows, fn($r) => $r['type'] === 'photo'); $others = array_filter($rows, fn($r) => $r['type'] !== 'photo'); ?>
-    <?php if ($photos): ?><div class="gal"><?php foreach ($photos as $r): ?><a href="<?= e(media_url($r['file'])) ?>" data-lb="<?= e($r['title']) ?>"><img loading="lazy" src="<?= e(media_url($r['file'])) ?>" alt="<?= e($r['title']) ?>"><span><?= e($r['title']) ?></span></a><?php endforeach; ?></div><?php endif; ?>
+    <?php if ($photos): ?><div class="gal"><?php foreach ($photos as $r): ?><a href="<?= e(media_url($r['file'])) ?>" data-lb="<?= e($r['title'] . ($r['credit'] ? ' · ' . $r['credit'] : '')) ?>"><img loading="lazy" src="<?= e(media_url($r['file'])) ?>" alt="<?= e($r['title']) ?>"><span><?= e($r['title']) ?></span></a><?php endforeach; ?></div><?php endif; ?>
     <?php if ($others): ?><div class="grid g2" style="margin-top:30px">
       <?php foreach ($others as $r): $emb = embed_url($r['url']); ?>
         <div class="box"><span class="tag"><?= e(__($types[$r['type']][0])) ?></span><h4 style="margin-top:8px"><?= e($r['title']) ?></h4>

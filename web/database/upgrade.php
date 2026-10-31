@@ -53,6 +53,7 @@ function lci_upgrade(PDO $pdo): array
     // photo credits for heritage entries, species and history chapters, and the "near threatened" conservation status
     $addCol('heritage_items', 'image_credit', 'VARCHAR(255) NULL');
     $addCol('species', 'image_credit', 'VARCHAR(255) NULL');
+    $addCol('districts', 'image_credit', 'VARCHAR(255) NULL');
     $consType = (string)$pdo->query("SELECT column_type FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='species' AND column_name='conservation'")->fetchColumn();
     if ($consType !== '' && strpos($consType, 'near_threatened') === false) {
         $pdo->exec("ALTER TABLE species MODIFY conservation ENUM('unknown','least_concern','near_threatened','vulnerable','endangered','critical','locally_extinct','reintroduced') NOT NULL DEFAULT 'unknown'");
@@ -340,6 +341,22 @@ function lci_upgrade(PDO $pdo): array
         $n++;
     }
     if ($n) $log[] = "$n gallery photos";
+    $n = 0;
+    foreach (require $dir . '/lango_photos.php' as [$file, $album, $title, $desc, $credit, $page]) {   // free-licence photographs from Wikimedia Commons
+        if ($val('SELECT id FROM media WHERE file=?', [$file])) continue;
+        $ins('media', ['type' => 'photo', 'title' => $title, 'description' => $desc, 'file' => $file, 'album' => $album, 'credit' => $credit, 'source' => $page, 'status' => 'published']);
+        $n++;
+    }
+    if ($n) $log[] = "$n Commons photos";
+    // the photographs on district pages and on heritage entries that only had a stock picture (an editor's own picture is never replaced)
+    $lp = require $dir . '/lango_photos.php';
+    foreach (['lira-city' => 'sunset-lira', 'lira' => 'ngetta-hill', 'oyam' => 'kraal-cows', 'apac' => 'great-harvest', 'dokolo' => 'olweny-swamp', 'amolatar' => 'uganda-centre-monument', 'kwania' => 'kwania-rock'] as $dist => $k) {
+        $upd('districts', ['image' => $lp[$k][0], 'image_credit' => $lp[$k][4]], "slug=? AND (image IS NULL OR image='')", [$dist]);
+    }
+    foreach (['abuda' => 'abuda-dancers', 'ngetta-rock' => 'ngetta-hill', 'amolatar-monument' => 'uganda-centre-monument', 'lake-kwania-kyoga' => 'lake-kwania', 'pottery' => 'museum-crafts',
+              'mats-baskets-and-cords' => 'museum-interior', 'smiths-and-metalwork' => 'museum-spears', 'marriage-customs' => 'traditional-marriage'] as $slug => $k) {
+        $upd('heritage_items', ['image' => $lp[$k][0], 'image_credit' => $lp[$k][4]], "slug=? AND (image IS NULL OR image='' OR image LIKE 'assets/img/photos/hero-%')", [$slug]);
+    }
     $n = 0;
     foreach ($more['documents'] as [$title, $cat, $year, $desc, $address]) {
         if ($val('SELECT id FROM documents WHERE title=?', [$title])) continue;

@@ -28,9 +28,11 @@ if (!empty($seg[1])) {
         'economy' => [__('Economy & livelihoods'), $d['economy']], 'places' => [__('Places to visit'), ($d['attractions'] || $items) ? 'x' : ''], 'history' => [__('History'), $d['history']],
     ], fn($s) => trim((string)$s[1]) !== '');
     $title = $d['name'] . ($isCity ? '' : ' ' . __('District'));
+    $imgCredit = !empty($d['image']) && !empty($d['image_credit']) ? (string)$d['image_credit'] : '';
     page_start($title, ['image' => $d['image'], 'desc' => excerpt($d['description'], 160), 'leaflet' => (bool)$d['lat'], 'hero' => ['eyebrow' => $isCity ? __('City of Lango') : __('District of Lango'), 'title' => $title, 'sub' => excerpt($d['description'], 170), 'crumbs' => [[__('About'), 'about'], [__('Districts'), 'districts'], [$d['name'], null]], 'image' => $d['image'] ?: 'assets/img/photos/' . $fallbackImgs[$idx % 6] . '.jpg']]);
     ?>
     <section class="section section--tight"><div class="container">
+      <?php if ($imgCredit): ?><p class="imgcredit"><?= icon('camera') ?> <?= e($imgCredit) ?></p><?php endif; ?>
       <dl class="facts">
         <?php if ($d['population']): ?><div><dt><?= number_format((int)$d['population']) ?></dt><dd><?= sprintf(__('People (%s census)'), (int)$d['pop_year']) ?></dd></div><?php endif; ?>
         <?php if ($d['area_km2']): ?><div><dt><?= number_format((float)$d['area_km2']) ?> km²</dt><dd><?php _e('Area'); ?></dd></div><?php endif; ?>

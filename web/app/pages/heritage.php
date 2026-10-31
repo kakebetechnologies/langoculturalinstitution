@@ -56,7 +56,7 @@ if ($g !== '' && isset(HERITAGE_GROUPS[$g])) {
     $rows = all("SELECT * FROM heritage_items WHERE status='published' AND category IN ($in) ORDER BY featured DESC, title LIMIT {$pg['per']} OFFSET {$pg['offset']}", $cats);
     $sites = in_array('site', $cats, true) ? all("SELECT * FROM heritage_items WHERE status='published' AND category='site' AND lat IS NOT NULL") : [];
     $pins = array_map(fn($s) => ['lat' => (float)$s['lat'], 'lng' => (float)$s['lng'], 'title' => t($s, 'title'), 'url' => url('heritage/item/' . $s['slug']), 'color' => '#2f5b3a'], $sites);
-    page_start(__($label), ['leaflet' => (bool)$pins, 'hero' => ['eyebrow' => __('Heritage'), 'title' => __($label), 'sub' => __($blurb), 'crumbs' => [[__('Heritage'), 'heritage'], [__($label), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
+    page_start(__($label), ['leaflet' => (bool)$pins, 'hero' => ['eyebrow' => __('Heritage'), 'title' => __($label), 'sub' => __($blurb), 'crumbs' => [[__('Heritage'), 'heritage'], [__($label), null]], 'image' => ['ceremonies' => 'assets/img/lango/traditional-marriage.jpg', 'attire' => 'assets/img/culture/dancers-group.jpg', 'crafts' => 'assets/img/lango/museum-crafts.jpg', 'music' => 'assets/img/lango/lira-dance.jpg', 'dance' => 'assets/img/lango/abuda-dancers.jpg', 'storytelling' => 'assets/img/culture/dance-story.jpg', 'symbols' => 'assets/img/lango/heritage-centre.jpg', 'sites' => 'assets/img/lango/ngetta-hill.jpg'][$g] ?? 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section"><div class="container">
       <?php if ($pins): ?><div id="map" class="mapbox" style="margin-bottom:40px"></div><?php endif; ?>
@@ -74,7 +74,7 @@ $counts = [];
 foreach (all("SELECT category, COUNT(*) n FROM heritage_items WHERE status='published' GROUP BY category") as $r) $counts[$r['category']] = (int)$r['n'];
 $clanN = (int)val("SELECT COUNT(*) FROM clans WHERE status='published'");
 $featured = all("SELECT * FROM heritage_items WHERE status='published' ORDER BY featured DESC, id DESC LIMIT 3");
-page_start(__('Heritage'), ['hero' => ['eyebrow' => __('Cultural Heritage Module'), 'title' => __('The living heritage of Lango'), 'sub' => __('Clans, ceremonies, attire, music, dance, symbols and sacred places.'), 'crumbs' => [[__('Heritage'), null]], 'image' => 'assets/img/photos/hero-site.jpg']]);
+page_start(__('Heritage'), ['hero' => ['eyebrow' => __('Cultural Heritage Module'), 'title' => __('The living heritage of Lango'), 'sub' => __('Clans, ceremonies, attire, music, dance, symbols and sacred places.'), 'crumbs' => [[__('Heritage'), null]], 'image' => 'assets/img/lango/lira-dance.jpg']]);
 ?>
 <section class="section"><div class="container">
   <div class="grid g4">

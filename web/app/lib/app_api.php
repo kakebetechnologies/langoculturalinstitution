@@ -164,7 +164,8 @@ function api_district(array $d, bool $full = false): array
     $known = array_values(array_filter(array_map('trim', explode("\n", (string)$d['known_for']))));
     $r = ['id' => (int)$d['id'], 'slug' => $d['slug'], 'name' => $d['name'], 'kind' => $d['kind'], 'headquarters' => $d['headquarters'], 'population' => $d['population'] !== null ? (int)$d['population'] : null,
         'pop_year' => $d['pop_year'] !== null ? (int)$d['pop_year'] : null, 'area_km2' => $d['area_km2'] !== null ? (float)$d['area_km2'] : null, 'created_year' => $d['created_year'] !== null ? (int)$d['created_year'] : null,
-        'summary' => excerpt($d['description'], 180), 'known_for' => $known, 'lat' => $d['lat'] !== null ? (float)$d['lat'] : null, 'lng' => $d['lng'] !== null ? (float)$d['lng'] : null, 'image' => api_abs($d['image'])];
+        'summary' => excerpt($d['description'], 180), 'known_for' => $known, 'lat' => $d['lat'] !== null ? (float)$d['lat'] : null, 'lng' => $d['lng'] !== null ? (float)$d['lng'] : null, 'image' => api_abs($d['image']),
+        'image_credit' => !empty($d['image']) ? ($d['image_credit'] ?? null) : null];
     if ($full) $r += ['parent' => $d['parent'], 'neighbours' => $d['neighbours'], 'distance' => $d['distance'], 'subdivisions' => $d['subdivisions'], 'overview_html' => rich($d['description']),
         'demography_html' => rich($d['demography']), 'economy_html' => rich($d['economy']), 'attractions_html' => rich($d['attractions']), 'history_html' => rich($d['history'])];
     return $r;
