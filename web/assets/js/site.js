@@ -128,8 +128,17 @@
         .then(function (r) { return r.json(); })
         .then(function (j) {
           if (j.error) { tout.textContent = j.error; tunk.textContent = ''; return; }
-          tout.textContent = j.translation;
           tunk.innerHTML = '';
+          if (j.coming_soon) {   // sentences are not ready: say so and offer each word in the dictionary
+            tout.textContent = j.message;
+            tunk.appendChild(document.createTextNode('Look up each word: '));
+            (j.words || []).forEach(function (w) {
+              var a = document.createElement('a'); a.textContent = w; a.href = LCI.base + '/language/dictionary?q=' + encodeURIComponent(w);
+              tunk.appendChild(a); tunk.appendChild(document.createTextNode(' '));
+            });
+            return;
+          }
+          tout.textContent = j.translation;
           if (j.unknown_words && j.unknown_words.length) {
             tunk.appendChild(document.createTextNode('Not in the dictionary yet: '));
             j.unknown_words.forEach(function (w) {

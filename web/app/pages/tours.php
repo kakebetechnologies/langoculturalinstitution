@@ -12,8 +12,11 @@ page_start(__('360° Heritage Tours'), ['hero' => ['eyebrow' => __('Virtual heri
     <div class="pano"><a-scene embedded vr-mode-ui="enabled: true" loading-screen="enabled:false" style="width:100%;height:100%"><a-sky src="<?= e(media_url($cur['panorama'])) ?>" rotation="0 -90 0"></a-sky><a-camera look-controls="reverseMouseDrag: true"></a-camera></a-scene></div>
     <h2 style="margin-top:24px"><?= e($cur['title']) ?></h2><p><?= e((string)$cur['description']) ?></p><p style="color:var(--muted);font-size:.85rem"><?php _e('Drag to look around. Use the headset icon for VR.'); ?></p>
     <?php if (count($tours) > 1): ?><div class="filters"><?php foreach ($tours as $t): ?><a class="pill <?= $t['id'] === $cur['id'] ? 'on' : '' ?>" href="<?= e(url('tours', ['id' => $t['id']])) ?>"><?= e($t['title']) ?></a><?php endforeach; ?></div><?php endif; ?>
-  <?php else: ?>
-    <?= empty_state(__('Tours are being captured'), __('Tours of heritage sites in 360° will be published here, and community members will be able to contribute their own 360° photographs.'), 'eye', '<p><a class="btn btn--primary btn--sm" href="' . e(url('contribute?type=heritage_site')) . '">' . e(__('Suggest a site to capture')) . '</a></p>') ?>
+  <?php else: $places = all("SELECT * FROM heritage_items WHERE status='published' AND category='site' ORDER BY featured DESC, title"); ?>
+    <div class="sec-head" style="max-width:720px"><span class="eyebrow"><?php _e('Places to visit'); ?></span><h2><?php _e('Heritage places across Lango'); ?></h2>
+      <p><?php _e('Our 360° tours are still being captured. Until they are ready, these are the places you can visit in person, with their story.'); ?></p></div>
+    <?php if ($places): ?><div class="grid g3"><?php foreach ($places as $r) echo card(url('heritage/item/' . $r['slug']), $r['image'], t($r, 'title'), (string)$r['summary'], __('Heritage site')); ?></div><?php endif; ?>
+    <p style="margin-top:30px;color:var(--muted)"><?php _e('Community members will be able to contribute their own 360° photographs.'); ?> <a class="link" href="<?= e(url('contribute?type=heritage_site')) ?>"><?php _e('Suggest a site to capture'); ?> <?= icon('arrow') ?></a></p>
   <?php endif; ?>
 </div></section>
 <?php page_end($cur && $cur['panorama'] ? ['scripts' => ['https://aframe.io/releases/1.5.0/aframe.min.js']] : []); ?>

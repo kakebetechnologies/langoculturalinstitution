@@ -2,6 +2,7 @@
 // words used in the history (tap a word to see it in the dictionary). Compiled from published sources, for historians to review.
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import Accordion from '../components/Accordion';
 import AppText from '../components/AppText';
@@ -50,6 +51,16 @@ export default function History() {
             <View style={{ marginTop: 12 }}>
               {h.sections.map((s, i) => (
                 <Accordion key={`${s.slug}-${openAll}`} number={String(i + 1).padStart(2, '0')} eyebrow={s.era} title={s.title} summary={s.summary} defaultOpen={expanded || (i === 0 && openAll === 0)}>
+                  {s.image ? (
+                    <View style={{ marginBottom: SPACING.md }}>
+                      <Image source={{ uri: s.image }} style={{ width: '100%', height: 190, borderRadius: RADIUS.lg }} contentFit="cover" />
+                      {s.image_credit ? (
+                        <AppText variant="caption" style={{ marginTop: 4 }}>
+                          {s.image_credit}
+                        </AppText>
+                      ) : null}
+                    </View>
+                  ) : null}
                   <RichText html={s.body_html} />
                 </Accordion>
               ))}

@@ -63,7 +63,7 @@ if ($sub === 'dictionary') {
             <label><input type="radio" name="dir" value="lg" <?= $dir === 'lg' ? 'checked' : '' ?>><span>Leb Lango</span></label>
             <label><input type="radio" name="dir" value="en" <?= $dir === 'en' ? 'checked' : '' ?>><span>English</span></label>
           </span>
-          <a class="dsearch__tr" href="<?= e(url('language/translate')) ?>"><?= icon('globe') ?> <?php _e('Translate whole sentences with the AI translator'); ?> <?= icon('arrow') ?></a>
+          <a class="dsearch__tr" href="<?= e(url('language/translate')) ?>"><?= icon('globe') ?> <?php _e('Translate a word with the AI translator'); ?> <?= icon('arrow') ?></a>
         </div>
       </form>
     </div></section>
@@ -95,7 +95,7 @@ if ($sub === 'dictionary') {
       <aside class="aside">
         <?php if ($wotd): ?><div class="wotd"><small><?php _e('Word of the day'); ?></small><h3><?= e($wotd['lango']) ?></h3><p style="color:#fff;margin:0"><?= e(str_replace(';', ' ·', $wotd['english'])) ?></p></div><?php endif; ?>
         <?= $suggestCard() ?>
-        <div class="box"><h4><?= icon('globe') ?> <?php _e('AI Lango translator'); ?></h4><p style="font-size:.9rem"><?php _e('Type a phrase in English or Leb Lango and get a translation built from the dictionary and textbook sentences.'); ?></p><a class="btn btn--dark btn--sm" href="<?= e(url('language/translate')) ?>"><?php _e('Open the translator'); ?></a></div>
+        <div class="box"><h4><?= icon('globe') ?> <?php _e('AI Lango translator'); ?></h4><p style="font-size:.9rem"><?php _e('Type a word in English or Leb Lango and see its translation. Whole sentences are coming soon.'); ?></p><a class="btn btn--dark btn--sm" href="<?= e(url('language/translate')) ?>"><?php _e('Open the translator'); ?></a></div>
         <div class="box"><dl class="kv" style="grid-template-columns:1fr auto"><dt><?php _e('Words in the dictionary'); ?></dt><dd><b><?= number_format($wordsTotal) ?></b></dd><dt><?php _e('Added by the community'); ?></dt><dd><b><?= number_format($communityWords) ?></b></dd></dl></div>
       </aside>
     </div></section>
@@ -108,7 +108,7 @@ if ($sub === 'translate') {
     $dir = get('dir') === 'lango-en' ? 'lango-en' : 'en-lango';
     $res = ($text !== '' && throttle('translate', 60, 600)) ? lango_translate($text, $dir) : null;
     $greet = array_slice(require ROOT . '/app/data/greetings.php', 0, 6);
-    page_start(__('AI Lango Translator'), ['hero' => ['eyebrow' => __('Language & translation'), 'title' => __('AI Lango translator'), 'sub' => __('Translate between English and Leb Lango using the Lango dictionary and textbook sentences.'), 'crumbs' => [[__('Language'), 'language'], [__('Translator'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
+    page_start(__('AI Lango Translator'), ['hero' => ['eyebrow' => __('Language & translation'), 'title' => __('AI Lango translator'), 'sub' => __('Translate words between English and Leb Lango using the Lango dictionary. Whole sentences are coming soon.'), 'crumbs' => [[__('Language'), 'language'], [__('Translator'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section section--tight"><div class="container">
       <form class="trans" id="transform" method="get" action="<?= e(url('language/translate')) ?>">
@@ -121,11 +121,12 @@ if ($sub === 'translate') {
         </div>
         <div class="trans__panes">
           <div class="trans__pane"><label for="tx-in" id="tx-in-label"><?= $dir === 'en-lango' ? e(__('English')) : 'Leb Lango' ?></label>
-            <textarea id="tx-in" name="text" rows="6" maxlength="600" placeholder="<?= e(__('Type a word, phrase or sentence…')) ?>"><?= e($text) ?></textarea></div>
+            <textarea id="tx-in" name="text" rows="6" maxlength="600" placeholder="<?= e(__('Type a word…')) ?>"><?= e($text) ?></textarea></div>
           <div class="trans__pane trans__pane--out"><label id="tx-out-label"><?= $dir === 'en-lango' ? 'Leb Lango' : e(__('English')) ?></label>
-            <div class="trans__out" id="tx-out" aria-live="polite"><?= $res ? e($res['translation']) : '<span class="trans__ph">' . e(__('The translation appears here.')) . '</span>' ?></div>
-            <div class="trans__unk" id="tx-unk"><?php if ($res && $res['unknown_words']): ?><?php _e('Not in the dictionary yet:'); ?> <?php foreach ($res['unknown_words'] as $uw): ?><a href="<?= e(url('contribute', ['type' => 'language', 'word' => $uw])) ?>"><?= e($uw) ?></a> <?php endforeach; ?><?php endif; ?></div></div>
+            <div class="trans__out" id="tx-out" aria-live="polite"><?= $res ? e(!empty($res['coming_soon']) ? $res['message'] : $res['translation']) : '<span class="trans__ph">' . e(__('The translation appears here.')) . '</span>' ?></div>
+            <div class="trans__unk" id="tx-unk"><?php if ($res && !empty($res['coming_soon'])): ?><?php _e('Look up each word:'); ?> <?php foreach ($res['words'] as $uw): ?><a href="<?= e(url('language/dictionary', ['q' => $uw])) ?>"><?= e($uw) ?></a> <?php endforeach; ?><?php elseif ($res && $res['unknown_words']): ?><?php _e('Not in the dictionary yet:'); ?> <?php foreach ($res['unknown_words'] as $uw): ?><a href="<?= e(url('contribute', ['type' => 'language', 'word' => $uw])) ?>"><?= e($uw) ?></a> <?php endforeach; ?><?php endif; ?></div></div>
         </div>
+        <p class="trans__soon"><?= icon('clock') ?> <?php _e('Translating whole sentences is coming soon. For now, type one word and see its meaning; the dictionary also works word by word.'); ?></p>
         <div class="trans__foot"><button class="btn btn--primary" id="tx-go"><?= icon('globe') ?> <?php _e('Translate'); ?></button><a class="btn btn--outline" href="<?= e(url('language/translate')) ?>"><?php _e('Clear'); ?></a></div>
       </form>
     </div></section>
@@ -135,8 +136,8 @@ if ($sub === 'translate') {
         <div class="sugg trans__sugg" id="tx-sugg"><?php foreach ($greet as [$lg, $en]): ?><button type="button" data-text="<?= e($lg) ?>" data-dir="lango-en"><?= e($lg) ?></button><?php endforeach; ?></div>
         <h2 style="font-size:1.35rem;margin-top:30px"><?php _e('How the translator works'); ?></h2>
         <div class="prose" style="font-size:.95rem;line-height:1.75">
-          <p><?php _e('This is a dictionary-based translator, not a full machine-translation model. It first looks for the whole sentence among the worked examples of the Practical Lango Grammar, then matches the longest phrases in the dictionary, and finally translates word by word. Words it does not know are left as they are and listed under the result.'); ?></p>
-          <p><?php _e('Leb Lango grammar is rich — verbs carry the subject as a prefix and tone changes meaning — so treat longer sentences as a starting point and ask a fluent speaker to check them. Every word our community adds to the dictionary is available here as soon as it is approved.'); ?></p>
+          <p><?php _e('Words and the set phrases of the dictionary are translated now, using the Lango dictionary and the worked examples of the Practical Lango Grammar. Translating whole sentences is coming soon: Leb Lango grammar is rich, since verbs carry the subject as a prefix and tone changes meaning, and we want sentences to be right before we offer them.'); ?></p>
+          <p><?php _e('Until then, type a sentence and the page lists its words so you can look each one up in the dictionary. Every word our community adds to the dictionary is available here as soon as it is approved.'); ?></p>
         </div>
       </div>
       <aside class="aside">
@@ -225,8 +226,8 @@ page_start(__('Language'), ['hero' => ['eyebrow' => __('Leb Lango'), 'title' => 
     <div class="lhub__card lhub__card--dark">
       <span class="lhub__ico"><?= icon('globe') ?></span>
       <h2><?php _e('AI Lango translator'); ?></h2>
-      <p><?php _e('Translate phrases and sentences between English and Leb Lango, built from the dictionary and textbook examples.'); ?></p>
-      <form class="lhub__search" action="<?= e(url('language/translate')) ?>"><input type="text" name="text" placeholder="<?= e(__('Type something to translate…')) ?>" aria-label="<?= e(__('Text to translate')) ?>" maxlength="600"><button class="btn btn--gold"><?php _e('Translate'); ?></button></form>
+      <p><?php _e('Translate a word between English and Leb Lango. Whole sentences are coming soon.'); ?></p>
+      <form class="lhub__search" action="<?= e(url('language/translate')) ?>"><input type="text" name="text" placeholder="<?= e(__('Type a word to translate…')) ?>" aria-label="<?= e(__('Text to translate')) ?>" maxlength="600"><button class="btn btn--gold"><?php _e('Translate'); ?></button></form>
       <a class="link" href="<?= e(url('language/translate')) ?>"><?php _e('Open the translator'); ?> <?= icon('arrow') ?></a>
     </div>
   </div>

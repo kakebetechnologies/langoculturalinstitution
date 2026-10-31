@@ -30,6 +30,43 @@ function person_links(int $id): array
     return all("SELECT kind, title, source, url FROM notable_links WHERE notable_id=? AND status='published' ORDER BY sort, id", [$id]);
 }
 
+/**
+ * Dates worth remembering in Lango and Ugandan history, each in the year and on the day it happened (from the notable people pages and the history chapters),
+ * with the next time the date comes round. This fills the Events page when no event has been announced. [month, day, year, title, text]
+ */
+function lango_dates(int $limit = 0): array
+{
+    $all = [
+        [2, 21, 0, 'International Mother Language Day', 'UNESCO marks the day each year for the world’s languages: a good day to learn, speak and record Leb Lango.'],
+        [4, 15, 1940, 'Birth of Gen. David Oyite-Ojok', 'The Lango army officer who helped lead the 1979 war that removed Idi Amin was born in Lira District.'],
+        [6, 20, 1997, 'Death of John Akii-Bua', 'Uganda’s first Olympic champion died in Kampala, aged 47, and was given a state funeral.'],
+        [7, 1, 2020, 'Lira becomes a city', 'Lira Municipality became Lira City on 1 July 2020. Dokolo (2006), Otuke (2009), Alebtong and Kole (2010) and Kwania (2018) also began on 1 July.'],
+        [9, 2, 1972, 'Akii-Bua wins Olympic gold', 'John Akii-Bua won the 400 metres hurdles at the Munich Games in a world record 47.82 seconds, the first Olympic gold for Uganda.'],
+        [10, 9, 1962, 'Uganda’s independence', 'Uganda became independent in 1962 with Milton Obote, born in Akokoro, Apac, as its first Prime Minister.'],
+        [10, 10, 2005, 'Death of Milton Obote', 'The former Prime Minister and President of Uganda died in Johannesburg, aged 79.'],
+        [12, 2, 1983, 'Death of Gen. Oyite-Ojok', 'The army Chief of Staff died when his helicopter crashed in Nakasongola District.'],
+        [12, 3, 1949, 'Birth of John Akii-Bua', 'The future Olympic champion was born in Lira.'],
+        [12, 28, 1925, 'Birth of Milton Obote', 'Apollo Milton Obote was born at Akokoro village in Apac.'],
+    ];
+    $today = strtotime('today');
+    $out = [];
+    foreach ($all as [$m, $d, $y, $title, $text]) {
+        $next = mktime(0, 0, 0, $m, $d, (int)date('Y'));
+        if ($next < $today) $next = mktime(0, 0, 0, $m, $d, (int)date('Y') + 1);
+        $out[] = ['month' => $m, 'day' => $d, 'year' => $y ?: null, 'title' => $title, 'text' => $text, 'next' => date('Y-m-d', $next), 'in_days' => (int)round(($next - $today) / 86400),
+            'years_ago' => $y ? (int)date('Y', $next) - $y : null];
+    }
+    usort($out, fn($a, $b) => $a['in_days'] <=> $b['in_days']);
+    return $limit > 0 ? array_slice($out, 0, $limit) : $out;
+}
+
+/** Articles, profiles, documentaries and papers about Lango people on other websites (we only link to them); shown while no news has been written. */
+function web_reads(int $limit = 12): array
+{
+    return all("SELECT l.title, l.source, l.url, l.kind, n.name person, n.slug person_slug FROM notable_links l JOIN notables n ON n.id=l.notable_id
+                WHERE l.status='published' AND n.status='published' AND l.kind IN ('article','profile','documentary','research') ORDER BY l.id DESC LIMIT " . (int)$limit);
+}
+
 function redirect(string $to): never
 {
     if (!preg_match('#^https?://#', $to) && !str_starts_with($to, BASE . '/') && $to !== BASE) $to = url($to);
@@ -237,7 +274,7 @@ const PROGRAM_CATS = [
     'conservation' => 'Conservation', 'development' => 'Community Development', 'digital' => 'Digital Innovation',
 ];
 const CONSERVATION = [
-    'unknown' => 'Not assessed', 'least_concern' => 'Least concern', 'vulnerable' => 'Vulnerable',
+    'unknown' => 'Not assessed', 'least_concern' => 'Least concern', 'near_threatened' => 'Near threatened', 'vulnerable' => 'Vulnerable',
     'endangered' => 'Endangered', 'critical' => 'Critically endangered', 'locally_extinct' => 'Locally extinct',
     'reintroduced' => 'Reintroduced',
 ];

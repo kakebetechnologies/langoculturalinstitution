@@ -48,6 +48,11 @@ page_start(__('Professionals Directory'), ['hero' => ['eyebrow' => __('Connect &
   <?php if ($rows): ?><div class="grid g4"><?php foreach ($rows as $p): ?>
     <div class="person box reveal" style="border-top-color:var(--clay)"><div class="ph" style="width:110px;height:110px"><?= $p['photo'] ? '<img loading="lazy" src="' . e(media_url($p['photo'])) . '" alt="">' : icon('user') ?></div><h3 style="font-size:1.1rem"><?= e($p['name']) ?></h3><small><?= e($p['industry']) ?></small><p style="font-size:.85rem;color:var(--muted);margin:8px 0 0"><?= e((string)$p['expertise']) ?><?= $p['clan'] ? '<br>' . e(__('Clan')) . ': ' . e($p['clan']) : '' ?><?= $p['location'] ? '<br>' . e($p['location']) : '' ?></p></div>
   <?php endforeach; ?></div>
-  <?php else: echo empty_state(__('The directory is just starting'), __('Be among the first Lango professionals listed, and help mentor the next generation.'), 'users', '<p><a class="btn btn--primary btn--sm" href="' . e(url('professionals/join')) . '">' . e(__('Add yourself')) . '</a></p>'); endif; ?>
+  <?php else: $pub = all("SELECT * FROM notables WHERE status='published' AND category IN ('public-service','statesman','military','sports') ORDER BY featured DESC, sort LIMIT 6"); ?>
+    <div class="sec-head" style="max-width:720px"><span class="eyebrow"><?php _e('The directory is just starting'); ?></span><h2><?php _e('Langos in public life'); ?></h2>
+      <p><?php _e('Be among the first Lango professionals listed, and help mentor the next generation. Until then, meet some of the Langos whose careers young people look up to.'); ?></p>
+      <p><a class="btn btn--primary btn--sm" href="<?= e(url('professionals/join')) ?>"><?php _e('Add yourself'); ?></a></p></div>
+    <div class="grid g3"><?php foreach ($pub as $n) echo person_card($n); ?></div>
+  <?php endif; ?>
 </div></section>
 <?php page_end(); ?>

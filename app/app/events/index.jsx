@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import AppText from '../../components/AppText';
+import Button from '../../components/Button';
 import Pill from '../../components/Pill';
 import Row from '../../components/Row';
 import Screen from '../../components/Screen';
@@ -18,11 +19,13 @@ export default function Events() {
   const [past, setPast] = useState('0');
   const { data, loading, error, retry, reload, refreshing } = useFetch('/events', { params: { past: past === '1' ? 1 : undefined } });
   const rows = data?.data ?? [];
+  const remember = data?.remember ?? [];
+  const showRemember = past !== '1' && !rows.length && remember.length > 0;   // nothing announced: days that matter in Lango's story
 
   return (
     <Screen title={t('Events')} onRefresh={reload} refreshing={refreshing}>
       <Segmented value={past} onChange={setPast} options={[{ value: '0', label: t('Upcoming') }, { value: '1', label: t('Past events') }]} style={{ marginBottom: 14 }} />
-      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="calendar-outline" emptyTitle={past === '1' ? 'No past events' : 'No upcoming events'} emptyMessage="Check back soon.">
+      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length && !showRemember} emptyIcon="calendar-outline" emptyTitle={past === '1' ? 'No past events' : 'No upcoming events'} emptyMessage="Check back soon.">
         {rows.map((e) => {
           const d = dayParts(e.starts_at);
           return (
@@ -42,6 +45,33 @@ export default function Events() {
             </Row>
           );
         })}
+        {showRemember ? (
+          <>
+            <AppText variant="subheading">{t('Dates to remember')}</AppText>
+            <AppText variant="caption" style={{ marginBottom: 10 }}>
+              {t('No event has been announced yet. Here are days that matter in the story of Lango, with the next time each one comes round.')}
+            </AppText>
+            {remember.map((r) => {
+              const d = dayParts(`${r.next} 00:00:00`);
+              return (
+                <Row
+                  key={r.title}
+                  title={r.title}
+                  subtitle={r.text}
+                  meta={[r.in_days === 0 ? t('Today') : t('In {n} days', { n: r.in_days }), r.years_ago ? t('{n} years ago', { n: r.years_ago }) : null].filter(Boolean).join(' · ')}
+                  numberOfLines={3}
+                  right={
+                    <View style={styles.date}>
+                      <AppText style={styles.day}>{d.day}</AppText>
+                      <AppText style={styles.month}>{d.month}</AppText>
+                    </View>
+                  }
+                />
+              );
+            })}
+            <Button small variant="outline" icon="add-circle-outline" title={t('Tell us about an event')} onPress={() => router.push({ pathname: '/contribute/new', params: { type: 'cultural' } })} style={{ alignSelf: 'flex-start', marginTop: 8 }} />
+          </>
+        ) : null}
       </StateView>
     </Screen>
   );

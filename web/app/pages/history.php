@@ -55,7 +55,7 @@ page_start(__('Our History'), ['hero' => ['eyebrow' => __('Origins, migration & 
           <span class="chap__t"><span class="chap__era"><?= icon($s['icon'] ?: 'history') ?> <?= e((string)$s['era']) ?></span><b><?= e($s['title']) ?></b><small><?= e((string)$s['summary']) ?></small></span>
           <?= icon('chevron', 'chap__chev') ?>
         </summary>
-        <div class="chap__body prose"><?= rich($s['body']) ?></div>
+        <div class="chap__body prose"><?php if (!empty($s['image'])): ?><figure class="chapfig"><img loading="lazy" src="<?= e(media_url($s['image'])) ?>" alt="<?= e($s['title']) ?>"><?php if (!empty($s['image_credit'])): ?><figcaption><?= e((string)$s['image_credit']) ?></figcaption><?php endif; ?></figure><?php endif; ?><?= rich($s['body']) ?></div>
       </details>
     <?php endforeach; ?>
 

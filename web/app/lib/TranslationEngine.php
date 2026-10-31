@@ -79,7 +79,10 @@ final class TranslationEngine
     }
 
     /**
-     * @return array{translation:string, unknown_words:string[]}
+     * `sentence` is true when the whole text is a worked example, and `pieces` counts the dictionary matches that made up the answer, so a caller
+     * can tell a single word or set phrase (one piece) from a sentence built word by word.
+     *
+     * @return array{translation:string, unknown_words:string[], pieces:int, sentence:bool}
      */
     public function translate(string $text, string $direction): array
     {
@@ -88,6 +91,8 @@ final class TranslationEngine
             return [
                 'translation' => $sentenceMatch,
                 'unknown_words' => [],
+                'pieces' => 1,
+                'sentence' => true,
             ];
         }
 
@@ -115,6 +120,7 @@ final class TranslationEngine
         }
 
         $unknown = [];
+        $pieces = 0;
         $wPos = 0;
         $wCount = count($wordIndices);
 
@@ -145,6 +151,7 @@ final class TranslationEngine
 
             if ($match !== null) {
                 [$translated, $wordsConsumed] = $match;
+                $pieces++;
                 $firstWordIdx = $wordIndices[$wPos];
                 $parts[$firstWordIdx] = $this->matchCase($parts[$firstWordIdx], $translated);
 
@@ -165,6 +172,8 @@ final class TranslationEngine
         return [
             'translation' => implode('', $parts),
             'unknown_words' => array_values(array_unique($unknown)),
+            'pieces' => $pieces,
+            'sentence' => false,
         ];
     }
 

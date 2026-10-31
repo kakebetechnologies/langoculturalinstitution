@@ -259,6 +259,14 @@ function lango_translate(string $text, string $direction): array
     $text = mb_substr(trim($text), 0, 600);
     if ($direction === 'lango-en') $text = lango_fold($text, false);
     $r = translator()->translate($text, $direction);
+    // Sentences are not ready: only a single word, a set phrase from the dictionary or a worked textbook sentence is translated.
+    // Anything longer gets a "coming soon" notice and its words, so each can be looked up one by one in the dictionary.
+    preg_match_all("/[\p{L}\p{M}]+(?:['\-][\p{L}\p{M}]+)*/u", $text, $w);
+    $words = array_values(array_unique(array_map('mb_strtolower', $w[0])));
+    if (count($w[0]) > 1 && !$r['sentence'] && !($r['pieces'] === 1 && !$r['unknown_words'])) {
+        return ['translation' => '', 'unknown_words' => [], 'coming_soon' => true, 'words' => array_slice($words, 0, 12),
+            'message' => __('Sentence translation is coming soon. For now the dictionary works word by word: look up each word below.')];
+    }
     return ['translation' => $r['translation'], 'unknown_words' => $r['unknown_words']];
 }
 

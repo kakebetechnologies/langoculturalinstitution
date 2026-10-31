@@ -18,7 +18,7 @@ if ($sub === 'documents') {
         <form method="get" style="margin-left:auto"><input type="search" name="q" value="<?= e($qs) ?>" placeholder="<?= e(__('Search documents…')) ?>" style="padding:.55em 1em;border-radius:999px" aria-label="Search"></form></div>
       <?php if ($rows): ?><div class="grid g3"><?php foreach ($rows as $d): ?>
         <a class="box reveal" style="display:block;color:inherit" href="<?= e(url('download/' . $d['id'])) ?>"><div class="meta"><span class="tag"><?= e(__(ucfirst($d['category']))) ?></span><?php if ($d['year']): ?><span><?= (int)$d['year'] ?></span><?php endif; ?></div>
-          <h4 style="margin-top:10px"><?= e($d['title']) ?></h4><p style="color:var(--muted);font-size:.92rem"><?= e(excerpt($d['description'], 120)) ?></p><b><?= icon('download') ?> <?php _e('Download'); ?></b></a>
+          <h4 style="margin-top:10px"><?= e($d['title']) ?></h4><p style="color:var(--muted);font-size:.92rem"><?= e(excerpt($d['description'], 120)) ?></p><b><?php if (preg_match('#^https://#i', (string)$d['file'])): ?><?= icon('external') ?> <?php _e('Read online'); ?><?php else: ?><?= icon('download') ?> <?php _e('Download'); ?><?php endif; ?></b></a>
       <?php endforeach; ?></div>
       <?php else: echo empty_state(__('No documents published yet'), __('Documents and historical records will be added here.'), 'file'); endif; ?>
     </div></section>

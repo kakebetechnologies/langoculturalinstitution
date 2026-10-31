@@ -1,6 +1,7 @@
 // One heritage item (GET /api/v1/heritage/{slug}): its story, where it is and a link to watch or listen when there is media.
 import { Linking, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import AppText from '../../components/AppText';
 import DetailScreen from '../../components/DetailScreen';
 import InfoRow from '../../components/InfoRow';
 import Pill from '../../components/Pill';
@@ -23,6 +24,11 @@ export default function HeritageItem() {
             {h.district ? <Pill label={h.district} icon="location" tone="sky" /> : null}
             {h.verified ? <Pill label={t('Verified')} icon="checkmark" tone="green" /> : null}
           </View>
+          {h.image_credit ? (
+            <AppText variant="caption" style={{ marginBottom: SPACING.sm }}>
+              {h.image_credit}
+            </AppText>
+          ) : null}
           <RichText html={h.body_html} />
           {h.video_url ? <InfoRow icon="play-circle-outline" title={t('Watch the video')} onPress={() => Linking.openURL(h.video_url).catch(() => {})} /> : null}
           {h.audio ? <InfoRow icon="musical-notes-outline" title={t('Listen to the recording')} onPress={() => Linking.openURL(h.audio).catch(() => {})} /> : null}

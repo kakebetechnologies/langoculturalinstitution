@@ -66,6 +66,13 @@ page_start(__('News & Blog'), ['hero' => ['eyebrow' => __('News & blog'), 'title
     <form method="get" style="margin-left:auto;display:flex;gap:8px"><?php if ($cat): ?><input type="hidden" name="category" value="<?= e($cat) ?>"><?php endif; ?><input type="search" name="q" value="<?= e($qs) ?>" placeholder="<?= e(__('Search news…')) ?>" style="padding:.55em 1em;border-radius:999px;width:200px" aria-label="Search"></form>
   </div>
   <?php if ($rows): ?><div class="grid g3"><?php foreach ($rows as $p) echo card(url('news/' . $p['slug']), $p['image'], t($p, 'title'), t($p, 'excerpt'), (string)$p['cat'], '<span>' . e(fmt_date($p['published_at'])) . '</span>' . ($p['author_name'] ? '<span>' . e($p['author_name']) . '</span>' : '')); ?></div><?= pager($pg) ?>
-  <?php else: echo empty_state(__('No stories found'), __('Check back soon or try another category.'), 'file'); endif; ?>
+  <?php else: $reads = web_reads(12); ?>
+    <div class="sec-head" style="max-width:720px"><span class="eyebrow"><?php _e('From around the web'); ?></span><h2><?php _e('Read about Lango'); ?></h2>
+      <p><?php _e('We have not published our own news yet. Meanwhile, here are articles, profiles and documentaries about Lango people on other websites. They open on the sites that published them.'); ?></p></div>
+    <div class="reads"><?php foreach ($reads as $r): ?>
+      <a class="read reveal" href="<?= e($r['url']) ?>" target="_blank" rel="noopener nofollow"><span class="read__k"><?= e(__(['article' => 'Article', 'profile' => 'Profile', 'documentary' => 'Documentary', 'research' => 'Research'][$r['kind']] ?? 'Link')) ?> · <?= e((string)$r['source']) ?></span>
+        <b><?= e($r['title']) ?></b><small><?= e(sprintf(__('About %s'), $r['person'])) ?></small></a><?php endforeach; ?></div>
+    <p style="margin-top:28px"><a class="btn btn--outline btn--sm" href="<?= e(url('people')) ?>"><?php _e('Meet the notable Langos'); ?></a></p>
+  <?php endif; ?>
 </div></section>
 <?php page_end(); ?>

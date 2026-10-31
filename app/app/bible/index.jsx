@@ -7,6 +7,7 @@ import { StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import AppText from '../../components/AppText';
+import BibleBooks from '../../components/BibleBooks';
 import BibleLinks from '../../components/BibleLinks';
 import Row from '../../components/Row';
 import Screen from '../../components/Screen';
@@ -69,7 +70,7 @@ export default function Bible() {
   return (
     <Screen title={bible?.title || t('Lango Bible')} onRefresh={reload} refreshing={refreshing}>
       <StateView loading={loading} error={error} onRetry={retry}>
-        {bible && !bible.ready ? <BibleLinks bible={bible} first /> : null}
+        {bible && !bible.ready ? bible.links?.some((l) => l.version) ? <BibleBooks bible={bible} /> : <BibleLinks bible={bible} first /> : null}
         {bible?.ready ? (
           <>
             <TextField value={q} onChangeText={setQ} placeholder={t('Search the Bible')} autoCapitalize="none" returnKeyType="search" />

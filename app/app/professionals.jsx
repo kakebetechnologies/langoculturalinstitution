@@ -63,7 +63,18 @@ export default function Professionals() {
       ) : (
         <View style={{ height: 12 }} />
       )}
-      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="briefcase-outline" emptyTitle="The directory is just starting" emptyMessage="Be among the first Lango professionals listed, and help mentor the next generation.">
+      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length && !(data?.people ?? []).length} emptyIcon="briefcase-outline" emptyTitle="The directory is just starting" emptyMessage="Be among the first Lango professionals listed, and help mentor the next generation.">
+        {!rows.length && (data?.people ?? []).length ? (
+          <>
+            <AppText variant="subheading">{t('Langos in public life')}</AppText>
+            <AppText variant="caption" style={{ marginBottom: 10 }}>
+              {t('The directory is just starting. Be among the first Lango professionals listed, and help mentor the next generation. Until then, meet some of the Langos whose careers young people look up to.')}
+            </AppText>
+            {(data?.people ?? []).map((p) => (
+              <Row key={p.id} avatar={{ name: p.short_name, photo: p.photo }} title={p.short_name} subtitle={p.title} onPress={() => router.push(`/people/${p.slug}`)} />
+            ))}
+          </>
+        ) : null}
         {rows.map((p) => (
           <Row key={p.id} avatar={{ name: p.name, photo: p.photo }} title={p.name} subtitle={[p.expertise, p.clan ? `${p.clan} ${t('clan')}` : '', p.location].filter(Boolean).join(' · ')} meta={p.industry} />
         ))}

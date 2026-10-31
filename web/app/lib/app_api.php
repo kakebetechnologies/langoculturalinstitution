@@ -474,7 +474,7 @@ function api_app(string $res, array $seg): void
 
         case 'history':
             json_out(['data' => [
-                'sections' => array_map(fn($s) => ['slug' => $s['slug'], 'title' => $s['title'], 'era' => $s['era'], 'icon' => $s['icon'], 'summary' => $s['summary'], 'body_html' => rich($s['body'])], all("SELECT * FROM history_sections WHERE status='published' ORDER BY sort, id")),
+                'sections' => array_map(fn($s) => ['slug' => $s['slug'], 'title' => $s['title'], 'era' => $s['era'], 'icon' => $s['icon'], 'summary' => $s['summary'], 'body_html' => rich($s['body']), 'image' => api_abs($s['image'] ?? null), 'image_credit' => !empty($s['image']) ? ($s['image_credit'] ?? null) : null], all("SELECT * FROM history_sections WHERE status='published' ORDER BY sort, id")),
                 'timeline' => all('SELECT year, title, body FROM timeline ORDER BY sort, id'),
                 'glossary' => all("SELECT term, meaning, note FROM glossary WHERE status='published' ORDER BY sort, term"),
             ]]);
@@ -484,7 +484,7 @@ function api_app(string $res, array $seg): void
                 $h = one("SELECT h.*, d.name district FROM heritage_items h LEFT JOIN districts d ON d.id=h.district_id WHERE h.slug=? AND h.status='published'", [$id]);
                 if (!$h) api_err('We could not find that item.', 404);
                 json_out(['data' => ['id' => (int)$h['id'], 'slug' => $h['slug'], 'title' => t($h, 'title'), 'category' => $h['category'], 'category_label' => HERITAGE_CATS[$h['category']][0] ?? $h['category'], 'summary' => $h['summary'], 'body_html' => rich(t($h, 'body')),
-                    'image' => api_abs($h['image']), 'video_url' => $h['video_url'], 'audio' => api_abs($h['audio']), 'district' => $h['district'], 'lat' => $h['lat'] !== null ? (float)$h['lat'] : null, 'lng' => $h['lng'] !== null ? (float)$h['lng'] : null, 'verified' => (bool)$h['verified']]]);
+                    'image' => api_abs($h['image']), 'image_credit' => $h['image'] ? ($h['image_credit'] ?? null) : null, 'video_url' => $h['video_url'], 'audio' => api_abs($h['audio']), 'district' => $h['district'], 'lat' => $h['lat'] !== null ? (float)$h['lat'] : null, 'lng' => $h['lng'] !== null ? (float)$h['lng'] : null, 'verified' => (bool)$h['verified']]]);
             }
             [$page, $limit, $off] = api_paging(30);
             $where = ["status='published'"]; $par = [];
@@ -501,14 +501,14 @@ function api_app(string $res, array $seg): void
                 $s = one("SELECT * FROM species WHERE slug=? AND status='published'", [$id]);
                 if (!$s) api_err('We could not find that species.', 404);
                 json_out(['data' => ['id' => (int)$s['id'], 'slug' => $s['slug'], 'name' => $s['name'], 'name_lg' => $s['name_lg'], 'scientific_name' => $s['scientific_name'], 'kind' => $s['kind'], 'conservation' => $s['conservation'], 'conservation_label' => CONSERVATION[$s['conservation']] ?? $s['conservation'],
-                    'medicinal' => (bool)$s['medicinal'], 'uses' => $s['uses'], 'habitat' => $s['habitat'], 'body_html' => rich($s['body']), 'image' => api_abs($s['image'])]]);
+                    'medicinal' => (bool)$s['medicinal'], 'uses' => $s['uses'], 'habitat' => $s['habitat'], 'body_html' => rich($s['body']), 'image' => api_abs($s['image']), 'image_credit' => $s['image'] ? ($s['image_credit'] ?? null) : null]]);
             }
             $rows = all("SELECT id, name, name_lg, slug, scientific_name, kind, conservation, medicinal, image FROM species WHERE status='published' ORDER BY name");
             json_out(['data' => array_map(fn($s) => ['id' => (int)$s['id'], 'slug' => $s['slug'], 'name' => $s['name'], 'name_lg' => $s['name_lg'], 'scientific_name' => $s['scientific_name'], 'kind' => $s['kind'], 'conservation_label' => CONSERVATION[$s['conservation']] ?? $s['conservation'], 'medicinal' => (bool)$s['medicinal'], 'image' => api_abs($s['image'])], $rows)]);
 
         case 'library':
             $rows = all("SELECT id, title, category, year, description, downloads FROM documents WHERE status='published' ORDER BY year DESC, id DESC");
-            foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['download_url'] = api_abs('download/' . $r['id']); }
+            foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['download_url'] = api_abs('download/' . $r['id']); }   // a reading-list entry redirects to its publisher's own page
             json_out(['data' => $rows]);
 
         case 'news':
@@ -521,7 +521,7 @@ function api_app(string $res, array $seg): void
             [$page, $limit, $off] = api_paging(15);
             $total = (int)val("SELECT COUNT(*) FROM posts WHERE status='published' AND published_at<=NOW()");
             $rows = all("SELECT p.*, c.name cat FROM posts p LEFT JOIN post_categories c ON c.id=p.category_id WHERE p.status='published' AND p.published_at<=NOW() ORDER BY p.featured DESC, p.published_at DESC LIMIT $limit OFFSET $off");
-            json_out(['data' => array_map('api_post', $rows), 'page' => $page, 'meta' => api_meta($page, $limit, $total)]);
+            json_out(['data' => array_map('api_post', $rows), 'page' => $page, 'meta' => api_meta($page, $limit, $total), 'web' => $page === 1 && !$total ? web_reads(12) : []]);   // with no news yet, articles on other websites
 
         /* ---------- language ---------- */
         case 'dictionary':
@@ -606,7 +606,7 @@ function api_app(string $res, array $seg): void
             }
             $upcoming = get('past') !== '1';
             $rows = all("SELECT * FROM events WHERE status='published' AND starts_at" . ($upcoming ? '>=CURDATE() ORDER BY starts_at' : '<CURDATE() ORDER BY starts_at DESC') . ' LIMIT 50');
-            json_out(['data' => array_map('api_event', $rows)]);
+            json_out(['data' => array_map('api_event', $rows), 'remember' => $upcoming && !$rows ? lango_dates(12) : []]);   // with no event announced, dates to remember
 
         case 'professionals':
             if ($m === 'POST') {
@@ -624,7 +624,8 @@ function api_app(string $res, array $seg): void
             if (get('industry') !== '') { $where[] = 'p.industry=?'; $par[] = get('industry'); }
             $rows = all('SELECT p.id, p.name, p.industry, p.expertise, p.location, p.bio, p.photo, c.name clan FROM professionals p LEFT JOIN clans c ON c.id=p.clan_id WHERE ' . implode(' AND ', $where) . ' ORDER BY p.name LIMIT 100', $par);
             foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['photo'] = api_abs($r['photo']); }
-            json_out(['data' => $rows, 'industries' => array_column(all("SELECT DISTINCT industry FROM professionals WHERE status='published' ORDER BY industry"), 'industry')]);
+            json_out(['data' => $rows, 'industries' => array_column(all("SELECT DISTINCT industry FROM professionals WHERE status='published' ORDER BY industry"), 'industry'),
+                'people' => $rows ? [] : array_map(fn($n) => api_person($n), all("SELECT * FROM notables WHERE status='published' AND category IN ('public-service','statesman','military','sports') ORDER BY featured DESC, sort LIMIT 6"))]);   // while the directory is empty: Langos in public life
 
         case 'programs':
             if ($id !== '') {

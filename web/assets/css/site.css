@@ -514,6 +514,11 @@ input[type=file]{width:100%;padding:12px;border:1.5px dashed #cfd3da;border-radi
 .trans__pane textarea{min-height:170px;font-size:1.05rem}
 .trans__out{min-height:170px;border:1.5px solid var(--line);border-radius:var(--radius-s);background:var(--paper);padding:.8em .9em;font:600 1.15rem/1.55 var(--serif);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
 .trans__out.busy{opacity:.5}.trans__ph{font:400 .95rem var(--sans);color:var(--muted)}
+.imgcredit{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 16px}.imgcredit .icon{flex:none;width:15px;height:15px;margin-top:2px}
+.chapfig{margin:0 0 20px;float:right;max-width:260px;margin-left:24px}.chapfig img{width:100%;border-radius:14px;box-shadow:var(--shadow-s)}.chapfig figcaption{font-size:.76rem;color:var(--muted);margin-top:6px;line-height:1.4}
+.article .chapfig{float:none;max-width:100%;margin:0 0 22px}.article .chapfig img{max-height:380px;width:auto;max-width:100%}
+@media(max-width:620px){.chapfig{float:none;max-width:100%;margin-left:0}}
+.trans__soon{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;padding:12px 14px;background:var(--paper);border-left:4px solid var(--yellow);border-radius:8px;font-size:.9rem;color:var(--ink)}.trans__soon svg{flex:none;width:18px;height:18px;margin-top:2px;color:var(--red-d)}
 .trans__unk{font-size:.82rem;color:var(--muted);margin-top:8px;min-height:1.2em}.trans__unk a{font-weight:700;margin-right:6px;text-decoration:underline}
 .trans__foot{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .trans__sugg{margin-top:10px}
@@ -931,3 +936,76 @@ body.auth .au{padding-bottom:64px}body.mc .mc-body{padding-bottom:64px}
 .biblecard b{font-size:1.2rem;letter-spacing:-.01em}.biblecard small{color:var(--text);font-size:.92rem}
 .biblecard .go{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font:600 .88rem var(--sans);color:var(--red-d)}.biblecard .go .icon{width:15px;height:15px}
 @media(max-width:640px){.biblecards{grid-template-columns:1fr}}
+
+/* ---------- home: the Lango App look on phones (.mob) and the long page on large screens (.dsk) ---------- */
+.mob{display:none}
+.mh-scroll{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px var(--gutter) 14px;margin:0 calc(var(--gutter) * -1);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mh-scroll::-webkit-scrollbar{display:none}
+.mh-photo{flex:0 0 76%;max-width:340px;scroll-snap-align:start;position:relative;margin:0;border-radius:22px;overflow:hidden;aspect-ratio:4/5;background:var(--navy);box-shadow:var(--shadow-s)}
+.mh-photo img{width:100%;height:100%;object-fit:cover}
+.mh-photo::after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(180deg,transparent,rgba(14,16,20,.82))}
+.mh-photo figcaption{position:absolute;z-index:1;left:16px;right:16px;bottom:14px;color:#fff;font:700 1rem/1.25 var(--sans)}
+.mh-scroll--wide{padding:2px 0 14px;margin:0}.mh-scroll--wide .mh-photo{flex:0 0 280px;aspect-ratio:3/4}
+.mh-scroll--cards .ncard{flex:0 0 70%;max-width:300px;scroll-snap-align:start}
+@media(max-width:760px){
+  .mob{display:block}.dsk{display:none!important}
+  .mh{background:var(--canvas);padding:14px 0 30px}
+  .mh .container{padding-left:var(--gutter);padding-right:var(--gutter)}
+  .mh-hero{position:relative;border-radius:28px;overflow:hidden;color:#fff;text-align:center;background:var(--navy);box-shadow:var(--shadow-s)}
+  .mh-hero::before{content:"";position:absolute;z-index:2;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--red) 0 33.4%,var(--yellow) 0 66.7%,var(--sky) 0)}
+  .mh-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .mh-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,16,20,.28),rgba(14,16,20,.74))}
+  .mh-hero__in{position:relative;z-index:1;padding:54px 22px 80px}
+  .mh-eyebrow{display:block;font:800 .64rem var(--sans);letter-spacing:.17em;text-transform:uppercase;color:var(--yellow)}
+  .mh-hero h1{font-size:2.45rem;line-height:1.05;margin:12px 0 8px;color:#fff;letter-spacing:-.025em}
+  .mh-hero p{margin:0;font-size:1.1rem;opacity:.94;color:#fff}
+  .mh-search{position:relative;z-index:3;display:flex;align-items:center;gap:8px;margin:-34px 12px 0;padding:6px 6px 6px 20px;background:#fff;border-radius:999px;box-shadow:var(--shadow)}
+  .mh-search input{flex:1;min-width:0;border:0;outline:0;background:none;font:500 1rem var(--sans);color:var(--ink);padding:10px 0}
+  .mh-search button{flex:none;width:46px;height:46px;border:0;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;cursor:pointer}
+  .mh-search button .icon{width:20px;height:20px}
+  .mh-word{position:relative;display:block;margin-top:20px;padding:26px 24px 24px;border-radius:28px;background:var(--yellow);color:var(--ink);overflow:hidden;box-shadow:var(--shadow-s)}
+  .mh-word::before{content:"";position:absolute;right:-44px;top:-44px;width:150px;height:150px;border-radius:50%;background:var(--red)}
+  .mh-word::after{content:"";position:absolute;right:92px;top:-20px;width:62px;height:62px;border-radius:50%;background:var(--sky)}
+  .mh-word small{position:relative;z-index:1;display:block;font:800 .68rem var(--sans);letter-spacing:.16em;text-transform:uppercase}
+  .mh-word b{position:relative;z-index:1;display:block;font:800 3rem/1.05 var(--sans);letter-spacing:-.03em;margin:16px 0 4px;word-break:break-word;padding-right:60px}
+  .mh-word span{position:relative;z-index:1;display:block;font-size:1.05rem;padding-right:70px}
+  .mh-word i{position:absolute;z-index:1;right:18px;bottom:18px;width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center}
+  .mh-word i .icon{width:20px;height:20px}
+  .mh-head{display:flex;align-items:center;justify-content:space-between;margin:28px 0 12px}
+  .mh-head h2{font-size:1.35rem;margin:0;letter-spacing:-.02em}
+  .mh-head a{display:inline-flex;align-items:center;gap:4px;font:700 .85rem var(--sans);color:var(--red-d)}.mh-head a .icon{width:14px;height:14px}
+  .mh-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .mh-tiles a{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 6px 14px;background:#fff;border-radius:22px;box-shadow:var(--shadow-s);color:var(--ink);text-align:center}
+  .mh-tiles span{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:#fde8e9;color:var(--red-d)}
+  .mh-tiles a:nth-child(3n+2) span{background:#fff6c4;color:#7a5c00}.mh-tiles a:nth-child(3n) span{background:#e3f6fe;color:var(--sky-d)}
+  .mh-tiles span .icon{width:22px;height:22px}.mh-tiles b{font:700 .82rem/1.2 var(--sans)}
+  .mh-ask{display:flex;align-items:center;gap:14px;margin-top:24px;padding:16px;border-radius:24px;color:#fff;background:linear-gradient(135deg,#14161b 0%,#2b1015 60%,#6d0f18 100%);box-shadow:var(--shadow-s);position:relative;overflow:hidden}
+  .mh-ask::after{content:"";position:absolute;inset:auto 0 0 0;height:5px;background:linear-gradient(90deg,var(--red) 0 33.4%,var(--yellow) 0 66.7%,var(--sky) 0)}
+  .mh-ask>span{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:var(--yellow);color:var(--ink)}.mh-ask>span .icon{width:24px;height:24px}
+  .mh-ask div{flex:1;min-width:0}.mh-ask b{display:block;font:800 1.05rem var(--sans)}.mh-ask small{display:block;opacity:.8;font-size:.85rem;margin-top:2px}
+  .mh-ask i{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--yellow);color:var(--ink)}.mh-ask i .icon{width:18px;height:18px}
+  .mh-cta{margin-top:22px;padding:24px 22px;border-radius:28px;background:#fff;box-shadow:var(--shadow-s)}
+  .mh-cta h2{font-size:1.4rem;margin:0 0 8px;letter-spacing:-.02em}.mh-cta p{margin:0 0 16px;color:var(--text);font-size:.96rem}
+  .mh-cta .btn--gold{justify-content:center}
+  .mh-events{padding-top:6px}
+}
+@media(min-width:761px){.mh-scroll--wide .mh-photo{flex-basis:300px}}
+
+/* ---------- "read about Lango" list (news page while no news has been written) ---------- */
+.reads{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.read{display:flex;flex-direction:column;gap:6px;padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-s);box-shadow:var(--shadow-s);color:var(--ink);transition:transform .15s,box-shadow .15s}
+.read:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.read__k{font:700 .66rem var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--red-d)}
+.read b{font:700 1.02rem/1.35 var(--sans)}.read small{color:var(--muted)}
+
+/* ---------- Lango Bible: book and chapter chooser and the reader ---------- */
+.bible-frame{width:100%;height:78vh;min-height:520px;border:1px solid var(--line);border-radius:var(--radius-s);background:#fff}
+.bread-nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.bookgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.bookitem{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-s)}
+.bookitem summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;font-weight:700;color:var(--ink)}
+.bookitem summary::-webkit-details-marker{display:none}.bookitem summary small{color:var(--muted);font-weight:600}
+.bookitem[open]{grid-column:1/-1}
+.chgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;padding:6px 14px 16px}
+.chgrid a{display:grid;place-items:center;height:42px;border-radius:10px;background:var(--paper);font-weight:700;color:var(--ink)}.chgrid a:hover{background:var(--yellow)}
+@media(max-width:620px){.bible-frame{height:74vh}}

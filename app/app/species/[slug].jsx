@@ -27,6 +27,11 @@ export default function SpeciesPage() {
           {s.habitat ? <InfoRow icon="earth-outline" title={t('Habitat')} subtitle={s.habitat} /> : null}
           {s.uses ? <InfoRow icon="flask-outline" title={t('Traditional uses')} subtitle={s.uses} /> : null}
           <AppText style={{ height: 8 }} />
+          {s.image_credit ? (
+            <AppText variant="caption" style={{ marginBottom: SPACING.sm }}>
+              {s.image_credit}
+            </AppText>
+          ) : null}
           <RichText html={s.body_html} />
         </>
       ) : null}

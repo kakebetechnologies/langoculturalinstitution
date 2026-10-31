@@ -50,6 +50,14 @@ function lci_upgrade(PDO $pdo): array
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $addCol('notables', 'photo_credit', 'VARCHAR(255) NULL');
     $addCol('notables', 'photo_source', 'VARCHAR(255) NULL');
+    // photo credits for heritage entries, species and history chapters, and the "near threatened" conservation status
+    $addCol('heritage_items', 'image_credit', 'VARCHAR(255) NULL');
+    $addCol('species', 'image_credit', 'VARCHAR(255) NULL');
+    $consType = (string)$pdo->query("SELECT column_type FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='species' AND column_name='conservation'")->fetchColumn();
+    if ($consType !== '' && strpos($consType, 'near_threatened') === false) {
+        $pdo->exec("ALTER TABLE species MODIFY conservation ENUM('unknown','least_concern','near_threatened','vulnerable','endangered','critical','locally_extinct','reintroduced') NOT NULL DEFAULT 'unknown'");
+        $log[] = 'species.conservation: near threatened';
+    }
     // further reading about a notable person: articles, profiles, documentaries and records on other websites (we link, never copy)
     $pdo->exec("CREATE TABLE IF NOT EXISTS notable_links (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, notable_id INT UNSIGNED NOT NULL, kind VARCHAR(20) NOT NULL DEFAULT 'article', title VARCHAR(255) NOT NULL,
@@ -72,6 +80,8 @@ function lci_upgrade(PDO $pdo): array
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(120) NOT NULL UNIQUE, title VARCHAR(190) NOT NULL, era VARCHAR(60) NULL, icon VARCHAR(30) NULL,
         summary VARCHAR(400) NULL, body MEDIUMTEXT NULL, body_lg MEDIUMTEXT NULL, sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published'
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $addCol('history_sections', 'image', 'VARCHAR(255) NULL');
+    $addCol('history_sections', 'image_credit', 'VARCHAR(255) NULL');
     $pdo->exec("CREATE TABLE IF NOT EXISTS glossary (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, term VARCHAR(120) NOT NULL, meaning VARCHAR(400) NOT NULL, note VARCHAR(400) NULL,
         sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published'
@@ -287,10 +297,66 @@ function lci_upgrade(PDO $pdo): array
         }
     }
 
+    // pages that would otherwise be empty: heritage entries, proverbs, clans, species and gallery photos, every one from a named source (see more_content.php)
+    $more = require $dir . '/more_content.php';
+    $n = 0;
+    foreach ($more['heritage'] as $h) {
+        if ($val('SELECT id FROM heritage_items WHERE slug=?', [$h['slug']])) continue;
+        $ins('heritage_items', ['category' => $h['category'], 'title' => html_entity_decode($h['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'slug' => $h['slug'], 'summary' => $h['summary'], 'body' => $h['body'],
+            'image' => $h['image'], 'image_credit' => $h['image_credit'], 'status' => 'published', 'verified' => 0]);
+        $n++;
+    }
+    if ($n) $log[] = "$n heritage entries";
+    $n = 0;
+    foreach ($more['proverbs'] as [$lg, $en, $meaning]) {
+        if ($val('SELECT id FROM proverbs WHERE lango=?', [$lg])) continue;
+        $ins('proverbs', ['lango' => $lg, 'english' => $en, 'meaning' => $meaning, 'verified' => 0, 'status' => 'published', 'source' => 'J. H. Driberg, The Lango (1923), pp. 136-137; old spelling']);
+        $n++;
+    }
+    if ($n) $log[] = "$n proverbs";
+    $n = 0;
+    foreach ($more['clans_new'] as $name => [$summary, $totem]) {
+        if ($val('SELECT id FROM clans WHERE name=?', [$name])) continue;
+        $ins('clans', ['name' => $name, 'slug' => trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($name)), '-'), 'summary' => $summary, 'totem' => $totem, 'leader_title' => 'Awitong', 'status' => 'published', 'verified' => 0,
+            'source_note' => sprintf($more['clan_note'], $name)]);
+        $n++;
+    }
+    foreach ($more['clans_summary'] as $name => $summary) $upd('clans', ['summary' => $summary], "name=? AND (summary IS NULL OR summary='')", [$name]);
+    if ($n) $log[] = "$n clans";
+    $n = 0;
+    $images = require $dir . '/species_images.php';
+    foreach ($more['species'] as $slug => [$name, $sci, $kind, $cons, $medicinal, $habitat, $body]) {
+        if ($val('SELECT id FROM species WHERE slug=?', [$slug])) continue;
+        [$img, $credit] = $images[$slug];
+        $ins('species', ['name' => $name, 'slug' => $slug, 'scientific_name' => $sci, 'kind' => $kind, 'conservation' => $cons, 'medicinal' => $medicinal, 'habitat' => $habitat, 'body' => $body,
+            'image' => $img, 'image_credit' => $credit, 'status' => 'published']);
+        $n++;
+    }
+    if ($n) $log[] = "$n species";
+    $n = 0;
+    foreach ($more['media'] as [$file, $title, $desc, $credit]) {
+        if ($val('SELECT id FROM media WHERE file=?', ['assets/img/culture/' . $file . '.jpg'])) continue;
+        $ins('media', ['type' => 'photo', 'title' => $title, 'description' => $desc, 'file' => 'assets/img/culture/' . $file . '.jpg', 'album' => 'Moments from Lango', 'credit' => $credit, 'status' => 'published']);
+        $n++;
+    }
+    if ($n) $log[] = "$n gallery photos";
+    $n = 0;
+    foreach ($more['documents'] as [$title, $cat, $year, $desc, $address]) {
+        if ($val('SELECT id FROM documents WHERE title=?', [$title])) continue;
+        $ins('documents', ['title' => $title, 'category' => $cat, 'year' => $year, 'description' => $desc, 'file' => $address, 'status' => 'published']);
+        $n++;
+    }
+    if ($n) $log[] = "$n reading-list documents";
+
     // history
     $hist = require $dir . '/history.php';
     foreach ($hist['sections'] as $s) {
         if (!$val('SELECT id FROM history_sections WHERE slug=?', [$s['slug']])) { $ins('history_sections', $s + ['status' => 'published']); $log[] = "history {$s['slug']}"; }
+    }
+    foreach ([['who-are-the-lango', 'dancers-group', 'Photograph supplied for this project; the photographer is being confirmed.'],
+              ['clans-and-society', 'chief-buchta', 'A Lango chief in a horned head-dress. Photograph by Richard Buchta (died 1894), published in The Living Races of Mankind (1902). Public domain.'],
+              ['lango-at-a-glance', 'harvest', 'Photograph supplied for this project; the photographer is being confirmed.']] as [$hs, $file, $credit]) {
+        $upd('history_sections', ['image' => 'assets/img/culture/' . $file . '.jpg', 'image_credit' => $credit], "slug=? AND (image IS NULL OR image='')", [$hs]);
     }
     if (!$val('SELECT COUNT(*) FROM timeline')) {
         foreach ($hist['timeline'] as $i => [$year, $title, $body]) $ins('timeline', ['year' => $year, 'title' => $title, 'body' => $body, 'sort' => $i + 1]);

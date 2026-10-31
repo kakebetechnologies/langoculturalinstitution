@@ -3,6 +3,7 @@
 // dictionary-based translator, not a full machine-translation model — and offers unknown words for suggestion.
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
@@ -61,7 +62,13 @@ export default function Translate() {
         <AppText variant="caption" style={{ marginVertical: 8 }}>
           {t('Letters like ε, ɔ and ŋ are optional — type e, o and ng.')}
         </AppText>
-        <TextField value={text} onChangeText={setText} multiline placeholder={t('Type a word, phrase or sentence…')} maxLength={600} label={dir === 'en-lango' ? 'English' : 'Leb Lango'} />
+        <TextField value={text} onChangeText={setText} multiline placeholder={t('Type a word…')} maxLength={600} label={dir === 'en-lango' ? 'English' : 'Leb Lango'} />
+        <View style={styles.soon}>
+          <Ionicons name="time-outline" size={20} color={COLORS.yellowInk} style={{ marginTop: 1 }} />
+          <AppText variant="caption" style={{ flex: 1, color: COLORS.black }}>
+            {t('Translating whole sentences is coming soon. For now, type one word and see its meaning; the dictionary also works word by word.')}
+          </AppText>
+        </View>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Button title={t('Translate')} icon="language-outline" onPress={() => run()} loading={busy} style={{ flex: 1 }} />
           <Button
@@ -83,7 +90,17 @@ export default function Translate() {
           </View>
         ) : null}
 
-        {res ? (
+        {res?.coming_soon ? (
+          <Card style={{ marginTop: SPACING.lg, backgroundColor: COLORS.paper, borderColor: '#EFE7BF' }}>
+            <AppText variant="subheading">{t('Sentence translation is coming soon')}</AppText>
+            <AppText style={{ marginTop: 6 }}>{t('For now the dictionary works word by word: tap a word to look it up.')}</AppText>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: SPACING.md }}>
+              {(res.words ?? []).map((w) => (
+                <Chip key={w} label={w} onPress={() => router.push({ pathname: '/dictionary', params: { q: w } })} />
+              ))}
+            </View>
+          </Card>
+        ) : res ? (
           <Card style={{ marginTop: SPACING.lg, backgroundColor: COLORS.paper, borderColor: '#EFE7BF' }}>
             <AppText variant="eyebrow">{dir === 'en-lango' ? 'Leb Lango' : 'English'}</AppText>
             <AppText style={styles.out} selectable>
@@ -124,7 +141,7 @@ export default function Translate() {
         ) : null}
 
         <AppText variant="caption" style={{ marginTop: SPACING.lg }}>
-          {t('This is a dictionary-based translator, not a full machine-translation model. It looks for the whole sentence among the worked examples of the Practical Lango Grammar, then matches the longest phrases in the dictionary, and finally translates word by word. Leb Lango grammar is rich, so ask a fluent speaker to check longer sentences.')}
+          {t('Words and the set phrases of the dictionary are translated now, using the Lango dictionary and the worked examples of the Practical Lango Grammar. Whole sentences are coming soon: Leb Lango grammar is rich, so we want them to be right before we offer them.')}
         </AppText>
       </KeyboardScroll>
     </KeyboardAvoidingView>
@@ -134,5 +151,6 @@ export default function Translate() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: COLORS.canvas },
   out: { fontFamily: FONTS.serifSemi, fontSize: 21, lineHeight: 30, color: COLORS.black, marginTop: 4 },
+  soon: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: COLORS.yellowMist, borderRadius: RADIUS.md, padding: SPACING.md, marginBottom: SPACING.md },
   error: { backgroundColor: COLORS.primaryMist, borderRadius: RADIUS.md, padding: SPACING.md, marginTop: SPACING.md },
 });

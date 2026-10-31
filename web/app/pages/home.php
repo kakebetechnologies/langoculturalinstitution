@@ -14,26 +14,69 @@ foreach ($defaults as $i => $d) $strip[] = isset($photos[$i]) ? [media_url($phot
 $next     = $events[0] ?? null;
 $progImgs = ['hero-aerial', 'hero-field', 'hero-ridge', 'hero-hill', 'hero-site', 'hero-road'];
 
+$moments = [
+    ['dancers-group', __('Dancers in traditional dress')],
+    ['harvest', __('Gathering the harvest')],
+    ['pot-dance', __('A dancer balancing a pot')],
+    ['warrior-rock', __('Spear, shield and feathered headdress')],
+    ['dance-story', __('Performers with a handmade prop')],
+];
+$moment = fn(array $m) => '<figure class="mh-photo"><img loading="lazy" src="' . e(asset('assets/img/culture/' . $m[0] . '.jpg')) . '" alt="' . e($m[1]) . '"><figcaption>' . e($m[1]) . '</figcaption></figure>';
+$explore = [['book', __('Dictionary'), 'language/dictionary'], ['users', __('Clans'), 'clans'], ['globe', __('Heritage'), 'heritage'], ['clock', __('History'), 'history'], ['award', __('Notable Langos'), 'people'], ['pin', __('Districts'), 'districts']];
+
 page_start('', ['class' => 'home']);
 ?>
-<section class="fd-hero">
+<!-- ============ phones: the same look as the Lango App ============ -->
+<div class="mob mh">
+  <div class="container">
+    <div class="mh-hero">
+      <img src="<?= e(asset('assets/img/photos/hero-ridge.jpg')) ?>" alt="" fetchpriority="high">
+      <div class="mh-hero__in">
+        <span class="mh-eyebrow"><?php _e('Everything about Lango, in one place'); ?></span>
+        <h1><?php _e('Welcome to Lango'); ?></h1>
+        <p><?php _e('Apwoyo!'); ?></p>
+      </div>
+    </div>
+    <form class="mh-search" action="<?= e(url('language/dictionary')) ?>" role="search"><input type="search" name="q" placeholder="<?= e(__('Search a word')) ?>" aria-label="<?= e(__('Search the dictionary')) ?>"><button aria-label="<?= e(__('Search')) ?>"><?= icon('arrow') ?></button></form>
+
+    <?php if ($wotd): ?>
+    <a class="mh-word" href="<?= e(url('language/dictionary', ['q' => $wotd['lango']])) ?>"><small><?php _e('Word of the day'); ?></small><b><?= e($wotd['lango']) ?></b><span><?= e(excerpt(str_replace(';', ' ·', $wotd['english']), 60)) ?></span><i><?= icon('arrow') ?></i></a>
+    <?php endif; ?>
+
+    <div class="mh-head"><h2><?php _e('Explore'); ?></h2></div>
+    <div class="mh-tiles"><?php foreach ($explore as [$ic, $lb, $pt]): ?><a href="<?= e(url($pt)) ?>"><span><?= icon($ic) ?></span><b><?= e($lb) ?></b></a><?php endforeach; ?></div>
+
+    <div class="mh-head"><h2><?php _e('Moments from Lango'); ?></h2><a href="<?= e(url('media')) ?>"><?php _e('All'); ?> <?= icon('arrow') ?></a></div>
+    <div class="mh-scroll"><?php foreach ($moments as $m) echo $moment($m); ?></div>
+
+    <?php if ($notables): ?>
+    <div class="mh-head"><h2><?php _e('Notable Langos'); ?></h2><a href="<?= e(url('people')) ?>"><?php _e('All'); ?> <?= icon('arrow') ?></a></div>
+    <div class="mh-scroll mh-scroll--cards"><?php foreach ($notables as $n) echo person_card($n); ?></div>
+    <?php endif; ?>
+
+    <a class="mh-ask" href="<?= e(url('assistant')) ?>"><span><?= icon('chat') ?></span><div><b><?php _e('Ask the Cultural Assistant'); ?></b><small><?php _e('Answers from reviewed Lango sources'); ?></small></div><i><?= icon('arrow') ?></i></a>
+
+    <div class="mh-cta">
+      <h2><?php _e('Know something about Lango?'); ?></h2>
+      <p><?php _e('Add a word, a photograph, a story or your clan. We only ask you to create a free account when you send it, and our reviewers check everything before it is published.'); ?></p>
+      <a class="btn btn--gold btn--block" href="<?= e(url('contribute')) ?>"><?= icon('camera') ?> <?php _e('Share what you know'); ?></a>
+    </div>
+  </div>
+</div>
+
+<section class="fd-hero dsk">
   <div class="container fd-hero__in">
     <div class="fd-hero__txt">
       <span class="fd-pill"><i></i> <?php _e('Everything about Lango'); ?></span>
       <h1><?php _e('Our Language.'); ?><br><?php _e('Our Clans.'); ?><br><span><?php _e('Our Culture.'); ?></span></h1>
-      <p class="fd-sub"><?php _e('One home for the Lango language, clans and heritage. Join free and find your own culture here.'); ?></p>
+      <p class="fd-sub"><?php _e('One home for the Lango language, clans and heritage. Search the dictionary, find your clan and explore your culture.'); ?></p>
       <div class="fd-cta">
-        <?php if (user()): ?>
-          <a class="btn btn--dark btn--lg" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?php _e('Open My culture'); ?></a>
-          <a class="btn btn--outline btn--lg" href="<?= e(url('contribute')) ?>"><?= icon('camera') ?> <?php _e('Contribute'); ?></a>
-        <?php else: ?>
-          <a class="btn btn--dark btn--lg" href="<?= e(url('account/register')) ?>"><?php _e('Create free account'); ?></a>
-          <a class="btn btn--outline btn--lg" href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a>
-        <?php endif; ?>
+        <a class="btn btn--dark btn--lg" href="<?= e(url('language/dictionary')) ?>"><?= icon('book') ?> <?php _e('Search the dictionary'); ?></a>
+        <a class="btn btn--outline btn--lg" href="<?= e(url('clans')) ?>"><?= icon('users') ?> <?php _e('Find your clan'); ?></a>
       </div>
       <ul class="fd-trust">
-        <li><?= icon('check') ?> <?php _e('Free to join'); ?></li>
-        <li><?= icon('shield') ?> <?php _e('Safe and private'); ?></li>
+        <li><?= icon('check') ?> <?php _e('Free to use'); ?></li>
+        <li><?= icon('shield') ?> <?php _e('Checked before it is published'); ?></li>
         <li><?= icon('phone-app') ?> <?php _e('On the web and your phone'); ?></li>
       </ul>
     </div>
@@ -45,13 +88,13 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
-<section class="fd-facts"><div class="container"><ul class="fd-facts__in">
+<section class="fd-facts dsk"><div class="container"><ul class="fd-facts__in">
   <li><b><?= (int)$counts['clans'] ?></b><span><?php _e('Clans listed'); ?></span></li>
   <li><b><?= (int)$counts['districts'] ?></b><span><?php _e('Districts'); ?></span></li>
   <li><b><?= number_format($counts['words']) ?></b><span><?php _e('Words documented'); ?></span></li>
 </ul></div></section>
 
-<section class="container fd-block">
+<section class="container fd-block dsk">
   <span class="eyebrow" style="text-align:center"><?php _e('Everything in one place'); ?></span>
   <h2 class="fd-h2"><?php _e('Learn it. Share it. Keep it alive.'); ?></h2>
   <p class="fd-lead"><?php _e('Everything about Lango in one place, whether you are in Lira or on the other side of the world.'); ?></p>
@@ -65,18 +108,12 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
-<section class="container fd-block" style="text-align:center">
-  <span class="eyebrow"><?php _e('How it works'); ?></span>
-  <h2 class="fd-h2"><?php _e('Start in 3 steps'); ?></h2>
-  <div class="fd-steps">
-    <div class="fd-step"><span class="n"><?= icon('user') ?></span><h3><?php _e('Create your account'); ?></h3><p><?php _e('Your name, an email and a password. It takes a minute.'); ?></p></div>
-    <div class="fd-step"><span class="n"><?= icon('users') ?></span><h3><?php _e('Choose your clan'); ?></h3><p><?php _e('Pick your clan, or type its name if it is not listed yet.'); ?></p></div>
-    <div class="fd-step"><span class="n"><?= icon('star') ?></span><h3><?php _e('See your culture'); ?></h3><p><?php _e('Your own page: your clan, the word of the day, events and your contributions.'); ?></p></div>
-  </div>
-  <p style="margin-top:30px"><a class="btn btn--primary btn--lg" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= user() ? __('Open My culture') : __('Create free account') ?></a></p>
+<section class="container fd-block dsk">
+  <div class="sec-row"><div><span class="eyebrow"><?php _e('Gallery'); ?></span><h2><?php _e('Moments from Lango'); ?></h2></div><a class="link" href="<?= e(url('media')) ?>"><?php _e('Media center'); ?> <?= icon('arrow') ?></a></div>
+  <div class="mh-scroll mh-scroll--wide"><?php foreach ($moments as $m) echo $moment($m); ?></div>
 </section>
 
-<section class="section">
+<section class="section dsk">
   <div class="container split">
     <div class="collage reveal">
       <div class="collage__a"><img loading="lazy" src="<?= e(site_img('about_image_1', 'assets/img/photos/hero-aerial.jpg')) ?>" alt=""></div>
@@ -93,12 +130,12 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
-<section class="section section--tight">
+<section class="section section--tight dsk">
   <div class="container"><div class="langband">
     <div class="langband__txt">
       <span class="eyebrow"><?php _e('Leb Lango'); ?></span>
       <h2><?php _e('Search the dictionary. Translate with AI.'); ?></h2>
-      <p><?= sprintf(__('%s words with meanings and examples — and a translator that turns English into Leb Lango and back. Know a word we are missing? Add it and our language team will review it.'), number_format($counts['words'])) ?></p>
+      <p><?= sprintf(__('%s words with meanings and examples — and a word translator (whole sentences are coming soon). Know a word we are missing? Add it and our language team will review it.'), number_format($counts['words'])) ?></p>
       <form class="lhub__search lhub__search--lg" action="<?= e(url('language/dictionary')) ?>" role="search"><input type="search" name="q" placeholder="<?= e(__('Search a word in Leb Lango or English…')) ?>" aria-label="<?= e(__('Search the dictionary')) ?>"><button class="btn btn--gold"><?= icon('search') ?> <?php _e('Search'); ?></button></form>
       <div class="langband__btns">
         <a class="btn btn--primary" href="<?= e(url('language/dictionary')) ?>"><?= icon('book') ?> <?php _e('Open the dictionary'); ?></a>
@@ -108,11 +145,11 @@ page_start('', ['class' => 'home']);
     </div>
     <?php if ($wotd): ?><div class="langband__card"><small><?php _e('Word of the day'); ?></small><h3><?= e($wotd['lango']) ?></h3><p><?= e(str_replace(';', ' ·', $wotd['english'])) ?></p>
       <div class="langband__try"><span><?php _e('Try the translator'); ?></span>
-        <a href="<?= e(url('language/translate', ['text' => 'thank you', 'dir' => 'en-lango'])) ?>">thank you</a><a href="<?= e(url('language/translate', ['text' => 'water', 'dir' => 'en-lango'])) ?>">water</a><a href="<?= e(url('language/translate', ['text' => 'how are you', 'dir' => 'en-lango'])) ?>">how are you</a></div></div><?php endif; ?>
+        <a href="<?= e(url('language/translate', ['text' => 'water', 'dir' => 'en-lango'])) ?>">water</a><a href="<?= e(url('language/translate', ['text' => 'mother', 'dir' => 'en-lango'])) ?>">mother</a><a href="<?= e(url('language/translate', ['text' => 'love', 'dir' => 'en-lango'])) ?>">love</a></div></div><?php endif; ?>
   </div></div>
 </section>
 
-<section class="section section--tight" style="padding-top:0">
+<section class="section section--tight dsk" style="padding-top:0">
   <div class="container"><div class="statband">
     <div><b data-count="<?= $counts['clans'] ?>">0</b><span><?php _e('Clans listed'); ?></span></div>
     <div><b data-count="<?= $counts['districts'] ?>">0</b><span><?php _e('Districts'); ?></span></div>
@@ -122,7 +159,7 @@ page_start('', ['class' => 'home']);
 </section>
 
 <?php if ($events): ?>
-<section class="section section--cream">
+<section class="section section--cream mh-events">
   <div class="container">
     <div class="sec-row"><div><span class="eyebrow"><?php _e('Events'); ?></span><h2><?php _e('Upcoming events'); ?></h2></div><a class="link" href="<?= e(url('events')) ?>"><?php _e('All events'); ?> <?= icon('arrow') ?></a></div>
     <div class="grid g3">
@@ -138,7 +175,7 @@ page_start('', ['class' => 'home']);
 </section>
 <?php endif; ?>
 
-<section class="section">
+<section class="section dsk">
   <div class="container">
     <div class="sec-row"><div><span class="eyebrow"><?php _e('Heritage'); ?></span><h2><?php _e('Explore Lango heritage'); ?></h2></div><a class="link" href="<?= e(url('heritage')) ?>"><?php _e('All heritage'); ?> <?= icon('arrow') ?></a></div>
     <div class="split" style="align-items:stretch;gap:28px">
@@ -164,7 +201,7 @@ page_start('', ['class' => 'home']);
 </section>
 
 <?php if ($notables): ?>
-<section class="section section--cream">
+<section class="section section--cream dsk">
   <div class="container">
     <div class="sec-row"><div><span class="eyebrow"><?php _e('Notable Langos'); ?></span><h2><?php _e('Sons and daughters of Lango every young person should know'); ?></h2></div><a class="link" href="<?= e(url('people')) ?>"><?php _e('Meet them all'); ?> <?= icon('arrow') ?></a></div>
     <div class="grid g4"><?php foreach ($notables as $n) echo person_card($n); ?></div>
@@ -172,7 +209,7 @@ page_start('', ['class' => 'home']);
 </section>
 <?php endif; ?>
 
-<section class="section" style="padding-top:0" id="contribute-cta">
+<section class="section dsk" style="padding-top:0" id="contribute-cta">
   <div class="container"><div class="darkpanel">
     <div class="sec-head"><span class="eyebrow"><?php _e('Community Contribution Engine'); ?></span><h2><?php _e('Every Lango voice can help build the archive'); ?></h2><p><?php _e('Photograph a rare bird. Record an elder. Share a proverb. Our experts verify every contribution before it joins the archive — and you keep your rights.'); ?></p></div>
     <div class="steps">
@@ -185,7 +222,7 @@ page_start('', ['class' => 'home']);
   </div></div>
 </section>
 
-<section class="section section--cream" id="app">
+<section class="section section--cream dsk" id="app">
   <div class="container split">
     <div class="reveal">
       <span class="eyebrow"><?php _e('The Lango App'); ?></span>
@@ -207,15 +244,6 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
-<section class="section section--tight">
-  <div class="container">
-    <div class="sec-row"><div><span class="eyebrow"><?php _e('Gallery'); ?></span><h2><?php _e('Moments from Lango'); ?></h2></div><a class="link" href="<?= e(url('media')) ?>"><?php _e('Media center'); ?> <?= icon('arrow') ?></a></div>
-    <div class="strip">
-      <?php foreach ($strip as [$src, $ttl]): ?><a href="<?= e(url('media')) ?>"><img loading="lazy" src="<?= e($src) ?>" alt="<?= e($ttl) ?>"></a><?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
 <?php if ($posts): ?>
 <section class="section section--cream">
   <div class="container">
@@ -227,20 +255,13 @@ page_start('', ['class' => 'home']);
 </section>
 <?php endif; ?>
 
-<section class="container fd-block" style="padding-bottom:48px">
+<section class="container fd-block dsk" style="padding-bottom:48px">
   <div class="fd-join">
-    <div class="fd-join__photo"><img loading="lazy" src="<?= e(site_img('cta_image', 'assets/img/photos/hero-hill.jpg')) ?>" alt=""></div>
+    <div class="fd-join__photo"><img loading="lazy" src="<?= e(asset('assets/img/culture/dancers-group.jpg')) ?>" alt="<?= e(__('Dancers in traditional dress')) ?>"></div>
     <div class="fd-join__body">
-      <h2><?php _e('Join the Lango family'); ?></h2>
-      <p><?php _e('Create your free account and see your culture, your clan and your community in one place.'); ?></p>
-      <div class="fd-cta">
-        <?php if (user()): ?>
-          <a class="btn btn--gold btn--lg" href="<?= e(url('account')) ?>"><?php _e('Open My culture'); ?></a>
-        <?php else: ?>
-          <a class="btn btn--gold btn--lg" href="<?= e(url('account/register')) ?>"><?php _e('Create free account'); ?></a>
-          <a class="btn btn--ghost btn--lg" href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a>
-        <?php endif; ?>
-      </div>
+      <h2><?php _e('Know something about Lango?'); ?></h2>
+      <p><?php _e('Add a word, a photograph, a story or your clan. We only ask you to create a free account when you send it, and our reviewers check everything before it is published.'); ?></p>
+      <div class="fd-cta"><a class="btn btn--gold btn--lg" href="<?= e(url('contribute')) ?>"><?= icon('camera') ?> <?php _e('Share what you know'); ?></a></div>
     </div>
   </div>
 </section>

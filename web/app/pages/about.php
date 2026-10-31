@@ -15,7 +15,7 @@ page_start(__('About Lango'), ['hero' => ['eyebrow' => __('About'), 'title' => _
       <h2><?php _e('A home for Lango on the web'); ?></h2>
       <p><?php _e('Lango is a community website about the Lango people of mid-northern Uganda: their language, clans, districts, history and culture. It is free to use. It is an independent website that anyone can add to.'); ?></p>
       <p><?php _e('Look words up in the Lango dictionary, find your clan, read about the districts and the history of the Lango, discover heritage places, and add what you know. Everything people add is checked by our reviewers before it is published.'); ?></p>
-      <p style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px"><a class="btn btn--primary" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= user() ? e(__('Open My culture')) : e(__('Join free')) ?></a><a class="btn btn--outline" href="<?= e(url('history')) ?>"><?php _e('Read the history'); ?></a></p>
+      <p style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px"><a class="btn btn--primary" href="<?= e(url(user() ? 'account' : 'contribute')) ?>"><?= user() ? e(__('Open My culture')) : e(__('Share what you know')) ?></a><a class="btn btn--outline" href="<?= e(url('history')) ?>"><?php _e('Read the history'); ?></a></p>
     </div>
   </div>
 </section>
@@ -44,8 +44,8 @@ page_start(__('About Lango'), ['hero' => ['eyebrow' => __('About'), 'title' => _
 
 <section class="section">
   <div class="container"><div class="cta-band">
-    <div><h3><?php _e('Join Lango'); ?></h3><p><?php _e('Create a free account, find your clan and add what you know.'); ?></p></div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--gold" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= user() ? e(__('Open My culture')) : e(__('Join free')) ?></a><a class="btn btn--ghost" href="<?= e(url('contribute')) ?>"><?php _e('Contribute'); ?></a></div>
+    <div><h3><?php _e('Add what you know'); ?></h3><p><?php _e('A word, a photograph, a story or your clan: share it, and our reviewers will check it before it is published.'); ?></p></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--gold" href="<?= e(url('contribute')) ?>"><?php _e('Contribute'); ?></a></div>
   </div></div>
 </section>
 <?php page_end(); ?>

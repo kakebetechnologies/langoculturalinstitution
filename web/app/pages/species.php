@@ -7,14 +7,14 @@ if (!empty($seg[1])) {
     page_start($s['name'], ['image' => $s['image'], 'hero' => ['eyebrow' => __('Biodiversity'), 'title' => $s['name'] . ($s['name_lg'] ? ' · ' . $s['name_lg'] : ''), 'sub' => $s['scientific_name'], 'crumbs' => [[__('Biodiversity'), 'species'], [$s['name'], null]], 'image' => $s['image'] ?: 'assets/img/photos/hero-ridge.jpg']]);
     ?>
     <section class="section"><div class="container article">
-      <div class="prose"><?= rich($s['body']) ?>
+      <div class="prose"><?php if (!empty($s['image_credit'])): ?><p class="imgcredit"><?= icon('camera') ?> <?= e((string)$s['image_credit']) ?></p><?php endif; ?><?= rich($s['body']) ?>
         <?php if ($s['uses']): ?><h2><?php _e('Traditional uses'); ?></h2><?= rich($s['uses']) ?><?php endif; ?>
         <?php if ($s['habitat']): ?><h2><?php _e('Habitat'); ?></h2><?= rich($s['habitat']) ?><?php endif; ?>
       </div>
       <aside class="aside">
         <div class="box"><h4><?php _e('Profile'); ?></h4><dl class="kv">
           <dt><?php _e('Type'); ?></dt><dd><?= e(ucfirst($s['kind'])) ?></dd>
-          <dt><?php _e('Status'); ?></dt><dd><span class="tag <?= in_array($s['conservation'], ['endangered', 'critical', 'locally_extinct'], true) ? 'tag--red' : 'tag--green' ?>"><?= e(__(CONSERVATION[$s['conservation']])) ?></span></dd>
+          <dt><?php _e('Status'); ?></dt><dd><span class="tag <?= in_array($s['conservation'], ['endangered', 'critical', 'locally_extinct'], true) ? 'tag--red' : (in_array($s['conservation'], ['vulnerable', 'near_threatened'], true) ? 'tag--gold' : 'tag--green') ?>"><?= e(__(CONSERVATION[$s['conservation']])) ?></span></dd>
           <?php if ($s['medicinal']): ?><dt><?php _e('Medicinal'); ?></dt><dd>✓ <?php _e('Used in traditional medicine'); ?></dd><?php endif; ?>
         </dl></div>
         <div class="box box--dark"><h4><?php _e('Seen this species?'); ?></h4><p><?php _e('Report a sighting with a photo and GPS location. Experts will review it.'); ?></p><a class="btn btn--gold btn--sm" href="<?= e(url('contribute?type=natural')) ?>"><?php _e('Report a sighting'); ?></a></div>

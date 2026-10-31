@@ -17,6 +17,7 @@ import ClanGroupCard from '../../components/clan/ClanGroupCard';
 import { ChallengeCard, ClanFeedCard, ClanOfWeekCard, PhotoCard, StoryCard } from '../../components/daily/TodayCards';
 import { MilestoneSheet, StreakChip } from '../../components/daily/Streaks';
 import IconTile from '../../components/IconTile';
+import MomentsStrip from '../../components/MomentsStrip';
 import Logo from '../../components/Logo';
 import RadioCard from '../../components/RadioCard';
 import Row from '../../components/Row';
@@ -196,6 +197,8 @@ export default function Home() {
             ))}
           </View>
         </View>
+
+        <MomentsStrip style={{ marginTop: SPACING.md }} />
 
         <StateView loading={loading} error={error} onRetry={retry}>
           {home ? (

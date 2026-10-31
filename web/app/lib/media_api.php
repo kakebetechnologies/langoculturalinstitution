@@ -39,12 +39,31 @@ function api_episode(array $e, bool $full = false): array
  * Where to read the Lango Bible online while its text is not in the app: the Bible Society of Uganda's own pages on Bible.com (links only,
  * no text is copied). The two addresses and the line above them are set in Site settings; empty addresses are left out.
  */
+/** Chapters in each book of the standard canon (the numbers the readers on Bible.com use), by book code. */
+const BIBLE_CHAPTERS = ['GEN' => 50, 'EXO' => 40, 'LEV' => 27, 'NUM' => 36, 'DEU' => 34, 'JOS' => 24, 'JDG' => 21, 'RUT' => 4, '1SA' => 31, '2SA' => 24, '1KI' => 22, '2KI' => 25, '1CH' => 29, '2CH' => 36,
+    'EZR' => 10, 'NEH' => 13, 'EST' => 10, 'JOB' => 42, 'PSA' => 150, 'PRO' => 31, 'ECC' => 12, 'SNG' => 8, 'ISA' => 66, 'JER' => 52, 'LAM' => 5, 'EZK' => 48, 'DAN' => 12, 'HOS' => 14, 'JOL' => 3, 'AMO' => 9,
+    'OBA' => 1, 'JON' => 4, 'MIC' => 7, 'NAM' => 3, 'HAB' => 3, 'ZEP' => 3, 'HAG' => 2, 'ZEC' => 14, 'MAL' => 4,
+    'MAT' => 28, 'MRK' => 16, 'LUK' => 24, 'JHN' => 21, 'ACT' => 28, 'ROM' => 16, '1CO' => 16, '2CO' => 13, 'GAL' => 6, 'EPH' => 6, 'PHP' => 4, 'COL' => 4, '1TH' => 5, '2TH' => 3, '1TI' => 6, '2TI' => 4,
+    'TIT' => 3, 'PHM' => 1, 'HEB' => 13, 'JAS' => 5, '1PE' => 5, '2PE' => 3, '1JN' => 5, '2JN' => 1, '3JN' => 1, 'JUD' => 1, 'REV' => 22];
+
+/** The edition number on Bible.com (from an address like https://www.bible.com/versions/1974), or 0. */
+function bible_version_of(string $url): int
+{
+    return preg_match('#bible\.com/(?:[a-z]{2,3}/)?(?:versions|bible)/(\d+)#i', $url, $m) ? (int)$m[1] : 0;
+}
+
+/** Address of one chapter in the reader on Bible.com: it opens at the text itself, with its own book and chapter menu, not at the page that offers to download the app. */
+function bible_reader_url(int $version, string $code, int $chapter): string
+{
+    return 'https://www.bible.com/bible/' . $version . '/' . strtoupper($code) . '.' . max(1, $chapter);
+}
+
 function bible_links(): array
 {
     $out = [];
     foreach (['full' => 'bible_link_full', 'nt' => 'bible_link_nt'] as $key => $setting) {
         $u = trim((string)setting($setting));
-        if (preg_match('#^https://[^\s]+$#i', $u)) $out[] = ['key' => $key, 'url' => $u];
+        if (preg_match('#^https://[^\s]+$#i', $u)) $out[] = ['key' => $key, 'url' => $u, 'version' => bible_version_of($u)];
     }
     return $out;
 }
@@ -125,7 +144,7 @@ function media_api(string $res, string $id, string $sub, string $m, ?array $user
             if ($m !== 'GET') api_err('Method not allowed.', 405);
             if ($id === '') {
                 $books = all('SELECT b.id, b.code, b.testament, b.name_en, b.name_lg, COALESCE(MAX(v.chapter), 0) chapters, COUNT(v.id) verses FROM bible_books b LEFT JOIN bible_verses v ON v.book_id=b.id GROUP BY b.id ORDER BY b.id');
-                $books = array_map(fn($b) => ['id' => (int)$b['id'], 'code' => $b['code'], 'testament' => $b['testament'], 'name' => $b['name_lg'] ?: $b['name_en'], 'name_en' => $b['name_en'], 'name_lg' => $b['name_lg'] ?: null, 'chapters' => (int)$b['chapters'], 'verses' => (int)$b['verses']], $books);
+                $books = array_map(fn($b) => ['id' => (int)$b['id'], 'code' => $b['code'], 'testament' => $b['testament'], 'name' => $b['name_lg'] ?: $b['name_en'], 'name_en' => $b['name_en'], 'name_lg' => $b['name_lg'] ?: null, 'chapters' => (int)$b['chapters'], 'chapters_total' => BIBLE_CHAPTERS[$b['code']] ?? 0, 'verses' => (int)$b['verses']], $books);
                 json_out(['data' => ['title' => setting('bible_title') ?: 'Lango Bible', 'copyright' => setting('bible_copyright') ?: null, 'ready' => (bool)array_sum(array_column($books, 'verses')), 'links' => bible_links(), 'link_note' => bible_link_note(), 'books' => $books]]);
             }
             if ($id === 'search') {

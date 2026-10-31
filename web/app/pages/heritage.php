@@ -23,6 +23,7 @@ if (($seg[1] ?? '') === 'item' && !empty($seg[2])) {
     ?>
     <section class="section"><div class="container article">
       <div class="prose">
+        <?php if (!empty($h['image_credit']) && $h['image']): ?><figure class="chapfig"><img src="<?= e(media_url($h['image'])) ?>" alt="<?= e(t($h, 'title')) ?>"><figcaption><?= e((string)$h['image_credit']) ?></figcaption></figure><?php endif; ?>
         <?= rich(t($h, 'body')) ?>
         <?php if ($embed): ?><div class="video"><iframe src="<?= e($embed) ?>" title="Video" allowfullscreen loading="lazy"></iframe></div><?php endif; ?>
         <?php if ($h['audio']): ?><audio controls style="width:100%" src="<?= e(media_url($h['audio'])) ?>"></audio><?php endif; ?>

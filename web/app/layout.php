@@ -134,12 +134,12 @@ function page_start(string $title, array $o = []): void
       <span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>">Leb Lango</a></span>
       <?php if (user()): ?><a class="nav__acct" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(user()['name']) ?></a>
       <?php else: ?><a class="nav__acct" href="<?= e(url('account/login')) ?>"><?= icon('user') ?> <?php _e('Sign in'); ?></a><?php endif; ?>
-      <a class="btn btn--primary btn--block" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= icon('user') ?> <?= user() ? __('My culture') : __('Join free') ?></a>
+      <a class="btn btn--primary btn--block" href="<?= e(url(user() ? 'account' : 'contribute')) ?>"><?= icon(user() ? 'user' : 'camera') ?> <?= user() ? __('My culture') : __('Share what you know') ?></a>
     </li>
   </ul>
   <button class="navclose" id="navclose" aria-label="Close menu"><?= icon('x') ?></button>
   <div class="header__cta">
-    <a class="btn btn--primary btn-don" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= icon('user') ?> <?= user() ? __('My culture') : __('Join free') ?></a>
+    <a class="btn btn--primary btn-don" href="<?= e(url(user() ? 'account' : 'contribute')) ?>"><?= icon(user() ? 'user' : 'camera') ?> <?= user() ? __('My culture') : __('Contribute') ?></a>
     <button class="burger" id="burger" aria-label="Open menu" aria-controls="nav" aria-expanded="false"><?= icon('menu') ?></button>
   </div>
 </div></header>

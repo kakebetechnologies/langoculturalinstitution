@@ -84,6 +84,19 @@ page_start(__('Events'), ['hero' => ['eyebrow' => __('Events'), 'title' => __('F
           <div><h3 style="margin-top:0"><a href="<?= e(url('events/' . $ev['slug'])) ?>"><?= e(t($ev, 'title')) ?></a></h3><p><?= icon('pin') ?> <?= e((string)$ev['location']) ?></p><a class="card__more" href="<?= e(url('events/' . $ev['slug'])) ?>"><?= $view === 'past' ? e(__('View')) : e(__('Details & registration')) ?> <?= icon('arrow') ?></a></div>
         </div></article>
     <?php endforeach; ?></div>
-  <?php else: echo empty_state($view === 'past' ? __('No past events yet') : __('No upcoming events right now'), __('New events are announced here and in the newsletter.'), 'calendar'); endif; ?>
+  <?php elseif ($view === 'past'): echo empty_state(__('No past events yet'), __('New events are announced here and in the newsletter.'), 'calendar'); ?>
+  <?php else: $dates = lango_dates(9); ?>
+    <div class="sec-head" style="max-width:720px"><span class="eyebrow"><?php _e('No event announced yet'); ?></span><h2><?php _e('Dates to remember'); ?></h2>
+      <p><?php _e('While we wait for the next festival or gathering to be announced, here are days that matter in the story of Lango, with the next time each one comes round.'); ?></p></div>
+    <div class="grid g3"><?php foreach ($dates as $d): $ts = strtotime($d['next']); ?>
+      <article class="card reveal"><div class="card__body" style="flex-direction:row;gap:16px">
+        <div class="date"><b><?= e(date('M', $ts)) ?></b><span><?= e(date('j', $ts)) ?></span><small><?= e(date('Y', $ts)) ?></small></div>
+        <div><h3 style="margin-top:0"><?= e(__($d['title'])) ?></h3><p><?= e(__($d['text'])) ?></p>
+          <small class="dim"><?= $d['in_days'] === 0 ? e(__('Today')) : e(sprintf(__('In %d days'), $d['in_days'])) ?><?= $d['years_ago'] ? ' · ' . e(sprintf(__('%d years ago'), $d['years_ago'])) : '' ?></small></div>
+      </div></article>
+    <?php endforeach; ?></div>
+    <div class="cta-band" style="margin-top:46px"><div><h3><?php _e('Know of an event?'); ?></h3><p><?php _e('A festival, a clan gathering, a cultural day: tell us the date and the place and we will list it here.'); ?></p></div>
+      <div><a class="btn btn--gold" href="<?= e(url('contribute', ['type' => 'cultural'])) ?>"><?php _e('Tell us about it'); ?></a></div></div>
+  <?php endif; ?>
 </div></section>
 <?php page_end(); ?>

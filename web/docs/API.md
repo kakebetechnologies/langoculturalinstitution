@@ -74,7 +74,7 @@ Nothing here is written by the app or the code: the editors add recordings and B
 | POST | `/podcasts/{id}/play` | Counts one play (rate limited) |
 | GET | `/radio` | Lango Radio channels that can play: `{ id, name, description, source, cover, count, stream_url }`. `source` is `playlist` (tracks the editors picked), `podcast` (every published episode) or `stream` (a live stream, `stream_url`) |
 | GET | `/radio/{id}` | The channel with its `tracks: [ { id, title, credit, minutes, audio_url, cover } ]` in play order (empty for a live stream) |
-| GET | `/bible` | `{ title, copyright, ready, links: [ { key: "full"|"nt", url } ], link_note, books: [ { id (1 to 66), code, testament, name, name_en, name_lg, chapters, verses } ] }`. `links` are the Bible Society of Uganda's Lango Bible on Bible.com (set in Site settings; nothing is copied) and `link_note` is the line above them. The 66 books are the standard canon; `name` is the Leb Lango name when LCI entered it. `ready` is false until verses are imported |
+| GET | `/bible` | `{ title, copyright, ready, links: [ { key: "full"|"nt", url, version } ], link_note, books: [ { id (1 to 66), code, testament, name, name_en, name_lg, chapters, chapters_total, verses } ] }`. `version` is the edition number on Bible.com and `chapters_total` the chapters of the book in the standard canon: the app builds the address of a chapter as `https://www.bible.com/bible/{version}/{code}.{chapter}`, which opens the reader straight at the text (not the page that offers to download the app). `links` are the Bible Society of Uganda's Lango Bible on Bible.com (set in Site settings; nothing is copied) and `link_note` is the line above them. The 66 books are the standard canon; `name` is the Leb Lango name when LCI entered it. `ready` is false until verses are imported |
 | GET | `/bible/{book}` | The chapters of that book that have text: `{ book, available: [1, 2, …] }` |
 | GET | `/bible/{book}/{chapter}` | `{ book, chapter, verses: [ { n, text } ], prev, next, title, copyright }`; `prev` and `next` are `{ book_id, chapter }` (the nearest chapter with text, across books) or null; 404 when the chapter has no text |
 | GET | `/bible/search?q=` | Verses containing the phrase (2+ characters), the first 40 → `{ data: [ { book_id, book, chapter, verse, text } ], more }` |
@@ -103,17 +103,17 @@ A member who chose a clan can join that clan's group. `user.clan_group` (in `/me
 | `/clans`, `/clans/options`, `/clans/{slug}` | Clan register (`?q=`, `?district=`), id/name pairs for pickers, one clan with its leader |
 | `/districts`, `/districts/{slug}` | The nine districts and Lira City |
 | `/people`, `/people/{slug}` | Notable Langos (`?category=`). Each has `photo_credit`; the full record adds `photo_source` (where the licence can be checked) and `links: [ { kind, title, source, url } ]` (articles, profiles, documentaries and records on other websites; we link, never copy) |
-| `/history` | History chapters, timeline, glossary |
-| `/heritage`, `/heritage/{slug}` | Ceremonies, crafts, music, symbols, sites (`?category=`, `?q=`) |
-| `/species`, `/species/{slug}` | Biodiversity register |
+| `/history` | History chapters (each may carry `image` and `image_credit`), timeline, glossary |
+| `/heritage`, `/heritage/{slug}` | Ceremonies, attire, crafts, music, dance, storytelling, symbols, sites (`?category=`, `?q=`); the full record has `image_credit` |
+| `/species`, `/species/{slug}` | Biodiversity register; the full record has `image_credit` |
 | `/library` | Published documents with download links |
-| `/news`, `/news/{slug}` | Articles |
+| `/news`, `/news/{slug}` | Articles. While none is published, `web` lists articles, profiles and documentaries on other websites: `[ { title, source, url, kind, person } ]` |
 | `/dictionary` | Search (`?q=&dir=lg|en|all&cat=&letter=`), paged |
 | `/dictionary/export` | The whole dictionary for offline use; pass `?version=` to get `{ unchanged: true }` when nothing changed |
 | `/proverbs`, `/greetings` | Published proverbs (none are pre-loaded); greetings from the Practical Lango Grammar |
-| `/translate` | `text`, `direction=en-lango|lango-en` — dictionary-based, not machine translation |
+| `/translate` | `text`, `direction=en-lango|lango-en` — dictionary-based, not machine translation. Only a single word, a set phrase of the dictionary or a worked textbook sentence is translated; for anything longer the answer is `{ coming_soon: true, message, words: [...] }` so the app can offer each word in the dictionary |
 | `/assistant` | POST `q` — answers only from reviewed content, with sources |
-| `/events`, `/events/{slug}` | Upcoming (or `?past=1`) events |
+| `/events`, `/events/{slug}` | Upcoming (or `?past=1`) events. With none announced, `remember` lists dates to remember: `[ { month, day, year, title, text, next, in_days, years_ago } ]` |
 | `/programs`, `/programs/{slug}`, `/transparency` | Programs with progress; confirmed donation totals |
 | `/professionals` | GET the directory; POST (signed in) a profile for verification |
 | `/leaderboard`, `/about` | Top contributors; organisation details |
