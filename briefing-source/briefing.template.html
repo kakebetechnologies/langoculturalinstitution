@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lango: a digital home for a people's culture and a blueprint for Uganda</title>
+<style>
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_400Regular.ttf');font-weight:400}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_500Medium.ttf');font-weight:500}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_600SemiBold.ttf');font-weight:600}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_700Bold.ttf');font-weight:700}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_800ExtraBold.ttf');font-weight:800}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_700Bold_Italic.ttf');font-weight:700;font-style:italic}
+@page{size:A4;margin:0}
+:root{--red:#ee1a26;--red-d:#c9111c;--yellow:#fddd16;--sky:#00adf1;--sky-d:#0786b8;--ink:#16181d;--text:#4f5662;--muted:#7b8390;--paper:#fbf8ec;--cream:#f6f3ec;--line:#e8e4da;--navy:#16181d;--green:#1e9e5a}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#8a8f98;font-family:'Clarity City','Inter',system-ui,sans-serif;color:var(--ink);font-size:9.3pt;line-height:1.5}
+.page{position:relative;width:210mm;height:297mm;overflow:hidden;background:var(--cream);page-break-after:always;margin:0 auto}
+@media screen{.page{margin:8mm auto;box-shadow:0 4mm 12mm rgba(0,0,0,.35)}}
+h1,h2,h3,h4,p{margin:0}
+.flag{position:absolute;left:0;right:0;top:0;height:2.4mm;background:linear-gradient(90deg,var(--red) 0 33.4%,var(--yellow) 0 66.7%,var(--sky) 0);z-index:20}
+.eyebrow{font-weight:800;font-size:7.4pt;letter-spacing:.2em;text-transform:uppercase;color:var(--red-d)}
+.pad{position:absolute;left:14mm;right:14mm}
+.foot{position:absolute;left:14mm;right:14mm;bottom:8mm;display:flex;justify-content:space-between;align-items:center;font-size:7.2pt;color:var(--muted);font-weight:600}
+.foot b{color:var(--ink);font-weight:800}
+.page h2{font-size:23pt;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.ico{display:inline-grid;place-items:center;width:9.5mm;height:9.5mm;border-radius:3mm;flex:none}
+.ico svg{width:5.2mm;height:5.2mm}
+.ico.r{background:#fde8e9;color:var(--red-d)}.ico.y{background:#fff3b8;color:#7a5c00}.ico.s{background:#e0f5fe;color:var(--sky-d)}.ico.g{background:#e3f5ea;color:#146b3c}.ico.k{background:var(--ink);color:#fff}
+.card{background:#fff;border-radius:4mm;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 2.2mm 6mm rgba(22,24,29,.07)}
+
+/* ---------- phone mock-up ---------- */
+.phone{position:relative;width:var(--w);aspect-ratio:1000/2104;padding:calc(var(--w)*.026);background:linear-gradient(145deg,#2b2e35,#0c0d10 55%,#24262c);border-radius:calc(var(--w)*.155);box-shadow:0 6mm 14mm rgba(0,0,0,.28),0 1.2mm 3mm rgba(0,0,0,.2),inset 0 0 0 .25mm rgba(255,255,255,.12)}
+.phone__s{position:relative;width:100%;height:100%;border-radius:calc(var(--w)*.13);overflow:hidden;background:#fff}
+.phone__s>img{display:block;width:100%;height:100%;object-fit:cover}
+.sb{position:absolute;left:0;right:0;top:0;height:calc(var(--w)*.12);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--w)*.085);font-weight:700;font-size:calc(var(--w)*.036);color:#111}
+.sb svg{height:calc(var(--w)*.032);width:auto;fill:currentColor}
+.sb .r{display:flex;gap:calc(var(--w)*.014);align-items:center}
+.phone.dark .sb{color:#fff}
+.isl{position:absolute;left:50%;top:calc(var(--w)*.03);transform:translateX(-50%);width:calc(var(--w)*.27);height:calc(var(--w)*.075);background:#050506;border-radius:99px}
+.hi{position:absolute;left:50%;bottom:calc(var(--w)*.022);transform:translateX(-50%);width:calc(var(--w)*.34);height:calc(var(--w)*.012);background:#16181d;border-radius:99px;opacity:.85}
+.phone.dark .hi{background:#fff}
+
+/* ---------- browser mock-up ---------- */
+.browser{width:var(--w);border-radius:2.4mm;overflow:hidden;background:#fff;box-shadow:0 5mm 12mm rgba(0,0,0,.25),0 1mm 2.5mm rgba(0,0,0,.18)}
+.browser__bar{height:6mm;background:#eceff3;display:flex;align-items:center;gap:1.4mm;padding:0 2.6mm}
+.browser__bar i{width:1.7mm;height:1.7mm;border-radius:50%;background:#c4c9d1}.browser__bar i:nth-child(1){background:#ff6058}.browser__bar i:nth-child(2){background:#ffbd2e}.browser__bar i:nth-child(3){background:#27c93f}
+.browser__bar span{margin-left:2mm;flex:1;height:3.6mm;border-radius:99px;background:#fff;font-size:5.4pt;line-height:3.6mm;padding:0 2.4mm;color:#6b727d;font-weight:600}
+.browser img{display:block;width:100%}
+
+/* ======================= PAGE 1 : cover ======================= */
+.cover{background:var(--navy);color:#fff}
+.cover__photo{position:absolute;inset:0 0 auto 0;height:182mm;background:url('art/sunset-lira.jpg') 50% 78%/cover}
+.cover__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,24,29,.62) 0%,rgba(22,24,29,.1) 26%,rgba(22,24,29,.25) 55%,var(--navy) 98%)}
+.cover__top{position:absolute;left:14mm;right:14mm;top:10mm;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.cover__top .brand{display:flex;align-items:center;gap:3mm}
+.cover__top .logo{width:11mm;height:12.6mm;border-radius:2.4mm;background:#fff;display:grid;place-items:center}
+.cover__top .logo img{width:7.4mm;height:9.4mm;object-fit:contain}
+.cover__top .brand b{font-size:15pt;font-weight:800;letter-spacing:-.01em}
+.cover__top .tag{font-size:7.2pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8);border:.3mm solid rgba(255,255,255,.4);border-radius:99px;padding:1.6mm 4mm}
+.cover .ph{position:absolute;z-index:4}
+.cover__text{position:absolute;left:14mm;right:14mm;top:162mm;z-index:6}
+.cover__text .eyebrow{color:var(--yellow)}
+.cover__text h1{font-size:30pt;line-height:1.04;font-weight:800;letter-spacing:-.025em;margin:3mm 0 3mm}
+.cover__text h1 em{color:var(--yellow);font-style:italic;font-weight:700}
+.cover__text .lead{font-size:12pt;color:rgba(255,255,255,.86);max-width:180mm}
+.chips{display:flex;gap:2.2mm;margin-top:5mm;flex-wrap:wrap}
+.chips span{font-size:7.6pt;font-weight:700;padding:1.7mm 3.6mm;border-radius:99px;background:rgba(255,255,255,.12);border:.25mm solid rgba(255,255,255,.28)}
+.cover__stats{position:absolute;left:14mm;right:14mm;top:252mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;z-index:6}
+.cover__stats div{background:rgba(255,255,255,.08);border:.25mm solid rgba(255,255,255,.18);border-radius:3.6mm;padding:3.4mm 4mm}
+.cover__stats b{display:block;font-size:18pt;font-weight:800;color:var(--yellow);letter-spacing:-.02em;line-height:1.1}
+.cover__stats small{font-size:7.4pt;color:rgba(255,255,255,.78);font-weight:600}
+.cover__foot{position:absolute;left:14mm;right:14mm;bottom:9mm;display:flex;justify-content:space-between;font-size:7.6pt;color:rgba(255,255,255,.7);font-weight:600;z-index:6}
+
+/* ======================= PAGE 2 ======================= */
+.p2 .head{top:13mm}
+.p2 .head h2{margin-top:2mm;max-width:132mm}
+.p2 .cols{top:52mm;width:98mm}
+.lbl{display:inline-flex;align-items:center;gap:2mm;font-weight:800;font-size:7.4pt;letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.6mm}
+.lbl::before{content:"";width:5mm;height:.9mm;background:var(--red);border-radius:2px}
+.p2 .cols p{color:var(--text);margin-bottom:5mm}
+.p2 .cols .door p{margin:0}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-top:1mm}
+.door{padding:3.6mm 3.8mm}
+.door h4{font-size:9.4pt;font-weight:800;margin:2mm 0 .6mm}
+.door p{font-size:7.9pt;line-height:1.42;color:var(--text);margin:0}
+.p2 .shots{left:120mm;right:auto;top:52mm;width:78mm;height:120mm}
+.p2 .band{left:14mm;right:14mm;top:222mm}
+.p2 .band h3{font-size:12pt;font-weight:800;margin-bottom:3mm}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.num{padding:4mm 4.4mm;border-radius:3.6mm;background:#fff;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 1.6mm 4.4mm rgba(22,24,29,.06);border-top:1.2mm solid var(--red)}
+.num:nth-child(4n+2){border-color:var(--yellow)}.num:nth-child(4n+3){border-color:var(--sky)}.num:nth-child(4n){border-color:var(--green)}
+.num b{display:block;font-size:17pt;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.num small{font-size:7.6pt;color:var(--muted);font-weight:600}
+
+/* ======================= PAGE 3 ======================= */
+.p3 .head{top:13mm}.p3 .head h2{margin-top:2mm}
+.p3 .head p{margin-top:2.4mm;max-width:150mm;color:var(--text);font-size:9.6pt}
+.p3 .row{top:49mm;left:0;right:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0 11mm}
+.p3 .cell{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 2mm}
+.p3 .cell h4{font-size:10.4pt;font-weight:800;margin:4.6mm 0 1mm}
+.p3 .cell p{font-size:7.9pt;line-height:1.42;color:var(--text);max-width:42mm}
+.p3 .feat{left:14mm;right:14mm;top:189mm;display:grid;grid-template-columns:repeat(3,1fr);gap:3.4mm}
+.feat .card{padding:3.8mm 4.2mm}
+.feat h4{font-size:9.2pt;font-weight:800;margin:2.2mm 0 1mm}
+.feat ul{margin:0;padding:0;list-style:none}
+.feat li{font-size:7.7pt;line-height:1.4;color:var(--text);padding-left:3.2mm;position:relative;margin-bottom:.5mm}
+.feat li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.5mm;height:1.5mm;border-radius:50%;background:var(--red)}
+
+/* ======================= PAGE 4 ======================= */
+.p4 .head{top:13mm}.p4 .head h2{margin-top:2mm}
+.p4 h3.sec{font-size:11pt;font-weight:800;margin-bottom:2.8mm}
+.p4 .who{left:14mm;right:14mm;top:38mm}
+.whogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.6mm}
+.w{padding:3mm 3.4mm;display:flex;gap:2.6mm;align-items:flex-start}
+.w .ico{width:7.6mm;height:7.6mm;border-radius:2.4mm}.w .ico svg{width:4.2mm;height:4.2mm}
+.w b{display:block;font-size:8.6pt;font-weight:800;line-height:1.2}
+.w small{display:block;font-size:7.4pt;line-height:1.38;color:var(--text);margin-top:.5mm}
+.p4 .flow{left:14mm;top:94mm;width:106mm}
+.step{display:flex;gap:3.2mm;align-items:flex-start;position:relative;padding-bottom:3.6mm}
+.step::before{content:"";position:absolute;left:4mm;top:8.6mm;bottom:.2mm;width:.5mm;background:var(--line)}
+.step:last-child::before{display:none}
+.step .n{flex:none;width:8.4mm;height:8.4mm;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:800;font-size:9pt}
+.step:nth-child(2) .n{background:var(--yellow);color:var(--ink)}.step:nth-child(3) .n{background:var(--sky)}.step:nth-child(4) .n{background:var(--green)}.step:nth-child(5) .n{background:var(--ink)}
+.step:nth-child(6) .n{background:var(--red)}
+.step b{display:block;font-size:9pt;font-weight:800}
+.step p{font-size:7.9pt;line-height:1.42;color:var(--text)}
+.p4 .shots{left:128mm;right:auto;top:94mm;width:70mm;height:100mm}
+.p4 .trust{left:14mm;width:104mm;top:202mm;padding:4.4mm 5mm;background:var(--ink);color:#fff;border-radius:4mm}
+.trust h3{font-size:10.4pt;font-weight:800;color:var(--yellow);margin-bottom:2mm}
+.trust ul{margin:0;padding:0;list-style:none}
+.trust li{font-size:7.9pt;line-height:1.4;padding-left:3.4mm;position:relative;color:rgba(255,255,255,.9);margin-bottom:1.2mm}
+.trust li::before{content:"";position:absolute;left:0;top:1.8mm;width:1.5mm;height:1.5mm;border-radius:50%;background:var(--yellow)}
+.p4 .web{left:124mm;right:auto;top:202mm}
+.p4 .web .cap{margin-top:2.4mm;font-size:7.2pt;color:var(--muted);font-weight:600;line-height:1.4;width:74mm}
+.p4 .web .cap b{color:var(--ink)}
+
+/* ======================= PAGE 5 ======================= */
+.p5 .head{top:13mm}.p5 .head h2{margin-top:2mm;max-width:150mm}
+.p5 .head p{margin-top:2.4mm;max-width:155mm;color:var(--text);font-size:9.6pt}
+.layers{left:14mm;top:64mm;width:92mm;display:flex;flex-direction:column;gap:2.6mm}
+.layer{border-radius:4mm;padding:4mm 4.4mm;color:#fff;position:relative}
+.layer h4{font-size:9.8pt;font-weight:800}.layer small{display:block;font-size:7.6pt;line-height:1.4;opacity:.92;margin-top:.8mm}
+.layer .k{display:inline-block;font-size:6.6pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-bottom:.6mm}
+.l3{background:linear-gradient(135deg,#14161b,#2b1015 60%,#7a0f18)}.l2{background:linear-gradient(135deg,var(--red-d),var(--red))}.l1{background:linear-gradient(135deg,#0786b8,#00adf1)}
+.hub{right:12mm;top:58mm;width:94mm;height:94mm}
+.hub svg{width:100%;height:100%}
+.benefits{left:14mm;right:14mm;top:164mm;display:grid;grid-template-columns:repeat(3,1fr);gap:3mm}
+.benefit{padding:3.4mm 3.8mm}
+.benefit h4{font-size:8.8pt;font-weight:800;margin:1.8mm 0 .6mm}.benefit p{font-size:7.5pt;line-height:1.4;color:var(--text)}
+.road{left:14mm;right:14mm;top:236mm}
+.road h3{font-size:11pt;font-weight:800;margin-bottom:3.4mm}
+.road__line{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.road__line::before{content:"";position:absolute;left:3mm;right:3mm;top:3mm;height:.8mm;background:linear-gradient(90deg,var(--red),var(--yellow),var(--sky),var(--green));border-radius:2px}
+.rd{position:relative;padding-top:7.4mm}
+.rd::before{content:"";position:absolute;left:1mm;top:.4mm;width:5mm;height:5mm;border-radius:50%;background:var(--red);border:1mm solid #fff;box-shadow:0 0 0 .3mm var(--line)}
+.rd:nth-child(2)::before{background:var(--yellow)}.rd:nth-child(3)::before{background:var(--sky)}.rd:nth-child(4)::before{background:var(--green)}
+.rd b{display:block;font-size:8.6pt;font-weight:800}.rd small{display:block;font-size:7.4pt;line-height:1.38;color:var(--text);margin-top:.6mm}
+.rd .when{font-size:6.8pt;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--red-d);margin-bottom:.6mm;display:block}
+
+/* ======================= PAGE 6 ======================= */
+.p6 .head{top:13mm}.p6 .head h2{margin-top:2mm}
+.p6 .head p{margin-top:2.2mm;max-width:172mm;color:var(--text);font-size:9.2pt;line-height:1.45}
+.pipe{left:14mm;right:14mm;top:49mm;display:grid;grid-template-columns:1fr 6mm 1fr 6mm 1fr 6mm 1fr;align-items:stretch;gap:1mm}
+.pipe .b{padding:3.2mm 3.6mm;border-radius:3.6mm;color:#fff}
+.pipe .b b{display:block;font-size:9pt;font-weight:800}.pipe .b small{display:block;font-size:7.2pt;line-height:1.38;opacity:.92;margin-top:.8mm}
+.pipe .b:nth-child(1){background:var(--red)}.pipe .b:nth-child(3){background:#a97d00}.pipe .b:nth-child(5){background:var(--sky-d)}.pipe .b:nth-child(7){background:var(--ink)}
+.pipe .ar{display:grid;place-items:center;color:var(--muted)}.pipe .ar svg{width:4.4mm;height:4.4mm}
+.p6 h3.sec{font-size:10.6pt;font-weight:800;margin-bottom:2.4mm}
+.dsets{left:14mm;right:14mm;top:79mm}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4mm}
+.ds{padding:2.6mm 3.2mm;display:flex;gap:2.6mm;align-items:center}
+.ds .ico{width:7.2mm;height:7.2mm;border-radius:2.4mm}.ds .ico svg{width:3.9mm;height:3.9mm}
+.ds b{display:block;font-size:8.2pt;font-weight:800;line-height:1.2}.ds small{display:block;font-size:7.1pt;line-height:1.35;color:var(--text);margin-top:.3mm}
+.aiuse{left:14mm;right:14mm;top:120mm}
+.ai{display:grid;grid-template-columns:32mm 1fr 1fr;gap:0;align-items:stretch;border-radius:3mm;overflow:hidden;margin-bottom:1.6mm;background:#fff;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 1.4mm 4mm rgba(22,24,29,.06)}
+.ai>div{padding:2mm 3.2mm;font-size:7.4pt;line-height:1.38;color:var(--text);display:flex;align-items:center}
+.ai>div>span.txt{display:block}
+.ai .t{background:var(--paper);font-weight:800;color:var(--ink);font-size:8.4pt}
+.tag{display:inline-block;font-size:6.2pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.5mm 1.8mm;border-radius:99px;margin-right:1.6mm;vertical-align:1px;flex:none}
+.tag.today{background:#e3f5ea;color:#146b3c}.tag.next{background:#fff3b8;color:#7a5c00}
+.principles{left:14mm;right:14mm;top:192mm}
+.prin{display:grid;grid-template-columns:repeat(4,1fr);gap:2.4mm}
+.prin>div{display:flex;gap:2.2mm;align-items:flex-start;padding:2.6mm 2.8mm}
+.prin .ico{width:6.6mm;height:6.6mm;border-radius:2.1mm}.prin .ico svg{width:3.6mm;height:3.6mm}
+.prin b{font-size:8pt;font-weight:800;display:block;line-height:1.2}.prin small{font-size:6.9pt;line-height:1.34;color:var(--text);display:block;margin-top:.3mm}
+.ask{left:14mm;right:14mm;top:227mm;padding:4.4mm 5.4mm;border-radius:4.4mm;background:linear-gradient(135deg,#14161b,#2b1015 62%,#7a0f18);color:#fff}
+.ask h3{font-size:12pt;font-weight:800;color:var(--yellow);margin-bottom:2.6mm}
+.ask ol{margin:0;padding:0;list-style:none;counter-reset:q;display:grid;grid-template-columns:1fr 1fr;gap:2.2mm 6mm}
+.ask li{counter-increment:q;position:relative;padding-left:7.4mm;font-size:8pt;line-height:1.4;color:rgba(255,255,255,.92)}
+.ask li::before{content:counter(q);position:absolute;left:0;top:-.1mm;width:5.2mm;height:5.2mm;border-radius:50%;background:var(--yellow);color:var(--ink);font-weight:800;font-size:7.6pt;display:grid;place-items:center}
+.ask .thanks{margin-top:3mm;padding-top:2.6mm;border-top:.25mm solid rgba(255,255,255,.2);font-size:8.6pt;font-weight:700}
+.credits{left:14mm;right:14mm;bottom:13mm;font-size:6.1pt;line-height:1.35;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- ================================================== PAGE 1 ================================================== -->
+<section class="page cover">
+  <div class="cover__photo"></div>
+  <div class="flag"></div>
+  <div class="cover__top">
+    <div class="brand"><span class="logo"><img src="art/logo-mark.png" alt=""></span><b>Lango</b></div>
+    <span class="tag">Stakeholder briefing &middot; October 2026</span>
+  </div>
+  <div class="ph" style="left:20mm;top:42mm;transform:rotate(-7deg)">{{PHONE:home|52|}}</div>
+  <div class="ph" style="right:22mm;top:42mm;transform:rotate(7deg)">{{PHONE:dictionary|52|}}</div>
+  <div class="ph" style="left:73mm;top:22mm;z-index:5">{{PHONE:welcome|64|dark}}</div>
+  <div class="cover__text">
+    <div class="eyebrow">Culture &middot; Language &middot; Technology</div>
+    <h1>A digital home for a people&rsquo;s culture, <em>and a blueprint for Uganda.</em></h1>
+    <p class="lead">One app, one website and one admin system that document, teach and share Lango language and heritage, built so that every culture in Uganda can follow.</p>
+    <div class="chips"><span>Mobile app</span><span>Website</span><span>Admin &amp; review system</span><span>Open data API</span><span>Ready for launch</span></div>
+  </div>
+  <div class="cover__stats">
+    <div><b>2,829</b><small>words in the dictionary</small></div>
+    <div><b>25</b><small>clans with their prohibitions</small></div>
+    <div><b>30</b><small>heritage entries with sources</small></div>
+    <div><b>37</b><small>quiz questions with sources</small></div>
+  </div>
+  <div class="cover__foot"><span>Presented by the Minister for ICT, Cedric Otolo, and team</span><span>1 / 6</span></div>
+</section>
+
+<!-- ================================================== PAGE 2 ================================================== -->
+<section class="page p2">
+  <div class="flag"></div>
+  <div class="pad head"><div class="eyebrow">The need and the innovation</div><h2>Culture lives in memory. We have given it a home.</h2></div>
+  <div class="pad cols">
+    <span class="lbl" style="color:var(--red-d)">The challenge</span>
+    <p>Languages, clans, songs and stories pass on by word of mouth. When elders pass away and families move to towns and abroad, the knowledge goes with them. Children learn in English, the diaspora cannot find its roots, and today&rsquo;s AI tools barely understand our languages.</p>
+    <span class="lbl" style="color:var(--sky-d)">The innovation</span>
+    <p>Lango is a free app, website and admin system that documents, teaches and shares a people&rsquo;s culture in one trusted place, in English and Leb Lango. Anyone can contribute. Language experts and clan leaders review it before anything is marked verified, and every photograph and source carries its credit.</p>
+    <div class="doors">
+      <div class="card door"><span class="ico r">{{ICON:book}}</span><h4>Learn</h4><p>Dictionary, word translator, proverbs, phrasebook, daily word and quizzes.</p></div>
+      <div class="card door"><span class="ico y">{{ICON:users}}</span><h4>Belong</h4><p>Clans, ten districts, notable people, history and heritage.</p></div>
+      <div class="card door"><span class="ico s">{{ICON:headphones}}</span><h4>Listen and read</h4><p>Radio, podcast, events, news and the Lango Bible.</p></div>
+      <div class="card door"><span class="ico g">{{ICON:camera}}</span><h4>Contribute</h4><p>Add words, photos, stories and clan history, even without internet.</p></div>
+    </div>
+  </div>
+  <div class="pad shots">
+    <div style="position:absolute;left:0;top:0;transform:rotate(-4deg)">{{PHONE:home|45|}}</div>
+    <div style="position:absolute;left:35mm;top:16mm;transform:rotate(3deg)">{{PHONE:learn|45|}}</div>
+  </div>
+  <div class="pad band">
+    <h3>Ready today, before launch</h3>
+    <div class="nums">
+      <div class="num"><b>2,829</b><small>dictionary words</small></div>
+      <div class="num"><b>25</b><small>clans listed</small></div>
+      <div class="num"><b>10</b><small>districts covered</small></div>
+      <div class="num"><b>30</b><small>heritage entries</small></div>
+      <div class="num"><b>19</b><small>proverbs</small></div>
+      <div class="num"><b>10</b><small>notable Langos</small></div>
+      <div class="num"><b>37</b><small>quiz questions</small></div>
+      <div class="num"><b>33</b><small>photographs, all credited</small></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>Lango</b> &middot; Briefing</span><span>2 / 6</span></div>
+</section>
+
+<!-- ================================================== PAGE 3 ================================================== -->
+<section class="page p3">
+  <div class="flag"></div>
+  <div class="pad head"><div class="eyebrow">What the app does</div><h2>One app for everything about Lango.</h2>
+    <p>Built for the phone first (Android, iOS and the web), with an offline dictionary. Every screen below is the real app.</p></div>
+  <div class="pad row">
+    <div class="cell">{{PHONE:dictionary|44|}}<h4>Dictionary</h4><p>2,829 words, searchable in Leb Lango or English, and saved on the phone for use offline.</p></div>
+    <div class="cell">{{PHONE:clan|44|}}<h4>Clans</h4><p>25 clans with their totems and prohibitions, clearly marked &ldquo;awaiting verification&rdquo;.</p></div>
+    <div class="cell">{{PHONE:heritage|44|}}<h4>Heritage</h4><p>Attire, crafts, music and ceremonies, each with its source and photo credit.</p></div>
+    <div class="cell">{{PHONE:quizResult|44|}}<h4>Quizzes</h4><p>Every answer shows the fact behind it and where it comes from.</p></div>
+  </div>
+  <div class="pad feat">
+    <div class="card"><span class="ico r">{{ICON:book}}</span><h4>Learn the language</h4><ul><li>Dictionary and word translator</li><li>Proverbs and everyday phrases</li><li>Word of the day, weekly challenge</li></ul></div>
+    <div class="card"><span class="ico y">{{ICON:users}}</span><h4>Know your people</h4><ul><li>Clan pages and clan groups</li><li>Notable Langos, with sources</li><li>History, timeline and districts</li></ul></div>
+    <div class="card"><span class="ico s">{{ICON:headphones}}</span><h4>Listen, read and play</h4><ul><li>Radio and podcast</li><li>The Lango Bible in the app</li><li>Points, streaks and badges</li></ul></div>
+    <div class="card"><span class="ico g">{{ICON:camera}}</span><h4>Contribute</h4><ul><li>Add words, photos and stories</li><li>Works offline, sends later</li><li>Follow each contribution&rsquo;s review</li></ul></div>
+    <div class="card"><span class="ico k">{{ICON:shield}}</span><h4>Trusted and safe</h4><ul><li>Sign in with Google or email</li><li>Verified or not, always labelled</li><li>Photo location data removed</li></ul></div>
+    <div class="card"><span class="ico r">{{ICON:globe}}</span><h4>For everyone</h4><ul><li>English and Leb Lango interface</li><li>Offline dictionary and contributions</li><li>Alerts for events and festivals</li></ul></div>
+  </div>
+  <div class="foot"><span><b>Lango</b> &middot; Briefing</span><span>3 / 6</span></div>
+</section>
+
+<!-- ================================================== PAGE 4 ================================================== -->
+<section class="page p4">
+  <div class="flag"></div>
+  <div class="pad head"><div class="eyebrow">Who uses it and how it works</div><h2>From an elder&rsquo;s memory to a child&rsquo;s phone.</h2></div>
+  <div class="pad who">
+    <h3 class="sec">Who uses it</h3>
+    <div class="whogrid">
+      <div class="card w"><span class="ico r">{{ICON:book}}</span><div><b>Young people</b><small>Learn Leb Lango and their clan in a form they enjoy.</small></div></div>
+      <div class="card w"><span class="ico y">{{ICON:globe}}</span><div><b>The diaspora</b><small>Stay connected to roots, language and home.</small></div></div>
+      <div class="card w"><span class="ico s">{{ICON:grad}}</span><div><b>Schools and teachers</b><small>Mother-tongue lessons, quizzes and sources.</small></div></div>
+      <div class="card w"><span class="ico g">{{ICON:users}}</span><div><b>Elders and clan leaders</b><small>Record and verify what they know.</small></div></div>
+      <div class="card w"><span class="ico k">{{ICON:database}}</span><div><b>Researchers</b><small>Reviewed data with sources, through an open API.</small></div></div>
+      <div class="card w"><span class="ico r">{{ICON:pin}}</span><div><b>Visitors and planners</b><small>Heritage sites, districts and events.</small></div></div>
+    </div>
+  </div>
+  <div class="pad flow">
+    <h3 class="sec">How a contribution becomes knowledge</h3>
+    <div class="step"><span class="n">1</span><div><b>Share</b><p>A member adds a word, photo, story or clan history in the app or on the website. It is saved on the phone and sent when there is a connection.</p></div></div>
+    <div class="step"><span class="n">2</span><div><b>Review</b><p>Language experts and clan leaders check it in the admin system and approve, correct or decline it.</p></div></div>
+    <div class="step"><span class="n">3</span><div><b>Publish</b><p>Approved material appears in the app, the website and the open API, with its credit and its status.</p></div></div>
+    <div class="step"><span class="n">4</span><div><b>Learn and use</b><p>Learners, schools, the diaspora and researchers use it. Points and badges reward contributors.</p></div></div>
+    <div class="step"><span class="n">5</span><div><b>Improve</b><p>What people search for and cannot find shows where to collect next.</p></div></div>
+  </div>
+  <div class="pad shots">
+    <div style="position:absolute;left:0;top:6mm;transform:rotate(-3deg)">{{PHONE:events|40|}}</div>
+    <div style="position:absolute;left:30mm;top:0;transform:rotate(3deg)">{{PHONE:contribute|40|}}</div>
+  </div>
+  <div class="pad trust">
+    <h3>Trust is built in</h3>
+    <ul>
+      <li>Nothing is called verified until an expert says so.</li>
+      <li>Every photograph and source carries its credit and licence.</li>
+      <li>Members sign in, and the location data in photos is removed.</li>
+      <li>The community keeps its rights to what it shares.</li>
+    </ul>
+  </div>
+  <div class="pad web">{{BROWSER:site_home|74|myculture.online}}<div class="cap">One platform, three doors: the <b>app</b>, the <b>website</b> shown here and the <b>open API</b>, all fed by the same reviewed data. The home page counter includes photos and documents as well as heritage entries.</div></div>
+  <div class="foot"><span><b>Lango</b> &middot; Briefing</span><span>4 / 6</span></div>
+</section>
+
+<!-- ================================================== PAGE 5 ================================================== -->
+<section class="page p5">
+  <div class="flag"></div>
+  <div class="pad head"><div class="eyebrow">From Lango to Uganda</div><h2>One platform. A home for every culture.</h2>
+    <p>Uganda has dozens of languages and many more clans and traditions. The Lango build separates the shared platform from the culture&rsquo;s own content, so a new culture can be added without starting again.</p></div>
+  <div class="pad layers">
+    <div class="layer l3"><span class="k">Layer 3 &middot; next</span><h4>National hub</h4><small>Search across cultures, a national dictionary and heritage atlas, open data and AI services for the whole country.</small></div>
+    <div class="layer l2"><span class="k">Layer 2 &middot; per culture</span><h4>Culture modules</h4><small>Dictionary, clans, heritage, people, history, radio and quizzes, written and reviewed by each community&rsquo;s own editors.</small></div>
+    <div class="layer l1"><span class="k">Layer 1 &middot; built once</span><h4>Shared platform</h4><small>App, website, admin and review system, API, quiz engine and offline support.</small></div>
+  </div>
+  <div class="pad hub" style="left:auto">{{HUB}}</div>
+  <div class="pad benefits">
+    <div class="card benefit"><span class="ico r">{{ICON:grad}}</span><h4>Mother-tongue education</h4><p>Reliable local-language material for schools, with sources.</p></div>
+    <div class="card benefit"><span class="ico y">{{ICON:heart}}</span><h4>Unity in diversity</h4><p>Each culture seen, valued and shared across the nation.</p></div>
+    <div class="card benefit"><span class="ico s">{{ICON:pin}}</span><h4>Heritage and tourism</h4><p>Sites, festivals and crafts made visible and protected.</p></div>
+    <div class="card benefit"><span class="ico g">{{ICON:globe}}</span><h4>The diaspora</h4><p>A way home for Ugandans abroad.</p></div>
+    <div class="card benefit"><span class="ico k">{{ICON:phone}}</span><h4>Digital inclusion</h4><p>Phone first, with an offline dictionary and contributions that send later.</p></div>
+    <div class="card benefit"><span class="ico r">{{ICON:database}}</span><h4>Evidence for policy</h4><p>Reliable data on languages, clans and heritage.</p></div>
+  </div>
+  <div class="pad road">
+    <h3>A proposed road</h3>
+    <div class="road__line">
+      <div class="rd"><span class="when">Now</span><b>Launch Lango</b><small>App stores, website and admin live; elders and editors begin reviewing.</small></div>
+      <div class="rd"><span class="when">Next</span><b>Deepen Lango</b><small>Sentence translation, recordings, more words, stories and schools.</small></div>
+      <div class="rd"><span class="when">Then</span><b>Add cultures</b><small>Two or three more communities, each with its own editors.</small></div>
+      <div class="rd"><span class="when">After</span><b>National hub</b><small>Cross-culture search, open data portal and national AI services.</small></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>Lango</b> &middot; Briefing</span><span>5 / 6</span></div>
+</section>
+
+<!-- ================================================== PAGE 6 ================================================== -->
+<section class="page p6">
+  <div class="flag"></div>
+  <div class="pad head"><div class="eyebrow">AI, data and the ask</div><h2>Data that speaks for Uganda.</h2>
+    <p>Every verified word, sentence, story and recording becomes part of a dataset that belongs to the community and can train tools that understand Ugandan languages, which global AI models largely do not.</p></div>
+  <div class="pad pipe">
+    <div class="b"><b>Community</b><small>Members, elders and clan leaders share knowledge, with consent.</small></div><div class="ar">{{ICON:arrow}}</div>
+    <div class="b"><b>Verified data</b><small>Experts review; each item keeps its source, credit and status.</small></div><div class="ar">{{ICON:arrow}}</div>
+    <div class="b"><b>Models</b><small>Translation, speech and assistants trained on verified data.</small></div><div class="ar">{{ICON:arrow}}</div>
+    <div class="b"><b>Services</b><small>Apps, schools, media and government, through the open API.</small></div>
+  </div>
+  <div class="pad dsets">
+    <h3 class="sec">What the dataset holds</h3>
+    <div class="dgrid">
+      <div class="card ds"><span class="ico r">{{ICON:book}}</span><div><b>Words and meanings</b><small>2,829 dictionary entries today</small></div></div>
+      <div class="card ds"><span class="ico y">{{ICON:message}}</span><div><b>Sentences and proverbs</b><small>Paired English and Leb Lango</small></div></div>
+      <div class="card ds"><span class="ico s">{{ICON:mic}}</span><div><b>Voices and audio</b><small>Radio, podcast, recorded elders</small></div></div>
+      <div class="card ds"><span class="ico g">{{ICON:camera}}</span><div><b>Photos with captions</b><small>Credited, with licence</small></div></div>
+      <div class="card ds"><span class="ico k">{{ICON:users}}</span><div><b>Clans and people</b><small>Totems, prohibitions, biographies</small></div></div>
+      <div class="card ds"><span class="ico r">{{ICON:pin}}</span><div><b>Places and heritage</b><small>Districts, sites, species</small></div></div>
+    </div>
+  </div>
+  <div class="pad aiuse">
+    <h3 class="sec">How AI will use it</h3>
+    <div class="ai"><div class="t">Cultural assistant</div><div><span class="tag today">Today</span><span class="txt">Answers from reviewed content, with its sources.</span></div><div><span class="tag next">Next</span><span class="txt">A language model grounded only in verified data.</span></div></div>
+    <div class="ai"><div class="t">Translation</div><div><span class="tag today">Today</span><span class="txt">Single words and set phrases from the dictionary.</span></div><div><span class="tag next">Next</span><span class="txt">Sentence translation trained on verified pairs.</span></div></div>
+    <div class="ai"><div class="t">Speech</div><div><span class="tag today">Today</span><span class="txt">Radio and podcast listening.</span></div><div><span class="tag next">Next</span><span class="txt">Speech recognition and read-aloud, from consented recordings.</span></div></div>
+    <div class="ai"><div class="t">Learning</div><div><span class="tag today">Today</span><span class="txt">Daily word, quizzes with sources.</span></div><div><span class="tag next">Next</span><span class="txt">Lessons that adapt to each learner.</span></div></div>
+    <div class="ai"><div class="t">National insight</div><div><span class="tag today">Today</span><span class="txt">Open API for researchers.</span></div><div><span class="tag next">Next</span><span class="txt">Culture and heritage atlas, dashboards for planners.</span></div></div>
+  </div>
+  <div class="pad principles">
+    <h3 class="sec">Principles</h3>
+    <div class="prin">
+      <div class="card"><span class="ico r">{{ICON:users}}</span><span><b>Community-owned</b><small>Shared with consent, rights kept.</small></span></div>
+      <div class="card"><span class="ico y">{{ICON:check}}</span><span><b>Expert-verified</b><small>Only reviewed data trains models.</small></span></div>
+      <div class="card"><span class="ico s">{{ICON:award}}</span><span><b>Credited</b><small>Every source and photo names its author.</small></span></div>
+      <div class="card"><span class="ico g">{{ICON:shield}}</span><span><b>Private and safe</b><small>Sensitive knowledge is guarded by elders.</small></span></div>
+    </div>
+  </div>
+  <div class="pad ask">
+    <h3>What we ask of you</h3>
+    <ol>
+      <li><b>Your opinion</b> on what you have seen: what works, and what is missing.</li>
+      <li><b>Your advice</b> on what elders must review first, and on knowledge that should stay protected.</li>
+      <li><b>Your partnership</b>: schools, universities, media, telecoms and cultural institutions.</li>
+      <li><b>Your blessing and support</b> for the launch, and for the next cultures.</li>
+    </ol>
+    <div class="thanks">Thank you for your time. The app is built, tested and ready to launch.</div>
+  </div>
+  <div class="pad credits">Photographs in the app are supplied for the project (photographers being confirmed) or come from Wikimedia Commons contributors under CC BY-SA, CC BY and CC0, each credited in the app. Facts come from named sources, listed in the app.</div>
+  <div class="foot"><span><b>Lango</b> &middot; Briefing</span><span>6 / 6</span></div>
+</section>
+</body>
+</html>
