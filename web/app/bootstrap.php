@@ -7,9 +7,8 @@ date_default_timezone_set('Africa/Kampala');
 
 $cfgFile = ROOT . '/config/config.php';
 if (!is_file($cfgFile)) {
-    $base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
-    $base = preg_replace('#/admin$#', '', $base);
-    header('Location: ' . $base . '/install.php');
+    require_once __DIR__ . '/lib/base_guess.php';
+    header('Location: ' . lci_guess_base() . '/install.php');
     exit;
 }
 $CFG = require $cfgFile;

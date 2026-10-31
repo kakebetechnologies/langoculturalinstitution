@@ -1,7 +1,9 @@
 // Builds the installable web version (PWA) of the app and publishes it inside the website at web/pwa, so it is served at
 //   <site>/pwa/        (for example http://localhost/langoculturalinstitution/pwa/)
 // next to the API it talks to (<site>/api/v1). The site's own address is read from web/config/config.php ("base"), so the same
-// command works on XAMPP and on a live server. Usage:  npm run pwa   (optionally:  npm run pwa -- --base=/some/folder)
+// command works on XAMPP and on a live server. Usage:  npm run pwa   (optionally:  npm run pwa -- --base=/some/folder --out=../deploy/pwa)
+// --base= (empty) is a site at the domain's root, as on https://myculture.online; --out= publishes somewhere other than web/pwa,
+// so a copy for the live site can be made without touching the one that XAMPP serves.
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -9,7 +11,8 @@ const { spawnSync } = require('child_process');
 const APP = path.join(__dirname, '..');
 const WEB = path.join(APP, '..', 'web');
 const OUT = path.join(APP, 'dist-web');
-const TARGET = path.join(WEB, 'pwa');
+const outArg = process.argv.find((a) => a.startsWith('--out='));
+const TARGET = outArg ? path.resolve(outArg.slice(6)) : path.join(WEB, 'pwa');
 
 function siteBase() {
   const arg = process.argv.find((a) => a.startsWith('--base='));

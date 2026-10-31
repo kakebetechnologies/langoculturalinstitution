@@ -18,43 +18,65 @@ $progImgs = ['hero-aerial', 'hero-field', 'hero-ridge', 'hero-hill', 'hero-site'
 
 page_start('', ['class' => 'home']);
 ?>
-<section class="hero">
-  <div class="container">
-    <div class="hero__panel">
-      <div class="hero__txt">
-        <span class="eyebrow"><?= e(setting('org_subtitle', 'Won Nyaci me Lango')) ?></span>
-        <h1><?php _e('Our Culture. Our People.'); ?> <em><?php _e('Our Future.'); ?></em></h1>
-        <p class="lead"><?php _e('The Lango Cultural Institution safeguards our language, clans and traditions, and brings Lango to the world through a living, community-built digital archive.'); ?></p>
-        <div class="hero__cta">
-          <a class="btn btn--primary" href="<?= e(url('contribute')) ?>"><?= icon('camera') ?> <?php _e('Become a Contributor'); ?></a>
-          <a class="btn btn--outline" href="<?= e(url('about')) ?>"><?php _e('Discover LCI'); ?></a>
-        </div>
-        <ul class="hero__facts">
-          <li><b><?= (int)$counts['clans'] ?></b><span><?php _e('Registered clans'); ?></span></li>
-          <li><b><?= (int)$counts['districts'] ?></b><span><?php _e('Districts'); ?></span></li>
-          <li><b><?= number_format($counts['words']) ?></b><span><?php _e('Words documented'); ?></span></li>
-        </ul>
-      </div>
-      <div class="hm">
-        <div class="hm__main"><img src="<?= e(site_img('hero_image_1', 'assets/img/photos/hero-site.jpg')) ?>" alt="<?= e(__('A Lango heritage site')) ?>"></div>
-        <div class="hm__inset"><img src="<?= e(site_img('hero_image_2', 'assets/img/photos/hero-hill.jpg')) ?>" alt=""></div>
-        <?php if ($next): $nts = strtotime($next['starts_at']); ?>
-          <a class="hm__event" href="<?= e(url('events/' . $next['slug'])) ?>">
-            <span class="d"><b><?= e(date('j', $nts)) ?></b><small><?= e(date('M', $nts)) ?></small></span>
-            <span class="t"><?= e(t($next, 'title')) ?><small><?php _e('Upcoming event'); ?> · <?= e((string)$next['location']) ?></small></span>
-          </a>
+<section class="fd-hero">
+  <div class="container fd-hero__in">
+    <div class="fd-hero__txt">
+      <span class="fd-pill"><i></i> <?= e(setting('org_subtitle', 'Won Nyaci me Lango')) ?></span>
+      <h1><?php _e('Our Culture.'); ?><br><?php _e('Our People.'); ?><br><span><?php _e('Our Future.'); ?></span></h1>
+      <p class="fd-sub"><?php _e('One home for the Lango language, clans and heritage. Join free and find your own culture here.'); ?></p>
+      <div class="fd-cta">
+        <?php if (user()): ?>
+          <a class="btn btn--dark btn--lg" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?php _e('Open My culture'); ?></a>
+          <a class="btn btn--outline btn--lg" href="<?= e(url('contribute')) ?>"><?= icon('camera') ?> <?php _e('Contribute'); ?></a>
+        <?php else: ?>
+          <a class="btn btn--dark btn--lg" href="<?= e(url('account/register')) ?>"><?php _e('Create free account'); ?></a>
+          <a class="btn btn--outline btn--lg" href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a>
         <?php endif; ?>
       </div>
+      <ul class="fd-trust">
+        <li><?= icon('check') ?> <?php _e('Free to join'); ?></li>
+        <li><?= icon('shield') ?> <?php _e('Safe and private'); ?></li>
+        <li><?= icon('phone-app') ?> <?php _e('On the web and your phone'); ?></li>
+      </ul>
+    </div>
+    <div class="fd-art">
+      <div class="fd-art__photo"><img src="<?= e(site_img('hero_image_1', 'assets/img/photos/hero-site.jpg')) ?>" alt="<?= e(__('A Lango heritage site')) ?>" fetchpriority="high"></div>
+      <div class="fd-phone"><img src="<?= e(asset('assets/img/app/app-home.jpg')) ?>" alt="<?= e(__('The Lango App')) ?>" width="390" height="844"></div>
+      <div class="fd-chip"><span class="ico"><?= icon('users') ?></span><span><b><?= (int)$counts['clans'] ?></b> <?php _e('registered clans'); ?></span></div>
     </div>
   </div>
 </section>
 
-<div class="qstrip"><div class="container"><div class="qstrip__in">
-  <a class="qi" href="<?= e(url('contribute')) ?>"><span class="ico"><?= icon('camera') ?></span><span><b><?php _e('Submit a contribution'); ?></b><small><?php _e('Photos, stories, sightings'); ?></small></span></a>
-  <a class="qi" href="<?= e(url('donate')) ?>"><span class="ico"><?= icon('heart') ?></span><span><b><?php _e('Donate'); ?></b><small><?php _e('Support Lango heritage'); ?></small></span></a>
-  <a class="qi" href="<?= e(url('library')) ?>"><span class="ico"><?= icon('book') ?></span><span><b><?php _e('Explore the Library'); ?></b><small><?php _e('Search the Data Center'); ?></small></span></a>
-  <a class="qi" href="<?= e(url('language/dictionary')) ?>"><span class="ico"><?= icon('globe') ?></span><span><b><?php _e('Dictionary & AI Translator'); ?></b><small><?php _e('Search and translate Leb Lango'); ?></small></span></a>
-</div></div></div>
+<section class="fd-facts"><div class="container"><ul class="fd-facts__in">
+  <li><b><?= (int)$counts['clans'] ?></b><span><?php _e('Registered clans'); ?></span></li>
+  <li><b><?= (int)$counts['districts'] ?></b><span><?php _e('Districts'); ?></span></li>
+  <li><b><?= number_format($counts['words']) ?></b><span><?php _e('Words documented'); ?></span></li>
+</ul></div></section>
+
+<section class="container fd-block">
+  <span class="eyebrow" style="text-align:center"><?php _e('Everything in one place'); ?></span>
+  <h2 class="fd-h2"><?php _e('Learn it. Share it. Keep it alive.'); ?></h2>
+  <p class="fd-lead"><?php _e('Everything LCI offers, whether you are in Lira or on the other side of the world.'); ?></p>
+  <div class="fd-grid">
+    <a class="fd-card" href="<?= e(url('language/dictionary')) ?>"><span class="ico"><?= icon('book') ?></span><h3><?php _e('Dictionary & AI Translator'); ?></h3><p><?php _e('Search words in Leb Lango and English, and translate with AI.'); ?></p></a>
+    <a class="fd-card" href="<?= e(url('clans')) ?>"><span class="ico"><?= icon('users') ?></span><h3><?php _e('Clan Explorer'); ?></h3><p><?php _e('Read about each clan and register under yours.'); ?></p></a>
+    <a class="fd-card" href="<?= e(url('heritage')) ?>"><span class="ico"><?= icon('globe') ?></span><h3><?php _e('Heritage & History'); ?></h3><p><?php _e('Ceremonies, music, dance and the story of the Lango people.'); ?></p></a>
+    <a class="fd-card" href="<?= e(url('contribute')) ?>"><span class="ico"><?= icon('camera') ?></span><h3><?php _e('Share what you know'); ?></h3><p><?php _e('Add a photo, a story or a word. Experts check it before it joins the archive.'); ?></p></a>
+    <a class="fd-card" href="<?= e(url('events')) ?>"><span class="ico"><?= icon('calendar') ?></span><h3><?php _e('Events & Programs'); ?></h3><p><?php _e('Follow what is happening and support the work.'); ?></p></a>
+    <a class="fd-card" href="<?= e(url('assistant')) ?>"><span class="ico"><?= icon('chat') ?></span><h3><?php _e('Cultural Assistant'); ?></h3><p><?php _e('Ask a question and get an answer from LCI’s own sources.'); ?></p></a>
+  </div>
+</section>
+
+<section class="container fd-block" style="text-align:center">
+  <span class="eyebrow"><?php _e('How it works'); ?></span>
+  <h2 class="fd-h2"><?php _e('Start in 3 steps'); ?></h2>
+  <div class="fd-steps">
+    <div class="fd-step"><span class="n"><?= icon('user') ?></span><h3><?php _e('Create your account'); ?></h3><p><?php _e('Your name, an email and a password. It takes a minute.'); ?></p></div>
+    <div class="fd-step"><span class="n"><?= icon('users') ?></span><h3><?php _e('Choose your clan'); ?></h3><p><?php _e('Pick your clan, or type its name if it is not listed yet.'); ?></p></div>
+    <div class="fd-step"><span class="n"><?= icon('star') ?></span><h3><?php _e('See your culture'); ?></h3><p><?php _e('Your own page: your clan, the word of the day, events and your contributions.'); ?></p></div>
+  </div>
+  <p style="margin-top:30px"><a class="btn btn--primary btn--lg" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= user() ? __('Open My culture') : __('Create free account') ?></a></p>
+</section>
 
 <section class="section">
   <div class="container split">
@@ -231,6 +253,24 @@ page_start('', ['class' => 'home']);
     <div class="sec-row"><div><span class="eyebrow"><?php _e('News & articles'); ?></span><h2><?php _e('Latest news'); ?></h2></div><a class="link" href="<?= e(url('news')) ?>"><?php _e('All news'); ?> <?= icon('arrow') ?></a></div>
     <div class="grid g3">
       <?php foreach ($posts as $p) echo card(url('news/' . $p['slug']), $p['image'], t($p, 'title'), excerpt(t($p, 'excerpt'), 120), (string)$p['cat'], '<span>' . icon('calendar') . ' ' . e(fmt_date($p['published_at'])) . '</span>' . ($p['author_name'] ? '<span>' . icon('user') . ' ' . e($p['author_name']) . '</span>' : '')); ?>
+    </div>
+  </div>
+</section>
+
+<section class="container fd-block" style="padding-bottom:48px">
+  <div class="fd-join">
+    <div class="fd-join__photo"><img loading="lazy" src="<?= e(site_img('cta_image', 'assets/img/photos/hero-hill.jpg')) ?>" alt=""></div>
+    <div class="fd-join__body">
+      <h2><?php _e('Join the Lango family'); ?></h2>
+      <p><?php _e('Create your free account and see your culture, your clan and your community in one place.'); ?></p>
+      <div class="fd-cta">
+        <?php if (user()): ?>
+          <a class="btn btn--gold btn--lg" href="<?= e(url('account')) ?>"><?php _e('Open My culture'); ?></a>
+        <?php else: ?>
+          <a class="btn btn--gold btn--lg" href="<?= e(url('account/register')) ?>"><?php _e('Create free account'); ?></a>
+          <a class="btn btn--ghost btn--lg" href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a>
+        <?php endif; ?>
+      </div>
     </div>
   </div>
 </section>

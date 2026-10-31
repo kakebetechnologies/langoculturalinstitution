@@ -11,7 +11,8 @@ lango/
 ├── app/   → Lango App — Expo / React Native (Android, iOS) and the installable web app (PWA)
 ├── scripts/dev.sh        → checks the API, then starts Expo
 ├── lango.code-workspace  → VS Code workspace with both projects
-└── .htaccess             → keeps http://localhost/langoculturalinstitution/ working (maps requests into web/)
+└── .htaccess             → serves web/ at the repository's own address: http://localhost/langoculturalinstitution/ here, and
+                            the main domain when the whole repository is deployed into public_html (Git); nothing else is served
 ```
 
 One repository, one database, one backend: the PHP site serves the public website **and** the API the app uses.

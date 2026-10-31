@@ -2,9 +2,10 @@
 declare(strict_types=1);
 // Web installer for first-time setup on a new server (XAMPP or hosting).
 require __DIR__ . '/database/install_lib.php';
+require __DIR__ . '/app/lib/base_guess.php';
 
 $cfgFile = __DIR__ . '/config/config.php';
-$base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+$base = lci_guess_base();
 $installed = is_file($cfgFile);
 $err = ''; $done = false;
 $v = ['host' => '127.0.0.1', 'port' => '3306', 'user' => 'root', 'name' => 'lci', 'aname' => '', 'aemail' => ''];

@@ -127,6 +127,25 @@ Add a new managed content type by adding one entry to `admin/modules.php`.
 * Sample news, events and programme dates are placeholders — edit or delete them before launch.
 * Privacy and Terms pages are drafts for legal review.
 
+## The live site: https://myculture.online (Hostinger)
+
+* **Deploy the whole repository into `public_html` (Git).** The root `.htaccess` maps every request into `web/`, so the domain opens
+  the website, with nothing else to point or configure. `app/`, `config/`, `database/`, `.git/`, the `.env` files, PDFs and the APK
+  answer 403 or 404 (checked on a copy of this layout). The mobile app's source is in the repository but never served.
+* Settings that must not be in Git live in `web/config/config.php`, which is git-ignored, so a `git pull` never replaces it and it
+  survives every deployment. First time only, either of these:
+  * open the domain: with no `config.php` it goes to `/install.php`, where you type the database details and the administrator
+    (the address is worked out for you, `'base' => ''` at a domain's root); or
+  * copy `config/config.live.php` (kept on the developer's computer, also git-ignored) to `config/config.php` on the server in File
+    Manager, then open `/install.php`: it asks only for the administrator and the database password (to show it is you), and
+    creates the tables. Starter content is optional (unticked).
+* Do not copy `config.live.php` over the `config.php` on the developer's computer, which points at the XAMPP database.
+* `npm run pwa -- --base= --out=../deploy/pwa` builds the web app for the domain root (`/pwa/`) without touching `web/pwa`, the copy
+  that XAMPP serves. The mobile app's address for the store builds is in `app/eas.json` (`https://myculture.online/api`).
+* PHP 8.2 or newer, with `pdo_mysql`, `mbstring`, `fileinfo` and `gd`; `uploads/` must be writable. Raise `upload_max_filesize` and
+  `post_max_size` to at least 128 MB if videos (up to 120 MB) will be uploaded.
+* `.htaccess` sends every http request on a real domain to https (not localhost or home-network addresses).
+
 ## Before going live
 
 1. Set `'debug' => false` in `config/config.php` (the web installer does this) and serve over HTTPS.
