@@ -1,6 +1,6 @@
 // Lango Podcast (GET /api/v1/podcasts): the stories of the old days told by the elders, newest first. Search by title or storyteller,
 // narrow to one series, tap an episode to open it or tap its play button to listen straight away (the next episode follows).
-// Only what LCI has published appears; until then the screen says the first stories are on their way.
+// Only what has been published appears; until then the screen says the first stories are on their way.
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -50,7 +50,7 @@ export default function Podcast() {
         empty={!rows.length}
         emptyIcon={filtered ? 'search-outline' : 'mic-outline'}
         emptyTitle={filtered ? 'No story matches that' : 'The first stories are on their way'}
-        emptyMessage={filtered ? 'Try another word, or choose all series.' : 'They will appear here as soon as LCI publishes them.'}
+        emptyMessage={filtered ? 'Try another word, or choose all series.' : 'They will appear here as soon as they are published.'}
       >
         {rows.map((e, i) => {
           const playing = now?.id === `e${e.id}`;

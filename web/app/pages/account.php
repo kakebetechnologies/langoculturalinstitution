@@ -149,7 +149,7 @@ page_start(__('My culture'), ['class' => 'mc']);
           <a class="link" href="<?= e(url('clans/' . $clan['slug'])) ?>"><?php _e('Open the clan page'); ?> <?= icon('arrow') ?></a>
         <?php elseif ($clanOther !== ''): ?>
           <h3><?= e($clanOther) ?></h3>
-          <p><?php _e('Your clan is not in the register yet. LCI will check the name and add it.'); ?></p>
+          <p><?php _e('Your clan is not in the register yet. We will check the name and add it.'); ?></p>
         <?php else: ?>
           <h3><?php _e('Choose your clan'); ?></h3>
           <form class="form mc-clanform" method="post" action="<?= e(url('account/clan')) ?>"><?= csrf_field() ?>

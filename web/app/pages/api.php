@@ -48,7 +48,7 @@ if ($a === 'translate') {
     json_out(lango_translate($text, ($body['direction'] ?? '') === 'lango-en' ? 'lango-en' : 'en-lango'));
 }
 
-if ($a !== 'v1') json_out(['name' => 'LCI Open Data API', 'version' => 'v1', 'docs' => url('developers')], $a === '' ? 200 : 404);
+if ($a !== 'v1') json_out(['name' => 'Lango Open Data API', 'version' => 'v1', 'docs' => url('developers')], $a === '' ? 200 : 404);
 
 api_app($res, $seg);   // the mobile app's endpoints (token auth, profile, contributions, content); exits when it handles the request
 

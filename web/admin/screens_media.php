@@ -67,7 +67,7 @@ function screen_bible_import(): void
         <p>Upload a CSV file with a header row and four columns: <code>book, chapter, verse, text</code>. The book can be its number (1 to 66), its three-letter code (GEN, EXO, … REV), its English name or its Leb Lango name. A verse that is already in is replaced, so the same file can be uploaded again after a correction. A tab-separated file works too.</p>
         <p><a href="data:text/csv;charset=utf-8,<?= e(rawurlencode("book,chapter,verse,text\n")) ?>" download="bible-template.csv">Download an empty template</a></p>
         <form method="post" enctype="multipart/form-data"><?= csrf_field() ?><input type="file" name="csv" accept=".csv,.tsv,.txt,text/csv,text/plain" required> <button class="btn btn--primary">Import</button></form>
-        <p class="dim" style="margin-top:16px"><b>Rights.</b> Only import text LCI has permission to publish, for example from the Bible Society of Uganda or another holder of the Lango translation. Write the copyright line the app shows under every chapter in <a href="<?= e(aurl('settings')) ?>">Site settings</a>. The app shows no Bible text until a file is imported.</p>
+        <p class="dim" style="margin-top:16px"><b>Rights.</b> Only import text you have permission to publish, for example from the Bible Society of Uganda or another holder of the Lango translation. Write the copyright line the app shows under every chapter in <a href="<?= e(aurl('settings')) ?>">Site settings</a>. The app shows no Bible text until a file is imported.</p>
       </div>
       <div class="panel">
         <h3>What is in so far</h3>

@@ -125,7 +125,7 @@ export default function Dictionary() {
             </View>
           ) : s.items.length ? (
             <AppText variant="caption" style={{ textAlign: 'center', marginTop: SPACING.md }}>
-              {t('“Checked” means an LCI language expert has confirmed the entry. Unmarked entries come from the original Lango dictionary project and are still being reviewed.')}
+              {t('“Checked” means a language reviewer has confirmed the entry. Unmarked entries come from the original Lango dictionary project and are still being reviewed.')}
             </AppText>
           ) : null
         }

@@ -10,7 +10,7 @@ if ($sub === 'documents') {
     if (in_array($cat, ['policy', 'governance', 'historical', 'research', 'report', 'other'], true)) { $where[] = 'category=?'; $par[] = $cat; }
     if ($qs !== '') { $where[] = '(title LIKE ? OR description LIKE ?)'; $l = '%' . like_escape($qs) . '%'; array_push($par, $l, $l); }
     $rows = all('SELECT * FROM documents WHERE ' . implode(' AND ', $where) . ' ORDER BY year DESC, id DESC', $par);
-    page_start(__('Official Documents'), ['hero' => ['eyebrow' => __('Data Center'), 'title' => __('Official documents'), 'sub' => __('Policies, governance records, historical documents and research papers.'), 'crumbs' => [[__('Library'), 'library'], [__('Documents'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
+    page_start(__('Documents'), ['hero' => ['eyebrow' => __('Data Center'), 'title' => __('Documents'), 'sub' => __('Historical documents and research papers.'), 'crumbs' => [[__('Library'), 'library'], [__('Documents'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
     ?>
     <section class="section"><div class="container">
       <div class="filters"><a class="pill <?= $cat === '' ? 'on' : '' ?>" href="<?= e(url('library/documents')) ?>"><?php _e('All'); ?></a>
@@ -20,7 +20,7 @@ if ($sub === 'documents') {
         <a class="box reveal" style="display:block;color:inherit" href="<?= e(url('download/' . $d['id'])) ?>"><div class="meta"><span class="tag"><?= e(__(ucfirst($d['category']))) ?></span><?php if ($d['year']): ?><span><?= (int)$d['year'] ?></span><?php endif; ?></div>
           <h4 style="margin-top:10px"><?= e($d['title']) ?></h4><p style="color:var(--muted);font-size:.92rem"><?= e(excerpt($d['description'], 120)) ?></p><b><?= icon('download') ?> <?php _e('Download'); ?></b></a>
       <?php endforeach; ?></div>
-      <?php else: echo empty_state(__('No documents published yet'), __('Official policies and historical records will be added by the institution.'), 'file'); endif; ?>
+      <?php else: echo empty_state(__('No documents published yet'), __('Documents and historical records will be added here.'), 'file'); endif; ?>
     </div></section>
     <?php page_end(); return;
 }
@@ -46,9 +46,9 @@ $cat = [
     ['media', 'image', 'Media archive', (int)val("SELECT COUNT(*) FROM media WHERE status='published'"), 'Photos, videos, audio and podcasts.'],
     ['library/documents', 'file', 'Official documents', (int)val("SELECT COUNT(*) FROM documents WHERE status='published'"), 'Policies, records, research papers.'],
     ['professionals', 'users', 'Professionals directory', (int)val("SELECT COUNT(*) FROM professionals WHERE status='published'"), 'Verified Lango professionals.'],
-    ['events', 'calendar', 'Events & programs', (int)val("SELECT COUNT(*) FROM events WHERE status='published'") + (int)val("SELECT COUNT(*) FROM programs WHERE status='published'"), 'Calendar and foundation programs.'],
+    ['events', 'calendar', 'Events', (int)val("SELECT COUNT(*) FROM events WHERE status='published'"), 'Festivals, gatherings and ceremonies.'],
 ];
-page_start(__('Data Center'), ['hero' => ['eyebrow' => __('The LCI digital nerve center'), 'title' => __('Data Center'), 'sub' => __('One secure, searchable home for Lango clans, language, heritage, biodiversity, media and documents.'), 'crumbs' => [[__('Library'), null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
+page_start(__('Data Center'), ['hero' => ['eyebrow' => __('Library'), 'title' => __('Data Center'), 'sub' => __('One secure, searchable home for Lango clans, language, heritage, biodiversity, media and documents.'), 'crumbs' => [[__('Library'), null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
 ?>
 <section class="section"><div class="container">
   <form class="searchbar" method="get" action="<?= e(url('library')) ?>"><input type="search" name="q" value="<?= e($qs) ?>" placeholder="<?= e(__('Search clans, words, ceremonies, species, news…')) ?>" aria-label="Search" autofocus><button class="btn btn--primary"><?= icon('search') ?> <?php _e('Search'); ?></button></form>

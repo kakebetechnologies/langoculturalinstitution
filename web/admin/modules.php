@@ -127,7 +127,7 @@ return [
             'title' => ['required' => true], 'description' => ['type' => 'textarea'],
             'file' => ['type' => 'file', 'kind_from' => 'type', 'kind_map' => ['photo' => 'image', 'video' => 'video', 'audio' => 'audio', 'podcast' => 'audio'], 'label' => 'File', 'help' => 'Photo, MP4/WebM video, or MP3/WAV/M4A audio.'],
             'url' => ['type' => 'url', 'label' => 'Or video link (YouTube / Vimeo)'], 'album' => [], 'credit' => [],
-            'source' => ['type' => 'select', 'options' => ['lci' => 'LCI', 'community' => 'Community'], 'required' => true, 'default' => 'lci'],
+            'source' => ['type' => 'select', 'options' => ['lci' => 'Editors', 'community' => 'Community'], 'required' => true, 'default' => 'lci'],
             'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'draft'],
         ],
     ],
@@ -162,7 +162,7 @@ return [
             'lineage' => ['type' => 'rich'], 'notable_members' => ['type' => 'textarea'], 'leader_name' => ['label' => 'Clan leader'], 'leader_title' => ['label' => 'Leader title', 'default' => 'Awitong'],
             'leader_photo' => ['type' => 'image', 'label' => 'Clan leader photo', 'help' => 'Shown on this clan page and used when someone asks the AI assistant who leads the clan.'],
             'image' => ['type' => 'image', 'label' => 'Clan image'], 'source_note' => ['label' => 'Where this name comes from', 'full' => true],
-            'verified' => $bool + ['label' => 'Verified by clan leaders / LCI'], 'status' => ['type' => 'select', 'options' => $PUB, 'default' => 'draft'],
+            'verified' => $bool + ['label' => 'Verified by clan leaders or editors'], 'status' => ['type' => 'select', 'options' => $PUB, 'default' => 'draft'],
         ],
     ],
     'heritage_items' => [
@@ -312,7 +312,7 @@ return [
         'label' => 'Donations', 'icon' => 'dollar', 'group' => 'Community', 'table' => 'donations', 'roles' => ADM_ALL, 'title' => 'reference', 'order' => 'created_at DESC',
         'list' => ['reference', 'donor_name', 'amount', 'currency', 'method', 'purpose', 'status', 'created_at'], 'search' => ['reference', 'donor_name', 'email', 'phone'], 'filters' => ['status', 'method', 'purpose', 'program_id'],
         'actions' => ['confirm' => ['Confirm', 'status', 'confirmed'], 'fail' => ['Failed', 'status', 'failed']],
-        'before' => function (array &$d, bool $new) { if ($new) { $d['reference'] = 'LCI' . new_code(7); } },
+        'before' => function (array &$d, bool $new) { if ($new) { $d['reference'] = 'LNG' . new_code(7); } },
         'fields' => [
             'reference' => ['readonly' => true, 'label' => 'Reference'], 'created_at' => ['type' => 'datetime', 'readonly' => true, 'label' => 'Received'],
             'donor_name' => ['required' => true], 'email' => ['type' => 'email'], 'phone' => [], 'country' => [],
@@ -326,7 +326,7 @@ return [
     ],
 
     /* ------------------------------ LISTEN & READ ------------------------------ */
-    // What the app's Listen and Bible screens show. Nothing is pre-filled: LCI adds the recordings and the Bible text it has the right to publish.
+    // What the app's Listen and Bible screens show. Nothing is pre-filled: add the recordings and the Bible text you have the right to publish.
     'podcast_episodes' => [
         'label' => 'Podcast episodes', 'icon' => 'mic', 'group' => 'Listen & read', 'table' => 'podcast_episodes', 'roles' => $cont, 'title' => 'title', 'order' => 'COALESCE(published_at, created_at) DESC, id DESC',
         'list' => ['title', 'storyteller', 'series', 'recorded_year', 'plays', 'status'], 'search' => ['title', 'storyteller', 'summary'], 'filters' => ['status'],

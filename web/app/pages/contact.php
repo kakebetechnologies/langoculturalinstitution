@@ -12,7 +12,7 @@ if (is_post()) {
     flash(__('Thank you — your message has been sent. We will reply as soon as we can.'));
     redirect('contact');
 }
-page_start(__('Contact'), ['hero' => ['eyebrow' => __('Get in touch'), 'title' => __('Contact the institution'), 'sub' => __('Questions, partnerships, press or research — we would love to hear from you.'), 'crumbs' => [[__('Contact'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
+page_start(__('Contact'), ['hero' => ['eyebrow' => __('Get in touch'), 'title' => __('Contact us'), 'sub' => __('Questions, partnerships, press or research — we would love to hear from you.'), 'crumbs' => [[__('Contact'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
 ?>
 <section class="section"><div class="container article article--form">
   <form class="formcard form" method="post"><?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
@@ -23,12 +23,12 @@ page_start(__('Contact'), ['hero' => ['eyebrow' => __('Get in touch'), 'title' =
     <div><button class="btn btn--primary"><?= icon('mail') ?> <?php _e('Send message'); ?></button></div>
   </form>
   <aside class="aside">
-    <div class="box"><h4><?php _e('Office'); ?></h4><dl class="kv" style="grid-template-columns:30px 1fr">
-      <dt><?= icon('pin') ?></dt><dd><?= e(setting('address')) ?></dd>
-      <dt><?= icon('mail') ?></dt><dd><a href="mailto:<?= e(setting('email')) ?>"><?= e(setting('email')) ?></a></dd>
-      <dt><?= icon('phone') ?></dt><dd><a href="tel:<?= e(preg_replace('/\s+/', '', setting('phone'))) ?>"><?= e(setting('phone')) ?></a></dd></dl>
+    <div class="box"><h4><?php _e('Get in touch'); ?></h4><dl class="kv" style="grid-template-columns:30px 1fr">
+      <?php if (setting('address')): ?><dt><?= icon('pin') ?></dt><dd><?= e(setting('address')) ?></dd><?php endif; ?>
+      <?php if (setting('email')): ?><dt><?= icon('mail') ?></dt><dd><a href="mailto:<?= e(setting('email')) ?>"><?= e(setting('email')) ?></a></dd><?php endif; ?>
+      <?php if (setting('phone')): ?><dt><?= icon('phone') ?></dt><dd><a href="tel:<?= e(preg_replace('/\s+/', '', setting('phone'))) ?>"><?= e(setting('phone')) ?></a></dd><?php endif; ?></dl>
       <?php if (setting('whatsapp')): ?><p style="margin:14px 0 0"><a class="btn btn--outline btn--sm" href="<?= e(setting('whatsapp')) ?>" target="_blank" rel="noopener"><?= icon('chat') ?> WhatsApp</a></p><?php endif; ?></div>
-    <div class="box box--dark"><h4><?php _e('Looking for something specific?'); ?></h4><p style="line-height:2"><a href="<?= e(url('apply/volunteer')) ?>" style="color:var(--gold)"><?php _e('Volunteer'); ?></a><br><a href="<?= e(url('apply/partner')) ?>" style="color:var(--gold)"><?php _e('Partner with LCI'); ?></a><br><a href="<?= e(url('developers')) ?>" style="color:var(--gold)"><?php _e('Data & research access'); ?></a></p></div>
+    <div class="box box--dark"><h4><?php _e('Looking for something specific?'); ?></h4><p style="line-height:2"><a href="<?= e(url('contribute')) ?>" style="color:var(--gold)"><?php _e('Share what you know'); ?></a><br><a href="<?= e(url('developers')) ?>" style="color:var(--gold)"><?php _e('Data & research access'); ?></a></p></div>
   </aside>
 </div></section>
 <?php page_end(); ?>

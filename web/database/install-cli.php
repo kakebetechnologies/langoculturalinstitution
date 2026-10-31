@@ -14,5 +14,5 @@ lci_install($db, ['name' => 'Site Administrator', 'email' => $opt['email'], 'pas
 $cfg = "<?php\nreturn " . var_export(['db' => $db, 'base' => $opt['base'], 'debug' => true], true) . ";\n";
 file_put_contents(dirname(__DIR__) . '/config/config.php', $cfg);
 file_put_contents(dirname(__DIR__) . '/config/first-run-credentials.txt',
-    "LCI admin first-run login (delete this file after your first sign-in)\nURL:      {$opt['base']}/admin/\nEmail:    {$opt['email']}\nPassword: $password\n");
+    "Lango admin first-run login (delete this file after your first sign-in)\nURL:      {$opt['base']}/admin/\nEmail:    {$opt['email']}\nPassword: $password\n");
 echo "Installed. Credentials saved to config/first-run-credentials.txt\n";

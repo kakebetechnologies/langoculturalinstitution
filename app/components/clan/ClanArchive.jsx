@@ -1,4 +1,4 @@
-// A clan's archive: everything its members contributed that LCI reviewers approved (words, proverbs, oral histories, photographs…).
+// A clan's archive: everything its members contributed that reviewers approved (words, proverbs, oral histories, photographs…).
 // A name is only shown when the contributor asked to be credited. Shortcuts add to the archive: a word, a proverb, a photo.
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
@@ -30,9 +30,9 @@ export default function ClanArchive({ clanId, clanName }) {
       </View>
 
       <AppText variant="heading" style={{ marginTop: SPACING.lg, marginBottom: SPACING.sm }}>
-        {t('Approved by LCI')}
+        {t('Approved')}
       </AppText>
-      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="images-outline" emptyTitle="Nothing in the archive yet" emptyMessage="When LCI approves what members of this clan contribute, it appears here.">
+      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="images-outline" emptyTitle="Nothing in the archive yet" emptyMessage="When reviewers approve what members of this clan contribute, it appears here.">
         {rows.map((r) => (
           <Row key={r.id} image={r.image} icon={r.image ? undefined : r.type === 'language' ? 'chatbubbles-outline' : 'document-text-outline'} iconTone="gold" title={r.title} subtitle={r.excerpt}>
             <View style={styles.meta}>

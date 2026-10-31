@@ -1,5 +1,5 @@
 // Our History (GET /api/v1/history): the story in chapters you open one by one, then the timeline and the glossary of Lango
-// words used in the history (tap a word to see it in the dictionary). Compiled from published sources, for LCI's historians to review.
+// words used in the history (tap a word to see it in the dictionary). Compiled from published sources, for historians to review.
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
@@ -31,7 +31,7 @@ export default function History() {
               <AppText variant="eyebrow">{t('The story in brief')}</AppText>
               <AppText style={styles.leadText}>{t('The Lango are a Nilotic people of north-central Uganda. Oral tradition remembers a long migration from the north, a society built on clans rather than kings, a colonial era that created chiefs where there had been none, and a post-independence history in which Lango sons and daughters stood at the centre of the nation.')}</AppText>
               <AppText variant="caption" style={{ marginTop: 8 }}>
-                {t('Compiled from published sources and still to be reviewed by LCI’s historians and the Council of Elders.')}
+                {t('Compiled from published sources and still to be reviewed by historians and elders.')}
               </AppText>
             </View>
 

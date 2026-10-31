@@ -5,10 +5,8 @@ $counts   = site_counts();
 $wotd     = word_of_day();
 $posts    = all("SELECT p.*, c.name cat FROM posts p LEFT JOIN post_categories c ON c.id=p.category_id WHERE p.status='published' AND p.published_at<=NOW() ORDER BY p.featured DESC, p.published_at DESC LIMIT 3");
 $events   = all("SELECT * FROM events WHERE status='published' AND starts_at>=CURDATE() ORDER BY starts_at LIMIT 3");
-$programs = all("SELECT * FROM programs WHERE status='published' ORDER BY featured DESC, sort, id LIMIT 4");
 $notables = all("SELECT * FROM notables WHERE status='published' ORDER BY featured DESC, sort LIMIT 4");
 $districtList = all("SELECT name, slug, kind FROM districts WHERE status='published' ORDER BY kind DESC, name");
-$partners = all("SELECT * FROM partners WHERE status='published' ORDER BY sort, id");
 $photos   = all("SELECT file, title FROM media WHERE type='photo' AND status='published' AND file IS NOT NULL ORDER BY id DESC LIMIT 6");
 $defaults = ['hero-road', 'hero-site', 'hero-hill', 'hero-aerial', 'hero-field', 'hero-ridge'];
 $strip    = [];
@@ -21,8 +19,8 @@ page_start('', ['class' => 'home']);
 <section class="fd-hero">
   <div class="container fd-hero__in">
     <div class="fd-hero__txt">
-      <span class="fd-pill"><i></i> <?= e(setting('org_subtitle', 'Won Nyaci me Lango')) ?></span>
-      <h1><?php _e('Our Culture.'); ?><br><?php _e('Our People.'); ?><br><span><?php _e('Our Future.'); ?></span></h1>
+      <span class="fd-pill"><i></i> <?php _e('Everything about Lango'); ?></span>
+      <h1><?php _e('Our Language.'); ?><br><?php _e('Our Clans.'); ?><br><span><?php _e('Our Culture.'); ?></span></h1>
       <p class="fd-sub"><?php _e('One home for the Lango language, clans and heritage. Join free and find your own culture here.'); ?></p>
       <div class="fd-cta">
         <?php if (user()): ?>
@@ -42,13 +40,13 @@ page_start('', ['class' => 'home']);
     <div class="fd-art">
       <div class="fd-art__photo"><img src="<?= e(site_img('hero_image_1', 'assets/img/photos/hero-site.jpg')) ?>" alt="<?= e(__('A Lango heritage site')) ?>" fetchpriority="high"></div>
       <div class="fd-phone"><img src="<?= e(asset('assets/img/app/app-home.jpg')) ?>" alt="<?= e(__('The Lango App')) ?>" width="390" height="844"></div>
-      <div class="fd-chip"><span class="ico"><?= icon('users') ?></span><span><b><?= (int)$counts['clans'] ?></b> <?php _e('registered clans'); ?></span></div>
+      <div class="fd-chip"><span class="ico"><?= icon('users') ?></span><span><b><?= (int)$counts['clans'] ?></b> <?php _e('clans listed'); ?></span></div>
     </div>
   </div>
 </section>
 
 <section class="fd-facts"><div class="container"><ul class="fd-facts__in">
-  <li><b><?= (int)$counts['clans'] ?></b><span><?php _e('Registered clans'); ?></span></li>
+  <li><b><?= (int)$counts['clans'] ?></b><span><?php _e('Clans listed'); ?></span></li>
   <li><b><?= (int)$counts['districts'] ?></b><span><?php _e('Districts'); ?></span></li>
   <li><b><?= number_format($counts['words']) ?></b><span><?php _e('Words documented'); ?></span></li>
 </ul></div></section>
@@ -56,14 +54,14 @@ page_start('', ['class' => 'home']);
 <section class="container fd-block">
   <span class="eyebrow" style="text-align:center"><?php _e('Everything in one place'); ?></span>
   <h2 class="fd-h2"><?php _e('Learn it. Share it. Keep it alive.'); ?></h2>
-  <p class="fd-lead"><?php _e('Everything LCI offers, whether you are in Lira or on the other side of the world.'); ?></p>
+  <p class="fd-lead"><?php _e('Everything about Lango in one place, whether you are in Lira or on the other side of the world.'); ?></p>
   <div class="fd-grid">
     <a class="fd-card" href="<?= e(url('language/dictionary')) ?>"><span class="ico"><?= icon('book') ?></span><h3><?php _e('Dictionary & AI Translator'); ?></h3><p><?php _e('Search words in Leb Lango and English, and translate with AI.'); ?></p></a>
     <a class="fd-card" href="<?= e(url('clans')) ?>"><span class="ico"><?= icon('users') ?></span><h3><?php _e('Clan Explorer'); ?></h3><p><?php _e('Read about each clan and register under yours.'); ?></p></a>
     <a class="fd-card" href="<?= e(url('heritage')) ?>"><span class="ico"><?= icon('globe') ?></span><h3><?php _e('Heritage & History'); ?></h3><p><?php _e('Ceremonies, music, dance and the story of the Lango people.'); ?></p></a>
     <a class="fd-card" href="<?= e(url('contribute')) ?>"><span class="ico"><?= icon('camera') ?></span><h3><?php _e('Share what you know'); ?></h3><p><?php _e('Add a photo, a story or a word. Experts check it before it joins the archive.'); ?></p></a>
     <a class="fd-card" href="<?= e(url('events')) ?>"><span class="ico"><?= icon('calendar') ?></span><h3><?php _e('Events & Programs'); ?></h3><p><?php _e('Follow what is happening and support the work.'); ?></p></a>
-    <a class="fd-card" href="<?= e(url('assistant')) ?>"><span class="ico"><?= icon('chat') ?></span><h3><?php _e('Cultural Assistant'); ?></h3><p><?php _e('Ask a question and get an answer from LCI’s own sources.'); ?></p></a>
+    <a class="fd-card" href="<?= e(url('assistant')) ?>"><span class="ico"><?= icon('chat') ?></span><h3><?php _e('Cultural Assistant'); ?></h3><p><?php _e('Ask a question and get an answer from reviewed Lango sources.'); ?></p></a>
   </div>
 </section>
 
@@ -86,27 +84,11 @@ page_start('', ['class' => 'home']);
       <div class="collage__badge"><b><?= (int)$counts['districts'] ?></b><small><?php _e('Districts of Lango'); ?></small></div>
     </div>
     <div class="reveal">
-      <span class="eyebrow"><?php _e('Welcome to LCI'); ?></span>
-      <h2><?php _e('A people with one heart and a shared future'); ?></h2>
-      <p><?php _e('The Lango Cultural Institution (LCI) is the traditional authority of the Lango people of mid-northern Uganda. Under the leadership of Won Nyaci Eng. Dr. Moses Michael Odongo Okune, we serve communities across Lira, Apac, Alebtong, Dokolo, Amolatar, Oyam, Kole, Otuke and Kwania.'); ?></p>
-      <p><?php _e('We believe that culture is identity. Together with 149 registered clans, we preserve what makes us Lango and build a future our children can be proud of.'); ?></p>
-      <div class="mv">
-        <div><b><?php _e('Our Mission'); ?></b><p><?= e(excerpt(setting('mission'), 170)) ?></p></div>
-        <div><b><?php _e('Our Vision'); ?></b><p><?= e(excerpt(setting('vision'), 170)) ?></p></div>
-      </div>
-      <a class="link" href="<?= e(url('about')) ?>"><?php _e('More about us'); ?> <?= icon('arrow') ?></a>
-    </div>
-  </div>
-</section>
-
-<section class="section section--cream">
-  <div class="container">
-    <div class="sec-row"><div><span class="eyebrow"><?php _e('What we do'); ?></span><h2><?php _e('Four ways we serve the Lango people'); ?></h2></div></div>
-    <div class="grid g4">
-      <a class="pillar reveal" href="<?= e(url('heritage')) ?>"><span class="pillar__n">01</span><h3><?php _e('Cultural preservation'); ?></h3><p><?php _e('Safeguarding dances like Okeme and Abuda, sacred sites and oral histories.'); ?></p><span class="link"><?php _e('Explore heritage'); ?> <?= icon('arrow') ?></span></a>
-      <a class="pillar reveal" href="<?= e(url('programs', ['category' => 'education'])) ?>"><span class="pillar__n">02</span><h3><?php _e('Education & youth'); ?></h3><p><?php _e('Scholarships, mentorship and skills rooted in Lango identity.'); ?></p><span class="link"><?php _e('See programs'); ?> <?= icon('arrow') ?></span></a>
-      <a class="pillar reveal" href="<?= e(url('clans')) ?>"><span class="pillar__n">03</span><h3><?php _e('Community unity'); ?></h3><p><?php _e('Bringing 149 clans across nine districts together in peace and development.'); ?></p><span class="link"><?php _e('Clan explorer'); ?> <?= icon('arrow') ?></span></a>
-      <a class="pillar reveal" href="<?= e(url('library')) ?>"><span class="pillar__n">04</span><h3><?php _e('Digital heritage'); ?></h3><p><?php _e('A secure archive of clans, language, media and documents for everyone.'); ?></p><span class="link"><?php _e('Open the Data Center'); ?> <?= icon('arrow') ?></span></a>
+      <span class="eyebrow"><?php _e('Welcome'); ?></span>
+      <h2><?php _e('A home for Lango on the web'); ?></h2>
+      <p><?php _e('Lango is a community website about the Lango people of mid-northern Uganda: their language, clans, districts, history and culture. It is free to use, and anyone can add to it.'); ?></p>
+      <p><?php _e('Culture is identity. Add your clan, your words and your stories, and help keep what makes us Lango for the next generation.'); ?></p>
+      <a class="link" href="<?= e(url('about')) ?>"><?php _e('More about Lango'); ?> <?= icon('arrow') ?></a>
     </div>
   </div>
 </section>
@@ -132,24 +114,10 @@ page_start('', ['class' => 'home']);
 
 <section class="section section--tight" style="padding-top:0">
   <div class="container"><div class="statband">
-    <div><b data-count="<?= $counts['clans'] ?>">0</b><span><?php _e('Registered clans'); ?></span></div>
+    <div><b data-count="<?= $counts['clans'] ?>">0</b><span><?php _e('Clans listed'); ?></span></div>
     <div><b data-count="<?= $counts['districts'] ?>">0</b><span><?php _e('Districts'); ?></span></div>
     <div><b data-count="<?= $counts['words'] ?>">0</b><span><?php _e('Words documented'); ?></span></div>
     <div><b data-count="<?= max($counts['archived'], 1) ?>">0</b><span><?php _e('Heritage items'); ?></span></div>
-  </div></div>
-</section>
-
-<section class="section" style="padding-top:34px">
-  <div class="container">
-    <div class="sec-row"><div><span class="eyebrow"><?php _e('Featured programs'); ?></span><h2><?php _e('Programs you can support'); ?></h2></div><a class="link" href="<?= e(url('programs')) ?>"><?php _e('All programs'); ?> <?= icon('arrow') ?></a></div>
-    <div class="pgrid"><?php foreach ($programs as $p) echo program_card($p); ?></div>
-  </div>
-</section>
-
-<section class="section" style="padding-top:0">
-  <div class="container"><div class="support" style="background-image:url('<?= e(site_img('cta_image', 'assets/img/photos/hero-road.jpg')) ?>')">
-    <div><span class="eyebrow"><?php _e('Be part of the story'); ?></span><h2><?php _e('Your support means a lot to Lango'); ?></h2><p><?= e(setting('donation_note')) ?></p></div>
-    <a class="btn btn--gold" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate now'); ?></a>
   </div></div>
 </section>
 
@@ -222,7 +190,7 @@ page_start('', ['class' => 'home']);
     <div class="reveal">
       <span class="eyebrow"><?php _e('The Lango App'); ?></span>
       <h2><?php _e('All of Lango, in your pocket'); ?></h2>
-      <p><?php _e('The Lango App brings the dictionary, clan pages, proverbs and the contribution tool to Android, iOS and the web — with offline access, low-data mode and SMS fallback for areas without internet.'); ?></p>
+      <p><?php _e('The Lango App brings the dictionary, clan pages, proverbs and the contribution tool to Android, iOS and the web — with offline access and a low-data mode.'); ?></p>
       <ul style="padding:0;list-style:none;display:grid;gap:9px;margin:0 0 24px;color:var(--ink);font-weight:500">
         <?php foreach (['Offline dictionary and proverbs', 'Contribute from the field, sync later', 'Push alerts for events and festivals', 'English and Leb Lango interface'] as $f): ?>
           <li style="display:flex;gap:10px;align-items:center"><span style="color:var(--sky-d)"><?= icon('check') ?></span> <?= e(__($f)) ?></li><?php endforeach; ?>
@@ -248,6 +216,7 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
+<?php if ($posts): ?>
 <section class="section section--cream">
   <div class="container">
     <div class="sec-row"><div><span class="eyebrow"><?php _e('News & articles'); ?></span><h2><?php _e('Latest news'); ?></h2></div><a class="link" href="<?= e(url('news')) ?>"><?php _e('All news'); ?> <?= icon('arrow') ?></a></div>
@@ -256,6 +225,7 @@ page_start('', ['class' => 'home']);
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <section class="container fd-block" style="padding-bottom:48px">
   <div class="fd-join">
@@ -275,12 +245,4 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
-<?php if ($partners): ?>
-<section class="section section--tight">
-  <div class="container"><div class="sec-head"><span class="eyebrow"><?php _e('Our partners'); ?></span></div>
-    <div class="partners"><?php foreach ($partners as $pt): ?>
-      <a href="<?= e($pt['url'] ?: '#') ?>" <?= $pt['url'] ? 'target="_blank" rel="noopener"' : '' ?>><?= $pt['logo'] ? '<img src="' . e(media_url($pt['logo'])) . '" alt="' . e($pt['name']) . '">' : '<span>' . e($pt['name']) . '</span>' ?></a>
-    <?php endforeach; ?></div></div>
-</section>
-<?php endif; ?>
 <?php page_end(); ?>

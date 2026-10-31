@@ -25,8 +25,10 @@ $route = $seg[0] ?? 'home';
 if ($route === 'robots.txt') { header('Content-Type: text/plain'); echo "User-agent: *\nDisallow: /admin/\nDisallow: /api/\nSitemap: " . (isset($_SERVER['HTTP_HOST']) ? ((!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']) : '') . url('sitemap.xml') . "\n"; exit; }
 if ($route === 'sitemap.xml') $route = 'sitemap';
 
-$pages = ['home', 'about', 'leadership', 'history', 'districts', 'clans', 'heritage', 'species', 'language', 'news', 'events', 'programs', 'media',
-    'library', 'search', 'contribute', 'donate', 'transparency', 'apply', 'diaspora', 'professionals', 'assistant', 'tours', 'developers',
+// Public pages. The institution's own pages (leadership, programs, transparency, apply, diaspora, donate) are not part of this independent site;
+// their files stay in app/pages, so adding a name back to this list brings a page back.
+$pages = ['home', 'about', 'history', 'districts', 'clans', 'heritage', 'species', 'language', 'news', 'events', 'media',
+    'library', 'search', 'contribute', 'professionals', 'assistant', 'tours', 'developers',
     'contact', 'account', 'privacy', 'terms', 'subscribe', 'api', 'download', 'comment', 'sitemap', 'people', 'auth'];
 
 if (!in_array($route, $pages, true)) not_found();

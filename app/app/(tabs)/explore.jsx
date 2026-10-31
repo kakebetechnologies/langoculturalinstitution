@@ -15,7 +15,7 @@ const LISTEN = [
   { href: '/radio', icon: 'radio', title: 'Lango Radio', text: 'Music, talk and stories', tone: 'red' },
   { href: '/podcast', icon: 'mic', title: 'Lango Podcast', text: 'Stories from our elders', tone: 'amber' },
   { href: '/bible', icon: 'book', title: 'Lango Bible', text: 'Read and search', tone: 'sky' },
-  { href: '/support', icon: 'heart', title: 'Give', text: 'Support LCI and the app', tone: 'green' },
+  { href: '/donate', icon: 'heart', title: 'Support', text: 'Help keep the Lango App running', tone: 'green' },
 ];
 
 const TILES = [
@@ -26,7 +26,7 @@ const TILES = [
   { href: '/heritage', icon: 'color-palette', title: 'Heritage', text: 'Ceremonies, dance, crafts, sites', tone: 'red' },
   { href: '/species', icon: 'leaf', title: 'Biodiversity', text: 'Plants and animals of Lango', tone: 'green' },
   { href: '/library', icon: 'library', title: 'Digital library', text: 'Documents and records', tone: 'sky' },
-  { href: '/news', icon: 'newspaper', title: 'News', text: 'Announcements from LCI', tone: 'slate' },
+  { href: '/news', icon: 'newspaper', title: 'News', text: 'News and stories', tone: 'slate' },
 ];
 
 export default function Explore() {
@@ -48,7 +48,7 @@ export default function Explore() {
         ))}
       </View>
       <AppText variant="caption" style={{ textAlign: 'center', marginTop: SPACING.lg }}>
-        {t('Everything here is checked by LCI before it is published.')}
+        {t('Everything here is checked before it is published.')}
       </AppText>
     </Screen>
   );

@@ -265,7 +265,7 @@ function api_app(string $res, array $seg): void
 
     switch ($res) {
         case 'ping':
-            json_out(['status' => 'ok', 'name' => setting('site_name', 'Lango Cultural Institution'), 'version' => 'v1', 'google' => google_enabled(), 'time' => date('c')]);
+            json_out(['status' => 'ok', 'name' => setting('site_name', 'Lango'), 'version' => 'v1', 'google' => google_enabled(), 'time' => date('c')]);
 
         /* ---------- accounts ---------- */
         case 'auth':
@@ -446,7 +446,7 @@ function api_app(string $res, array $seg): void
             $rows = all("SELECT c.id, c.name, c.slug, c.totem, c.summary, c.verified, d.name district FROM clans c LEFT JOIN districts d ON d.id=c.district_id WHERE $w ORDER BY c.name LIMIT $limit OFFSET $off", $par);
             $sizes = clan_group_counts();
             foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['verified'] = (bool)$r['verified']; $r['members'] = $sizes[$r['id']] ?? 0; }
-            json_out(['data' => $rows, 'page' => $page, 'meta' => api_meta($page, $limit, $total), 'registered_total' => (int)setting('clan_total', '149')]);
+            json_out(['data' => $rows, 'page' => $page, 'meta' => api_meta($page, $limit, $total), 'registered_total' => (int)val("SELECT COUNT(*) FROM clans WHERE status='published'")]);
 
         case 'districts':
             $rows = all("SELECT * FROM districts WHERE status='published' ORDER BY sort, name");
@@ -648,24 +648,24 @@ function api_app(string $res, array $seg): void
             if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) $e['email'] = 'That email address does not look right.';
             if ($email === '' && $phone === '') $e['email'] = 'Please give an email or phone number so we can send payment instructions.';
             if ($e) api_err(reset($e), 422, $e);
-            $ref = 'LCI' . new_code(7);
+            $ref = 'LNG' . new_code(7);
             insert('donations', ['reference' => $ref, 'donor_name' => $name !== '' ? mb_substr($name, 0, 150) : 'Anonymous', 'email' => $email ?: null, 'phone' => $phone ?: null, 'country' => ($in['country'] ?? $user['country'] ?? null) ?: null,
                 'amount' => $amount, 'currency' => $cur, 'method' => isset($methods[$in['method'] ?? '']) ? $in['method'] : 'mtn_momo', 'program_id' => (int)($in['program_id'] ?? 0) ?: null,
                 'recurring' => in_array($in['recurring'] ?? '', ['monthly', 'yearly'], true) ? $in['recurring'] : 'once', 'anonymous' => $anon ? 1 : 0, 'message' => mb_substr((string)($in['message'] ?? ''), 0, 500) ?: null,
                 'purpose' => ($in['purpose'] ?? '') === 'app' ? 'app' : 'general']);
             $method = isset($methods[$in['method'] ?? '']) ? $in['method'] : 'mtn_momo';
-            $pay = give_pay($method);   // how to pay, as LCI wrote it in Site settings (may be empty)
+            $pay = give_pay($method);   // how to pay, as the site owner wrote it in Site settings (may be empty)
             json_out(['data' => ['reference' => $ref, 'amount' => $amount, 'currency' => $cur, 'method' => $methods[$method], 'pay' => $pay,
                 'message' => $pay['instructions'] !== '' || $pay['url']
-                    ? 'Your pledge has been recorded. Pay as shown below and quote your reference; LCI confirms every gift once it arrives.'
-                    : 'Your pledge has been recorded. The LCI finance office will contact you with payment instructions. Keep your reference and quote it if you pay by mobile money or bank transfer.']], 201);
+                    ? 'Your pledge has been recorded. Pay as shown below and quote your reference; every gift is confirmed once it arrives.'
+                    : 'Your pledge has been recorded. We will contact you with payment instructions. Keep your reference and quote it if you pay by mobile money or bank transfer.']], 201);
 
         case 'transparency':
             $d = donation_totals();
             json_out(['data' => ['confirmed_donations' => (int)$d['n'], 'ugx' => (float)$d['ugx'], 'usd' => (float)$d['usd']]]);
 
         case 'about':
-            json_out(['data' => ['name' => setting('site_name', 'Lango Cultural Institution'), 'subtitle' => setting('org_subtitle', 'Won Nyaci me Lango'), 'tagline' => setting('site_tagline'), 'mission' => setting('mission'), 'vision' => setting('vision'),
+            json_out(['data' => ['name' => setting('site_name', 'Lango'), 'subtitle' => setting('org_subtitle', ''), 'tagline' => setting('site_tagline'), 'mission' => setting('mission'), 'vision' => setting('vision'),
                 'email' => setting('email'), 'phone' => setting('phone'), 'address' => setting('address'), 'website' => api_abs('')]]);
 
         case 'leaderboard':

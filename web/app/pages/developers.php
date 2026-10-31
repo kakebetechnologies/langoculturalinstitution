@@ -16,7 +16,7 @@ page_start(__('Open Data & API'), ['hero' => ['eyebrow' => __('For researchers &
     <div class="table-wrap"><table class="table"><thead><tr><th><?php _e('Endpoint'); ?></th><th><?php _e('Returns'); ?></th></tr></thead><tbody>
       <?php foreach ($eps as [$p, $d]): ?><tr><td><a href="<?= e(url('api/v1' . $p)) ?>"><code>GET /api/v1<?= e($p) ?></code></a></td><td><?= e(__($d)) ?></td></tr><?php endforeach; ?></tbody></table></div>
     <h2><?php _e('Data licence'); ?></h2>
-    <p><?php _e('Unless an item states otherwise, published data is made available under Creative Commons Attribution (CC BY 4.0): you may share and adapt it, including commercially, provided you credit “Lango Cultural Institution”. Contributor-owned media remains the property of its contributor and may carry different terms. Sacred or restricted knowledge is never published.'); ?></p>
+    <p><?php _e('Unless an item states otherwise, published data is made available under Creative Commons Attribution (CC BY 4.0): you may share and adapt it, including commercially, provided you credit “this site”. Contributor-owned media remains the property of its contributor and may carry different terms. Sacred or restricted knowledge is never published.'); ?></p>
     <p><?php _e('For bulk exports (CSV/JSON), higher rate limits or research partnerships, please contact the Data Center team.'); ?></p>
   </div>
   <aside class="aside"><div class="box box--dark"><h4><?php _e('Need something else?'); ?></h4><p><?php _e('We welcome research collaborations and app integrations.'); ?></p><a class="btn btn--gold btn--sm" href="<?= e(url('contact')) ?>"><?php _e('Contact the Data Center'); ?></a></div></aside>

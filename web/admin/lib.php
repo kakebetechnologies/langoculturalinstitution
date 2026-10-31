@@ -82,13 +82,13 @@ function admin_start(string $title, string $active, string $actions = ''): void
     $bellN = $bellOn ? badge_count('notifications') : 0;
     ?><!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><?= e($title) ?> · LCI Admin</title><meta name="robots" content="noindex">
+<title><?= e($title) ?> · Lango Admin</title><meta name="robots" content="noindex">
 <link rel="icon" href="<?= e(logo_url() ?: asset('assets/img/favicon.svg')) ?>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= e(asset('assets/css/admin.css')) ?>">
 </head><body>
 <aside class="side" id="side">
-  <a class="side__brand" href="<?= e(aurl()) ?>"><?= logo_url() ? '<img class="mark-img" src="' . e(logo_url()) . '" alt="">' : '<span class="mark">LCI</span>' ?><span><b>LCI Admin</b><small><?= e(setting('site_name', 'Lango Cultural Institution')) ?></small></span></a>
+  <a class="side__brand" href="<?= e(aurl()) ?>"><?= logo_url() ? '<img class="mark-img" src="' . e(logo_url()) . '" alt="">' : '<span class="mark">L</span>' ?><span><b>Lango Admin</b><small><?= e(setting('site_name', 'Lango Cultural Institution')) ?></small></span></a>
   <nav>
     <?php foreach ($order as $g): if (empty($groups[$g])) continue; ?>
       <div class="side__group"><?= e($g) ?></div>

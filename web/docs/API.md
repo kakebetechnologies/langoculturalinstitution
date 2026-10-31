@@ -58,18 +58,18 @@ Everything below is built from content already in the archive (the dictionary, h
 | GET | `/clans/leaderboard?sort=members|contributions|learners` | Every published clan with its numbers and rank, and `mine` for a signed-in member |
 | GET | `/clans/{id}/stats` | One clan's numbers and rank |
 
-Quiz words come from the dictionary: only entries LCI experts have verified once there are at least 100 of them (until then all published entries), never long or multi-word entries, and never the words in `DAILY_SENSITIVE` (web/app/lib/content.php).
+Quiz words come from the dictionary: only entries reviewers have verified once there are at least 100 of them (until then all published entries), never long or multi-word entries, and never the words in `DAILY_SENSITIVE` (web/app/lib/content.php).
 
 ## Listen & read
 
-Nothing here is written by the app or the code: LCI adds recordings and Bible text in *Admin → Listen & read*, so every list is empty until then. A channel with nothing to play, a draft and a future-dated episode never appear.
+Nothing here is written by the app or the code: the editors add recordings and Bible text in *Admin → Listen & read*, so every list is empty until then. A channel with nothing to play, a draft and a future-dated episode never appear.
 
 | Method | Path | Notes |
 |---|---|---|
 | GET | `/podcasts` | The Lango Podcast: published episodes, newest first, `?q=` (title, storyteller, summary) and `?series=` → `{ data: [ { id, title, storyteller, storyteller_note, series, clan, district, recorded_year, summary, minutes, cover, audio_url, published_at, plays } ], series: [names] }` |
 | GET | `/podcasts/{id}` | One episode with its `transcript`, and `more` from the same series or storyteller |
 | POST | `/podcasts/{id}/play` | Counts one play (rate limited) |
-| GET | `/radio` | Lango Radio channels that can play: `{ id, name, description, source, cover, count, stream_url }`. `source` is `playlist` (tracks LCI picked), `podcast` (every published episode) or `stream` (a live stream, `stream_url`) |
+| GET | `/radio` | Lango Radio channels that can play: `{ id, name, description, source, cover, count, stream_url }`. `source` is `playlist` (tracks the editors picked), `podcast` (every published episode) or `stream` (a live stream, `stream_url`) |
 | GET | `/radio/{id}` | The channel with its `tracks: [ { id, title, credit, minutes, audio_url, cover } ]` in play order (empty for a live stream) |
 | GET | `/bible` | `{ title, copyright, ready, books: [ { id (1 to 66), code, testament, name, name_en, name_lg, chapters, verses } ] }`. The 66 books are the standard canon; `name` is the Leb Lango name when LCI entered it. `ready` is false until verses are imported |
 | GET | `/bible/{book}` | The chapters of that book that have text: `{ book, available: [1, 2, …] }` |
@@ -109,7 +109,7 @@ A member who chose a clan can join that clan's group. `user.clan_group` (in `/me
 | `/dictionary/export` | The whole dictionary for offline use; pass `?version=` to get `{ unchanged: true }` when nothing changed |
 | `/proverbs`, `/greetings` | Published proverbs (none are pre-loaded); greetings from the Practical Lango Grammar |
 | `/translate` | `text`, `direction=en-lango|lango-en` — dictionary-based, not machine translation |
-| `/assistant` | POST `q` — answers only from reviewed LCI content, with sources |
+| `/assistant` | POST `q` — answers only from reviewed content, with sources |
 | `/events`, `/events/{slug}` | Upcoming (or `?past=1`) events |
 | `/programs`, `/programs/{slug}`, `/transparency` | Programs with progress; confirmed donation totals |
 | `/professionals` | GET the directory; POST (signed in) a profile for verification |

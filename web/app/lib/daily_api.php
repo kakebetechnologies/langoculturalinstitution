@@ -283,6 +283,6 @@ function daily_api(string $res, string $id, string $sub, string $m, ?array $u): 
         $sort = in_array(get('sort'), ['members', 'contributions', 'learners'], true) ? get('sort') : 'members';
         $rows = clan_rank_by(clan_stats_all(), $sort);
         $mine = $u && $u['clan_id'] ? (array_values(array_filter($rows, fn($r) => $r['id'] === (int)$u['clan_id']))[0] ?? null) : null;
-        json_out(['sort' => $sort, 'data' => $rows, 'mine' => $mine, 'registered_total' => (int)setting('clan_total', '149')]);
+        json_out(['sort' => $sort, 'data' => $rows, 'mine' => $mine, 'registered_total' => (int)val("SELECT COUNT(*) FROM clans WHERE status='published'")]);
     }
 }

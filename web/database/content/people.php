@@ -21,7 +21,7 @@ return [
 </ul>
 <h3>Last years and legacy</h3>
 <p>Obote lived in exile in Kenya and Zambia and died in Johannesburg, South Africa, on <strong>10 October 2005</strong>, aged 79. His ancestral home and monument in Apac are recognised as a national heritage site.</p>
-<p>Obote is remembered as a founding figure of independent Uganda. His two periods in office were also marked by political repression and violent conflict, and historians and Ugandans continue to assess his legacy differently. LCI presents his story here as part of the history that young people should know and discuss.</p>
+<p>Obote is remembered as a founding figure of independent Uganda. His two periods in office were also marked by political repression and violent conflict, and historians and Ugandans continue to assess his legacy differently. His story is presented here as part of the history that young people should know and discuss.</p>
 HTML,
 ],
 [
@@ -70,7 +70,7 @@ HTML,
  'summary' => "Remembered as a Lango warrior who fought beside Bunyoro's Omukama Kabalega against British forces in the 1890s.",
  'body' => <<<'HTML'
 <p>Owiny Akullu is remembered in Lango and in Ugandan history as a warrior who <strong>fought alongside Omukama Kabalega of Bunyoro</strong> against British forces and their allies in the 1890s. Daily Monitor has described him as the Langi warrior who defended Kabalega &ldquo;to the end&rdquo;.</p>
-<p>Few detailed records of his life survive, which is why LCI invites elders and families to record what they know of him as part of the oral history programme.</p>
+<p>Few detailed records of his life survive, which is why elders and families are invited to record what they know of him through the contribution form.</p>
 HTML,
 ],
 [

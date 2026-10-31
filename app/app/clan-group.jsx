@@ -94,7 +94,7 @@ export default function ClanGroup() {
               {t('Choose your clan first')}
             </AppText>
             <AppText style={{ marginTop: 6 }}>
-              {user.clan_other ? t('You told us your clan is {clan}. It is not in the register yet. When LCI adds it, your group will open here.', { clan: user.clan_other }) : t('The group is for people of the same clan. Choose yours on your profile.')}
+              {user.clan_other ? t('You told us your clan is {clan}. It is not in the register yet. When it is added, your group will open here.', { clan: user.clan_other }) : t('The group is for people of the same clan. Choose yours on your profile.')}
             </AppText>
             <Button title={t('Choose my clan')} onPress={() => router.push('/profile')} style={{ marginTop: SPACING.md }} />
           </Card>

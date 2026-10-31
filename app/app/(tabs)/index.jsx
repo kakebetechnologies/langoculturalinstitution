@@ -45,7 +45,7 @@ const LISTEN = [
   { href: '/radio', icon: 'radio', label: 'Radio', tone: 'red' },
   { href: '/podcast', icon: 'mic', label: 'Podcast', tone: 'amber' },
   { href: '/bible', icon: 'book', label: 'Bible', tone: 'sky' },
-  { href: '/support', icon: 'heart', label: 'Give', tone: 'green' },
+  { href: '/donate', icon: 'heart', label: 'Support', tone: 'green' },
 ];
 const CARD_TONES = ['red', 'sky', 'amber', 'green'];
 
@@ -89,7 +89,7 @@ export default function Home() {
           <View style={styles.hero}>
             <Image source={require('../../assets/welcome/ridge.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" />
             <LinearGradient colors={['rgba(14,16,20,0.2)', 'rgba(14,16,20,0.86)']} style={StyleSheet.absoluteFill} />
-            <AppText style={styles.heroEyebrow}>{t('Our Culture. Our People. Our Future.')}</AppText>
+            <AppText style={styles.heroEyebrow}>{t('Everything about Lango, in one place.')}</AppText>
             <AppText style={styles.heroTitle} numberOfLines={2}>
               {user ? t('Welcome back, {name}', { name: firstName(user.name) }) : t('Welcome to Lango')}
             </AppText>
@@ -270,16 +270,16 @@ export default function Home() {
                   </View>
                 ) : null}
 
-                <Pressable onPress={() => router.push('/support')} accessibilityRole="button" style={styles.donate}>
+                <Pressable onPress={() => router.push('/donate')} accessibilityRole="button" style={styles.donate}>
                   <Image source={require('../../assets/welcome/field.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" />
                   <LinearGradient colors={['rgba(20,22,27,0.35)', 'rgba(122,15,24,0.88)']} style={StyleSheet.absoluteFill} />
                   <AppText variant="eyebrow" style={{ color: COLORS.yellow }}>
-                    {t('Be part of the story')}
+                    {t('Support the app')}
                   </AppText>
-                  <AppText style={styles.donateTitle}>{t('Support LCI — your gift keeps Lango heritage alive')}</AppText>
+                  <AppText style={styles.donateTitle}>{t('Help keep the Lango App free and running')}</AppText>
                   <View style={styles.donateBtn}>
                     <Ionicons name="heart" size={16} color={COLORS.navy} />
-                    <AppText style={{ fontFamily: FONTS.semibold, color: COLORS.navy }}>{t('Donate now')}</AppText>
+                    <AppText style={{ fontFamily: FONTS.semibold, color: COLORS.navy }}>{t('Support now')}</AppText>
                   </View>
                 </Pressable>
 

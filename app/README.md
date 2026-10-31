@@ -1,6 +1,6 @@
 # Lango App
 
-The mobile app of the Lango Cultural Institution — heritage, language, clans and community contributions.
+The Lango App — heritage, language, clans and community contributions.
 Expo SDK 57 · React Native 0.86 · Expo Router · JavaScript. One codebase for **Android**, **iOS** and the installable **web app (PWA)**.
 It talks to the PHP website in [`../web`](../web) through the JSON API (`/api/v1`, see [`../web/docs/API.md`](../web/docs/API.md)).
 
@@ -58,7 +58,7 @@ public/               PWA manifest, service worker, icons
 - **Tickets and tracking codes** are saved on the phone so they open offline.
 - **Sign-in:** a bearer token kept in the secure store (Keychain / Keystore; local storage in the browser). A rejected token signs the
   person out cleanly.
-- **Language:** English or Leb Lango. `t('English phrase')` looks the phrase up in the translations entered by LCI's language experts
+- **Language:** English or Leb Lango. `t('English phrase')` looks the phrase up in the translations entered by language experts
   (*Admin → Translations*); anything not translated shows in English. On first run the app registers its phrases with the server
   so they appear in the admin screen ready to translate. Nothing is machine-translated or invented.
 - **Push notifications:** when a reviewer approves, publishes or returns a contribution, the member gets an in-app notification and, if

@@ -79,7 +79,7 @@ export default function Challenge() {
                 <AppText variant="heading">{t('Ten words, ten meanings')}</AppText>
                 <AppText style={{ marginTop: 6 }}>{t('Each question shows a Leb Lango word. Choose what it means. Everyone gets the same ten questions this week, and you can play once.')}</AppText>
                 <AppText variant="caption" style={{ marginTop: SPACING.sm }}>
-                  {t('Words come from the Lango dictionary project. Entries that LCI language experts have checked carry a tick in the dictionary.')}
+                  {t('Words come from the Lango dictionary project. Entries that a language reviewer has checked carry a tick in the dictionary.')}
                 </AppText>
               </Card>
               <Button title={t('Start')} onPress={() => setStep(0)} style={{ marginTop: SPACING.md }} />

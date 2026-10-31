@@ -1,5 +1,5 @@
 // Lango Bible, the books (GET /api/v1/bible): Old and New Testament, a search across the verses, and "continue reading" where the
-// member stopped last. Only books that have text are listed; the text is added in the admin panel by LCI, so until then the
+// member stopped last. Only books that have text are listed; the text is added in the admin panel, so until then the
 // screen says the Bible is being prepared. Nothing here is written by the app.
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -73,7 +73,7 @@ export default function Bible() {
         empty={!!bible && !bible.ready}
         emptyIcon="book-outline"
         emptyTitle="The Lango Bible is being prepared"
-        emptyMessage="The text will appear here once LCI has added it with the permission of those who hold the translation."
+        emptyMessage="The text will appear here once it has been added with the permission of those who hold the translation."
       >
         {bible ? (
           <>
@@ -100,7 +100,7 @@ export default function Bible() {
                 )}
                 {missing > 0 ? (
                   <AppText variant="caption" style={{ textAlign: 'center', marginTop: SPACING.md }}>
-                    {t('More books are added as LCI completes them.')}
+                    {t('More books are added as they are completed.')}
                   </AppText>
                 ) : null}
               </>

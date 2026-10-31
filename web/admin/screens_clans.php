@@ -67,11 +67,11 @@ function screen_clan_requests(): void
             $cid = (int)val('SELECT id FROM clans WHERE LOWER(name)=?', [mb_strtolower($name)]);
             if (!$cid) {
                 $cid = insert('clans', ['name' => $name, 'slug' => unique_slug('clans', slugify($name)), 'leader_title' => 'Awitong', 'verified' => 0, 'status' => 'published',
-                    'source_note' => 'Added from ' . $groups[$key]['people'] . ' member registration' . ($groups[$key]['people'] === 1 ? '' : 's') . ' (not yet verified by LCI)']);
+                    'source_note' => 'Added from ' . $groups[$key]['people'] . ' member registration' . ($groups[$key]['people'] === 1 ? '' : 's') . ' (not yet verified)']);
             }
             $n = clan_request_link($key, $cid);
             audit('create', 'clans', $cid, "clan request added ($n)");
-            flash(sprintf('“%s” is now in the clan register, awaiting LCI verification (%d record%s linked).', $name, $n, $n === 1 ? '' : 's'));
+            flash(sprintf('“%s” is now in the clan register, awaiting verification (%d record%s linked).', $name, $n, $n === 1 ? '' : 's'));
         } else {
             flash('Nothing to do.', 'error');
         }

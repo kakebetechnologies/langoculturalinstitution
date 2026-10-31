@@ -1,5 +1,5 @@
-// "Your clan" on every form: the clans LCI has registered so far (search the list), plus "My clan is not listed" (which asks for the
-// name, so LCI can add it) and "I am not sure of my clan". The list is kept on the phone, so it also works with no internet.
+// "Your clan" on every form: the clans listed so far (search the list), plus "My clan is not listed" (which asks for the
+// name, so we can add it) and "I am not sure of my clan". The list is kept on the phone, so it also works with no internet.
 // value: { clan_id: '' | '12' | 'other' | 'unknown', clan_other: '' }
 import { useMemo } from 'react';
 import { useFetch } from '../lib/useFetch';

@@ -8,7 +8,7 @@ const DAILY_SENSITIVE = 'prostitut|whore|sex|penis|vagina|vulva|testicl|genital|
 /** SQL that keeps only dictionary entries that are short, clear and suitable for a quiz. */
 function daily_word_filter(string $t = ''): string
 {
-    static $verifiedOnly = null;   // once LCI's language experts have checked a good number of entries, only those are used
+    static $verifiedOnly = null;   // once language reviewers have checked a good number of entries, only those are used
     $verifiedOnly ??= (int)val("SELECT COUNT(*) FROM dictionary WHERE status='published' AND verified=1") >= 100;
     $p = $t === '' ? '' : $t . '.';
     return ($verifiedOnly ? "{$p}verified=1 AND " : '') . "{$p}status='published' AND CHAR_LENGTH({$p}english)<70 AND CHAR_LENGTH({$p}lango)<24 AND {$p}lango NOT LIKE '% %' AND {$p}english NOT REGEXP '" . DAILY_SENSITIVE . "' AND {$p}lango NOT REGEXP '[0-9]'";
@@ -55,8 +55,6 @@ function search_all(string $term, int $limit = 60, ?string $only = null): array
         fn($r) => ['title' => $r['name'], 'text' => excerpt($r['description'], 180), 'url' => url('districts/' . $r['slug']), 'img' => $r['image']]);
     $add('history', "SELECT * FROM history_sections WHERE status='published' AND (title LIKE ? OR summary LIKE ? OR body LIKE ?) LIMIT 6", [$like, $like, $like],
         fn($r) => ['title' => $r['title'], 'text' => $r['summary'], 'url' => url('history') . '#' . $r['slug'], 'img' => null]);
-    $add('program', "SELECT * FROM programs WHERE status='published' AND (title LIKE ? OR summary LIKE ?) LIMIT 6", [$like, $like],
-        fn($r) => ['title' => t($r, 'title'), 'text' => $r['summary'], 'url' => url('programs/' . $r['slug']), 'img' => $r['image']]);
     $add('species', "SELECT * FROM species WHERE status='published' AND (name LIKE ? OR name_lg LIKE ? OR scientific_name LIKE ? OR body LIKE ?) LIMIT 8", [$like, $like, $like, $like],
         fn($r) => ['title' => $r['name'] . ($r['name_lg'] ? ' (' . $r['name_lg'] . ')' : ''), 'text' => excerpt($r['body']), 'url' => url('species/' . $r['slug']), 'img' => $r['image']]);
     $add('document', "SELECT * FROM documents WHERE status='published' AND (title LIKE ? OR description LIKE ?) LIMIT 8", [$like, $like],
@@ -121,7 +119,7 @@ function assistant_answer(string $q): array
     }
 
     if (!$html) {
-        $html = e(__("I could not find that in the Lango archive yet. I only answer from reviewed LCI content, so I will not guess. You can search the Data Center, or contribute what you know so our cultural experts can add it."));
+        $html = e(__("I could not find that in the Lango archive yet. I only answer from reviewed content, so I will not guess. You can search the Data Center, or contribute what you know so our cultural experts can add it."));
         $sources[] = ['title' => __('Search the Data Center'), 'url' => url('library')];
     }
     return ['answer_html' => $html, 'sources' => $sources];
@@ -173,7 +171,7 @@ function assistant_entity_answer(string $q): ?array
                 $img = $ld['photo'] ? '<img class="msg__img" src="' . e(media_url($ld['photo'])) . '" alt="' . e($ld['name']) . '">' : '';
                 return ['answer_html' => $img . '<strong>' . e($ld['name']) . '</strong> ' . e(sprintf(__('is the %s of the %s clan.'), $ld['title'], $clan['name'])) . ($ld['bio'] ? '<br>' . e(excerpt($ld['bio'], 220)) : ''), 'sources' => $src];
             }
-            return ['answer_html' => e(sprintf(__('The register does not have a clan leader recorded for the %s clan yet. LCI adds leaders and their photographs as each clan is verified. If you are a member, you can help by sending the details through the contact page.'), $clan['name'])), 'sources' => array_merge($src, [['title' => __('Contact LCI'), 'url' => url('contact')]])];
+            return ['answer_html' => e(sprintf(__('The register does not have a clan leader recorded for the %s clan yet. Leaders and their photographs are added as each clan is verified. If you are a member, you can help by sending the details through the contact page.'), $clan['name'])), 'sources' => array_merge($src, [['title' => __('Contact us'), 'url' => url('contact')]])];
         }
         $d = $clan['district_id'] ? val('SELECT name FROM districts WHERE id=?', [$clan['district_id']]) : null;
         $bits = array_filter([
@@ -182,11 +180,11 @@ function assistant_entity_answer(string $q): ?array
             $d ? sprintf(__('District: %s.'), $d) : '',
             $ld ? sprintf(__('%s: %s.'), $ld['title'], $ld['name']) : '',
         ]);
-        return ['answer_html' => '<strong>' . e($clan['name']) . '</strong> ' . e(__('clan')) . ' — ' . e($bits ? implode(' ', $bits) : __('This clan is in the LCI register and its history is still being documented.')), 'sources' => $src];
+        return ['answer_html' => '<strong>' . e($clan['name']) . '</strong> ' . e(__('clan')) . ' — ' . e($bits ? implode(' ', $bits) : __('This clan is in the register and its history is still being documented.')), 'sources' => $src];
     }
     // "clan leader of X" where X is not in the register
     if ($leaderIntent && preg_match('/(?:leader|awitong|head|chief)\s+(?:of|for)\s+(?:the\s+)?([\p{L}\' ]{2,40}?)(?:\s+clan)?\s*[?.!]*$/iu', $q, $m)) {
-        return ['answer_html' => e(sprintf(__('I could not find a clan called “%s” in the register. LCI has %d registered clans and is still adding them to this website, so it may not be loaded yet.'), trim($m[1]), (int)setting('clan_total', '149'))), 'sources' => [['title' => __('Clan Explorer'), 'url' => url('clans')]]];
+        return ['answer_html' => e(sprintf(__('I could not find a clan called “%s” in the register. The Lango people have about %d clans and they are still being added to this website, so it may not be loaded yet.'), trim($m[1]), (int)setting('clan_total', '149'))), 'sources' => [['title' => __('Clan Explorer'), 'url' => url('clans')]]];
     }
 
     // notable people

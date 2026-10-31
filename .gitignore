@@ -3,6 +3,7 @@
 # ===== Web (PHP) =====
 web/config/config.php
 web/config/config.live.php
+web/config/schema_rev.txt*
 web/config/first-run-credentials.txt
 # Upload packages for the live server (contain the live database password)
 deploy/

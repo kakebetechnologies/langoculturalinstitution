@@ -1,6 +1,6 @@
-// Lango Radio (GET /api/v1/radio, /radio/{id}): the channels LCI has set up. A channel is a live stream from a station, a playlist of
+// Lango Radio (GET /api/v1/radio, /radio/{id}): the channels that have been set up. A channel is a live stream from a station, a playlist of
 // recordings, or every podcast episode; the ones with something to play appear here. Pick one and it plays and keeps going, also
-// when the app is in the background; the bar above the tabs shows what is on. Until LCI adds a channel the screen says so.
+// when the app is in the background; the bar above the tabs shows what is on. Until a channel is added the screen says so.
 import { useState } from 'react';
 import { Pressable, StyleSheet, Switch, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -58,7 +58,7 @@ export default function Radio() {
 
   return (
     <Screen title={t('Lango Radio')} subtitle={t('Listen to Lango, wherever you are')} onRefresh={reload} refreshing={refreshing}>
-      <StateView loading={loading} error={error} onRetry={retry} empty={!channels.length} emptyIcon="radio-outline" emptyTitle="Lango Radio is getting ready" emptyMessage="Channels appear here as soon as LCI sets them up.">
+      <StateView loading={loading} error={error} onRetry={retry} empty={!channels.length} emptyIcon="radio-outline" emptyTitle="Lango Radio is getting ready" emptyMessage="Channels appear here as soon as they are set up.">
         {onAir && track ? (
           <Card style={{ marginBottom: SPACING.md }}>
             <View style={styles.live}>

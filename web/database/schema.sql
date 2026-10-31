@@ -1,4 +1,4 @@
--- Lango Cultural Institution (LCI) - database schema
+-- Lango - database schema
 -- Shared by the website, the admin control panel and (later) the Lango mobile app / API.
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;

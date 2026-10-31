@@ -29,7 +29,7 @@ if (!empty($seg[1])) {
           <dl class="kv">
             <?php if ($c['totem']): ?><dt><?php _e('Totem'); ?></dt><dd><?= e($c['totem']) ?><?= $c['totem_type'] ? ' (' . e($c['totem_type']) . ')' : '' ?></dd><?php endif; ?>
             <?php if ($c['district']): ?><dt><?php _e('District'); ?></dt><dd><?= e($c['district']) ?></dd><?php endif; ?>
-            <dt><?php _e('Status'); ?></dt><dd><?= $c['verified'] ? '<span class="tag tag--green">' . e(__('Verified by LCI')) . '</span>' : '<span class="tag tag--gold">' . e(__('Awaiting verification')) . '</span>' ?></dd>
+            <dt><?php _e('Status'); ?></dt><dd><?= $c['verified'] ? '<span class="tag tag--green">' . e(__('Verified')) . '</span>' : '<span class="tag tag--gold">' . e(__('Awaiting verification')) . '</span>' ?></dd>
           </dl>
         </div>
         <div class="box box--dark"><h4><?php _e('Know this clan?'); ?></h4><p><?php _e('Clan leaders can verify and update this page. Everyone can contribute stories and photographs.'); ?></p><a class="btn btn--gold btn--sm" href="<?= e(url('contribute')) ?>"><?php _e('Contribute'); ?></a></div>
@@ -81,8 +81,8 @@ page_start(__('Clan Explorer'), ['hero' => ['eyebrow' => __('Heritage'), 'title'
       <?= empty_state(__('No clans match'), __('No clan matching your search or district has been added to the register yet.'), 'users',
           '<p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn btn--outline btn--sm" href="' . e(url('clans')) . '">' . e(__('Show all clans')) . '</a>' . ($dist !== '' ? '<a class="btn btn--primary btn--sm" href="' . e(url('districts/' . $dist)) . '">' . e(__('Open the district page')) . '</a>' : '') . '</p>') ?>
     <?php else: ?>
-      <?= empty_state(__('The clan register is being digitised'), __('LCI is documenting all 149 clans. Each clan page will carry its history, totem, lineage and Awitong once verified by its leaders.'), 'users',
-          '<p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="' . e(url('apply/clan')) . '">' . e(__('Register your clan')) . '</a><a class="btn btn--outline btn--sm" href="' . e(url('contribute?type=oral_history')) . '">' . e(__('Share clan history')) . '</a></p>') ?>
+      <?= empty_state(__('The clan register is being digitised'), __('Clans are being added to this website one by one. Each clan page will carry its history, totem, lineage and Awitong once verified by its leaders.'), 'users',
+          '<p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="' . e(url('account/register')) . '">' . e(__('Register your clan')) . '</a><a class="btn btn--outline btn--sm" href="' . e(url('contribute?type=oral_history')) . '">' . e(__('Share clan history')) . '</a></p>') ?>
     <?php endif; ?>
   </div>
 </section>

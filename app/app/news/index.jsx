@@ -1,4 +1,4 @@
-// News from LCI (GET /api/v1/news): announcements and stories, newest first, with "load more".
+// News (GET /api/v1/news): announcements and stories, newest first, with "load more".
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import Button from '../../components/Button';

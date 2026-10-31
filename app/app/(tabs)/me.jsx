@@ -70,7 +70,7 @@ export default function Me() {
             <>
               <Logo tile size={64} />
               <AppText style={styles.name}>{t('Welcome to Lango')}</AppText>
-              <AppText style={styles.clan}>{t('Our Culture. Our People. Our Future.')}</AppText>
+              <AppText style={styles.clan}>{t('Everything about Lango, in one place.')}</AppText>
             </>
           )}
         </LinearGradient>
@@ -127,8 +127,8 @@ export default function Me() {
 
           <MenuGroup title={t('More')} style={{ marginTop: SPACING.lg }}>
             <MenuRow icon="settings-outline" tone="slate" title={t('Settings')} subtitle={t('Language, offline dictionary, notifications')} onPress={() => router.push('/settings')} />
-            <MenuRow icon="heart-outline" tone="red" title={t('Support LCI')} subtitle={t('Donate and sponsor programs')} onPress={() => router.push('/support')} />
-            <MenuRow icon="information-circle-outline" tone="sky" title={t('About LCI and this app')} onPress={() => router.push('/about')} />
+            <MenuRow icon="heart-outline" tone="red" title={t('Support the Lango App')} subtitle={t('Help keep it running')} onPress={() => router.push('/donate')} />
+            <MenuRow icon="information-circle-outline" tone="sky" title={t('About Lango')} onPress={() => router.push('/about')} />
             <MenuRow icon="shield-checkmark-outline" tone="green" title={t('Privacy & terms')} onPress={() => router.push('/legal/privacy')} />
             {user ? <MenuRow icon="log-out-outline" tone="red" title={t('Sign out')} onPress={confirmSignOut} /> : null}
           </MenuGroup>

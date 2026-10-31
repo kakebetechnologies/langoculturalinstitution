@@ -27,7 +27,7 @@ HTML,
         'attractions' => <<<'HTML'
 <ul>
 <li><strong>Ngetta Rock (Got Ngetta)</strong> – a large rock formation rising above the surrounding landscape and one of Lira's best-known landmarks.</li>
-<li><strong>Lango Cultural Centre</strong> – a meeting place linked to the Lango traditional institution, where cultural events and gatherings are held.</li>
+<li><strong>Lango Cultural Centre</strong> – a meeting place where cultural events and gatherings are held.</li>
 <li><strong>Akii Bua Stadium</strong> – named after Lira's Olympic champion John Akii-Bua.</li>
 <li><strong>Obote Avenue</strong> and sites associated with Dr. Apollo Milton Obote.</li>
 <li><strong>The Lira War Memorial.</strong></li>

@@ -1,4 +1,4 @@
-// About the Lango Cultural Institution and this app: the mission and vision, how to reach LCI, and who built the app.
+// About Lango and this app: what it is, how to reach us, and who built it.
 // The details come from the website's Site settings (GET /api/v1/about), so editing them there updates the app.
 import { Linking, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
@@ -22,28 +22,16 @@ export default function About() {
       <View style={styles.head}>
         <Logo size={84} />
         <AppText variant="title" style={{ textAlign: 'center', marginTop: SPACING.md }}>
-          {a?.name ?? 'Lango Cultural Institution'}
+          {a?.name ?? 'Lango'}
         </AppText>
         <AppText variant="eyebrow" style={{ marginTop: 4 }}>
-          {a?.subtitle ?? 'Won Nyaci me Lango'}
+          {a?.subtitle || t('Everything about Lango')}
         </AppText>
       </View>
       <StateView loading={loading && !a} error={error} onRetry={retry}>
         {a ? (
           <>
             <AppText style={{ marginBottom: SPACING.md }}>{t('The Lango App puts Lango heritage, language and clan records in your pocket: discover your heritage, register your clan, contribute cultural and natural observations, learn Leb Lango and connect with the global Lango community.')}</AppText>
-            {a.mission ? (
-              <View style={{ marginBottom: SPACING.md }}>
-                <SectionHeader title={t('Our mission')} />
-                <AppText>{a.mission}</AppText>
-              </View>
-            ) : null}
-            {a.vision ? (
-              <View style={{ marginBottom: SPACING.md }}>
-                <SectionHeader title={t('Our vision')} />
-                <AppText>{a.vision}</AppText>
-              </View>
-            ) : null}
             <SectionHeader title={t('Contact')} />
             {a.address ? <InfoRow icon="location-outline" title={a.address} /> : null}
             {a.email ? <InfoRow icon="mail-outline" title={a.email} onPress={() => Linking.openURL(`mailto:${a.email}`).catch(() => {})} /> : null}
@@ -53,7 +41,7 @@ export default function About() {
         ) : null}
       </StateView>
       <AppText variant="caption" style={{ textAlign: 'center', marginTop: SPACING.xl }}>
-        {t('Lango App {v} · built by Kakebe Technologies Limited for the Lango Cultural Institution', { v: Constants.expoConfig?.version ?? '' })}
+        {t('Lango App {v} · built by Kakebe Technologies Limited', { v: Constants.expoConfig?.version ?? '' })}
       </AppText>
     </Screen>
   );

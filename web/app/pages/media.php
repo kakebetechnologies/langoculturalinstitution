@@ -12,7 +12,7 @@ $pg = paginate($total, 24);
 $rows = all("SELECT * FROM media WHERE $w ORDER BY id DESC LIMIT {$pg['per']} OFFSET {$pg['offset']}", $par);
 $albums = all("SELECT DISTINCT album FROM media WHERE status='published' AND album IS NOT NULL AND album<>'' ORDER BY album");
 
-page_start(__('Media Center'), ['hero' => ['eyebrow' => __('Media center'), 'title' => __('Photos, video & audio'), 'sub' => __('Galleries of events and heritage sites, documentaries, oral histories, songs and the LCI podcast.'), 'crumbs' => [[__('Library'), 'library'], [__('Media'), null]], 'image' => 'assets/img/photos/hero-aerial.jpg']]);
+page_start(__('Media Center'), ['hero' => ['eyebrow' => __('Media center'), 'title' => __('Photos, video & audio'), 'sub' => __('Galleries of events and heritage sites, documentaries, oral histories, songs and the podcast.'), 'crumbs' => [[__('Library'), 'library'], [__('Media'), null]], 'image' => 'assets/img/photos/hero-aerial.jpg']]);
 ?>
 <section class="section"><div class="container">
   <div class="filters">

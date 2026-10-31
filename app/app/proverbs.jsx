@@ -1,4 +1,4 @@
-// Proverbs & sayings (GET /api/v1/proverbs): only sayings that came from Lango speakers and were reviewed by LCI's language team.
+// Proverbs & sayings (GET /api/v1/proverbs): only sayings that came from Lango speakers and were reviewed by language reviewers.
 // While the collection is empty the screen explains that, and invites an elder or speaker to add one.
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
@@ -54,7 +54,7 @@ export default function Proverbs() {
             <AppText variant="title" style={{ marginTop: 4 }}>
               {t('Help us write down the proverbs of Lango')}
             </AppText>
-            <AppText style={{ marginTop: 10 }}>{t('Proverbs are how the Lango teach children, settle disputes and speak about life. We would rather publish nothing than publish one that is wrong, so this list only shows sayings that come from Lango speakers and have been reviewed by the LCI language team.')}</AppText>
+            <AppText style={{ marginTop: 10 }}>{t('Proverbs are how the Lango teach children, settle disputes and speak about life. We would rather publish nothing than publish one that is wrong, so this list only shows sayings that come from Lango speakers and have been reviewed by language reviewers.')}</AppText>
             <View style={{ marginTop: 12, gap: 6 }}>
               {['Write the proverb in Leb Lango, exactly as you heard it.', 'Add its English meaning and when it is used.', 'Choose your clan so the saying is credited to where it comes from.'].map((s, i) => (
                 <AppText key={s}>

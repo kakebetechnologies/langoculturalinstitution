@@ -58,7 +58,7 @@ if (!empty($seg[1])) {
 
         <?php if (isset($sections['history'])): ?><div class="dist__sec prose" id="history"><h2><?php _e('History'); ?></h2><?= rich($d['history']) ?></div><?php endif; ?>
 
-        <p class="dist__src"><?php _e('Population figures are from the 2024 National Population and Housing Census (Uganda Bureau of Statistics). Descriptions are compiled from published sources and are reviewed by LCI; corrections are welcome.'); ?> <a href="<?= e(url('contact')) ?>"><?php _e('Send a correction'); ?></a></p>
+        <p class="dist__src"><?php _e('Population figures are from the 2024 National Population and Housing Census (Uganda Bureau of Statistics). Descriptions are compiled from published sources and are being reviewed; corrections are welcome.'); ?> <a href="<?= e(url('contact')) ?>"><?php _e('Send a correction'); ?></a></p>
 
         <div class="pn"><a href="<?= e(url('districts/' . $prev['slug'])) ?>"><small>← <?php _e('Previous'); ?></small><b><?= e($prev['name']) ?></b></a><a class="pn__r" href="<?= e(url('districts/' . $next['slug'])) ?>"><small><?php _e('Next'); ?> →</small><b><?= e($next['name']) ?></b></a></div>
       </div>
@@ -133,7 +133,7 @@ page_start(__('Districts & Lira City'), ['leaflet' => true, 'hero' => ['eyebrow'
         <td class="num"><?= $d['created_year'] ?: '—' ?></td><td><?= e((string)$d['parent']) ?></td></tr><?php endforeach; ?>
       <tr class="total"><td colspan="2"><b><?php _e('Lango sub-region'); ?></b></td><td class="num"><b><?= number_format($totalPop) ?></b></td><td class="num"><b><?= number_format($totalArea) ?></b></td><td class="num"><b><?= $totalArea > 0 ? number_format((int)round($totalPop / $totalArea)) : '—' ?></b></td><td colspan="2"></td></tr>
     </tbody></table></div>
-  <p class="dim" style="font-size:.85rem;margin-top:10px"><?php _e('Source: Uganda Bureau of Statistics, National Population and Housing Census 2024. Areas and creation dates are compiled from published sources; LCI will review them.'); ?></p>
+  <p class="dim" style="font-size:.85rem;margin-top:10px"><?php _e('Source: Uganda Bureau of Statistics, National Population and Housing Census 2024. Areas and creation dates are compiled from published sources and are still being reviewed.'); ?></p>
 </div></section>
 <script>window.LCI_PINS=<?= json_encode($pins, JSON_UNESCAPED_UNICODE) ?>;window.LCI_CENTER=[<?= e(setting('map_lat', '2.2499')) ?>,<?= e(setting('map_lng', '32.8998')) ?>];</script>
 <?php page_end(['scripts' => ['https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js']]); ?>

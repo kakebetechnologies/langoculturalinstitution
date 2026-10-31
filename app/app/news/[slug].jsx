@@ -22,10 +22,10 @@ export default function Article() {
         <>
           <RichText html={n.body_html} />
           <View style={{ marginTop: SPACING.lg }}>
-            <Button small variant="outline" icon="share-outline" title={t('Share')} onPress={() => Share.share({ message: `${n.title} — Lango Cultural Institution` }).catch(() => {})} style={{ alignSelf: 'flex-start' }} />
+            <Button small variant="outline" icon="share-outline" title={t('Share')} onPress={() => Share.share({ message: `${n.title} — Lango` }).catch(() => {})} style={{ alignSelf: 'flex-start' }} />
           </View>
           <AppText variant="caption" style={{ marginTop: SPACING.md }}>
-            {t('From the Lango Cultural Institution.')}
+            {t('From Lango.')}
           </AppText>
         </>
       ) : null}

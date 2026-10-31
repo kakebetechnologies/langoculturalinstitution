@@ -258,11 +258,11 @@ function screen_clan_quick(): void
     <div class="cols two">
       <form class="panel" method="post"><?= csrf_field() ?>
         <h3>Paste clan names</h3>
-        <p class="dim">One clan per line (or separated by commas). Names already in the register are skipped. LCI has <?= (int)setting('clan_total', '149') ?> registered clans; <b><?= $total ?></b> are loaded so far.</p>
+        <p class="dim">One clan per line (or separated by commas). Names already in the register are skipped. <b><?= $total ?></b> clans are loaded so far.</p>
         <div class="field"><label>Clan names</label><textarea name="names" rows="14" placeholder="Otengoro Olang&#10;Atek&#10;Okarowok…" required><?= e(str_replace(['|', ';'], "\n", get('names'))) ?></textarea></div>
         <div class="fgrid2"><div class="field"><label>Show on the website</label><select name="status"><option value="published">Yes, publish now</option><option value="draft">No, keep as draft</option></select></div>
           <div class="field"><label>District (optional)</label><select name="district_id"><option value="">—</option><?php foreach (field_options(['options' => 'districts:id:name']) as $dk => $dn): ?><option value="<?= (int)$dk ?>"><?= e($dn) ?></option><?php endforeach; ?></select></div></div>
-        <label class="check"><input type="checkbox" name="verified" value="1"> Mark these as verified by LCI</label>
+        <label class="check"><input type="checkbox" name="verified" value="1"> Mark these as verified</label>
         <div class="btnrow"><button class="btn btn--primary">Add clans</button></div>
       </form>
       <div class="panel"><h3>What happens next</h3>

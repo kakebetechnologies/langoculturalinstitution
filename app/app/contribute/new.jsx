@@ -251,9 +251,9 @@ export default function NewContribution() {
                 label={t('How may we use your contribution?')}
                 value={f.rights}
                 options={[
-                  { value: 'retain', label: t('I keep all rights — LCI may display it in the archive') },
+                  { value: 'retain', label: t('I keep all rights — it may be displayed in the archive') },
                   { value: 'cc_by', label: t('Share openly with credit (CC BY)') },
-                  { value: 'lci', label: t('Give LCI full rights to use it') },
+                  { value: 'lci', label: t('Give the site full rights to use it') },
                 ]}
                 onChange={set('rights')}
               />

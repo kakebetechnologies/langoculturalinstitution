@@ -50,7 +50,7 @@ if ($finish && $_SERVER['REQUEST_METHOD'] === 'POST') {
 function h($s) { return htmlspecialchars((string)$s, ENT_QUOTES); }
 ?><!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Install — Lango Cultural Institution</title>
+<title>Install — Lango</title>
 <style>
 body{font:16px/1.5 system-ui,sans-serif;background:#1c120d;color:#1c120d;margin:0;display:grid;place-items:center;min-height:100vh;padding:24px}
 .box{background:#fbf6ea;max-width:520px;width:100%;border-radius:14px;padding:32px;border-top:8px solid #d99a1e}
@@ -60,7 +60,7 @@ button{margin-top:22px;background:#a8431f;color:#fff;border:0;padding:12px 22px;
 .row{display:grid;grid-template-columns:2fr 1fr;gap:12px}.err{background:#fde8e4;color:#8a1c0c;padding:10px 14px;border-radius:8px}
 .ok{background:#e6f2e6;padding:12px 14px;border-radius:8px}small{color:#6d5a4c}
 </style></head><body><div class="box">
-<h1>Lango Cultural Institution</h1><p><small>Website &amp; admin control panel — installation</small></p>
+<h1>Lango</h1><p><small>Website &amp; admin control panel — installation</small></p>
 <?php if ($finish): ?>
   <p>The database settings in <code>config/config.php</code> work, and the database is empty. Create the first administrator to finish.</p>
   <?php if ($err): ?><p class="err"><?= h($err) ?></p><?php endif; ?>

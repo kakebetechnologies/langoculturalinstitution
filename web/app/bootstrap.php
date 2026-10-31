@@ -42,6 +42,29 @@ require_once __DIR__ . '/lib/i18n.php';
 require_once __DIR__ . '/lib/auth.php';
 require_once __DIR__ . '/lib/upload.php';
 
+// After a deploy, brings the database up to date by itself (new tables or columns, one-time clean-ups): nobody has to run a script on the server.
+// config/schema_rev.txt (git-ignored, closed to the web) records the revision already applied; a lock stops two requests running it at once,
+// and a folder that cannot be written to simply skips this (the same update is available as php database/upgrade-cli.php).
+if (PHP_SAPI !== 'cli') {
+    $lciRev = '2026-10-31-lango-1';
+    $lciMark = ROOT . '/config/schema_rev.txt';
+    if (@file_get_contents($lciMark) !== $lciRev && is_writable(dirname($lciMark))) {
+        $lciLock = @fopen($lciMark . '.lock', 'c');
+        if ($lciLock && flock($lciLock, LOCK_EX | LOCK_NB)) {
+            try {
+                // only a database that has been installed (an empty one waits for install.php)
+                if (@file_get_contents($lciMark) !== $lciRev && db()->query("SHOW TABLES LIKE 'users'")->fetch()) {
+                    require_once ROOT . '/database/upgrade.php';
+                    lci_upgrade(db());
+                    file_put_contents($lciMark, $lciRev);
+                }
+            } catch (Throwable $e) { error_log('LCI database update failed: ' . $e->getMessage()); }
+            flock($lciLock, LOCK_UN);
+        }
+        if ($lciLock) fclose($lciLock);
+    }
+}
+
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: strict-origin-when-cross-origin');

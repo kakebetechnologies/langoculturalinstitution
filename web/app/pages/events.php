@@ -72,7 +72,7 @@ $view = get('view') === 'past' ? 'past' : 'upcoming';
 $rows = $view === 'past'
     ? all("SELECT * FROM events WHERE status='published' AND starts_at<CURDATE() ORDER BY starts_at DESC LIMIT 60")
     : all("SELECT * FROM events WHERE status='published' AND starts_at>=CURDATE() ORDER BY starts_at LIMIT 60");
-page_start(__('Events'), ['hero' => ['eyebrow' => __('Events & programs'), 'title' => __('Festivals, gatherings & ceremonies'), 'sub' => __('Register online, receive your ticket, and join the Lango community.'), 'crumbs' => [[__('News'), 'news'], [__('Events'), null]], 'image' => 'assets/img/photos/hero-site.jpg']]);
+page_start(__('Events'), ['hero' => ['eyebrow' => __('Events'), 'title' => __('Festivals, gatherings & ceremonies'), 'sub' => __('Register online, receive your ticket, and join the Lango community.'), 'crumbs' => [[__('News'), 'news'], [__('Events'), null]], 'image' => 'assets/img/photos/hero-site.jpg']]);
 ?>
 <section class="section"><div class="container">
   <div class="filters"><a class="pill <?= $view === 'upcoming' ? 'on' : '' ?>" href="<?= e(url('events')) ?>"><?php _e('Upcoming'); ?></a><a class="pill <?= $view === 'past' ? 'on' : '' ?>" href="<?= e(url('events', ['view' => 'past'])) ?>"><?php _e('Past events'); ?></a></div>

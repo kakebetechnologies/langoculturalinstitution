@@ -1,5 +1,5 @@
 // One podcast episode (GET /api/v1/podcasts/{id}): who tells the story, where and when it was recorded, the player, the written
-// version when LCI has added one, and more stories from the same storyteller or series.
+// version when one has been added, and more stories from the same storyteller or series.
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';

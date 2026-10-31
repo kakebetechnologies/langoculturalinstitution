@@ -57,7 +57,7 @@ $total = (int)val("SELECT COUNT(*) FROM posts p LEFT JOIN post_categories c ON c
 $pg = paginate($total, 9);
 $rows = all("SELECT p.*, c.name cat FROM posts p LEFT JOIN post_categories c ON c.id=p.category_id WHERE $w ORDER BY p.featured DESC, p.published_at DESC LIMIT {$pg['per']} OFFSET {$pg['offset']}", $par);
 
-page_start(__('News & Blog'), ['hero' => ['eyebrow' => __('News & blog'), 'title' => __('News, stories and royal messages'), 'sub' => __('Announcements from the Won Nyaci’s office, clan leaders, cultural experts and young Lango voices.'), 'crumbs' => [[__('News'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
+page_start(__('News & Blog'), ['hero' => ['eyebrow' => __('News & blog'), 'title' => __('News and stories'), 'sub' => __('News, stories and announcements from across the Lango community.'), 'crumbs' => [[__('News'), null]], 'image' => 'assets/img/photos/hero-road.jpg']]);
 ?>
 <section class="section"><div class="container">
   <div class="filters">

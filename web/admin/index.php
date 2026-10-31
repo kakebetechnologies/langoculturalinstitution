@@ -31,13 +31,13 @@ if (!user() || !is_staff()) {
             else $err = 'Incorrect email or password.';
         }
     }
-    ?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · LCI Admin</title><meta name="robots" content="noindex">
+    ?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · Lango Admin</title><meta name="robots" content="noindex">
     <link rel="icon" href="<?= e(logo_url() ?: asset('assets/img/favicon.svg')) ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('assets/css/admin.css')) ?>"></head>
     <body class="login"><div class="login__box">
-      <?= logo_url() ? '<img class="login__logo" src="' . e(logo_url()) . '" alt="">' : '<span class="mark big">LCI</span>' ?>
-      <h1>Lango Cultural Institution</h1><p class="dim">Admin control panel</p>
+      <?= logo_url() ? '<img class="login__logo" src="' . e(logo_url()) . '" alt="">' : '<span class="mark big">L</span>' ?>
+      <h1>Lango</h1><p class="dim">Admin control panel</p>
       <?php if ($err): ?><div class="alert alert-error"><?= e($err) ?></div><?php endif; ?>
       <form method="post" action="<?= e(aurl('', 'login')) ?>"><?= csrf_field() ?>
         <div class="field"><label>Email</label><input type="email" name="email" required autofocus autocomplete="username"></div>

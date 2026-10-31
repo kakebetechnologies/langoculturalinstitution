@@ -1,6 +1,6 @@
-# Lango Cultural Institution — Website & Admin Control Panel
+# Lango — Website & Admin Control Panel
 
-Official digital home of the Lango Cultural Institution (Won Nyaci me Lango), with a
+An independent community website about the Lango people, with a
 content-managed public website, a role-based admin control panel and the JSON API (`/api/v1`) that the
 **Lango App** (`../app`) uses. This folder is the `web/` half of the repository; see the [root README](../README.md).
 
@@ -30,7 +30,7 @@ The FaithFellows look (also used by the Lango App), in the Lango colours: a cont
 real side margins, and a framed page on very wide monitors) on a soft canvas, white rounded cards with a gentle shadow and no
 borders, pill buttons, and deep black-to-red gradient panels (home hero, dark bands, footer, inner-page headers). Type is
 **Clarity City** (files in `assets/fonts/`, SIL Open Font Licence); it has no ɛ ɔ ŋ, so the browser takes those letters from **Inter**,
-which is next in the font stacks. The colour scheme comes from the official LCI logo: black, red `#ee1a26`, yellow `#fddd16`,
+which is next in the font stacks. The colour scheme is: black, red `#ee1a26`, yellow `#fddd16`,
 sky blue `#00adf1`, mountain grey and cream, with the logo's flag-stripe accent on the header and footer.
 
 * **Navigation:** the full menu is inline from 992px up (the wordmark hides on narrower laptops so nothing wraps);
@@ -45,7 +45,7 @@ sky blue `#00adf1`, mountain grey and cream, with the logo's flag-stripe accent 
 
 | Area | Public site | Admin |
 |---|---|---|
-| Home, About (with the Won Nyaci's portrait), Leadership | ✓ | Leadership (Won Nyaci, cabinet, elders) |
+| Home, About | ✓ | The institution's leadership, programs, transparency, apply and donate pages are not part of this independent site (their files stay in `app/pages`; add the name back to `$pages` in `index.php` to bring one back) |
 | **History**: ten accordion chapters, table of contents, timeline, glossary, sources | ✓ | History chapters, Timeline, Glossary |
 | **Districts & Lira City**: atlas list, comparison table, map; one page per district with demography, economy, best-known-for, places, history | ✓ | Districts (all fields editable) |
 | **Notable Langos**: people pages with stories (Obote, Oyite-Ojok, Akii-Bua …) and portraits | ✓ | Notable Langos |
@@ -108,21 +108,21 @@ Add a new managed content type by adding one entry to `admin/modules.php`.
 
 ## Content rules followed
 
-* Only facts LCI already published were used (Won Nyaci, 149 clans, nine districts, Okeme/Abuda, programme figures).
+* Only facts from published sources were used (nine districts, Okeme/Abuda); the site does not speak for any institution.
 * **No clan names, proverbs or Leb Lango translations were invented.** Import the 149 clans via
   *Admin → Clans → Import CSV* (columns: `name,totem,totem_type,district,summary,leader_name,leader_title`);
   rows arrive as drafts for verification. Leb Lango interface text is entered in *Admin → Translations*;
   anything blank falls back to English.
-* Only five clans could be sourced and are loaded: **Otengoro Olang** (supplied by LCI) plus **Atek, Okarowok, Arak and Oki**
+* Only five clans could be sourced and are loaded: **Otengoro Olang** plus **Atek, Okarowok, Arak and Oki**
   (named as Lango clans in published research). Load the rest with *Admin → Clans → Add clans in bulk* (paste names, one per line).
 * **No proverbs are pre-loaded**, because none could be sourced reliably. The public "Add a proverb" form feeds the review queue.
 * **Notable Langos have no portraits yet** (monograms are shown). Add properly licensed photographs in *Admin → Notable Langos*.
 * The four cabinet and elder entries on the Leadership page are **sample slots** ("Name to be announced"); edit them in
-  *Admin → Leadership*. The Won Nyaci's photograph is the one supplied by LCI.
+  *Admin → Leadership*. 
 * District populations are 2024 census figures (Uganda Bureau of Statistics); areas and creation years come from published
-  sources and should be reviewed by LCI. The History chapters are compiled from published sources (listed on the page)
-  for LCI's historians to review.
-* The dictionary was imported from the LCI language project and is marked unverified until experts verify it. Words approved
+  sources and should be reviewed. The History chapters are compiled from published sources (listed on the page)
+  for historians to review.
+* The dictionary was imported from the Lango dictionary project and is marked unverified until reviewers verify it. Words approved
   from community suggestions are marked "Community".
 * Sample news, events and programme dates are placeholders — edit or delete them before launch.
 * Privacy and Terms pages are drafts for legal review.

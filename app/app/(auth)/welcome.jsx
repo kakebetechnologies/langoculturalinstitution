@@ -27,7 +27,7 @@ export default function Welcome() {
       </View>
       <View style={[styles.bottom, { paddingBottom: insets.bottom + 22 }]}>
         <AppText variant="eyebrow" style={{ color: COLORS.yellow }}>
-          Won Nyaci me Lango
+          Everything about Lango
         </AppText>
         <AppText style={styles.headline}>{t('Your culture, your clan, your language — in your pocket')}</AppText>
         <AppText style={styles.sub}>{t('Join the Lango community to contribute heritage, learn Leb Lango and connect with your clan.')}</AppText>

@@ -48,7 +48,7 @@ export default function Clan() {
           <View style={styles.tags}>
             {c.totem ? <Pill label={`${t('Totem')}: ${c.totem}`} tone="gold" /> : null}
             {c.district ? <Pill label={c.district} tone="sky" /> : null}
-            <Pill label={c.verified ? t('Verified by LCI') : t('Awaiting verification')} icon={c.verified ? 'checkmark' : undefined} tone={c.verified ? 'green' : 'grey'} />
+            <Pill label={c.verified ? t('Verified') : t('Awaiting verification')} icon={c.verified ? 'checkmark' : undefined} tone={c.verified ? 'green' : 'grey'} />
             {c.members ? <Pill label={c.members === 1 ? t('1 member in the group') : t('{n} members in the group', { n: c.members })} icon="people" tone="red" /> : null}
           </View>
 

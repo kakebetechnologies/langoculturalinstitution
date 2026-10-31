@@ -13,7 +13,7 @@ page_start(__('360° Heritage Tours'), ['hero' => ['eyebrow' => __('Virtual heri
     <h2 style="margin-top:24px"><?= e($cur['title']) ?></h2><p><?= e((string)$cur['description']) ?></p><p style="color:var(--muted);font-size:.85rem"><?php _e('Drag to look around. Use the headset icon for VR.'); ?></p>
     <?php if (count($tours) > 1): ?><div class="filters"><?php foreach ($tours as $t): ?><a class="pill <?= $t['id'] === $cur['id'] ? 'on' : '' ?>" href="<?= e(url('tours', ['id' => $t['id']])) ?>"><?= e($t['title']) ?></a><?php endforeach; ?></div><?php endif; ?>
   <?php else: ?>
-    <?= empty_state(__('Tours are being captured'), __('LCI is photographing the Palace, monuments and heritage sites in 360°. Tours will be published here, and community members will be able to contribute their own 360° photographs.'), 'eye', '<p><a class="btn btn--primary btn--sm" href="' . e(url('contribute?type=heritage_site')) . '">' . e(__('Suggest a site to capture')) . '</a></p>') ?>
+    <?= empty_state(__('Tours are being captured'), __('Tours of heritage sites in 360° will be published here, and community members will be able to contribute their own 360° photographs.'), 'eye', '<p><a class="btn btn--primary btn--sm" href="' . e(url('contribute?type=heritage_site')) . '">' . e(__('Suggest a site to capture')) . '</a></p>') ?>
   <?php endif; ?>
 </div></section>
 <?php page_end($cur && $cur['panorama'] ? ['scripts' => ['https://aframe.io/releases/1.5.0/aframe.min.js']] : []); ?>

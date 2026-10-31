@@ -140,7 +140,7 @@ function google_find_member(array $claims): array
 {
     $user = one('SELECT * FROM users WHERE google_sub=?', [(string)$claims['sub']]) ?? one('SELECT * FROM users WHERE email=?', [strtolower((string)$claims['email'])]);
     if (!$user) return [null, null];
-    if (!(int)$user['is_active']) return [null, 'This account has been switched off. Please contact LCI.'];
+    if (!(int)$user['is_active']) return [null, 'This account has been switched off. Please contact us.'];
     if (!in_array($user['role'], ['contributor', 'clan_leader'], true)) return [null, 'This is a staff account. Please sign in with your email and password.'];
     if ($user['google_sub'] === null) q('UPDATE users SET google_sub=? WHERE id=?', [(string)$claims['sub'], $user['id']]);
     elseif ($user['google_sub'] !== (string)$claims['sub']) return [null, 'This email belongs to a different Google account.'];

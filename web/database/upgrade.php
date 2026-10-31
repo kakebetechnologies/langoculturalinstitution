@@ -105,8 +105,8 @@ function lci_upgrade(PDO $pdo): array
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $addCol('users', 'best_streak', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0');
 
-    // Listen & read. The Lango Podcast (elders' stories), Lango Radio (channels: a live stream, a playlist LCI builds, or every podcast episode)
-    // and the Lango Bible (the 66 books are the standard canon; the verses are imported from a text LCI has the right to publish).
+    // Listen & read. The Lango Podcast (elders' stories), Lango Radio (channels: a live stream, a playlist the editors build, or every podcast episode)
+    // and the Lango Bible (the 66 books are the standard canon; the verses are imported from a text the site has the right to publish).
     $pdo->exec("CREATE TABLE IF NOT EXISTS podcast_episodes (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(200) NOT NULL, storyteller VARCHAR(150) NULL, storyteller_note VARCHAR(255) NULL, series VARCHAR(120) NULL,
         clan_id INT UNSIGNED NULL, district_id INT UNSIGNED NULL, recorded_year SMALLINT UNSIGNED NULL, summary TEXT NULL, transcript MEDIUMTEXT NULL,
@@ -211,23 +211,6 @@ function lci_upgrade(PDO $pdo): array
         }
     }
 
-    // leaders: real photo for the Won Nyaci; placeholder cabinet entries replace the earlier "To be announced" drafts
-    $upd('leaders', ['photo' => 'assets/img/people/won-nyaci.jpg'], "grp='won_nyaci' AND (photo IS NULL OR photo='')", []);
-    if (!$val("SELECT COUNT(*) FROM leaders WHERE name='Name to be added'")) {
-        $pdo->exec("DELETE FROM leaders WHERE name='To be announced' AND status='draft'");
-        foreach ($misc['leaders'] as $l) { $ins('leaders', $l + ['status' => 'published']); }
-        $log[] = 'sample leaders';
-    }
-
-    // programmes
-    foreach ($misc['programs'] as [$title, $cat, $summary, $progress, $featured]) {
-        $slug = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($title)), '-');
-        if (!$val('SELECT id FROM programs WHERE slug=?', [$slug])) {
-            $ins('programs', ['title' => $title, 'slug' => $slug, 'category' => $cat, 'summary' => $summary, 'body' => $summary, 'progress' => $progress, 'featured' => $featured, 'sort' => 20, 'status' => 'published']);
-            $log[] = "program $slug";
-        }
-    }
-
     // heritage
     $o = $misc['heritage']['okeme'];
     $upd('heritage_items', ['summary' => $o['summary'], 'body' => $o['body']], "slug='okeme' AND (body IS NULL OR body LIKE '%starting point to be enriched%' OR body LIKE '%This entry is a starting point%')", []);
@@ -261,7 +244,7 @@ function lci_upgrade(PDO $pdo): array
                                  : $one('SELECT lango, english FROM dictionary WHERE lango=? LIMIT 1', [$key]);
             if ($r) $ins('glossary', ['term' => $r['lango'], 'meaning' => $r['english'], 'note' => $note, 'sort' => ++$i]);
         }
-        foreach ($hist['terms'] as [$term, $meaning]) $ins('glossary', ['term' => $term, 'meaning' => $meaning, 'note' => 'Institutional term', 'sort' => ++$i]);
+        foreach ($hist['terms'] as [$term, $meaning]) $ins('glossary', ['term' => $term, 'meaning' => $meaning, 'note' => 'Cultural term', 'sort' => ++$i]);
         $log[] = 'glossary';
     }
 
@@ -275,5 +258,84 @@ function lci_upgrade(PDO $pdo): array
         if (!$val('SELECT id FROM knowledge WHERE question=?', [$qn])) $ins('knowledge', ['topic' => $tp, 'question' => $qn, 'answer' => $an, 'reviewed' => 1]);
     }
 
+    return array_merge($log, lci_rebrand($pdo));
+}
+
+/**
+ * One-time clean-up for sites installed while this website still presented itself as the Lango Cultural Institution (LCI). It is an
+ * independent Lango website: settings that still hold the old defaults are replaced, the old starter content (leadership, programmes, sample
+ * news and events, answers about the institution) is unpublished, and wording that credited the institution is reworded.
+ * Only values that are still exactly as installed are touched, so anything an editor changed stays; nothing is deleted (an editor can publish
+ * a row again); the setting brand_rev makes it run once.
+ */
+function lci_rebrand(PDO $pdo): array
+{
+    $rev = 'lango-1';
+    $get = $pdo->prepare("SELECT v FROM settings WHERE k='brand_rev'");
+    $get->execute();
+    if ($get->fetchColumn() === $rev) return [];
+    $log = [];
+    $run = function (string $sql, array $p = []) use ($pdo): int {
+        try { $st = $pdo->prepare($sql); $st->execute($p); return $st->rowCount(); } catch (Throwable $e) { return 0; }   // a table or column this site does not have
+    };
+
+    foreach ([
+        'site_name'    => ['Lango Cultural Institution', 'Lango'],
+        'site_tagline' => ['Our Culture. Our People. Our Future.', 'Everything about Lango, in one place.'],
+        'org_subtitle' => ['Won Nyaci me Lango', ''],
+        'phone'        => ['+256 772 123 456', ''],
+        'address'      => ['Lira City, Northern Uganda', ''],
+        'email'        => ['info@langoculture.org', ''],
+    ] as $k => [$from, $to]) {
+        if ($run('UPDATE settings SET v=? WHERE k=? AND v=?', [$to, $k, $from])) $log[] = "setting $k";
+    }
+
+    $n = 0;
+    foreach ([
+        ['posts', 'title', ['Lango Cultural Festival: Celebrating Heritage and Unity', 'Welcome to the new LCI website and the Lango App', 'How to contribute to the Lango heritage archive']],
+        ['events', 'title', ['Lango Cultural Festival & Heritage Showcase', 'Annual Clans Convention', 'Youth & Education Forum', 'Greening Lango Campaign']],
+    ] as [$t, $c, $titles]) {
+        $n += $run("UPDATE `$t` SET status='draft' WHERE status='published' AND `$c` IN (" . implode(',', array_fill(0, count($titles), '?')) . ')', $titles);
+    }
+    $n += $run("UPDATE programs SET status='draft' WHERE status='published'");
+    $n += $run("UPDATE leaders SET status='draft' WHERE status='published'");
+    $n += $run("UPDATE history_sections SET status='draft' WHERE slug='lci-today' AND status='published'");
+    $n += $run("UPDATE knowledge SET status='draft' WHERE status='published' AND (question LIKE '%Cultural Institution%' OR answer LIKE '%Cultural Institution%' OR question LIKE '%Won Nyaci%' OR answer LIKE '%Won Nyaci%' OR question LIKE '%How many clans are there%')");
+    if ($n) $log[] = "$n old rows unpublished";
+
+    $fix = [
+        ['A meeting place of the Lango traditional institution, used for cultural events and gatherings.', 'A meeting place in Lira, used for cultural events and gatherings.'],
+        ['a meeting place linked to the Lango traditional institution, where cultural events and gatherings are held.', 'a meeting place where cultural events and gatherings are held.'],
+        ['<blockquote>The Lango Cultural Institution unites 149 registered clans under the leadership of the Won Nyaci, the cultural leader of the Lango people.</blockquote>', ''],
+        ['<h3>The account preserved by LCI</h3>', '<h3>The account preserved in oral tradition</h3>'],
+        ['Lango oral traditions recorded by the Lango Cultural Institution trace', 'Lango oral traditions trace'],
+        ["In LCI's words, the clan leader is the <strong>Awitong</strong>", 'The clan leader is the <strong>Awitong</strong>'],
+        ["LCI's records note that missionary education", 'Records note that missionary education'],
+        ['LCI invites families to share their own memories through our oral history programme so that', 'families are invited to share their own memories through the contribution form so that'],
+        ['LCI records that the ancestors', 'Oral tradition records that the ancestors'],
+        [', as used by the Lango Cultural Institution.', '.'],
+        ['Each of the 149 registered clans is represented by its Awitong.', 'Each clan is represented by its Awitong.'],
+        ['A traditional Lango dance safeguarded by LCI as part of its cultural preservation programme.', 'A traditional Lango dance.'],
+        ['A traditional Lango dance preserved and promoted by the Lango Cultural Institution.', 'A traditional Lango dance.'],
+        [', safeguarded by the Lango Cultural Institution as part of its cultural preservation programme.', '.'],
+        ['Okeme is one of the dances that the Lango Cultural Institution safeguards through its cultural preservation programme.', 'Okeme is one of the best-known Lango dances.'],
+        ['Check with LCI for the dates of festivals and public events before you visit.', 'Check locally for the dates of festivals and public events before you visit.'],
+        ['a gathering place linked to the Lango traditional leadership,', 'a gathering place'],
+        ['Supplied by the Lango Cultural Institution.', 'Source being confirmed.'],
+        ['LCI presents his story here as part of the history that young people should know and discuss.', 'His story is presented here as part of the history that young people should know and discuss.'],
+        ['which is why LCI invites elders and families to record what they know of him as part of the oral history programme.', 'which is why elders and families are invited to record what they know of him through the contribution form.'],
+    ];
+    $changed = 0;
+    foreach ([['history_sections', 'summary'], ['history_sections', 'body'], ['timeline', 'body'], ['glossary', 'meaning'], ['glossary', 'note'], ['heritage_items', 'summary'], ['heritage_items', 'body'],
+              ['notables', 'summary'], ['notables', 'body'], ['clans', 'source_note'], ['districts', 'description'], ['districts', 'attractions']] as [$t, $c]) {
+        foreach ($fix as [$old, $new]) $changed += $run("UPDATE `$t` SET `$c`=REPLACE(`$c`, ?, ?) WHERE `$c` LIKE ?", [$old, $new, '%' . addcslashes($old, '%_\\') . '%']);
+    }
+    if ($changed) $log[] = "$changed texts reworded";
+    $run("UPDATE glossary SET note='Cultural term' WHERE note='Institutional term'");
+    if (!$pdo->query("SELECT COUNT(*) FROM post_categories WHERE slug='announcements'")->fetchColumn()) $run("UPDATE post_categories SET name='Announcements', slug='announcements' WHERE slug='royal-messages'");
+    if ($run("UPDATE dictionary SET source='Lango dictionary project import' WHERE source='LCI language project import'")) $log[] = 'dictionary source';
+
+    $marked = $pdo->query("SELECT COUNT(*) FROM settings WHERE k='brand_rev'")->fetchColumn();
+    $run($marked ? "UPDATE settings SET v=? WHERE k='brand_rev'" : "INSERT INTO settings (v, k) VALUES (?, 'brand_rev')", [$rev]);
     return $log;
 }

@@ -33,7 +33,7 @@ if (($seg[1] ?? '') === 'item' && !empty($seg[2])) {
           <dt><?php _e('Category'); ?></dt><dd><?= e(HERITAGE_CATS[$h['category']][0]) ?></dd>
           <?php if ($h['clan']): ?><dt><?php _e('Clan'); ?></dt><dd><a href="<?= e(url('clans/' . $h['clan_slug'])) ?>"><?= e($h['clan']) ?></a></dd><?php endif; ?>
           <?php if ($h['district']): ?><dt><?php _e('District'); ?></dt><dd><?= e($h['district']) ?></dd><?php endif; ?>
-          <dt><?php _e('Status'); ?></dt><dd><?= $h['verified'] ? '<span class="tag tag--green">' . e(__('Verified by LCI')) . '</span>' : '<span class="tag tag--gold">' . e(__('Awaiting expert review')) . '</span>' ?></dd>
+          <dt><?php _e('Status'); ?></dt><dd><?= $h['verified'] ? '<span class="tag tag--green">' . e(__('Verified')) . '</span>' : '<span class="tag tag--gold">' . e(__('Awaiting expert review')) . '</span>' ?></dd>
         </dl></div>
         <div class="box box--dark"><h4><?php _e('Add to this story'); ?></h4><p><?php _e('Know more about this tradition? Share photos, recordings or memories for our experts to review.'); ?></p><a class="btn btn--gold btn--sm" href="<?= e(url('contribute?type=cultural')) ?>"><?php _e('Contribute'); ?></a></div>
       </aside>

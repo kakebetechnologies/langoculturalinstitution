@@ -4,8 +4,8 @@ declare(strict_types=1);
 /* History of the Lango: sections (accordions), timeline and glossary seeds.
    Written from published sources (Wikipedia articles on the Lango people, Lango sub-region, Lira, Milton Obote,
    David Oyite-Ojok, John Akii-Bua; Owiny, "The Lango of Uganda: identity, origin, migration and settlements" (Boston
-   University); Ingham on Lango District administration; Daily Monitor features) and from LCI's own published text.
-   Items marked as oral tradition are accounts, not settled fact. LCI's historians should review and extend. */
+   University); Ingham on Lango District administration; Daily Monitor features) and from published accounts.
+   Items marked as oral tradition are accounts, not settled fact. Historians and elders should review and extend. */
 return [
 'sections' => [
 [
@@ -15,7 +15,7 @@ return [
  'body' => <<<'HTML'
 <p>The Lango (also written <em>Langi</em>) live in north-central Uganda, in the plains, wetlands and low hills around the northern shores of Lake Kyoga and the Nile. Their homeland, the <strong>Lango sub-region</strong>, covers roughly 15,500 square kilometres and today includes nine districts &mdash; Lira, Alebtong, Amolatar, Apac, Dokolo, Kole, Kwania, Oyam and Otuke &mdash; together with Lira City. At the 2024 census about <strong>2.5 million people</strong> lived there.</p>
 <p>Their language is <strong>Leb Lango</strong>, a Western Nilotic language related to the Luo languages spoken by their Acholi and Alur neighbours, although scholars continue to debate how closely the Lango should be linked with the Luo or with the Ateker peoples of Teso and Karamoja. What is certain is that Lango identity is old, distinctive and deeply rooted in the clan.</p>
-<blockquote>The Lango Cultural Institution unites 149 registered clans under the leadership of the Won Nyaci, the cultural leader of the Lango people.</blockquote>
+
 <h3>Why history matters</h3>
 <ul>
 <li>It tells young people where their clans come from and why the Lango live as they do.</li>
@@ -30,8 +30,8 @@ HTML,
  'summary' => 'Oral tradition, language and clan names point to a people of many origins.',
  'body' => <<<'HTML'
 <p>There is no single, agreed account of where the Lango came from. Historians rely on oral tradition, language and the names of clans, and they have reached different conclusions.</p>
-<h3>The account preserved by LCI</h3>
-<p>Lango oral traditions recorded by the Lango Cultural Institution trace the migration of the ancestors of the Lango from the <strong>Bahr el Ghazal region of present-day South Sudan</strong> between the 15th and 17th centuries, southwards into northern Uganda, where they settled as a decentralised society of clans.</p>
+<h3>The account preserved in oral tradition</h3>
+<p>Lango oral traditions trace the migration of the ancestors of the Lango from the <strong>Bahr el Ghazal region of present-day South Sudan</strong> between the 15th and 17th centuries, southwards into northern Uganda, where they settled as a decentralised society of clans.</p>
 <h3>What scholars add</h3>
 <ul>
 <li><strong>A mixed origin.</strong> Research on Lango identity stresses that the Lango came from diverse backgrounds and cannot trace themselves to a single grandfather or group.</li>
@@ -47,7 +47,7 @@ HTML,
  'title' => 'Clans and society before colonial rule',
  'summary' => 'Small, localised clans, elders and war leaders chosen only for as long as a war lasted.',
  'body' => <<<'HTML'
-<p>In the nineteenth century the most important social unit among the Lango was the <strong>clan</strong>. Clans were small and highly localised: a clan lived around its own villages and gardens and recognised its own head and elders. In LCI's words, the clan leader is the <strong>Awitong</strong>, who guided decisions, resolved disputes and led clan rituals with the elders and spiritual leaders.</p>
+<p>In the nineteenth century the most important social unit among the Lango was the <strong>clan</strong>. Clans were small and highly localised: a clan lived around its own villages and gardens and recognised its own head and elders. The clan leader is the <strong>Awitong</strong>, who guided decisions, resolved disputes and led clan rituals with the elders and spiritual leaders.</p>
 <h3>Leadership without kings</h3>
 <p>Unlike the kingdoms to the south, Lango society had <strong>no permanent chief</strong>. Power was shared among clans and elders. In times of war the clans united under one military leader chosen by consensus, and his authority ended when the war ended. Some of the best-remembered war leaders were <strong>Ongora Okubal, Opyen, Arim Oroba</strong> and <strong>Agoro Abwango</strong>.</p>
 <h3>Land, farming and cattle</h3>
@@ -86,7 +86,7 @@ HTML,
 <ul>
 <li><strong>Cotton</strong> became the main cash crop, and farming, especially of cotton, shaped the colonial-era economy.</li>
 <li><strong>Lira</strong> was founded in 1919 as a district centre, and it became a town council in 1962.</li>
-<li><strong>Mission schools</strong> opened across the district. LCI's records note that missionary education produced many of the leaders of independent Uganda, among them Dr. Milton Obote, who attended a missionary school in Lira from 1940.</li>
+<li><strong>Mission schools</strong> opened across the district. Records note that missionary education produced many of the leaders of independent Uganda, among them Dr. Milton Obote, who attended a missionary school in Lira from 1940.</li>
 </ul>
 HTML,
 ],
@@ -112,7 +112,7 @@ HTML,
 <p>In 1978–79, Tanzanian forces together with Ugandan exiles overthrew Amin. The last major battle of that war, the <strong>Battle of Lira, was fought on 15 May 1979</strong>, when the town fell to the liberating forces. Oyite-Ojok rose to become Chief of Staff of the new national army.</p>
 <h3>The second Obote government (1980–1985)</h3>
 <p>Obote returned and served as President from <strong>17 December 1980 to 27 July 1985</strong>. His government fought a bush war against Yoweri Museveni's National Resistance Army, and the conflict caused immense suffering across the country. Oyite-Ojok died in a helicopter crash on <strong>2 December 1983</strong>. On 27 July 1985 army commanders overthrew Obote, and in January 1986 the NRA captured Kampala.</p>
-<p>This period remains painful and contested, and LCI invites families to share their own memories through our oral history programme so that the full story can be recorded fairly.</p>
+<p>This period remains painful and contested, and families are invited to share their own memories through the contribution form so that the full story can be recorded fairly.</p>
 HTML,
 ],
 [
@@ -147,26 +147,10 @@ HTML,
 <p>The sub-region's population grew from about 1.5 million in 2002 to 2,061,694 in 2014 and 2,546,118 in 2024. Explore each district on the <a href="{base}/districts">districts</a> page.</p>
 HTML,
 ],
-[
- 'slug' => 'lci-today', 'icon' => 'heart', 'era' => 'Today', 'sort' => 10,
- 'title' => 'The Lango Cultural Institution today',
- 'summary' => 'Culture, unity, education and a digital archive for the next generation.',
- 'body' => <<<'HTML'
-<p>The <strong>Lango Cultural Institution (LCI)</strong> is the traditional authority representing the Lango people. It brings together <strong>149 registered clans</strong> under the leadership of the <strong>Won Nyaci Eng. Dr. Moses Michael Odongo Okune</strong>, and each clan is represented by its Awitong.</p>
-<h3>What LCI does</h3>
-<ul>
-<li><strong>Preserves culture</strong> &ndash; safeguarding dances such as Okeme and Abuda, sacred sites and oral histories.</li>
-<li><strong>Promotes unity</strong> &ndash; bringing the clans together for peace, reconciliation and development.</li>
-<li><strong>Educates the young</strong> &ndash; through scholarships, mentorship and cultural learning.</li>
-<li><strong>Builds an archive</strong> &ndash; this website and the Lango App let anyone record clan histories, words, photographs and stories for future generations.</li>
-</ul>
-<p>History is never finished. If you have a story, a photograph, a document or the memory of an elder to share, you can add it to the archive today.</p>
-HTML,
-],
 ],
 
 'timeline' => [
- ['15th–17th c.', 'Oral tradition of migration', 'LCI records that the ancestors of the Lango migrated from the Bahr el Ghazal region of present-day South Sudan between the 15th and 17th centuries and settled in northern Uganda as a society of clans.'],
+ ['15th–17th c.', 'Oral tradition of migration', 'Oral tradition records that the ancestors of the Lango migrated from the Bahr el Ghazal region of present-day South Sudan between the 15th and 17th centuries and settled in northern Uganda as a society of clans.'],
  ['19th c.', 'A society of clans and war leaders', 'Lango clans are small and localised. There are no permanent chiefs; war leaders such as Ongora Okubal, Opyen, Arim Oroba and Agoro Abwango are chosen by consensus and lose their authority when a war ends.'],
  ['c.1896', 'Resistance to Kakungulu', 'Oral accounts say Lango clans resisted a push into their country led by the Buganda general Semei Kakungulu.'],
  ['1899', 'Kabalega captured', 'British forces capture Omukama Kabalega of Bunyoro on 9 April 1899. Lango warriors such as Owiny Akullu are remembered for having fought on his side.'],
@@ -211,11 +195,11 @@ HTML,
  ['cere', 'Hill.'],
 ],
 
-/* institutional terms that are not in the dictionary (as published by LCI) */
+/* terms that are not in the dictionary */
 'terms' => [
- ['Won Nyaci', 'The title of the cultural leader (paramount chief) of the Lango, as used by the Lango Cultural Institution.'],
- ['Awitong', 'The title of a clan leader. Each of the 149 registered clans is represented by its Awitong.'],
+ ['Won Nyaci', 'The title of the cultural leader (paramount chief) of the Lango.'],
+ ['Awitong', 'The title of a clan leader. Each clan is represented by its Awitong.'],
  ['Okeme', 'A Lango dance and instrument (thumb piano), performed at weddings and cultural ceremonies.'],
- ['Abuda', 'A traditional Lango dance safeguarded by LCI as part of its cultural preservation programme.'],
+ ['Abuda', 'A traditional Lango dance.'],
 ],
 ];

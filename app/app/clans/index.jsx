@@ -1,4 +1,4 @@
-// Clan Explorer (GET /api/v1/clans): search the clans LCI has registered so far, by name or totem. Each clan opens its own page,
+// Clan Explorer (GET /api/v1/clans): search the clans listed so far, by name or totem. Each clan opens its own page,
 // where its leader (Awitong) and photograph are shown.
 import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
@@ -35,19 +35,19 @@ export default function Clans() {
         </View>
         <View style={{ flex: 1 }}>
           <AppText variant="subheading">{user ? (user.clan ? t('You are registered under {clan}', { clan: user.clan.name }) : user.clan_other ? t('You told us your clan is {clan}', { clan: user.clan_other }) : t('Register under your clan')) : t('Register under your clan')}</AppText>
-          <AppText variant="caption">{user ? t('If your clan is missing from this list, type its name on your profile and LCI will add it.') : t('Create an account, choose your clan, and add words, stories and heritage under it.')}</AppText>
+          <AppText variant="caption">{user ? t('If your clan is missing from this list, type its name on your profile and we will add it.') : t('Create an account, choose your clan, and add words, stories and heritage under it.')}</AppText>
           <Button small title={user ? t('Update my clan') : t('Register')} onPress={() => router.push(user ? '/profile' : '/(auth)/register')} style={{ alignSelf: 'flex-start', marginTop: 10 }} />
         </View>
       </Card>
       <Row icon="podium-outline" iconTone="gold" title={t('Clan leaderboard')} subtitle={t('Which clan has the most members, contributions and learners?')} onPress={() => router.push('/leaders?tab=clans')} />
-      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="people-outline" emptyTitle={q ? 'No clans match' : 'The clan register is being digitised'} emptyMessage={q ? 'No clan matching your search has been added yet.' : 'LCI is documenting all 149 clans. Each clan page will carry its history, totem and leader once verified.'}>
+      <StateView loading={loading && !data} error={error} onRetry={retry} empty={!rows.length} emptyIcon="people-outline" emptyTitle={q ? 'No clans match' : 'The clan register is being digitised'} emptyMessage={q ? 'No clan matching your search has been added yet.' : 'Clans are being added one by one. Each clan page will carry its history, totem and leader once verified.'}>
         {rows.map((c) => (
           <Row key={c.id} icon="people-outline" title={c.name} subtitle={c.summary || (c.totem ? `${t('Totem')}: ${c.totem}` : c.district || '')} meta={c.members ? (c.members === 1 ? t('1 member in the group') : t('{n} members in the group', { n: c.members })) : undefined} onPress={() => router.push(`/clans/${c.slug}`)}>
             {c.verified ? <Pill label={t('Verified')} icon="checkmark" tone="sky" style={{ marginTop: 6 }} /> : <Pill label={t('Awaiting verification')} tone="gold" style={{ marginTop: 6 }} />}
           </Row>
         ))}
         <AppText variant="caption" style={{ textAlign: 'center', marginTop: 8 }}>
-          {t('LCI has {n} registered clans and is adding them to the app as each one is verified.', { n: data?.registered_total ?? 149 })}
+          {t('Clans are added to the app one by one as each is verified.')}
         </AppText>
       </StateView>
     </Screen>

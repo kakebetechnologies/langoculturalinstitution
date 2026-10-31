@@ -1,6 +1,6 @@
 // Reading one chapter of the Lango Bible (GET /api/v1/bible/{book}/{chapter}): the verses, a text size the reader sets, previous and
 // next chapter, and a share button for the verses the reader taps. Opened from a search result it scrolls to and marks that verse.
-// The place is remembered ("Continue reading" on the list of books). The copyright line LCI entered is shown under the chapter.
+// The place is remembered ("Continue reading" on the list of books). The copyright line entered in the admin panel is shown under the chapter.
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';

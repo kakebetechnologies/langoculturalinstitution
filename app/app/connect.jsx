@@ -18,7 +18,7 @@ export default function Connect() {
       <Row icon="briefcase-outline" iconTone="sky" title={t('Professionals directory')} subtitle={t('Lango professionals by industry and clan, and how to join')} onPress={() => router.push('/professionals')} />
       <Row icon="chatbubble-ellipses-outline" iconTone="gold" title={t('AI cultural assistant')} subtitle={t('Ask about clans, leaders, districts, history and language')} onPress={() => router.push('/assistant')} />
       <Row icon="trophy-outline" iconTone="dark" title={t('Top contributors')} subtitle={t('Who is adding most to the archive')} onPress={() => router.push('/leaderboard')} />
-      <Row icon="newspaper-outline" iconTone="dark" title={t('News')} subtitle={t('Announcements from LCI')} onPress={() => router.push('/news')} />
+      <Row icon="newspaper-outline" iconTone="dark" title={t('News')} subtitle={t('News and stories')} onPress={() => router.push('/news')} />
     </Screen>
   );
 }

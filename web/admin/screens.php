@@ -149,7 +149,7 @@ function screen_contributions(): void
               <?php else: ?><a class="btn btn--line" href="<?= e(media_url($c['media_file'])) ?>" target="_blank">Open document</a><?php endif; endif; ?>
             <dl class="kv" style="margin-top:20px"><dt>Contributor</dt><dd><?= e($c['name']) ?><?= $c['user_id'] ? ' <span class="chip ok">account</span>' : '' ?></dd><dt>Email</dt><dd><?= e((string)$c['email']) ?: '—' ?></dd><dt>Phone</dt><dd><?= e((string)$c['phone']) ?: '—' ?></dd>
               <dt>Clan</dt><dd><?= e((string)$c['clan']) ?: '—' ?></dd><dt>District</dt><dd><?= e((string)$c['district']) ?: '—' ?></dd><dt>Place</dt><dd><?= e((string)$c['location_text']) ?: '—' ?></dd>
-              <dt>Observed on</dt><dd><?= e(fmt_date($c['observed_on'])) ?: '—' ?></dd><dt>Rights</dt><dd><?= e(['retain' => 'Contributor keeps all rights', 'cc_by' => 'Open with credit (CC BY)', 'lci' => 'LCI full rights'][$c['rights']]) ?></dd>
+              <dt>Observed on</dt><dd><?= e(fmt_date($c['observed_on'])) ?: '—' ?></dd><dt>Rights</dt><dd><?= e(['retain' => 'Contributor keeps all rights', 'cc_by' => 'Open with credit (CC BY)', 'lci' => 'Site has full rights'][$c['rights']]) ?></dd>
               <?php if ($c['lat']): ?><dt>GPS</dt><dd><a target="_blank" href="https://www.openstreetmap.org/?mlat=<?= e((string)$c['lat']) ?>&mlon=<?= e((string)$c['lng']) ?>#map=14/<?= e((string)$c['lat']) ?>/<?= e((string)$c['lng']) ?>"><?= e((string)$c['lat']) ?>, <?= e((string)$c['lng']) ?></a></dd><?php endif; ?></dl>
           </div>
           <div>
@@ -237,7 +237,7 @@ function screen_settings(): void
     ?>
     <form method="post" enctype="multipart/form-data" class="panel"><?= csrf_field() ?>
       <h3>Branding & photos</h3>
-      <p class="dim"><?= setting('logo') ? 'Your uploaded logo is in use.' : 'The official LCI logo (<code>assets/img/logo.png</code>) is in use — upload a file below only if you want to replace it.' ?> Photos that are not set use the bundled drone photography.</p>
+      <p class="dim"><?= setting('logo') ? 'Your uploaded logo is in use.' : 'The Lango logo (<code>assets/img/logo.png</code>) is in use — upload a file below only if you want to replace it.' ?> Photos that are not set use the bundled drone photography.</p>
       <div class="formgrid">
         <?php foreach ($images as $k => [$label, $help]): $cur = setting($k); ?>
           <div class="field">
@@ -313,7 +313,7 @@ function screen_backup(): void
         header('Content-Type: application/sql; charset=utf-8');
         header('Content-Disposition: attachment; filename="lci-backup-' . date('Ymd-His') . '.sql"');
         $pdo = db();
-        echo "-- LCI database backup " . date('c') . "\nSET NAMES utf8mb4; SET FOREIGN_KEY_CHECKS=0;\n\n";
+        echo "-- Lango database backup " . date('c') . "\nSET NAMES utf8mb4; SET FOREIGN_KEY_CHECKS=0;\n\n";
         foreach ($pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN) as $t) {
             $create = $pdo->query("SHOW CREATE TABLE `$t`")->fetch(PDO::FETCH_NUM)[1];
             echo "DROP TABLE IF EXISTS `$t`;\n$create;\n\n";

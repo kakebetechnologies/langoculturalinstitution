@@ -20,7 +20,7 @@ export default function Assistant() {
   const list = useRef(null);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
-  const [msgs, setMsgs] = useState([{ id: 'hi', who: 'bot', html: `<p>${t('Hello! I can answer questions about Lango history, clans, leaders, districts, traditions and the dictionary. I only use reviewed content from the LCI archive, so if I do not know something I will say so.')}</p>`, sources: [] }]);
+  const [msgs, setMsgs] = useState([{ id: 'hi', who: 'bot', html: `<p>${t('Hello! I can answer questions about Lango history, clans, leaders, districts, traditions and the dictionary. I only use reviewed content from the Lango archive, so if I do not know something I will say so.')}</p>`, sources: [] }]);
 
   async function ask(q) {
     const question = (q ?? text).trim();
@@ -41,7 +41,7 @@ export default function Assistant() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScreenHeader title={t('AI cultural assistant')} subtitle={t('Answers only from reviewed LCI content')} />
+      <ScreenHeader title={t('AI cultural assistant')} subtitle={t('Answers only from reviewed content')} />
       <FlatList
         ref={list}
         data={msgs}

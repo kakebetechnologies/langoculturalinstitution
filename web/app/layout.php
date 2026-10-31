@@ -67,12 +67,11 @@ function icon(string $n, string $cls = ''): string
 function nav_items(): array
 {
     return [
-        [__('About'), 'about', [[__('About LCI'), 'about'], [__('Won Nyaci & Leadership'), 'leadership'], [__('Our History'), 'history'], [__('Districts & Lira City'), 'districts'], [__('Notable Langos'), 'people']]],
-        [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols'], [__('Biodiversity'), 'species'], [__('360° Heritage Tours'), 'tours']]],
+        [__('Lango'), 'about', [[__('About Lango'), 'about'], [__('History'), 'history'], [__('Districts'), 'districts'], [__('Notable Langos'), 'people']]],
+        [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols'], [__('Biodiversity'), 'species']]],
         [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], [__('Learn Leb Lango'), 'language/lessons'], [__('Suggest a Word'), 'contribute?type=language']]],
-        [__('Library'), 'library', [[__('Data Center'), 'library'], [__('Documents'), 'library/documents'], [__('Media Center'), 'media'], [__('Professionals'), 'professionals'], [__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
+        [__('Library'), 'library', [[__('Library'), 'library'], [__('Documents'), 'library/documents'], [__('Media Center'), 'media'], [__('Professionals'), 'professionals'], [__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
         [__('News & Events'), 'news', [[__('News & Blog'), 'news'], [__('Events'), 'events']]],
-        [__('Programs'), 'programs', [[__('Our Programs'), 'programs'], [__('Scholarships & Grants'), 'apply/scholarship'], [__('Diaspora Partnership'), 'diaspora'], [__('Transparency'), 'transparency']]],
         [__('Contribute'), 'contribute', []],
         [__('Contact'), 'contact', []],
     ];
@@ -81,9 +80,9 @@ function nav_items(): array
 function page_start(string $title, array $o = []): void
 {
     global $seg;
-    $site = setting('site_name', 'Lango Cultural Institution');
+    $site = setting('site_name', 'Lango');
     $full = $title === '' ? $site . ' — ' . setting('site_tagline') : $title . ' — ' . $site;
-    $desc = $o['desc'] ?? 'The official digital home of the Lango Cultural Institution (Won Nyaci me Lango): clans, language, heritage, news, events and a community archive for the Lango people at home and abroad.';
+    $desc = $o['desc'] ?? 'Everything about Lango in one place: the language, clans, history, heritage, news and events, and a community archive for Lango people at home and abroad.';
     $img = media_url($o['image'] ?? null, 'assets/img/photos/hero-road.jpg');
     $cur = $seg[0] ?? '';
     $here = strtok($_SERVER['REQUEST_URI'], '?');
@@ -126,7 +125,7 @@ function page_start(string $title, array $o = []): void
 <header class="header" id="top"><div class="container header__in">
   <?= brand_html() ?>
   <ul class="nav" id="nav">
-    <?php foreach (nav_items() as [$label, $path, $kids]): $on = $cur === explode('/', $path)[0] || ($path === 'about' && in_array($cur, ['leadership', 'history', 'districts', 'people'], true)) || ($path === 'heritage' && in_array($cur, ['clans', 'species', 'tours'], true)) || ($path === 'library' && in_array($cur, ['media', 'professionals', 'assistant', 'developers'], true)) || ($path === 'news' && $cur === 'events') || ($path === 'programs' && in_array($cur, ['apply', 'diaspora', 'transparency', 'donate'], true)); ?>
+    <?php foreach (nav_items() as [$label, $path, $kids]): $on = $cur === explode('/', $path)[0] || ($path === 'about' && in_array($cur, ['history', 'districts', 'people'], true)) || ($path === 'heritage' && in_array($cur, ['clans', 'species', 'tours'], true)) || ($path === 'library' && in_array($cur, ['media', 'professionals', 'assistant', 'developers'], true)) || ($path === 'news' && $cur === 'events'); ?>
       <li class="<?= $kids ? 'has-sub' : '' ?>"><a href="<?= e(url($path)) ?>" class="<?= $on ? 'on' : '' ?>"<?= $kids ? ' aria-haspopup="true" aria-expanded="false"' : '' ?>><span><?= e($label) ?></span><?= $kids ? icon('chevron') : '' ?></a>
         <?php if ($kids): ?><ul><?php foreach ($kids as [$l, $p]): ?><li><a href="<?= e(url($p)) ?>"><?= e($l) ?></a></li><?php endforeach; ?></ul><?php endif; ?>
       </li>
@@ -135,12 +134,12 @@ function page_start(string $title, array $o = []): void
       <span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>">Leb Lango</a></span>
       <?php if (user()): ?><a class="nav__acct" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(user()['name']) ?></a>
       <?php else: ?><a class="nav__acct" href="<?= e(url('account/login')) ?>"><?= icon('user') ?> <?php _e('Sign in'); ?></a><?php endif; ?>
-      <a class="btn btn--primary btn--block" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate'); ?></a>
+      <a class="btn btn--primary btn--block" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= icon('user') ?> <?= user() ? __('My culture') : __('Join free') ?></a>
     </li>
   </ul>
   <button class="navclose" id="navclose" aria-label="Close menu"><?= icon('x') ?></button>
   <div class="header__cta">
-    <a class="btn btn--primary btn-don" href="<?= e(url('donate')) ?>"><?= icon('heart') ?> <?php _e('Donate'); ?></a>
+    <a class="btn btn--primary btn-don" href="<?= e(url(user() ? 'account' : 'account/register')) ?>"><?= icon('user') ?> <?= user() ? __('My culture') : __('Join free') ?></a>
     <button class="burger" id="burger" aria-label="Open menu" aria-controls="nav" aria-expanded="false"><?= icon('menu') ?></button>
   </div>
 </div></header>
@@ -167,7 +166,7 @@ function page_start(string $title, array $o = []): void
 
 function page_end(array $o = []): void
 {
-    $site = setting('site_name', 'Lango Cultural Institution');
+    $site = setting('site_name', 'Lango');
     ?>
 </main>
 <footer class="footer">
@@ -175,7 +174,7 @@ function page_end(array $o = []): void
   <div class="container footer__main">
     <div class="footer__about">
       <?= brand_html(true) ?>
-      <p><?= e(setting('site_tagline')) ?> <?php _e('The official digital home of the Lango people, preserving heritage and inspiring the future.'); ?></p>
+      <p><?= e(setting('site_tagline')) ?> <?php _e('A community website for the Lango people: the language, clans, history and culture in one place.'); ?></p>
       <div class="footer__social">
         <?php foreach (['facebook' => 'facebook', 'x' => 'x-social', 'youtube' => 'youtube', 'instagram' => 'instagram'] as $k => $ic): if (setting($k)): ?>
           <a href="<?= e(setting($k)) ?>" target="_blank" rel="noopener" aria-label="<?= e(ucfirst($k)) ?>"><?= icon($ic) ?></a>
@@ -186,23 +185,23 @@ function page_end(array $o = []): void
     <div>
       <h4><?php _e('Quick links'); ?></h4>
       <ul>
-        <li><a href="<?= e(url('about')) ?>"><?php _e('About LCI'); ?></a></li>
+        <li><a href="<?= e(url('about')) ?>"><?php _e('About Lango'); ?></a></li>
         <li><a href="<?= e(url('clans')) ?>"><?php _e('Clan Explorer'); ?></a></li>
         <li><a href="<?= e(url('language/dictionary')) ?>"><?php _e('Dictionary'); ?></a></li>
-        <li><a href="<?= e(url('library')) ?>"><?php _e('Data Center'); ?></a></li>
+        <li><a href="<?= e(url('library')) ?>"><?php _e('Library'); ?></a></li>
         <li><a href="<?= e(url('events')) ?>"><?php _e('Events'); ?></a></li>
         <li><a href="<?= e(url('contribute')) ?>"><?php _e('Submit a Contribution'); ?></a></li>
         <li><a href="<?= e(url('developers')) ?>"><?php _e('Open Data & API'); ?></a></li>
       </ul>
     </div>
-    <div>
-      <h4><?php _e('Our address'); ?></h4>
+    <?php if (setting('address') || setting('email') || setting('phone')): ?><div>
+      <h4><?php _e('Contact'); ?></h4>
       <ul class="footer__ct">
         <?php if (setting('address')): ?><li><?= icon('pin') ?><span><?= e(setting('address')) ?></span></li><?php endif; ?>
         <?php if (setting('email')): ?><li><?= icon('mail') ?><a href="mailto:<?= e(setting('email')) ?>"><?= e(setting('email')) ?></a></li><?php endif; ?>
         <?php if (setting('phone')): ?><li><?= icon('phone') ?><a href="tel:<?= e(preg_replace('/\s+/', '', setting('phone'))) ?>"><?= e(setting('phone')) ?></a></li><?php endif; ?>
       </ul>
-    </div>
+    </div><?php endif; ?>
     <div>
       <h4><?php _e('Newsletter'); ?></h4>
       <p><?php _e('News, events and heritage stories in your inbox.'); ?></p>

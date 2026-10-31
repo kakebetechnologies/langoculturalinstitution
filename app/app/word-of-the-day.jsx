@@ -102,7 +102,7 @@ export default function WordOfTheDay() {
                       {(result?.example_en ?? q.word.example_en) ? <AppText variant="caption">{result?.example_en ?? q.word.example_en}</AppText> : null}
                     </View>
                   ) : null}
-                  {!q.word.verified ? <AppText variant="caption" style={{ marginTop: SPACING.sm }}>{t('This entry comes from the Lango dictionary project and is still being checked by LCI.')}</AppText> : null}
+                  {!q.word.verified ? <AppText variant="caption" style={{ marginTop: SPACING.sm }}>{t('This entry comes from the Lango dictionary project and is still being checked.')}</AppText> : null}
                 </Card>
 
                 {user && streaks ? (

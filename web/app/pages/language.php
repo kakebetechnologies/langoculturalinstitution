@@ -12,8 +12,8 @@ $entry = function (array $r): string {
     if ($r['pos']) $h .= '<span class="entry__pos">' . e($r['pos']) . '</span>';
     if ($r['category'] && isset(WORD_CATS[$r['category']])) $h .= '<a class="entry__cat" href="' . e(url('language/dictionary', ['cat' => $r['category']])) . '">' . e(__(WORD_CATS[$r['category']])) . '</a>';
     $h .= '<span class="entry__flags">';
-    if (str_starts_with((string)$r['source'], 'Community')) $h .= '<span class="flag flag--community" title="' . e(__('Suggested by the community and approved by LCI')) . '">' . icon('users') . ' ' . e(__('Community')) . '</span>';
-    elseif ($r['verified']) $h .= '<span class="flag flag--ok" title="' . e(__('Checked by LCI language experts')) . '">' . icon('check') . ' ' . e(__('Checked')) . '</span>';
+    if (str_starts_with((string)$r['source'], 'Community')) $h .= '<span class="flag flag--community" title="' . e(__('Suggested by the community and approved by our reviewers')) . '">' . icon('users') . ' ' . e(__('Community')) . '</span>';
+    elseif ($r['verified']) $h .= '<span class="flag flag--ok" title="' . e(__('Checked by a language reviewer')) . '">' . icon('check') . ' ' . e(__('Checked')) . '</span>';
     $h .= '</span></div><p class="entry__m">' . implode('<i> · </i>', array_map('e', $senses)) . '</p>';
     if ($r['example_lg']) $h .= '<p class="entry__ex"><em>' . e($r['example_lg']) . '</em>' . ($r['example_en'] ? ' — ' . e($r['example_en']) : '') . '</p>';
     if ($r['audio']) $h .= '<audio controls preload="none" src="' . e(media_url($r['audio'])) . '"></audio>';
@@ -90,7 +90,7 @@ if ($sub === 'dictionary') {
           <?= empty_state(__('No entry found'), __('This word may not be in the dictionary yet. Try the translator, or suggest it and our language experts will review it.'), 'book',
               '<p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="' . e(url('contribute', ['type' => 'language', 'word' => $qs])) . '">' . e(__('Suggest this word')) . '</a><a class="btn btn--outline btn--sm" href="' . e(url('language/translate', ['text' => $qs, 'dir' => 'lango-en'])) . '">' . e(__('Try the translator')) . '</a></p>') ?>
         <?php endif; ?>
-        <p class="dict__note"><?php _e('“Checked” means an LCI language expert has confirmed the entry. Unmarked entries come from the original Lango dictionary project and are still being reviewed.'); ?></p>
+        <p class="dict__note"><?php _e('“Checked” means a language reviewer has confirmed the entry. Unmarked entries come from the original Lango dictionary project and are still being reviewed.'); ?></p>
       </div>
       <aside class="aside">
         <?php if ($wotd): ?><div class="wotd"><small><?php _e('Word of the day'); ?></small><h3><?= e($wotd['lango']) ?></h3><p style="color:#fff;margin:0"><?= e(str_replace(';', ' ·', $wotd['english'])) ?></p></div><?php endif; ?>
@@ -108,7 +108,7 @@ if ($sub === 'translate') {
     $dir = get('dir') === 'lango-en' ? 'lango-en' : 'en-lango';
     $res = ($text !== '' && throttle('translate', 60, 600)) ? lango_translate($text, $dir) : null;
     $greet = array_slice(require ROOT . '/app/data/greetings.php', 0, 6);
-    page_start(__('AI Lango Translator'), ['hero' => ['eyebrow' => __('Language & translation'), 'title' => __('AI Lango translator'), 'sub' => __('Translate between English and Leb Lango using LCI’s dictionary and textbook sentences.'), 'crumbs' => [[__('Language'), 'language'], [__('Translator'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
+    page_start(__('AI Lango Translator'), ['hero' => ['eyebrow' => __('Language & translation'), 'title' => __('AI Lango translator'), 'sub' => __('Translate between English and Leb Lango using the Lango dictionary and textbook sentences.'), 'crumbs' => [[__('Language'), 'language'], [__('Translator'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section section--tight"><div class="container">
       <form class="trans" id="transform" method="get" action="<?= e(url('language/translate')) ?>">
@@ -173,7 +173,7 @@ if ($sub === 'proverbs') {
           <div>
             <span class="eyebrow"><?php _e('A collection waiting for its elders'); ?></span>
             <h2><?php _e('Help us write down the proverbs of Lango'); ?></h2>
-            <p><?php _e('Proverbs are how the Lango teach children, settle disputes and speak about life. We would rather publish nothing than publish a proverb that is wrong, so this page only shows sayings that come from Lango speakers and have been reviewed by the LCI language team.'); ?></p>
+            <p><?php _e('Proverbs are how the Lango teach children, settle disputes and speak about life. We would rather publish nothing than publish a proverb that is wrong, so this page only shows sayings that come from Lango speakers and have been reviewed by language reviewers.'); ?></p>
             <?php if ($parable): ?><p class="begin__note"><?= icon('book') ?> <?= sprintf(__('In the dictionary, a proverb or parable is %s.'), '<b>' . e($parable['lango']) . '</b>') ?></p><?php endif; ?>
             <ol class="begin__steps"><li><?php _e('Write the proverb in Leb Lango, exactly as you heard it.'); ?></li><li><?php _e('Add its English meaning and when it is used.'); ?></li><li><?php _e('Choose your clan so the saying is credited to where it comes from.'); ?></li></ol>
             <p style="display:flex;gap:10px;flex-wrap:wrap;margin:0"><a class="btn btn--primary" href="<?= e(url('contribute', ['type' => 'language', 'kind' => 'proverb'])) ?>"><?= icon('plus') ?> <?php _e('Add a proverb'); ?></a><a class="btn btn--outline" href="<?= e(url('language/dictionary')) ?>"><?php _e('Browse the dictionary'); ?></a></p>

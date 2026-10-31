@@ -910,3 +910,6 @@ a.mc-card{transition:transform .2s,box-shadow .2s}a.mc-card:hover{transform:tran
 .mc-aside .btn--outline{border:1.5px solid #dfe2e7;box-shadow:none}.mc-aside .btn--outline:hover{border-color:var(--red)}
 body.auth .footer,body.mc .footer{margin-top:0}
 body.auth .au{padding-bottom:64px}body.mc .mc-body{padding-bottom:64px}
+
+/* the Lango mark is a rounded square of its own: no white tile behind it in the footer */
+.brand--footer.brand--logo .brand__logo{background:none;padding:0;height:56px;border-radius:14px}

@@ -23,7 +23,7 @@ page_start(__('Our History'), ['hero' => ['eyebrow' => __('Origins, migration & 
     <div class="hlead__txt">
       <span class="eyebrow"><?php _e('The story in brief'); ?></span>
       <p class="hlead__p"><?php _e('The Lango are a Nilotic people of north-central Uganda. Oral tradition remembers a long migration from the north, a society built on clans rather than kings, a colonial era that created chiefs where there had been none, and a post-independence history in which Lango sons and daughters stood at the centre of the nation.'); ?></p>
-      <p class="hlead__s"><?php _e('This history is compiled from the published sources listed at the end of the page. It will be reviewed and extended by LCI’s historians and the Council of Elders — and you can help.'); ?> <a href="<?= e(url('contribute', ['type' => 'oral_history'])) ?>"><?php _e('Share what you know.'); ?></a></p>
+      <p class="hlead__s"><?php _e('This history is compiled from the published sources listed at the end of the page. It will be reviewed and extended by historians and elders — and you can help.'); ?> <a href="<?= e(url('contribute', ['type' => 'oral_history'])) ?>"><?php _e('Share what you know.'); ?></a></p>
     </div>
     <dl class="hlead__facts">
       <div><dt><?= $pop ? number_format($pop) : '—' ?></dt><dd><?php _e('people in the sub-region (2024 census)'); ?></dd></div>

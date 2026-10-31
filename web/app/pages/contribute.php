@@ -124,7 +124,7 @@ if (is_post()) {
 /* ---------- type chooser ---------- */
 $icons = ['cultural' => 'star', 'natural' => 'leaf', 'language' => 'book', 'oral_history' => 'mic', 'document' => 'file', 'heritage_site' => 'pin'];
 if (!$type) {
-    page_start(__('Contribute'), ['hero' => ['eyebrow' => __('Community Contribution Engine'), 'title' => __('Add to the Lango archive'), 'sub' => __('Share a word, a photo, a story or a place. Every contribution is checked by LCI reviewers before it is published, and you keep your rights.'), 'crumbs' => [[__('Contribute'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
+    page_start(__('Contribute'), ['hero' => ['eyebrow' => __('Community Contribution Engine'), 'title' => __('Add to the Lango archive'), 'sub' => __('Share a word, a photo, a story or a place. Every contribution is checked by our reviewers before it is published, and you keep your rights.'), 'crumbs' => [[__('Contribute'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section"><div class="container">
       <div class="sec-row"><div><span class="eyebrow"><?php _e('Step 1 of 2'); ?></span><h2><?php _e('What would you like to share?'); ?></h2></div><a class="link" href="<?= e(url('contribute/track')) ?>"><?php _e('Already submitted? Track it'); ?> <?= icon('arrow') ?></a></div>
@@ -139,7 +139,7 @@ if (!$type) {
       <div class="sec-head"><span class="eyebrow"><?php _e('How it works'); ?></span><h2><?php _e('Simple, and always reviewed'); ?></h2></div>
       <div class="grid g3">
         <div class="pillar"><span class="pillar__n">01</span><h3><?php _e('Fill in one short form'); ?></h3><p><?php _e('Choose your clan, tell us what you are sharing and add a photo or recording if you have one. No account is needed.'); ?></p></div>
-        <div class="pillar"><span class="pillar__n">02</span><h3><?php _e('Our team reviews it'); ?></h3><p><?php _e('LCI reviewers and clan leaders check every submission and are notified the moment it arrives. You can follow it with your code.'); ?></p></div>
+        <div class="pillar"><span class="pillar__n">02</span><h3><?php _e('Our team reviews it'); ?></h3><p><?php _e('Our reviewers and clan leaders check every submission and are notified the moment it arrives. You can follow it with your code.'); ?></p></div>
         <div class="pillar"><span class="pillar__n">03</span><h3><?php _e('It joins the archive'); ?></h3><p><?php _e('Approved words go into the dictionary and the AI translator; stories, photos and places go into the heritage archive.'); ?></p></div>
       </div>
     </div></section>
@@ -231,7 +231,7 @@ $prefWord = old('word', get('word'));
           <label class="check"><input type="checkbox" name="credit" value="1" <?= (!is_post() || old('credit') === '1') ? 'checked' : '' ?>> <span><?php _e('Show my first name and clan beside the word so I get the credit.'); ?></span></label>
         <?php else: ?>
           <div class="field"><label for="rt"><?php _e('How may we use your contribution?'); ?></label>
-            <select id="rt" name="rights"><option value="retain"><?php _e('I keep all rights — LCI may display it in the archive'); ?></option><option value="cc_by"><?php _e('Share openly with credit (CC BY)'); ?></option><option value="lci"><?php _e('Give LCI full rights to use it'); ?></option></select></div>
+            <select id="rt" name="rights"><option value="retain"><?php _e('I keep all rights — it may be displayed in the archive'); ?></option><option value="cc_by"><?php _e('Share openly with credit (CC BY)'); ?></option><option value="lci"><?php _e('Give the site full rights to use it'); ?></option></select></div>
         <?php endif; ?>
         <label class="check"><input type="checkbox" name="consent" value="1" required> <span><?php _e('I confirm this is my own knowledge or work, or I have permission to share it, and I agree to the'); ?> <a href="<?= e(url('terms')) ?>" target="_blank"><?php _e('terms'); ?></a>.</span></label>
         <div><button class="btn btn--primary"><?= icon('upload') ?> <?= $isProv ? e(__('Submit proverb')) : ($isWord ? e(__('Submit word')) : e(__('Submit contribution'))) ?></button></div>
@@ -241,7 +241,7 @@ $prefWord = old('word', get('word'));
 
   <aside class="aside">
     <div class="box"><h4><?php _e('What happens next'); ?></h4>
-      <ol class="nextsteps"><li><?php _e('LCI reviewers are notified straight away.'); ?></li><li><?= $isWord ? e(__('They check the spelling and meaning, and may ask you for more detail.')) : e(__('They check the details, and may ask you for more.')) ?></li><li><?= $isWord ? e(__('Approved entries join the public dictionary and the AI translator.')) : e(__('Approved entries join the heritage archive.')) ?></li></ol></div>
+      <ol class="nextsteps"><li><?php _e('Our reviewers are notified straight away.'); ?></li><li><?= $isWord ? e(__('They check the spelling and meaning, and may ask you for more detail.')) : e(__('They check the details, and may ask you for more.')) ?></li><li><?= $isWord ? e(__('Approved entries join the public dictionary and the AI translator.')) : e(__('Approved entries join the heritage archive.')) ?></li></ol></div>
     <?php if (!$u): ?><div class="box"><h4><?php _e('Already have an account?'); ?></h4><p style="font-size:.9rem"><?php _e('Sign in so this contribution is saved to your profile.'); ?></p><a class="btn btn--outline btn--sm" href="<?= e(url('account/login', ['next' => $self])) ?>"><?php _e('Sign in'); ?></a></div><?php endif; ?>
     <div class="box"><h4><?php _e('Something else to share?'); ?></h4>
       <p style="margin:0;font-size:.9rem"><a href="<?= e(url('contribute')) ?>"><?php _e('Choose a different type of contribution'); ?></a><br><a href="<?= e(url('contribute/track')) ?>"><?php _e('Track a contribution you already sent'); ?></a></p></div>

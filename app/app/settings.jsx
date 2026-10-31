@@ -100,7 +100,7 @@ export default function Settings() {
       <SectionHeader title={t('Language')} />
       <Segmented value={lang} onChange={setLang} options={[{ value: 'en', label: 'English' }, { value: 'lg', label: 'Leb Lango' }]} />
       <AppText variant="caption" style={{ marginTop: 8 }}>
-        {t('Leb Lango text appears where LCI’s language experts have translated it; everything else stays in English.')}
+        {t('Leb Lango text appears where language experts have translated it; everything else stays in English.')}
       </AppText>
 
       <SectionHeader title={t('Offline dictionary')} style={{ marginTop: SPACING.lg }} />

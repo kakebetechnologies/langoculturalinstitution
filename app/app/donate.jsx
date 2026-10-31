@@ -1,10 +1,10 @@
 // Donate (POST /api/v1/donations): choose an amount and currency, a payment method (MTN MoMo, Airtel Money, Visa, Mastercard,
-// PayPal, bank transfer), once / monthly / yearly, and where it goes: a program, "where it is needed most" or keeping the app running.
-// The pledge is recorded and the LCI finance office confirms it once it arrives. How to pay with each method is what LCI wrote in Site
+// PayPal, bank transfer) and once / monthly / yearly. Giving keeps the Lango App running.
+// The pledge is recorded and confirmed once it arrives. How to pay with each method is what the site owner wrote in Site
 // settings (GET /giving); the screen shows it, and gives the reference to quote when paying.
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -26,28 +26,23 @@ const PRESETS = { UGX: [10000, 20000, 50000, 100000, 200000], USD: [5, 10, 25, 5
 export default function Donate() {
   const { t } = useT();
   const { user } = useAuth();
-  const { program, purpose } = useLocalSearchParams();
-  const programs = useFetch('/programs');
-  const giving = useFetch('/giving'); // how to pay with each method, as LCI wrote it in the admin panel
+  const giving = useFetch('/giving'); // how to pay with each method, as written in the admin panel
   const info = giving.data?.data;
   const [cur, setCur] = useState('UGX');
-  // "Give to" is a program, "where it is needed most", or the running of the app itself (program_id "app")
-  const [f, setF] = useState({ amount: '', method: 'mtn_momo', recurring: 'once', program_id: purpose === 'app' ? 'app' : typeof program === 'string' ? program : '', donor_name: user?.name ?? '', email: user?.email ?? '', phone: user?.phone ?? '', message: '', anonymous: false });
+  const [f, setF] = useState({ amount: '', method: 'mtn_momo', recurring: 'once', donor_name: user?.name ?? '', email: user?.email ?? '', phone: user?.phone ?? '', message: '', anonymous: false });
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState({});
   const [banner, setBanner] = useState('');
   const [done, setDone] = useState(null);
   const set = (k) => (v) => setF((x) => ({ ...x, [k]: v }));
   const how = info?.methods?.find((m) => m.key === f.method);
-  const progOptions = useMemo(() => [{ value: '', label: t('Where it is needed most') }, { value: 'app', label: t('Keeping the Lango App running') }, ...(programs.data?.data ?? []).filter((p) => p.accepts_donations).map((p) => ({ value: String(p.id), label: p.title }))], [programs.data, t]);
 
   async function submit() {
     setBusy(true);
     setBanner('');
     setErrors({});
     try {
-      const forApp = f.program_id === 'app';
-      const { data } = await api.post('/donations', { ...f, program_id: forApp ? '' : f.program_id, purpose: forApp ? 'app' : 'general', currency: cur, amount: f.amount.replace(/,/g, ''), anonymous: f.anonymous ? 1 : 0 });
+      const { data } = await api.post('/donations', { ...f, program_id: '', purpose: 'app', currency: cur, amount: f.amount.replace(/,/g, ''), anonymous: f.anonymous ? 1 : 0 });
       setDone(data.data);
     } catch (e) {
       setErrors(fieldErrors(e));
@@ -92,7 +87,7 @@ export default function Donate() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScreenHeader title={t('Donate')} />
+      <ScreenHeader title={t('Support the Lango App')} />
       <KeyboardScroll contentContainerStyle={{ padding: SPACING.md, paddingBottom: SPACING.xxl }} keyboardShouldPersistTaps="handled">
         {banner ? (
           <View style={styles.banner} accessibilityRole="alert">
@@ -121,8 +116,7 @@ export default function Donate() {
           {t('How often?')}
         </AppText>
         <Segmented value={f.recurring} onChange={set('recurring')} options={[{ value: 'once', label: t('Once') }, { value: 'monthly', label: t('Monthly') }, { value: 'yearly', label: t('Yearly') }]} style={{ marginBottom: 16 }} />
-        <Select label={t('Give to')} value={f.program_id} options={progOptions} onChange={set('program_id')} />
-        {f.program_id === 'app' && info?.app_text ? (
+        {info?.app_text ? (
           <AppText variant="caption" style={{ marginBottom: 12 }}>
             {info.app_text}
           </AppText>
@@ -138,8 +132,8 @@ export default function Donate() {
         <Button title={t('Record my pledge')} icon="heart" onPress={submit} loading={busy} />
         <AppText variant="caption" style={{ marginTop: 10 }}>
           {how?.instructions || how?.url
-            ? t('Your pledge is recorded now. Pay as shown above and quote your reference; LCI confirms your gift when it arrives.')
-            : t('Online payment is being connected. Your pledge is recorded now and the LCI finance office will contact you with payment instructions for your chosen method.')}
+            ? t('Your pledge is recorded now. Pay as shown above and quote your reference; your gift is confirmed when it arrives.')
+            : t('Online payment is being connected. Your pledge is recorded now and we will contact you with payment instructions for your chosen method.')}
         </AppText>
       </KeyboardScroll>
     </KeyboardAvoidingView>

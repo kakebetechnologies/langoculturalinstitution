@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /* ==========================================================================
    Listen & read, for the app: the Lango Podcast (elders' stories), Lango Radio, the Lango Bible and how to give.
-   Everything here is shown only when LCI has put it in the admin panel: nothing is written for them, so the app shows an
+   Everything here is shown only when it has been added in the admin panel: nothing is written for them, so the app shows an
    empty state until there is content. Called from api_app() like daily_api(); returns normally for any other request.
    ========================================================================== */
 
@@ -35,7 +35,7 @@ function api_episode(array $e, bool $full = false): array
     return $out;
 }
 
-/** Pay-to instructions LCI entered in Site settings for one payment method (empty text and no link when it has none). */
+/** Pay-to instructions entered in Site settings for one payment method (empty text and no link when it has none). */
 function give_pay(string $method): array
 {
     $g = ['visa' => 'card', 'mastercard' => 'card'][$method] ?? $method;

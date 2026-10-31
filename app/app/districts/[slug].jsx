@@ -92,7 +92,7 @@ export default function District() {
           ) : null}
 
           <AppText variant="caption" style={{ marginTop: SPACING.lg }}>
-            {t('Population figures are from the 2024 National Population and Housing Census (Uganda Bureau of Statistics). Descriptions are compiled from published sources and reviewed by LCI.')}
+            {t('Population figures are from the 2024 National Population and Housing Census (Uganda Bureau of Statistics). Descriptions are compiled from published sources and are still being reviewed.')}
           </AppText>
         </>
       ) : null}

@@ -270,7 +270,7 @@ function site_counts(): array
            + (int)val("SELECT COUNT(*) FROM media WHERE status='published'")
            + (int)val("SELECT COUNT(*) FROM documents WHERE status='published'");
     return $c = [
-        'clans'    => (int)setting('clan_total', '149'),
+        'clans'    => (int)val("SELECT COUNT(*) FROM clans WHERE status='published'"),
         'districts'=> (int)val("SELECT COUNT(*) FROM districts WHERE status='published'") ?: 9,
         'words'    => $words,
         'archived' => $items,
@@ -300,12 +300,12 @@ function site_img(string $key, string $default): string
 
 function brand_html(bool $footer = false): string
 {
-    $name = setting('site_name', 'Lango Cultural Institution');
+    $name = setting('site_name', 'Lango');
     $logo = logo_url();
     $cls = 'brand' . ($footer ? ' brand--footer' : '');
-    $text = '<span class="brand__text"><b>' . e($name) . '</b><small>' . e(setting('org_subtitle', 'Won Nyaci me Lango')) . '</small></span>';
+    $text = '<span class="brand__text"><b>' . e($name) . '</b>' . (setting('org_subtitle') ? '<small>' . e(setting('org_subtitle')) . '</small>' : '') . '</span>';
     if ($logo) return '<a class="' . $cls . ' brand--logo" href="' . e(url()) . '" aria-label="' . e($name) . '"><img class="brand__logo" src="' . e($logo) . '" alt="" width="42" height="60">' . $text . '</a>';
-    return '<a class="' . $cls . '" href="' . e(url()) . '" aria-label="' . e($name) . '"><span class="brand__mark" aria-hidden="true">LCI</span>' . $text . '</a>';
+    return '<a class="' . $cls . '" href="' . e(url()) . '" aria-label="' . e($name) . '"><span class="brand__mark" aria-hidden="true">L</span>' . $text . '</a>';
 }
 
 
