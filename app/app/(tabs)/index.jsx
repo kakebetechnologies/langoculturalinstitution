@@ -1,5 +1,5 @@
-// Home (GET /api/v1/home): a centred title bar with the streak and the notification bell, a photo banner with the welcome and a search box
-// that overlaps it, the word of the day, a grid of shortcut tiles (Explore, Listen and read), a "Coming up" carousel of events, today's
+// Home (GET /api/v1/home): a centred title bar with the streak and the notification bell, a photo banner (with a red, yellow and blue edge)
+// with the welcome and a search box that overlaps it, the word of the day as a yellow poster, Lango Radio with a play button, a grid of shortcut tiles (Explore, Listen and read), a "Coming up" carousel of events, today's
 // cards, a notable Lango, the latest news and the donation call. Signed-in members also see their points and level. Pull down to
 // refresh; the last copy shows with no internet.
 import { useState } from 'react';
@@ -18,6 +18,7 @@ import { ChallengeCard, ClanFeedCard, ClanOfWeekCard, PhotoCard, StoryCard } fro
 import { MilestoneSheet, StreakChip } from '../../components/daily/Streaks';
 import IconTile from '../../components/IconTile';
 import Logo from '../../components/Logo';
+import RadioCard from '../../components/RadioCard';
 import Row from '../../components/Row';
 import { HeaderAction } from '../../components/ScreenHeader';
 import SectionHeader from '../../components/SectionHeader';
@@ -89,6 +90,11 @@ export default function Home() {
           <View style={styles.hero}>
             <Image source={require('../../assets/welcome/ridge.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" />
             <LinearGradient colors={['rgba(14,16,20,0.2)', 'rgba(14,16,20,0.86)']} style={StyleSheet.absoluteFill} />
+            <View style={styles.flag} pointerEvents="none">
+              <View style={{ flex: 1, backgroundColor: COLORS.primary }} />
+              <View style={{ flex: 1, backgroundColor: COLORS.yellow }} />
+              <View style={{ flex: 1, backgroundColor: COLORS.sky }} />
+            </View>
             <AppText style={styles.heroEyebrow}>{t('Everything about Lango, in one place.')}</AppText>
             <AppText style={styles.heroTitle} numberOfLines={2}>
               {user ? t('Welcome back, {name}', { name: firstName(user.name) }) : t('Welcome to Lango')}
@@ -119,23 +125,22 @@ export default function Home() {
         <View style={styles.body}>
           {wotd ? (
             <Pressable onPress={() => router.push('/word-of-the-day')} accessibilityRole="button" accessibilityLabel={t('Word of the day quiz')} style={({ pressed }) => [styles.wotd, pressed && { opacity: 0.93, transform: [{ scale: 0.99 }] }]}>
-              <View style={styles.sun}>
-                <Ionicons name="sunny" size={22} color="#B46B00" />
-              </View>
-              <View style={{ flex: 1 }}>
-                <AppText variant="eyebrow">{t('Word of the day')}</AppText>
-                <AppText lango style={styles.word} numberOfLines={1}>
-                  {wotd.lango}
-                </AppText>
-                <AppText lango style={styles.meaning} numberOfLines={2}>
-                  {String(wotd.english).split(';').map((s) => s.trim()).join(' · ')}
-                </AppText>
-              </View>
+              <View style={styles.circleRed} />
+              <View style={styles.circleSky} />
+              <AppText style={styles.wotdEyebrow}>{t('Word of the day')}</AppText>
+              <AppText lango style={styles.word} numberOfLines={1}>
+                {wotd.lango}
+              </AppText>
+              <AppText lango style={styles.meaning} numberOfLines={2}>
+                {String(wotd.english).split(';').map((x) => x.trim()).join(' · ')}
+              </AppText>
               <View style={styles.go}>
                 <Ionicons name={home?.word_quiz?.answered ? 'checkmark' : 'arrow-forward'} size={20} color={COLORS.white} />
               </View>
             </Pressable>
           ) : null}
+
+          <RadioCard style={{ marginTop: SPACING.md }} />
 
           {user ? (
             <Card onPress={() => router.push('/(tabs)/me')} style={styles.stats}>
@@ -317,11 +322,14 @@ const styles = StyleSheet.create({
   search: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: -26, marginHorizontal: 14, backgroundColor: COLORS.white, borderRadius: RADIUS.full, paddingLeft: 18, paddingRight: 6, ...SHADOW, shadowOpacity: 0.12 },
   input: { flex: 1, minHeight: 52, fontFamily: 'Inter_400Regular', fontSize: 15, color: COLORS.black },
   searchGo: { width: 42, height: 42, borderRadius: 21, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' },
-  wotd: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: SPACING.md, backgroundColor: COLORS.white, borderRadius: RADIUS.lg + 2, padding: 14, ...SHADOW },
-  sun: { width: 48, height: 48, borderRadius: 16, backgroundColor: '#FFF1D6', alignItems: 'center', justifyContent: 'center' },
-  word: { fontFamily: 'Inter_700Bold', fontSize: 27, lineHeight: 34, color: COLORS.primaryDark },
-  meaning: { fontFamily: 'Inter_400Regular', fontSize: 14, lineHeight: 20, color: COLORS.gray900 },
-  go: { width: 42, height: 42, borderRadius: 21, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' },
+  flag: { position: 'absolute', left: 0, right: 0, top: 0, height: 5, flexDirection: 'row' },
+  wotd: { overflow: 'hidden', marginTop: SPACING.md, backgroundColor: COLORS.yellow, borderRadius: RADIUS.lg + 2, paddingHorizontal: 18, paddingTop: 16, paddingBottom: 18, ...SHADOW },
+  circleRed: { position: 'absolute', right: -34, top: -38, width: 112, height: 112, borderRadius: 56, backgroundColor: COLORS.primary },
+  circleSky: { position: 'absolute', right: 58, top: -26, width: 52, height: 52, borderRadius: 26, backgroundColor: COLORS.sky },
+  wotdEyebrow: { fontFamily: FONTS.bold, fontSize: 10.5, letterSpacing: 1.4, textTransform: 'uppercase', color: COLORS.black },
+  word: { fontFamily: 'Inter_700Bold', fontSize: 46, lineHeight: 54, letterSpacing: -1.5, color: COLORS.black, marginTop: 4, paddingRight: 56 },
+  meaning: { fontFamily: 'Inter_400Regular', fontSize: 16, lineHeight: 22, color: COLORS.black, paddingRight: 64 },
+  go: { position: 'absolute', right: 14, bottom: 14, width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.black, alignItems: 'center', justifyContent: 'center' },
   stats: { marginTop: SPACING.md },
   join: { marginTop: SPACING.md },
   statsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },

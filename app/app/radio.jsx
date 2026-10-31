@@ -12,19 +12,11 @@ import Screen from '../components/Screen';
 import SectionHeader from '../components/SectionHeader';
 import StateView from '../components/StateView';
 import { COLORS, SPACING } from '../constants/theme';
-import api, { errorMessage } from '../lib/api';
+import { errorMessage } from '../lib/api';
 import { useT } from '../lib/i18n';
-import { currentTrack, playLive, playQueue, toggle, usePlayer } from '../lib/player';
+import { currentTrack, toggle, usePlayer } from '../lib/player';
+import { tuneChannel } from '../lib/radio';
 import { useFetch } from '../lib/useFetch';
-
-const shuffled = (list) => {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
 
 export default function Radio() {
   const { t } = useT();
@@ -41,14 +33,7 @@ export default function Radio() {
     setBusy(c.id);
     setNote('');
     try {
-      if (c.source === 'stream') await playLive(c);
-      else {
-        const { data: r } = await api.get(`/radio/${c.id}`);
-        let tracks = r.data.tracks ?? [];
-        if (!tracks.length) return setNote(t('This channel has nothing to play yet.'));
-        if (shuffle && tracks.length > 1) tracks = shuffled(tracks);
-        await playQueue(tracks, 0, { loop: true, label: c.name, route: '/radio', key: `radio:${c.id}` });
-      }
+      if ((await tuneChannel(c, shuffle)) === 'empty') setNote(t('This channel has nothing to play yet.'));
     } catch (e) {
       setNote(errorMessage(e));
     } finally {
@@ -96,7 +81,7 @@ export default function Radio() {
               icon={c.cover ? undefined : 'radio-outline'}
               iconTone={active ? 'red' : 'sky'}
               title={c.name}
-              subtitle={c.description || (c.source === 'stream' ? t('Live radio') : t('{n} recordings', { n: c.count }))}
+              subtitle={c.description || (c.source === 'stream' ? t('Live radio') : c.count === 1 ? t('1 recording') : t('{n} recordings', { n: c.count }))}
               onPress={() => (active ? toggle() : tune(c))}
               right={
                 <Pressable onPress={() => (active ? toggle() : tune(c))} hitSlop={8} accessibilityLabel={active && p.playing ? t('Pause') : t('Play')} style={styles.play}>
