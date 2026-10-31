@@ -8,17 +8,18 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
-import Illustration from '../components/Illustration';
 import Logo from '../components/Logo';
+import PhotoSlide from '../components/PhotoSlide';
+import { MOMENTS } from '../constants/moments';
 import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../constants/theme';
 import { useAuth } from '../lib/auth';
 import { useT } from '../lib/i18n';
 import { setStored } from '../lib/storage';
 
 const SLIDES = [
-  { key: 'a', icon: 'earth', tone: 'red', orbit: [['book', COLORS.yellowInk], ['map', COLORS.skyDark], ['time', COLORS.primary]], title: 'Preserve your heritage', text: 'Clans, ceremonies, history and the places that make Lango — kept safe for the next generation.' },
-  { key: 'b', icon: 'camera', tone: 'sky', orbit: [['mic', COLORS.primary], ['create', COLORS.yellowInk], ['location', COLORS.skyDark]], title: 'Contribute your knowledge', text: 'Photograph a heritage site, record an elder, suggest a word. Reviewers check it and add it to the archive.' },
-  { key: 'c', icon: 'people', tone: 'green', orbit: [['language', COLORS.skyDark], ['calendar', COLORS.primary], ['chatbubbles', COLORS.yellowInk]], title: 'Connect with your clan', text: 'Choose your clan, learn Leb Lango, find events and meet the Lango community at home and abroad.' },
+  { key: 'a', photo: 'dancers-group', icon: 'earth', tone: 'red', orbit: [['book', COLORS.yellowInk], ['map', COLORS.skyDark], ['time', COLORS.primary]], title: 'Preserve your heritage', text: 'Clans, ceremonies, history and the places that make Lango — kept safe for the next generation.' },
+  { key: 'b', photo: 'harvest', icon: 'camera', tone: 'sky', orbit: [['mic', COLORS.primary], ['create', COLORS.yellowInk], ['location', COLORS.skyDark]], title: 'Contribute your knowledge', text: 'Photograph a heritage site, record an elder, suggest a word. Reviewers check it and add it to the archive.' },
+  { key: 'c', photo: 'pot-dance', icon: 'people', tone: 'green', orbit: [['language', COLORS.skyDark], ['calendar', COLORS.primary], ['chatbubbles', COLORS.yellowInk]], title: 'Connect with your clan', text: 'Choose your clan, learn Leb Lango, find events and meet the Lango community at home and abroad.' },
 ];
 
 export default function Onboarding() {
@@ -29,7 +30,7 @@ export default function Onboarding() {
   const { token } = useAuth();
   const [page, setPage] = useState(0);
   const last = SLIDES.length; // the language page
-  const illustration = Math.min(300, width - 80, height * 0.38);
+  const illustration = Math.min(330, width - 64, height * 0.4);
 
   const go = (n) => {
     list.current?.scrollToIndex({ index: n, animated: true });
@@ -79,7 +80,7 @@ export default function Onboarding() {
             </View>
           ) : (
             <View style={[styles.page, { width, height, paddingTop: insets.top + 70 }]}>
-              <Illustration icon={item.icon} tone={item.tone} orbit={item.orbit} size={illustration} />
+              <PhotoSlide source={MOMENTS.find((m) => m.key === item.photo).source} icon={item.icon} tone={item.tone} width={Math.min(330, width - 64)} height={illustration} label={t(MOMENTS.find((m) => m.key === item.photo).caption)} />
               <AppText style={[styles.h, { marginTop: SPACING.xl }]}>{t(item.title)}</AppText>
               <AppText style={styles.p}>{t(item.text)}</AppText>
             </View>

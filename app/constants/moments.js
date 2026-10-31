@@ -10,3 +10,8 @@ export const MOMENTS = [
   { key: 'dance-story', caption: 'Performers with a handmade prop', credit: SUPPLIED, source: require('../assets/culture/dance-story.jpg') },
   { key: 'chief-buchta', caption: 'A Lango chief in a horned head-dress', credit: 'Photograph by Richard Buchta (died 1894), published in The Living Races of Mankind (1902). Public domain.', source: require('../assets/culture/chief-buchta.jpg'), historical: true },
 ];
+
+// The pictures of the opening screen (the slideshow above the sign-in buttons), in the order they appear.
+// `focus` is how far down the picture to keep when it is cropped to the frame (so a head-dress or a face is not cut off).
+const FOCUS = { 'warrior-rock': '4%', harvest: '62%' };
+export const OPENING = ['dancers-group', 'pot-dance', 'harvest', 'warrior-rock', 'dance-story'].map((k) => ({ ...MOMENTS.find((m) => m.key === k), focus: FOCUS[k] ?? '45%' }));

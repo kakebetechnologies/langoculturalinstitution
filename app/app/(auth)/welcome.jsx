@@ -1,15 +1,15 @@
-// The way in. The app needs an account, so this is the first screen of anyone who is not signed in: the logo over a photograph,
+// The way in. The app needs an account, so this is the first screen of anyone who is not signed in: the logo over a slideshow of photographs of Lango,
 // "Continue with Google" (when the website has it set up), "Create an account" and "Sign in" (with the page the person was heading for
 // carried along as ?next=). Test builds also get a link to change the server address.
 import { StyleSheet, View } from 'react-native';
-import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppText from '../../components/AppText';
 import Button from '../../components/Button';
 import GoogleButton from '../../components/GoogleButton';
 import Logo from '../../components/Logo';
+import PhotoSlideshow from '../../components/PhotoSlideshow';
+import { OPENING } from '../../constants/moments';
 import { COLORS, FONTS, SPACING } from '../../constants/theme';
 import { isTestServer } from '../../lib/api';
 import { useT } from '../../lib/i18n';
@@ -22,12 +22,14 @@ export default function Welcome() {
 
   return (
     <View style={styles.screen}>
-      <Image source={require('../../assets/welcome/ridge.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" />
-      <LinearGradient colors={['rgba(22,24,29,0.6)', 'rgba(22,24,29,0.15)', 'rgba(22,24,29,0.96)']} locations={[0, 0.3, 0.8]} style={StyleSheet.absoluteFill} />
-      <View style={[styles.top, { paddingTop: insets.top + 18 }]}>
-        <Logo size={52} tile />
+      <View style={[styles.top, { paddingTop: insets.top + 12 }]}>
+        <PhotoSlideshow slides={OPENING} style={styles.photos}>
+          <View style={styles.logo} pointerEvents="none">
+            <Logo size={46} tile />
+          </View>
+        </PhotoSlideshow>
       </View>
-      <View style={[styles.bottom, { paddingBottom: insets.bottom + 22 }]}>
+      <View style={[styles.bottom, { paddingBottom: insets.bottom + 20 }]}>
         <AppText variant="eyebrow" style={{ color: COLORS.yellow }}>
           Everything about Lango
         </AppText>
@@ -44,8 +46,10 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: COLORS.navy },
-  top: { paddingHorizontal: SPACING.lg },
-  bottom: { flex: 1, justifyContent: 'flex-end', paddingHorizontal: SPACING.lg, gap: 12 },
-  headline: { fontFamily: FONTS.bold, fontSize: 30, lineHeight: 37, color: COLORS.white },
-  sub: { fontFamily: FONTS.regular, fontSize: 15.5, lineHeight: 23, color: 'rgba(255,255,255,0.86)', marginBottom: 6 },
+  top: { flex: 1, paddingHorizontal: SPACING.md },
+  photos: { flex: 1, minHeight: 190 },
+  logo: { position: 'absolute', top: 18, left: 18 },
+  bottom: { paddingTop: SPACING.md, paddingHorizontal: SPACING.lg, gap: 12 },
+  headline: { fontFamily: FONTS.bold, fontSize: 27, lineHeight: 33, color: COLORS.white },
+  sub: { fontFamily: FONTS.regular, fontSize: 15, lineHeight: 22, color: 'rgba(255,255,255,0.86)', marginBottom: 4 },
 });
