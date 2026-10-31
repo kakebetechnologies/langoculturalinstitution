@@ -5,14 +5,17 @@ define('ROOT', dirname(__DIR__));
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Africa/Kampala');
 
+require_once __DIR__ . '/lib/base_guess.php';
 $cfgFile = ROOT . '/config/config.php';
 if (!is_file($cfgFile)) {
-    require_once __DIR__ . '/lib/base_guess.php';
     header('Location: ' . lci_guess_base() . '/install.php');
     exit;
 }
 $CFG = require $cfgFile;
-define('BASE', rtrim((string)($CFG['base'] ?? ''), '/'));
+// Where the site is served from ('' at https://myculture.online, '/langoculturalinstitution' on XAMPP). Worked out from the request itself, so a
+// config.php written under another address (an installer run before this was fixed, a copy from another computer) can never put "/web" or a
+// folder name into every link. The configured value is only used where there is no request (command line scripts).
+define('BASE', PHP_SAPI === 'cli' ? rtrim((string)($CFG['base'] ?? ''), '/') : lci_guess_base());
 define('DEBUG', !empty($CFG['debug']));
 
 if (DEBUG) { error_reporting(E_ALL); ini_set('display_errors', '1'); }

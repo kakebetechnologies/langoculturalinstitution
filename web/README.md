@@ -135,10 +135,14 @@ Add a new managed content type by adding one entry to `admin/modules.php`.
 * Settings that must not be in Git live in `web/config/config.php`, which is git-ignored, so a `git pull` never replaces it and it
   survives every deployment. First time only, either of these:
   * open the domain: with no `config.php` it goes to `/install.php`, where you type the database details and the administrator
-    (the address is worked out for you, `'base' => ''` at a domain's root); or
+    (the address is worked out for you); or
   * copy `config/config.live.php` (kept on the developer's computer, also git-ignored) to `config/config.php` on the server in File
     Manager, then open `/install.php`: it asks only for the administrator and the database password (to show it is you), and
     creates the tables. Starter content is optional (unticked).
+* **Addresses are clean: `https://myculture.online/about`, never `/web/about`.** On a web request the site works out the folder it is
+  served from by itself (`lci_guess_base()`), so the `'base'` value in `config.php` is ignored (only command-line scripts use it) and an
+  old or copied `config.php` cannot put `/web` into the links. A link that still has `/web` in it (`/web/about`) is redirected to
+  `/about` by `web/.htaccess`.
 * Do not copy `config.live.php` over the `config.php` on the developer's computer, which points at the XAMPP database.
 * `npm run pwa -- --base= --out=../deploy/pwa` builds the web app for the domain root (`/pwa/`) without touching `web/pwa`, the copy
   that XAMPP serves. The mobile app's address for the store builds is in `app/eas.json` (`https://myculture.online/api`).

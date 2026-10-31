@@ -11,6 +11,11 @@ RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|10\.|192\.168\.|172\.(1[6-9]|
 RewriteCond %{HTTP_HOST} !\.(local|test)(:[0-9]+)?$ [NC]
 RewriteCond %{THE_REQUEST} \s(\S+)\s
 RewriteRule ^ https://%{HTTP_HOST}%1 [R=301,L]
+# The address never carries the folder name. When the whole repository is the web root, the root .htaccess maps /about into this folder
+# (REDIRECT_STATUS is then set); a request that arrives here directly with /web in it (an old link) goes to the clean address.
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{REQUEST_URI} ^(.*?)/web(?:/(.*))?$
+RewriteRule ^ %1/%2 [R=301,L,NE]
 # Bearer tokens from the mobile app: some Apache/CGI setups drop the Authorization header unless it is passed on
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteRule ^(app|config|database|legacy)(/|$) - [F,L]
