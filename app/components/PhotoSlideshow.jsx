@@ -63,11 +63,13 @@ export default function PhotoSlideshow({ slides, interval = 5200, style, childre
         </View>
       )}
       {children}
-      <View style={[styles.dots, { top: dotsTop }]} pointerEvents="none">
-        {slides.map((s, i) => (
-          <View key={s.key} style={[styles.dot, i === index && styles.dotOn]} />
-        ))}
-      </View>
+      {slides.length > 1 ? (
+        <View style={[styles.dots, { top: dotsTop }]} pointerEvents="none">
+          {slides.map((s, i) => (
+            <View key={s.key} style={[styles.dot, i === index && styles.dotOn]} />
+          ))}
+        </View>
+      ) : null}
       {bleed ? null : (
         <View style={styles.foot} pointerEvents="none">
           <AppText style={styles.caption} numberOfLines={1}>

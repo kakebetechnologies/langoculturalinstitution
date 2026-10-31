@@ -119,6 +119,16 @@ return [
             'sort' => ['type' => 'number', 'default' => 0], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'draft'],
         ],
     ],
+    'welcome_photos' => [
+        'label' => 'App opening photos', 'icon' => 'image', 'group' => 'Content', 'table' => 'welcome_photos', 'roles' => $cont, 'title' => 'title', 'order' => 'sort, id',
+        'list' => ['image', 'title', 'focus', 'sort', 'status'], 'search' => ['title', 'credit'], 'filters' => ['status'],
+        'fields' => [
+            'image' => ['type' => 'image', 'required' => true, 'label' => 'Photo', 'help' => 'The photograph on the first screen of the app. A tall photo works best; the bottom half fades into dark, so keep the subject in the upper part. Use only photographs you own or that are free to use.'],
+            'title' => ['label' => 'Caption', 'full' => true], 'credit' => ['label' => 'Photo credit', 'full' => true, 'help' => 'Who took it and under which licence.'],
+            'focus' => ['type' => 'select', 'label' => 'Part of the photo to keep', 'options' => ['top' => 'The top', 'upper' => 'The upper part', 'centre' => 'The centre', 'lower' => 'The lower part'], 'default' => 'upper', 'help' => 'The app crops the photo to the top of a phone screen; choose which part must stay in view.'],
+            'sort' => ['type' => 'number', 'default' => 0, 'help' => 'Photos are shown in this order, one after the other, when more than one is published.'], 'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
+        ],
+    ],
     'media' => [
         'label' => 'Media library', 'icon' => 'image', 'group' => 'Content', 'table' => 'media', 'roles' => $cont, 'title' => 'title', 'order' => 'id DESC',
         'list' => ['title', 'type', 'album', 'source', 'status'], 'search' => ['title', 'album'], 'filters' => ['type', 'status', 'source'],

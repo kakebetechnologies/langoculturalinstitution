@@ -46,7 +46,7 @@ require_once __DIR__ . '/lib/upload.php';
 // config/schema_rev.txt (git-ignored, closed to the web) records the revision already applied; a lock stops two requests running it at once,
 // and a folder that cannot be written to simply skips this (the same update is available as php database/upgrade-cli.php).
 if (PHP_SAPI !== 'cli') {
-    $lciRev = '2026-10-31-lango-5';
+    $lciRev = '2026-10-31-lango-6';
     $lciMark = ROOT . '/config/schema_rev.txt';
     if (@file_get_contents($lciMark) !== $lciRev && is_writable(dirname($lciMark))) {
         $lciLock = @fopen($lciMark . '.lock', 'c');

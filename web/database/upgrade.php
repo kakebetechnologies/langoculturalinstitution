@@ -77,6 +77,12 @@ function lci_upgrade(PDO $pdo): array
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, user_id INT UNSIGNED NOT NULL, set_id INT UNSIGNED NOT NULL, best SMALLINT UNSIGNED NOT NULL DEFAULT 0, total SMALLINT UNSIGNED NOT NULL DEFAULT 0,
         plays INT UNSIGNED NOT NULL DEFAULT 0, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (user_id, set_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // the photographs of the app's opening screen (Admin, Content, App opening photos); the app asks for them at GET /api/v1/welcome
+    $pdo->exec("CREATE TABLE IF NOT EXISTS welcome_photos (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(190) NULL, image VARCHAR(255) NULL, credit VARCHAR(255) NULL, focus VARCHAR(10) NOT NULL DEFAULT 'upper',
+        sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("ALTER TABLE welcome_photos MODIFY image VARCHAR(255) NULL");   // a row saved without a photo is simply not shown
     $pdo->exec("CREATE TABLE IF NOT EXISTS history_sections (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(120) NOT NULL UNIQUE, title VARCHAR(190) NOT NULL, era VARCHAR(60) NULL, icon VARCHAR(30) NULL,
         summary VARCHAR(400) NULL, body MEDIUMTEXT NULL, body_lg MEDIUMTEXT NULL, sort INT NOT NULL DEFAULT 0, status ENUM('published','draft') NOT NULL DEFAULT 'published'
@@ -364,6 +370,13 @@ function lci_upgrade(PDO $pdo): array
         $n++;
     }
     if ($n) $log[] = "$n reading-list documents";
+
+    if (!(int)$val('SELECT COUNT(*) FROM welcome_photos')) {   // only when nobody has set up the opening photos yet
+        foreach (require $dir . '/welcome_photos.php' as $i => [$file, $caption, $credit, $focus, $status]) {
+            $ins('welcome_photos', ['title' => $caption, 'image' => $file, 'credit' => $credit, 'focus' => $focus, 'sort' => $i + 1, 'status' => $status]);
+        }
+        $log[] = 'opening photos';
+    }
 
     // history
     $hist = require $dir . '/history.php';

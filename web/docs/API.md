@@ -57,6 +57,7 @@ Everything below is built from content already in the archive (the dictionary, h
 | GET | `/quiz` | The knowledge quizzes about the Lango people: `[ { slug, title, summary, icon, questions, best, plays } ]` (`best` is the signed-in member's best score) |
 | GET | `/quiz/{slug}` | One quiz: `{ title, total, best, questions: [ { id, question, options[] } ] }`; the options are mixed in a new order each time and carry no answers |
 | POST | `/quiz/{slug}/submit` | `answers: { "<question id>": "<chosen answer>" }` → `{ score, total, best, review[] }`; each review item has `answer`, `why`, `source`, `source_url`. Any number of attempts; the best score is kept for signed-in members |
+| GET | `/welcome` | The photographs of the app's opening screen, set in Admin, Content, App opening photos: `[ { id, image, caption, credit, focus: top|upper|centre|lower } ]` in the order to show them. No sign-in needed |
 | GET | `/leaderboards/challenge`, `/leaderboards/learners` | Top ten this week / this month, names as first name and initial |
 | GET | `/clans/leaderboard?sort=members|contributions|learners` | Every published clan with its numbers and rank, and `mine` for a signed-in member |
 | GET | `/clans/{id}/stats` | One clan's numbers and rank |

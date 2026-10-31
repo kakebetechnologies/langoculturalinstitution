@@ -555,6 +555,10 @@ function api_app(string $res, array $seg): void
             $rows = all("SELECT p.*, c.name clan FROM proverbs p LEFT JOIN clans c ON c.id=p.clan_id WHERE p.status='published' ORDER BY p.id DESC LIMIT 200");
             json_out(['data' => array_map(fn($r) => ['id' => (int)$r['id'], 'lango' => $r['lango'], 'english' => $r['english'], 'meaning' => $r['meaning'], 'verified' => (bool)$r['verified'], 'credit' => $r['contributor'] ?: ($r['clan'] ? $r['clan'] . ' clan' : null)], $rows)]);
 
+        case 'welcome':   // the photographs of the opening screen, set in Admin, Content, App opening photos (no sign-in needed: it is the first screen)
+            json_out(['data' => array_map(fn($p) => ['id' => (int)$p['id'], 'image' => api_abs($p['image']), 'caption' => $p['title'], 'credit' => $p['credit'], 'focus' => $p['focus']],
+                all("SELECT * FROM welcome_photos WHERE status='published' AND image<>'' ORDER BY sort, id LIMIT 12"))]);
+
         case 'greetings':
             json_out(['data' => array_map(fn($g) => ['lango' => $g[0], 'english' => $g[1]], require ROOT . '/app/data/greetings.php'), 'source' => 'Practical Lango Grammar']);
 
