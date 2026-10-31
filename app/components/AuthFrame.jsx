@@ -1,5 +1,5 @@
-// The frame of the sign-in and sign-up screens: the logo, a title and a line of text on the soft grey page, and the form in a white
-// rounded card. Scrolls above the keyboard.
+// The frame of the sign-in and sign-up screens, kept simple: a round back button, the logo, a bold title and a line of text, and the form straight on the white page.
+// Scrolls above the keyboard.
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,7 +7,7 @@ import AppText from './AppText';
 import KeyboardScroll from './KeyboardScroll';
 import Logo from './Logo';
 import { BackButton } from './ScreenHeader';
-import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../constants/theme';
+import { COLORS, FONTS, SPACING } from '../constants/theme';
 
 export default function AuthFrame({ title, subtitle, children }) {
   const insets = useSafeAreaInsets();
@@ -30,10 +30,10 @@ export default function AuthFrame({ title, subtitle, children }) {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: COLORS.canvas },
+  flex: { flex: 1, backgroundColor: COLORS.white },
   scroll: { flexGrow: 1, paddingBottom: SPACING.xxl },
   center: { alignItems: 'center', paddingHorizontal: SPACING.lg, marginTop: 2, marginBottom: SPACING.lg },
   title: { fontFamily: FONTS.bold, fontSize: 26, lineHeight: 32, color: COLORS.black, marginTop: 14, textAlign: 'center' },
   sub: { fontFamily: FONTS.regular, fontSize: 14.5, lineHeight: 21, color: COLORS.gray900, marginTop: 4, textAlign: 'center' },
-  sheet: { marginHorizontal: SPACING.md, backgroundColor: COLORS.white, borderRadius: RADIUS.xl + 2, padding: SPACING.lg, ...SHADOW },
+  sheet: { marginHorizontal: SPACING.lg },
 });

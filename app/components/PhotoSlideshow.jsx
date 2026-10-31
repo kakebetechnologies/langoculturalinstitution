@@ -11,7 +11,7 @@ import { useT } from '../lib/i18n';
 
 const native = Platform.OS !== 'web';
 
-export default function PhotoSlideshow({ slides, interval = 5200, style, children }) {
+export default function PhotoSlideshow({ slides, interval = 5200, style, children, bleed = false, onChange, dotsTop = 30 }) {
   const { t } = useT();
   const [index, setIndex] = useState(0);
   const [still, setStill] = useState(false);
@@ -21,6 +21,10 @@ export default function PhotoSlideshow({ slides, interval = 5200, style, childre
   useEffect(() => {
     AccessibilityInfo.isReduceMotionEnabled?.().then(setStill).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    onChange?.(index);
+  }, [index]);
 
   // the slow zoom of the picture on show
   useEffect(() => {
@@ -44,29 +48,33 @@ export default function PhotoSlideshow({ slides, interval = 5200, style, childre
   }, [index, still]);
 
   return (
-    <View style={[styles.frame, style]}>
+    <View style={[styles.frame, bleed && { borderRadius: 0 }, style]}>
       {slides.map((s, i) => (
         <Animated.View key={s.key} pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity: fades[i], transform: [{ scale: zooms[i] }] }]}>
-          <Image source={s.source} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={{ left: '50%', top: s.focus ?? '50%' }} accessibilityLabel={t(s.caption)} />
+          <Image source={s.source} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={{ left: Array.isArray(s.focus) ? s.focus[0] : '50%', top: Array.isArray(s.focus) ? s.focus[1] : s.focus ?? '50%' }} accessibilityLabel={t(s.caption)} />
         </Animated.View>
       ))}
       <LinearGradient colors={['rgba(14,16,20,0.35)', 'rgba(14,16,20,0)', 'rgba(14,16,20,0.8)']} locations={[0, 0.4, 1]} style={StyleSheet.absoluteFill} pointerEvents="none" />
-      <View style={styles.flag} pointerEvents="none">
-        <View style={{ flex: 1, backgroundColor: COLORS.primary }} />
-        <View style={{ flex: 1, backgroundColor: COLORS.yellow }} />
-        <View style={{ flex: 1, backgroundColor: COLORS.sky }} />
-      </View>
+      {bleed ? null : (
+        <View style={styles.flag} pointerEvents="none">
+          <View style={{ flex: 1, backgroundColor: COLORS.primary }} />
+          <View style={{ flex: 1, backgroundColor: COLORS.yellow }} />
+          <View style={{ flex: 1, backgroundColor: COLORS.sky }} />
+        </View>
+      )}
       {children}
-      <View style={styles.dots} pointerEvents="none">
+      <View style={[styles.dots, { top: dotsTop }]} pointerEvents="none">
         {slides.map((s, i) => (
           <View key={s.key} style={[styles.dot, i === index && styles.dotOn]} />
         ))}
       </View>
-      <View style={styles.foot} pointerEvents="none">
-        <AppText style={styles.caption} numberOfLines={1}>
-          {t(slides[index].caption)}
-        </AppText>
-      </View>
+      {bleed ? null : (
+        <View style={styles.foot} pointerEvents="none">
+          <AppText style={styles.caption} numberOfLines={1}>
+            {t(slides[index].caption)}
+          </AppText>
+        </View>
+      )}
     </View>
   );
 }
