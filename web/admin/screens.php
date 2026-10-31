@@ -207,7 +207,8 @@ function screen_settings(): void
             'give_mtn_momo' => 'MTN Mobile Money: how to pay (number and account name)', 'give_airtel_money' => 'Airtel Money: how to pay (number and account name)',
             'give_bank' => 'Bank transfer: how to pay (bank, account name and number)', 'give_paypal' => 'PayPal: how to pay (the PayPal email)', 'give_paypal_url' => 'PayPal link (https://…, optional)',
             'give_card' => 'Visa / Mastercard: how to pay', 'give_card_url' => 'Card payment link (https://…, from your payment provider, optional)'],
-        'Lango Bible (the app)' => ['bible_title' => 'Name of the Bible shown in the app (default: Lango Bible)', 'bible_copyright' => 'Copyright and permission line shown under every chapter'],
+        'Lango Bible (the app and the website)' => ['bible_title' => 'Name of the Bible shown in the app (default: Lango Bible)', 'bible_copyright' => 'Copyright and permission line shown under every chapter',
+            'bible_link_full' => 'Link to the full Bible online (https://…, blank = none)', 'bible_link_nt' => 'Link to the New Testament online (https://…, blank = none)', 'bible_link_note' => 'Line shown above those links (blank = the default about the Bible Society of Uganda)'],
         'Google sign-in (the app)' => ['google_client_id' => 'Google client ID', 'google_client_secret' => 'Google client secret'],
     ];
     $images = [
@@ -248,7 +249,7 @@ function screen_settings(): void
           </div>
         <?php endforeach; ?>
       </div>
-      <?php foreach ($groups as $title => $fields): ?><h3 style="margin-top:26px"><?= e($title) ?></h3><div class="formgrid"><?php foreach ($fields as $k => $l): $long = in_array($k, ['address', 'donation_note', 'site_tagline', 'mission', 'vision', 'give_app_text', 'give_mtn_momo', 'give_airtel_money', 'give_bank', 'give_paypal', 'give_card', 'bible_copyright']); ?><div class="field <?= $long ? 'full' : '' ?>"><label><?= e($l) ?></label><?php if (in_array($k, ['mission', 'vision'])): ?><textarea name="<?= e($k) ?>" rows="3"><?= e(setting($k)) ?></textarea><?php else: ?><input type="text" name="<?= e($k) ?>" value="<?= e(setting($k)) ?>"><?php endif; ?></div><?php endforeach; ?></div><?php endforeach; ?>
+      <?php foreach ($groups as $title => $fields): ?><h3 style="margin-top:26px"><?= e($title) ?></h3><div class="formgrid"><?php foreach ($fields as $k => $l): $long = in_array($k, ['address', 'donation_note', 'site_tagline', 'mission', 'vision', 'give_app_text', 'give_mtn_momo', 'give_airtel_money', 'give_bank', 'give_paypal', 'give_card', 'bible_copyright', 'bible_link_note']); ?><div class="field <?= $long ? 'full' : '' ?>"><label><?= e($l) ?></label><?php if (in_array($k, ['mission', 'vision'])): ?><textarea name="<?= e($k) ?>" rows="3"><?= e(setting($k)) ?></textarea><?php else: ?><input type="text" name="<?= e($k) ?>" value="<?= e(setting($k)) ?>"><?php endif; ?></div><?php endforeach; ?></div><?php endforeach; ?>
       <?php require_once ROOT . '/app/lib/app_api.php'; ?>
       <p class="dim" style="margin-top:14px"><b>Google sign-in:</b> <?= google_enabled() ? 'switched on.' : 'off until both fields above are filled.' ?> In Google Cloud Console (Credentials, OAuth client ID, Web application) add this authorised redirect URI: <code><?= e(google_callback_url()) ?></code>. The same two keys switch on "Continue with Google" on the website (sign-in and sign-up pages) and in the app. Google accepts only https addresses (and localhost), so phones can use it once the site is on its live address.</p>
       <div class="formfoot" style="margin-top:22px"><button class="btn btn--primary">Save settings</button></div></form>

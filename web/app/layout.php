@@ -70,7 +70,7 @@ function nav_items(): array
         [__('Lango'), 'about', [[__('About Lango'), 'about'], [__('History'), 'history'], [__('Districts'), 'districts'], [__('Notable Langos'), 'people']]],
         [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols'], [__('Biodiversity'), 'species']]],
         [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], [__('Learn Leb Lango'), 'language/lessons'], [__('Suggest a Word'), 'contribute?type=language']]],
-        [__('Library'), 'library', [[__('Library'), 'library'], [__('Documents'), 'library/documents'], [__('Media Center'), 'media'], [__('Professionals'), 'professionals'], [__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
+        [__('Library'), 'library', [[__('Library'), 'library'], [__('Documents'), 'library/documents'], [__('Media Center'), 'media'], [__('Lango Bible'), 'bible'], [__('Professionals'), 'professionals'], [__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
         [__('News & Events'), 'news', [[__('News & Blog'), 'news'], [__('Events'), 'events']]],
         [__('Contribute'), 'contribute', []],
         [__('Contact'), 'contact', []],
@@ -125,7 +125,7 @@ function page_start(string $title, array $o = []): void
 <header class="header" id="top"><div class="container header__in">
   <?= brand_html() ?>
   <ul class="nav" id="nav">
-    <?php foreach (nav_items() as [$label, $path, $kids]): $on = $cur === explode('/', $path)[0] || ($path === 'about' && in_array($cur, ['history', 'districts', 'people'], true)) || ($path === 'heritage' && in_array($cur, ['clans', 'species', 'tours'], true)) || ($path === 'library' && in_array($cur, ['media', 'professionals', 'assistant', 'developers'], true)) || ($path === 'news' && $cur === 'events'); ?>
+    <?php foreach (nav_items() as [$label, $path, $kids]): $on = $cur === explode('/', $path)[0] || ($path === 'about' && in_array($cur, ['history', 'districts', 'people'], true)) || ($path === 'heritage' && in_array($cur, ['clans', 'species', 'tours'], true)) || ($path === 'library' && in_array($cur, ['media', 'bible', 'professionals', 'assistant', 'developers'], true)) || ($path === 'news' && $cur === 'events'); ?>
       <li class="<?= $kids ? 'has-sub' : '' ?>"><a href="<?= e(url($path)) ?>" class="<?= $on ? 'on' : '' ?>"<?= $kids ? ' aria-haspopup="true" aria-expanded="false"' : '' ?>><span><?= e($label) ?></span><?= $kids ? icon('chevron') : '' ?></a>
         <?php if ($kids): ?><ul><?php foreach ($kids as [$l, $p]): ?><li><a href="<?= e(url($p)) ?>"><?= e($l) ?></a></li><?php endforeach; ?></ul><?php endif; ?>
       </li>

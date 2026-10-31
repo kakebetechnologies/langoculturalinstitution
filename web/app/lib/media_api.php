@@ -35,6 +35,25 @@ function api_episode(array $e, bool $full = false): array
     return $out;
 }
 
+/**
+ * Where to read the Lango Bible online while its text is not in the app: the Bible Society of Uganda's own pages on Bible.com (links only,
+ * no text is copied). The two addresses and the line above them are set in Site settings; empty addresses are left out.
+ */
+function bible_links(): array
+{
+    $out = [];
+    foreach (['full' => 'bible_link_full', 'nt' => 'bible_link_nt'] as $key => $setting) {
+        $u = trim((string)setting($setting));
+        if (preg_match('#^https://[^\s]+$#i', $u)) $out[] = ['key' => $key, 'url' => $u];
+    }
+    return $out;
+}
+
+function bible_link_note(): string
+{
+    return trim((string)setting('bible_link_note')) ?: 'The Lango Bible is published by the Bible Society of Uganda. These links open it on Bible.com, where you can read it and listen to it.';
+}
+
 /** Pay-to instructions entered in Site settings for one payment method (empty text and no link when it has none). */
 function give_pay(string $method): array
 {
@@ -107,7 +126,7 @@ function media_api(string $res, string $id, string $sub, string $m, ?array $user
             if ($id === '') {
                 $books = all('SELECT b.id, b.code, b.testament, b.name_en, b.name_lg, COALESCE(MAX(v.chapter), 0) chapters, COUNT(v.id) verses FROM bible_books b LEFT JOIN bible_verses v ON v.book_id=b.id GROUP BY b.id ORDER BY b.id');
                 $books = array_map(fn($b) => ['id' => (int)$b['id'], 'code' => $b['code'], 'testament' => $b['testament'], 'name' => $b['name_lg'] ?: $b['name_en'], 'name_en' => $b['name_en'], 'name_lg' => $b['name_lg'] ?: null, 'chapters' => (int)$b['chapters'], 'verses' => (int)$b['verses']], $books);
-                json_out(['data' => ['title' => setting('bible_title') ?: 'Lango Bible', 'copyright' => setting('bible_copyright') ?: null, 'ready' => (bool)array_sum(array_column($books, 'verses')), 'books' => $books]]);
+                json_out(['data' => ['title' => setting('bible_title') ?: 'Lango Bible', 'copyright' => setting('bible_copyright') ?: null, 'ready' => (bool)array_sum(array_column($books, 'verses')), 'links' => bible_links(), 'link_note' => bible_link_note(), 'books' => $books]]);
             }
             if ($id === 'search') {
                 api_throttle('biblesearch', 60, 600);

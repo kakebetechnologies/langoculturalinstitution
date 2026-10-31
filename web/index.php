@@ -28,7 +28,7 @@ if ($route === 'sitemap.xml') $route = 'sitemap';
 // Public pages. The institution's own pages (leadership, programs, transparency, apply, diaspora, donate) are not part of this independent site;
 // their files stay in app/pages, so adding a name back to this list brings a page back.
 $pages = ['home', 'about', 'history', 'districts', 'clans', 'heritage', 'species', 'language', 'news', 'events', 'media',
-    'library', 'search', 'contribute', 'professionals', 'assistant', 'tours', 'developers',
+    'library', 'bible', 'search', 'contribute', 'professionals', 'assistant', 'tours', 'developers',
     'contact', 'account', 'privacy', 'terms', 'subscribe', 'api', 'download', 'comment', 'sitemap', 'people', 'auth'];
 
 if (!in_array($route, $pages, true)) not_found();

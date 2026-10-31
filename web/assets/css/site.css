@@ -916,3 +916,13 @@ body.auth .au{padding-bottom:64px}body.mc .mc-body{padding-bottom:64px}
 .btn-google:hover{background:#f8f9fa;box-shadow:var(--shadow);color:#1f1f1f}
 .au__or{display:flex;align-items:center;gap:14px;margin:18px 0 6px;color:var(--muted);font:500 .8rem var(--sans)}
 .au__or:before,.au__or:after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* Lango Bible page: links to the publisher's pages */
+.biblecards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}
+.biblecard{display:flex;flex-direction:column;gap:4px;padding:26px;background:#fff;border:1px solid var(--line);border-radius:26px;color:var(--ink);box-shadow:var(--shadow-s);transition:transform .2s,box-shadow .2s}
+.biblecard:hover{transform:translateY(-3px);box-shadow:var(--shadow);color:var(--ink)}
+.biblecard .ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#fde8e9;color:var(--red-d);margin-bottom:10px}
+.biblecard:nth-child(2) .ico{background:#e3f6fe;color:var(--sky-d)}
+.biblecard b{font-size:1.2rem;letter-spacing:-.01em}.biblecard small{color:var(--text);font-size:.92rem}
+.biblecard .go{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font:600 .88rem var(--sans);color:var(--red-d)}.biblecard .go .icon{width:15px;height:15px}
+@media(max-width:640px){.biblecards{grid-template-columns:1fr}}

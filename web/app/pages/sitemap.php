@@ -2,7 +2,7 @@
 declare(strict_types=1);
 header('Content-Type: application/xml; charset=utf-8');
 $host = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? 'localhost');
-$urls = ['', 'about', 'history', 'districts', 'clans', 'heritage', 'species', 'language', 'language/dictionary', 'language/translate', 'language/proverbs', 'people', 'news', 'events', 'media', 'library', 'library/documents', 'contribute', 'professionals', 'tours', 'developers', 'contact'];
+$urls = ['', 'about', 'history', 'districts', 'clans', 'heritage', 'species', 'language', 'language/dictionary', 'language/translate', 'language/proverbs', 'people', 'news', 'events', 'media', 'library', 'library/documents', 'bible', 'contribute', 'professionals', 'tours', 'developers', 'contact'];
 foreach (all("SELECT slug FROM posts WHERE status='published' AND published_at<=NOW()") as $r) $urls[] = 'news/' . $r['slug'];
 foreach (all("SELECT slug FROM events WHERE status='published'") as $r) $urls[] = 'events/' . $r['slug'];
 foreach (all("SELECT slug FROM clans WHERE status='published'") as $r) $urls[] = 'clans/' . $r['slug'];

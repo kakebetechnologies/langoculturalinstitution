@@ -258,6 +258,11 @@ function lci_upgrade(PDO $pdo): array
         if (!$val('SELECT id FROM knowledge WHERE question=?', [$qn])) $ins('knowledge', ['topic' => $tp, 'question' => $qn, 'answer' => $an, 'reviewed' => 1]);
     }
 
+    // Bible links (the Bible Society of Uganda's Lango versions on Bible.com); inserted only when absent, so an edit or a cleared field stays.
+    foreach (['bible_link_full' => 'https://www.bible.com/versions/1974', 'bible_link_nt' => 'https://www.bible.com/versions/472'] as $k => $v) {
+        if ($val('SELECT COUNT(*) FROM settings WHERE k=?', [$k]) == 0) { $ins('settings', ['k' => $k, 'v' => $v]); $log[] = "setting $k"; }
+    }
+
     return array_merge($log, lci_rebrand($pdo));
 }
 

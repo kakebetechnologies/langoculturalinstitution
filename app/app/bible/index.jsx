@@ -1,11 +1,13 @@
 // Lango Bible, the books (GET /api/v1/bible): Old and New Testament, a search across the verses, and "continue reading" where the
 // member stopped last. Only books that have text are listed; the text is added in the admin panel, so until then the
-// screen says the Bible is being prepared. Nothing here is written by the app.
+// screen shows links to the Bible Society of Uganda's Lango Bible on Bible.com (components/BibleLinks.jsx). Nothing here is written by the
+// app, and no Bible text is copied.
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import AppText from '../../components/AppText';
+import BibleLinks from '../../components/BibleLinks';
 import Row from '../../components/Row';
 import Screen from '../../components/Screen';
 import Segmented from '../../components/Segmented';
@@ -66,16 +68,9 @@ export default function Bible() {
 
   return (
     <Screen title={bible?.title || t('Lango Bible')} onRefresh={reload} refreshing={refreshing}>
-      <StateView
-        loading={loading}
-        error={error}
-        onRetry={retry}
-        empty={!!bible && !bible.ready}
-        emptyIcon="book-outline"
-        emptyTitle="The Lango Bible is being prepared"
-        emptyMessage="The text will appear here once it has been added with the permission of those who hold the translation."
-      >
-        {bible ? (
+      <StateView loading={loading} error={error} onRetry={retry}>
+        {bible && !bible.ready ? <BibleLinks bible={bible} first /> : null}
+        {bible?.ready ? (
           <>
             <TextField value={q} onChangeText={setQ} placeholder={t('Search the Bible')} autoCapitalize="none" returnKeyType="search" />
             {term.length >= 2 ? (
@@ -103,6 +98,7 @@ export default function Bible() {
                     {t('More books are added as they are completed.')}
                   </AppText>
                 ) : null}
+                <BibleLinks bible={bible} style={{ marginTop: SPACING.lg }} />
               </>
             )}
           </>
