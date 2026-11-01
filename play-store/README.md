@@ -23,30 +23,30 @@ Everything below was written from what the app actually does; replace anything i
 ```
 Lango is a free app about the Lango people of northern Uganda: their language, clans, heritage and community, all in one place.
 
-LEARN LEB LANGO
+Learn Leb Lango
 • Search the dictionary in Leb Lango or English, even without internet
 • Look up words and set phrases with the translator
 • Proverbs, greetings and everyday phrases
 • A new word every day, quizzes with sources and a weekly language challenge
 
-KNOW YOUR CLAN AND YOUR PEOPLE
+Know your clan and your people
 • Clans with their totems and prohibitions, clearly marked until language experts and clan leaders have verified them
 • Notable Langos, history and districts, with sources and photo credits
 • Heritage: attire, crafts, music and ceremonies
 • Join the group of your clan
 
-LISTEN, READ AND FOLLOW
+Listen, read and follow
 • Lango Radio and Podcast, which keep playing in the background
 • Events, anniversaries and festivals, with a countdown
 • The Lango Bible, opened at the chapter you choose
 
-ADD WHAT YOU KNOW
+Add what you know
 • Share a word, proverb, story, photo or recording
 • Every contribution is reviewed before it is published
 • Works offline: your contribution is sent when you are connected again
 • Earn points, badges and streaks
 
-CAREFUL AND TRANSPARENT
+Careful and transparent
 • Sources and credits are shown throughout
 • Nothing is marked verified until a language expert or clan leader says so
 • Sign in with Google or your email, and delete your account at any time in the app
@@ -71,6 +71,7 @@ Lango is an independent community project. It is free and has no advertising.
 | News app / Government app / Health app / Financial features | No |
 | Data safety | See section 4 |
 | Account deletion | In the app: Me, Edit profile, Delete account. On the web: https://myculture.online/account/delete |
+| Request deletion of some data (optional link in the Data safety form, for people who want data deleted without deleting the account) | https://myculture.online/account/data-request (requests arrive in Admin, Messages, subject "Data deletion request"; reply to the email to confirm it is the owner, then delete what was asked) |
 
 ## 4. Data safety form
 

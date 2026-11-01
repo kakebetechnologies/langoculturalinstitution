@@ -33,6 +33,7 @@ page_start(__('Privacy'), ['hero' => ['title' => __('Privacy policy'), 'crumbs' 
 
   <h2><?php _e('Keeping it and deleting it'); ?></h2>
   <p><?php _e('We keep your account while you use it. You can delete it any time, in the app (Me, Edit profile, Delete account) or on this website at'); ?> <a href="<?= e(url('account/delete')) ?>"><?= e(url('account/delete')) ?></a>. <?php _e('Deleting removes your personal details, points, streaks, quiz results, messages and sign-in tokens. Contributions already published in the archive stay, without your name, because they belong to the archive; ask us if you want one taken down.'); ?></p>
+  <p><?php _e('To have some of your data deleted without deleting your account, or if you cannot sign in, use'); ?> <a href="<?= e(url('account/data-request')) ?>"><?= e(url('account/data-request')) ?></a>.</p>
 
   <h2><?php _e('Your rights'); ?></h2>
   <p><?php _e('You can see and correct your details in the app (Me, Edit profile), and ask us to export or delete your data. We follow the principles of Uganda’s Data Protection and Privacy Act, 2019, and general international data-protection practice.'); ?></p>

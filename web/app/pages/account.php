@@ -46,10 +46,59 @@ if ($sub === 'delete') {
     <p><a class="btn btn--primary" href="<?= e(url('account/login', ['next' => 'account/delete'])) ?>"><?php _e('Sign in to delete your account'); ?></a></p>
     <p><?php _e('Cannot sign in? Contact us from the Contact page with the email address of your account and we will delete it.'); ?> <a href="<?= e(url('contact')) ?>"><?php _e('Contact us'); ?></a></p>
   <?php endif; ?>
+  <p><?php _e('Want to delete only some of your data and keep your account?'); ?> <a href="<?= e(url('account/data-request')) ?>"><?php _e('Request data deletion'); ?></a>.</p>
   <h2><?php _e('What is deleted and what stays'); ?></h2>
   <ul>
     <li><?php _e('Deleted: your name, email, phone, country, clan, sign-in details, points, badges, streaks, quiz results, clan group messages, notification settings and sign-in tokens.'); ?></li>
     <li><?php _e('Stays: contributions already published in the Lango archive (words, photos, stories) stay, with no link to your name, because they belong to the archive. Ask us on the Contact page if you want one removed.'); ?></li>
+  </ul>
+</div></div></section>
+<?php page_end(); return; }
+
+/** Ask us to delete some or all of your data without deleting the account: the second web address Google Play's Data safety form asks for.
+ *  Open to everyone (a person who cannot sign in can still ask); the request lands in Admin → Messages and is answered by email before anything is deleted. */
+if ($sub === 'data-request') {
+    $me = user();
+    $choices = ['photos' => __('Photos I contributed'), 'audio' => __('Audio recordings I made'), 'stories' => __('Words, stories and other text I contributed'),
+        'messages' => __('My clan group messages'), 'location' => __('Location details on my contributions'), 'all' => __('All my personal data (and my account)')];
+    if (is_post()) {
+        csrf_check(); keep_old($_POST);
+        if (!empty($_POST['website'])) redirect('account/data-request');
+        if (!throttle('data_request', 4, 1800)) { flash(__('Too many requests. Please try again later.'), 'error'); redirect('account/data-request'); }
+        $name = post('name'); $email = trim(post('email')); $what = array_values(array_intersect(array_keys($choices), (array)($_POST['what'] ?? []))); $more = trim(post('details'));
+        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || (!$what && mb_strlen($more) < 5)) {
+            flash(__('Please enter your name, a valid email, and choose what you want deleted (or describe it).'), 'error'); redirect('account/data-request');
+        }
+        $lines = ['Data deletion request (from /account/data-request)', 'Name: ' . $name, 'Email: ' . $email];
+        if ($me) $lines[] = 'Signed in as member #' . (int)$me['id'] . ' (' . $me['email'] . ')';
+        $lines[] = 'Delete: ' . ($what ? implode('; ', array_map(fn($k) => $choices[$k], $what)) : '(see details)');
+        if ($more !== '') $lines[] = 'Details: ' . $more;
+        $lines[] = 'Reply to the email above to confirm it is the account owner before deleting anything.';
+        insert('messages', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'subject' => 'Data deletion request', 'body' => mb_substr(implode("\n", $lines), 0, 5000)]);
+        clear_old();
+        flash(__('Thank you. We have your request. We will reply to your email to confirm it is you, then delete the data.'));
+        redirect('account/data-request');
+    }
+    page_start(__('Request data deletion'), ['hero' => ['title' => __('Request data deletion'), 'crumbs' => [[__('Account'), null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
+    ?>
+<section class="section"><div class="container" style="max-width:760px"><div class="prose">
+  <p><?php _e('Use this form to ask us to delete some or all of the personal data we hold about you, without having to delete your whole account. You do not need to be signed in.'); ?></p>
+  <p><?php _e('Want to delete your whole account instead?'); ?> <a href="<?= e(url('account/delete')) ?>"><?php _e('Delete your account'); ?></a>.</p>
+  <form class="formcard form" method="post"><?= csrf_field() ?><input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
+    <div class="fgrid">
+      <div class="field"><label for="dr-name"><?php _e('Your name'); ?> *</label><input id="dr-name" type="text" name="name" required value="<?= e($me['name'] ?? old('name')) ?>"></div>
+      <div class="field"><label for="dr-email"><?php _e('Email of your Lango account'); ?> *</label><input id="dr-email" type="email" name="email" required value="<?= e($me['email'] ?? old('email')) ?>"></div>
+    </div>
+    <div class="field"><label><?php _e('What should we delete?'); ?></label>
+      <?php foreach ($choices as $k => $label): ?><label style="display:flex;gap:10px;align-items:flex-start;margin:7px 0;font-weight:500"><input type="checkbox" name="what[]" value="<?= e($k) ?>" style="margin-top:5px"><span><?= e($label) ?></span></label><?php endforeach; ?>
+    </div>
+    <div class="field"><label for="dr-details"><?php _e('Anything else we should know (optional)'); ?></label><textarea id="dr-details" name="details" style="min-height:120px"><?= e(old('details')) ?></textarea></div>
+    <div><button class="btn btn--primary"><?php _e('Send request'); ?></button></div>
+  </form>
+  <h2><?php _e('What happens next'); ?></h2>
+  <ul>
+    <li><?php _e('We reply to the email above to check that the request comes from the owner of the account.'); ?></li>
+    <li><?php _e('Then we delete what you asked for. Contributions already published in the Lango archive stay without your name unless you ask for a specific one to be removed.'); ?></li>
   </ul>
 </div></div></section>
 <?php page_end(); return; }
