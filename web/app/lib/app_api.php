@@ -146,7 +146,29 @@ function api_user_json(array $u): array
         'points' => (int)$u['points'], 'level' => contributor_level((int)$u['points']), 'badges' => user_badges((int)$u['id']),
         'counts' => ['total' => $n(''), 'approved' => $n("AND status IN ('approved','published')"), 'pending' => $n("AND status IN ('pending','under_review','needs_info')")],
         'joined' => $u['created_at'], 'clan_group' => clan_group_summary($u), 'streaks' => streaks_json($u),
+        'google' => !empty($u['google_sub']),   // signed up with Google: no password of their own, so deleting the account is confirmed with the email address
     ];
+}
+
+/** Checks the confirmation for deleting an account: the password, or (for a Google account, which has no password the person knows) the account's email address.
+ *  Returns an error message, or null when it is right. */
+function member_delete_check(array $u, string $password, string $confirmEmail): ?string
+{
+    if ($password !== '' && password_verify($password, (string)$u['password_hash'])) return null;
+    if (!empty($u['google_sub']) && $confirmEmail !== '' && strcasecmp(trim($confirmEmail), (string)$u['email']) === 0) return null;
+    return !empty($u['google_sub']) ? 'Type the email address of your account to confirm.' : 'That password is not right.';
+}
+
+/** Deletes a member's account (app stores require it): contributions stay in the archive without the person's link; messages, streaks, quiz results,
+ *  tokens and notifications go with the account. Staff accounts are never deleted this way. */
+function member_delete_account(array $u): void
+{
+    q('UPDATE contributions SET user_id=NULL WHERE user_id=?', [$u['id']]);
+    q('DELETE FROM clan_message_reports WHERE user_id=? OR message_id IN (SELECT id FROM (SELECT id FROM clan_messages WHERE user_id=?) x)', [$u['id'], $u['id']]);
+    q('DELETE FROM clan_messages WHERE user_id=?', [$u['id']]);
+    foreach (['activity_days', 'quiz_scores', 'quiz_results'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);   // streaks and quiz results go with the account
+    foreach (['api_tokens', 'device_tokens', 'user_notifications'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);
+    q('DELETE FROM users WHERE id=? AND role=?', [$u['id'], 'contributor']);
 }
 
 /* ---------- shapers ---------- */
@@ -357,13 +379,9 @@ function api_app(string $res, array $seg): void
                 }
                 if ($m === 'DELETE') {   // delete the account (stores require it); contributions stay, without the person's link
                     $in = api_in();
-                    if (!password_verify((string)($in['password'] ?? ''), $u['password_hash'])) api_err('That password is not right.', 422, ['password' => 'That password is not right.']);
-                    q('UPDATE contributions SET user_id=NULL WHERE user_id=?', [$u['id']]);
-                    q('DELETE FROM clan_message_reports WHERE user_id=? OR message_id IN (SELECT id FROM (SELECT id FROM clan_messages WHERE user_id=?) x)', [$u['id'], $u['id']]);
-                    q('DELETE FROM clan_messages WHERE user_id=?', [$u['id']]);
-                    foreach (['activity_days', 'quiz_scores'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);   // streaks and quiz results go with the account
-                    foreach (['api_tokens', 'device_tokens', 'user_notifications'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);
-                    q('DELETE FROM users WHERE id=? AND role=?', [$u['id'], 'contributor']);
+                    $bad = member_delete_check($u, (string)($in['password'] ?? ''), (string)($in['confirm_email'] ?? ''));
+                    if ($bad !== null) api_err($bad, 422, [!empty($u['google_sub']) ? 'confirm_email' : 'password' => $bad]);
+                    member_delete_account($u);
                     json_out(['ok' => true]);
                 }
                 api_err('Method not allowed.', 405);

@@ -19,6 +19,9 @@
     },
     "android": {
       "package": "tech.kakebe.lango",
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#FBF8EC",
         "foregroundImage": "./assets/android-icon-foreground.png",

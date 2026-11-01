@@ -52,3 +52,6 @@ npm-debug.log*
 # Firebase service account keys (upload them to Expo, never commit them)
 *firebase-adminsdk*.json
 *service-account*.json
+
+# Play Store bundles built by EAS (download them from expo.dev; too big for git)
+*.aab

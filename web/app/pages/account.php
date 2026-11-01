@@ -10,6 +10,50 @@ if ($sub === 'logout') {
     redirect('');
 }
 
+/** Delete my account: the web address to give Google Play (and anyone) for deleting an account and its data. Public; signed-in members can do it right here. */
+if ($sub === 'delete') {
+    $me = user();
+    $isMember = $me && ($me['role'] ?? '') === 'contributor';
+    if (is_post() && $isMember) {
+        csrf_check();
+        if (!throttle('delete_account', 6, 900)) { flash(__('Too many attempts. Please wait 15 minutes.'), 'error'); redirect('account/delete'); }
+        $bad = member_delete_check($me, (string)($_POST['password'] ?? ''), (string)($_POST['confirm_email'] ?? ''));
+        if ($bad !== null) { flash(__($bad), 'error'); redirect('account/delete'); }
+        $row = $me;
+        logout_user();
+        member_delete_account($row);
+        flash(__('Your account has been deleted.'), 'success');
+        redirect('');
+    }
+    page_start(__('Delete your account'), ['hero' => ['title' => __('Delete your account'), 'crumbs' => [[__('Account'), null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
+    ?>
+<section class="section"><div class="container" style="max-width:760px"><div class="prose">
+  <p><?php _e('You can delete your Lango account and the personal data tied to it at any time.'); ?></p>
+  <h2><?php _e('In the app'); ?></h2>
+  <p><?php _e('Open Me, then Edit profile, scroll to Delete account and confirm.'); ?></p>
+  <h2><?php _e('On this website'); ?></h2>
+  <?php if ($isMember): $google = !empty($me['google_sub']); ?>
+    <p><?php _e('Signed in as'); ?> <strong><?= e($me['email']) ?></strong>.</p>
+    <form class="form" method="post" style="max-width:420px"><?= csrf_field() ?>
+      <?php if ($google): ?>
+        <div class="field"><label for="del-email"><?php _e('Type your email address to confirm'); ?></label><input id="del-email" type="email" name="confirm_email" required autocomplete="off"></div>
+      <?php else: ?>
+        <div class="field"><label for="del-pw"><?php _e('Enter your password to confirm'); ?></label><input id="del-pw" type="password" name="password" required autocomplete="current-password"></div>
+      <?php endif; ?>
+      <button class="btn btn--primary" onclick="return confirm('<?= e(__('Delete your account? This cannot be undone.')) ?>')"><?php _e('Delete my account'); ?></button>
+    </form>
+  <?php else: ?>
+    <p><a class="btn btn--primary" href="<?= e(url('account/login', ['next' => 'account/delete'])) ?>"><?php _e('Sign in to delete your account'); ?></a></p>
+    <p><?php _e('Cannot sign in? Contact us from the Contact page with the email address of your account and we will delete it.'); ?> <a href="<?= e(url('contact')) ?>"><?php _e('Contact us'); ?></a></p>
+  <?php endif; ?>
+  <h2><?php _e('What is deleted and what stays'); ?></h2>
+  <ul>
+    <li><?php _e('Deleted: your name, email, phone, country, clan, sign-in details, points, badges, streaks, quiz results, clan group messages, notification settings and sign-in tokens.'); ?></li>
+    <li><?php _e('Stays: contributions already published in the Lango archive (words, photos, stories) stay, with no link to your name, because they belong to the archive. Ask us on the Contact page if you want one removed.'); ?></li>
+  </ul>
+</div></div></section>
+<?php page_end(); return; }
+
 /** The two-column sign-in / sign-up page: a photo panel that says what an account gives, and the form. */
 function auth_page_start(string $title, string $eyebrow, string $heading, string $lead, array $perks): void
 {

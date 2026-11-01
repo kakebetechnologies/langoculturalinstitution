@@ -25,6 +25,7 @@ export default function Profile() {
   const [msg, setMsg] = useState({ ok: true, text: '' });
   const [errors, setErrors] = useState({});
   const [delPw, setDelPw] = useState('');
+  const [delEmail, setDelEmail] = useState('');
   const [showDelete, setShowDelete] = useState(false);
 
   async function save() {
@@ -60,7 +61,7 @@ export default function Profile() {
   async function deleteAccount() {
     setBusy('del');
     try {
-      await api.delete('/me', { data: { password: delPw } });
+      await api.delete('/me', { data: user?.google ? { confirm_email: delEmail } : { password: delPw } });   // a Google account has no password of its own: it confirms with its email address
       await signOut();
       router.replace('/(tabs)');
     } catch (e) {
@@ -100,14 +101,16 @@ export default function Profile() {
         <TextField label={t('Country')} value={f.country} onChangeText={(v) => setF((x) => ({ ...x, country: v }))} />
         <Button title={t('Save profile')} onPress={save} loading={busy === 'save'} />
 
-        <Card style={{ marginTop: SPACING.xl }}>
-          <AppText variant="heading" style={{ marginBottom: 10 }}>
-            {t('Change password')}
-          </AppText>
-          <TextField label={t('Current password')} value={pw.current_password} onChangeText={(v) => setPw((x) => ({ ...x, current_password: v }))} error={errors.current_password} secureTextEntry />
-          <TextField label={t('New password')} value={pw.password} onChangeText={(v) => setPw((x) => ({ ...x, password: v }))} error={errors.password} secureTextEntry hint={t('At least 8 characters.')} />
-          <Button title={t('Change password')} variant="outline" onPress={changePassword} loading={busy === 'pw'} />
-        </Card>
+        {user?.google ? null : (
+          <Card style={{ marginTop: SPACING.xl }}>
+            <AppText variant="heading" style={{ marginBottom: 10 }}>
+              {t('Change password')}
+            </AppText>
+            <TextField label={t('Current password')} value={pw.current_password} onChangeText={(v) => setPw((x) => ({ ...x, current_password: v }))} error={errors.current_password} secureTextEntry />
+            <TextField label={t('New password')} value={pw.password} onChangeText={(v) => setPw((x) => ({ ...x, password: v }))} error={errors.password} secureTextEntry hint={t('At least 8 characters.')} />
+            <Button title={t('Change password')} variant="outline" onPress={changePassword} loading={busy === 'pw'} />
+          </Card>
+        )}
 
         <Card style={{ marginTop: SPACING.lg, borderColor: '#F6C7C9' }}>
           <AppText variant="heading" style={{ marginBottom: 6 }}>
@@ -118,7 +121,11 @@ export default function Profile() {
           </AppText>
           {showDelete ? (
             <>
-              <TextField label={t('Enter your password to confirm')} value={delPw} onChangeText={setDelPw} error={errors.password} secureTextEntry />
+              {user?.google ? (
+                <TextField label={t('Type your email address to confirm')} value={delEmail} onChangeText={setDelEmail} error={errors.confirm_email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} />
+              ) : (
+                <TextField label={t('Enter your password to confirm')} value={delPw} onChangeText={setDelPw} error={errors.password} secureTextEntry />
+              )}
               <Button title={t('Delete my account')} onPress={deleteAccount} loading={busy === 'del'} />
             </>
           ) : (
