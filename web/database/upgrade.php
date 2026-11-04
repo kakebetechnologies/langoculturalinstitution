@@ -294,6 +294,30 @@ function lci_upgrade(PDO $pdo): array
         $log[] = 'people stories refreshed';
     }
 
+    // further notable Langos (Sam Engola): the person, the supplied portrait with its credit, the home district and the sources
+    if (is_file($dir . '/people_more.php')) {
+        $more = require $dir . '/people_more.php';
+        foreach ($more['new'] as $n) {
+            if ($val('SELECT id FROM notables WHERE slug=?', [$n['slug']])) continue;
+            $ins('notables', $n + ['status' => 'published']);
+            $log[] = "notable {$n['slug']}";
+        }
+        foreach ($more['photos'] as $slug => [$file, $credit, $page]) {
+            $upd('notables', ['photo' => $file, 'photo_credit' => $credit, 'photo_source' => $page ?: null], "slug=? AND (photo IS NULL OR photo='')", [$slug]);
+        }
+        foreach ($more['districts'] as $slug => $dslug) {
+            if ($did = $districtId($dslug)) $upd('notables', ['district_id' => $did], 'slug=? AND district_id IS NULL', [$slug]);
+        }
+        foreach ($more['links'] as $slug => $rows) {
+            if (!($nid = $val('SELECT id FROM notables WHERE slug=?', [$slug]))) continue;
+            foreach ($rows as $i => [$kind, $title, $source, $url]) {
+                if ($val('SELECT id FROM notable_links WHERE notable_id=? AND url=?', [$nid, $url])) continue;
+                $ins('notable_links', ['notable_id' => $nid, 'kind' => $kind, 'title' => $title, 'source' => $source, 'url' => $url, 'sort' => $i + 1]);
+                $log[] = "link $slug";
+            }
+        }
+    }
+
     // knowledge quizzes
     foreach (require $dir . '/quiz.php' as $s) {
         $sid = $val('SELECT id FROM quiz_sets WHERE slug=?', [$s['slug']]);
