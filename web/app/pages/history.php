@@ -16,6 +16,7 @@ $sources = [
     ['Uganda Bureau of Statistics', 'National Population and Housing Census 2024', 'The population figures quoted on the districts pages.'],
     ['Practical Lango Grammar', 'Worked examples and vocabulary', 'The source of the glossary spellings and of the dictionary and translator examples.'],
 ];
+if (community() !== 'lango') $sources = array_values(array_filter($sources, fn($s) => $s[0] === 'Uganda Bureau of Statistics'));
 page_start(__('Our History'), ['hero' => ['eyebrow' => __('Origins, migration & cultural evolution'), 'title' => __('History of the Lango people'), 'sub' => __('From the oral traditions of migration to the districts and cities of today.'), 'crumbs' => [[__('About'), 'about'], [__('History'), null]], 'image' => 'assets/img/photos/hero-ridge.jpg']]);
 ?>
 <section class="section section--tight"><div class="container">
@@ -27,9 +28,9 @@ page_start(__('Our History'), ['hero' => ['eyebrow' => __('Origins, migration & 
     </div>
     <dl class="hlead__facts">
       <div><dt><?= $pop ? number_format($pop) : '—' ?></dt><dd><?php _e('people in the sub-region (2024 census)'); ?></dd></div>
-      <div><dt>149</dt><dd><?php _e('registered clans'); ?></dd></div>
+      <?php if (community() === 'lango'): ?><div><dt>149</dt><dd><?php _e('registered clans'); ?></dd></div><?php else: ?><div><dt><?= (int)val("SELECT COUNT(*) FROM clans WHERE status='published'") ?></dt><dd>chiefdoms listed on this site</dd></div><?php endif; ?>
       <div><dt><?= $nDist ?> + 1</dt><dd><?php _e('districts, and Lira City'); ?></dd></div>
-      <div><dt>Leb Lango</dt><dd><?php _e('a Western Nilotic language'); ?></dd></div>
+      <div><dt><?= e(community_info()['language']) ?></dt><dd><?php _e('a Western Nilotic language'); ?></dd></div>
     </dl>
   </div>
 </div></section>

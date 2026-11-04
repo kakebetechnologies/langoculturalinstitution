@@ -11,12 +11,17 @@ import RichText from '../components/RichText';
 import ScreenHeader from '../components/ScreenHeader';
 import { COLORS, FONTS, MAX_FONT_SCALE, RADIUS, SPACING, SHADOW } from '../constants/theme';
 import api, { errorMessage } from '../lib/api';
+import { useCommunity } from '../lib/community';
 import { useT } from '../lib/i18n';
 
-const SUGGESTIONS = ['Who is the clan leader of Otengoro Olang?', 'Tell me about Amolatar', 'What is Lira City known for?', 'Who was Milton Obote?', 'What is an Awitong?', 'What does yoo mean?'];
+const SUGGESTIONS = {
+  lango: ['Who is the clan leader of Otengoro Olang?', 'Tell me about Amolatar', 'What is Lira City known for?', 'Who was Milton Obote?', 'What is an Awitong?', 'What does yoo mean?'],
+  acholi: ['Who is the Paramount Chief of the Acholi?', 'What is Mato Oput?', 'What is a rwot?', 'What is Bwola?', 'Which districts make up Acholiland?', 'What language do the Acholi speak?'],
+};
 
 export default function Assistant() {
   const { t } = useT();
+  const { community } = useCommunity();
   const list = useRef(null);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
@@ -74,7 +79,7 @@ export default function Assistant() {
         ListFooterComponent={
           msgs.length <= 1 ? (
             <View style={styles.sugg}>
-              {SUGGESTIONS.map((s) => (
+              {SUGGESTIONS[community].map((s) => (
                 <Chip key={s} label={t(s)} onPress={() => ask(t(s))} />
               ))}
             </View>

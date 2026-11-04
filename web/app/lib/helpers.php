@@ -36,6 +36,7 @@ function person_links(int $id): array
  */
 function lango_dates(int $limit = 0): array
 {
+    if (community() !== 'lango') return [];   // these dates are Lango's; another community has none until its own are written
     $all = [
         [2, 21, 0, 'International Mother Language Day', 'UNESCO marks the day each year for the world’s languages: a good day to learn, speak and record Leb Lango.'],
         [4, 15, 1940, 'Birth of Gen. David Oyite-Ojok', 'The Lango army officer who helped lead the 1979 war that removed Idi Amin was born in Lira District.'],
@@ -132,8 +133,17 @@ function setting(string $k, string $default = ''): string
     if ($all === null) {
         try { $all = array_column(all('SELECT k,v FROM settings'), 'v', 'k'); } catch (Throwable $e) { $all = []; }
     }
+    $c = community();
+    if ($c !== 'lango') {   // another community: its own setting (named <code>.<key>), else what comes from the community's own record, else the site-wide one
+        $own = trim((string)($all[$c . '.' . $k] ?? ''));
+        if ($own !== '') return $own;
+        $i = community_info();
+        if ($k === 'site_name') return $i['name'];
+        if ($k === 'site_tagline') return 'Everything about ' . $i['name'] . ', in one place.';
+        if ($k === 'org_subtitle' || $k === 'clan_total') return $default;
+    }
     $v = $all[$k] ?? '';
-    return $v !== '' ? (string)$v : $default;
+    return trim((string)$v) !== '' ? (string)$v : $default;
 }
 
 /* ---------- text & dates ---------- */
@@ -328,6 +338,7 @@ function site_counts(): array
 /** URL of the uploaded logo (Admin → Site settings) or a file dropped at assets/img/logo.{png,webp,jpg,svg}; null if none yet. */
 function logo_url(): ?string
 {
+    if (community() !== 'lango') return null;   // the emblem is Lango's
     $l = setting('logo');
     if ($l && is_file(ROOT . '/' . $l)) return url($l);
     foreach (['png', 'webp', 'jpg', 'jpeg', 'svg'] as $ext) if (is_file(ROOT . '/assets/img/logo.' . $ext)) return asset('assets/img/logo.' . $ext);
@@ -348,7 +359,7 @@ function brand_html(bool $footer = false): string
     $cls = 'brand' . ($footer ? ' brand--footer' : '');
     $text = '<span class="brand__text"><b>' . e($name) . '</b>' . (setting('org_subtitle') ? '<small>' . e(setting('org_subtitle')) . '</small>' : '') . '</span>';
     if ($logo) return '<a class="' . $cls . ' brand--logo" href="' . e(url()) . '" aria-label="' . e($name) . '"><img class="brand__logo" src="' . e($logo) . '" alt="" width="42" height="60">' . $text . '</a>';
-    return '<a class="' . $cls . '" href="' . e(url()) . '" aria-label="' . e($name) . '"><span class="brand__mark" aria-hidden="true">L</span>' . $text . '</a>';
+    return '<a class="' . $cls . '" href="' . e(url()) . '" aria-label="' . e($name) . '"><span class="brand__mark" aria-hidden="true">' . e(mb_strtoupper(mb_substr($name, 0, 1))) . '</span>' . $text . '</a>';
 }
 
 

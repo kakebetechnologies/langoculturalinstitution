@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppText from './AppText';
 import KeyboardScroll from './KeyboardScroll';
+import CommunitySwitch from './CommunitySwitch';
 import Logo from './Logo';
 import { BackButton } from './ScreenHeader';
 import { COLORS, FONTS, SPACING } from '../constants/theme';
@@ -19,6 +20,7 @@ export default function AuthFrame({ title, subtitle, children }) {
           <BackButton onPress={() => (router.canGoBack() ? router.back() : router.replace('/(auth)/welcome'))} />
         </View>
         <View style={styles.center}>
+          <CommunitySwitch style={{ marginBottom: SPACING.md }} />
           <Logo tile size={62} />
           <AppText style={styles.title}>{title}</AppText>
           {subtitle ? <AppText style={styles.sub}>{subtitle}</AppText> : null}

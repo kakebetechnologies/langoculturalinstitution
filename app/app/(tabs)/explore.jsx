@@ -9,6 +9,7 @@ import Row from '../../components/Row';
 import Screen from '../../components/Screen';
 import SectionHeader from '../../components/SectionHeader';
 import { SPACING } from '../../constants/theme';
+import { useCommunity } from '../../lib/community';
 import { useT } from '../../lib/i18n';
 
 const LISTEN = [
@@ -31,19 +32,22 @@ const TILES = [
 
 export default function Explore() {
   const { t } = useT();
+  const { features } = useCommunity();
+  const listen = LISTEN.filter((x) => (x.href === '/radio' ? features.radio : x.href === '/podcast' ? features.podcast : x.href === '/bible' ? features.bible : true));
+  const tiles = TILES.filter((x) => (x.href === '/species' ? features.species : x.href === '/library' ? features.library : true));
 
   return (
     <Screen big title={t('Explore')} subtitle={t('Discover the heritage of the Lango people')}>
       <SectionHeader title={t('Listen and read')} />
       <View style={styles.grid}>
-        {LISTEN.map((x) => (
+        {listen.map((x) => (
           <GradientTile key={x.href} icon={x.icon} tone={x.tone} title={t(x.title)} text={t(x.text)} onPress={() => router.push(x.href)} />
         ))}
       </View>
       <SectionHeader title={t('Grow your roots')} style={{ marginTop: SPACING.lg }} />
       <Row icon="people-outline" iconTone="green" title={t('Find your clan')} subtitle={t('Search the clan register and see who leads it.')} onPress={() => router.push('/clans')} />
       <View style={styles.grid}>
-        {TILES.map((x) => (
+        {tiles.map((x) => (
           <GradientTile key={x.href} icon={x.icon} tone={x.tone} title={t(x.title)} text={t(x.text)} onPress={() => router.push(x.href)} />
         ))}
       </View>

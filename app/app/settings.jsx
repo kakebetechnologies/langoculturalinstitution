@@ -3,17 +3,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Switch, View } from 'react-native';
 import Constants from 'expo-constants';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import CommunitySwitch from '../components/CommunitySwitch';
 import Screen from '../components/Screen';
 import SectionHeader from '../components/SectionHeader';
 import Segmented from '../components/Segmented';
 import TextField from '../components/TextField';
 import { COLORS, SPACING } from '../constants/theme';
-import { API_ROOT, errorMessage, ping, setServerAddress } from '../lib/api';
+import api, { API_ROOT, errorMessage, ping, setServerAddress } from '../lib/api';
 import { useAuth } from '../lib/auth';
+import { useCommunity } from '../lib/community';
 import { downloadDictionary, removeOffline, useOfflineDictionary } from '../lib/dictionary';
 import { fmtDate } from '../lib/format';
 import { useT } from '../lib/i18n';
@@ -23,7 +25,8 @@ import { getStored } from '../lib/storage';
 
 export default function Settings() {
   const { t, lang, setLang } = useT();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const { info, features } = useCommunity();
   const params = useLocalSearchParams();
   const offline = useOfflineDictionary();
   const [busy, setBusy] = useState('');
@@ -39,6 +42,21 @@ export default function Settings() {
     getStored('push_on', false).then(setPush);
     getStored('daily_reminder', false).then(setDaily);
   }, []);
+
+  // A member's community is part of their account (their clan or chiefdom is kept for each); a visitor's is kept on the phone.
+  async function changeCommunity(code) {
+    setNote('');
+    if (user) {
+      try {
+        const { data } = await api.patch('/me', { community: code });
+        setUser(data.data);
+      } catch (e) {
+        setNote(errorMessage(e));
+        return;
+      }
+    }
+    router.replace('/(tabs)');
+  }
 
   async function download() {
     setBusy('dl');
@@ -97,17 +115,27 @@ export default function Settings() {
 
   return (
     <Screen title={t('Settings')}>
-      <SectionHeader title={t('Language')} />
-      <Segmented value={lang} onChange={setLang} options={[{ value: 'en', label: 'English' }, { value: 'lg', label: 'Leb Lango' }]} />
+      <SectionHeader title={t('Community')} />
+      <CommunitySwitch onChange={changeCommunity} style={{ alignSelf: 'flex-start' }} />
       <AppText variant="caption" style={{ marginTop: 8 }}>
-        {t('Leb Lango text appears where language experts have translated it; everything else stays in English.')}
+        {t('Choose whose culture the app shows: Lango or Acholi. Your clan or chiefdom is kept for each.')}
       </AppText>
+
+      {features.languageSwitch ? (
+        <>
+          <SectionHeader title={t('Language')} style={{ marginTop: SPACING.lg }} />
+          <Segmented value={lang} onChange={setLang} options={[{ value: 'en', label: 'English' }, { value: 'lg', label: 'Leb Lango' }]} />
+          <AppText variant="caption" style={{ marginTop: 8 }}>
+            {t('Leb Lango text appears where language experts have translated it; everything else stays in English.')}
+          </AppText>
+        </>
+      ) : null}
 
       <SectionHeader title={t('Offline dictionary')} style={{ marginTop: SPACING.lg }} />
       <Card>
         <AppText variant="subheading">{offline.ready ? t('{n} words saved on this phone', { n: offline.count.toLocaleString('en-US') }) : t('Not downloaded yet')}</AppText>
         <AppText variant="caption" style={{ marginTop: 2, marginBottom: 12 }}>
-          {offline.ready ? t('Downloaded {d}. Search works with no internet.', { d: fmtDate(new Date(offline.at).toISOString().slice(0, 10)) }) : t('About 2,800 words, a few hundred KB. Then search works with no internet, in both directions.')}
+          {offline.ready ? t('Downloaded {d}. Search works with no internet.', { d: fmtDate(new Date(offline.at).toISOString().slice(0, 10)) }) : t('About {n} words, a few hundred KB. Then search works with no internet, in both directions.', { n: info.code === 'lango' ? '2,800' : '4,900' })}
         </AppText>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Button title={offline.ready ? t('Update') : t('Download')} icon="cloud-download-outline" small onPress={download} loading={busy === 'dl'} />
@@ -117,6 +145,7 @@ export default function Settings() {
 
       <SectionHeader title={t('Notifications')} style={{ marginTop: SPACING.lg }} />
       <Card style={{ gap: 14 }}>
+        {features.daily ? (
         <View style={styles.sw}>
           <View style={{ flex: 1 }}>
             <AppText variant="subheading">{t('Daily word reminder')}</AppText>
@@ -124,6 +153,7 @@ export default function Settings() {
           </View>
           <Switch value={daily} onValueChange={toggleDaily} trackColor={{ true: COLORS.primary, false: COLORS.gray300 }} />
         </View>
+        ) : null}
         {user ? (
           <View style={styles.sw}>
             <View style={{ flex: 1 }}>

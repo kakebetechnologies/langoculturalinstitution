@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Platform } from 'react-native';
 import api from './api';
+import { useCommunity } from './community';
 import { readJson, removeDir, removeFile, writeJson } from './localFiles';
 import { googleBrowserSignIn, setPendingGoogle } from './google';
 import { forgetOutbox } from './outbox';
@@ -17,6 +18,12 @@ export function AuthProvider({ children }) {
   const [ready, setReady] = useState(false);
   const [token, setTokenState] = useState(null);
   const [user, setUser] = useState(null);
+  const { setCommunity } = useCommunity();
+
+  // A signed-in member's own community (Lango or Acholi) is the one the app shows.
+  useEffect(() => {
+    if (user?.community) setCommunity(user.community);
+  }, [user?.community, setCommunity]);
 
   // Restore the session on launch. The last known profile is kept on the phone, so the app opens at once and works with no
   // internet; the profile is refreshed in the background (and retried until it works).

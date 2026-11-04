@@ -3,6 +3,7 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { getCommunity } from './community';
 import { getLang } from './lang';
 import { clearToken, expireSession, getToken } from './session';
 import { getStored, setStored } from './storage';
@@ -54,6 +55,7 @@ api.interceptors.request.use(async (config) => {
   const token = await getToken();
   if (token) config.headers.Authorization = `Bearer ${token}`;
   config.headers['X-App-Lang'] = getLang();
+  config.headers['X-App-Community'] = getCommunity();   // Lango or Acholi: the website answers with that community's content
   return config;
 });
 

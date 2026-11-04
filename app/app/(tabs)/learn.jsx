@@ -9,12 +9,14 @@ import GradientTile from '../../components/GradientTile';
 import Screen from '../../components/Screen';
 import SectionHeader from '../../components/SectionHeader';
 import { COLORS, MAX_FONT_SCALE, RADIUS, SHADOW, SPACING } from '../../constants/theme';
+import { useCommunity } from '../../lib/community';
 import { useOfflineDictionary } from '../../lib/dictionary';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
 
 export default function Learn() {
   const { t } = useT();
+  const { features, info } = useCommunity();
   const [q, setQ] = useState('');
   const offline = useOfflineDictionary();
   const { data } = useFetch('/home');
@@ -68,8 +70,9 @@ export default function Learn() {
           <GradientTile icon="book" tone="amber" title={t('Dictionary')} text={t('Lango–English and English–Lango, with examples')} onPress={() => router.push('/dictionary')} />
           <GradientTile icon="language" tone="sky" title={t('AI Lango translator')} text={t('Words, both ways. Sentences coming soon')} onPress={() => router.push('/translate')} />
           <GradientTile icon="ribbon" tone="red" title={t('Proverbs & sayings')} text={t('The wisdom of the elders')} onPress={() => router.push('/proverbs')} />
-          <GradientTile icon="chatbubble-ellipses" tone="slate" title={t('Phrasebook')} text={t('Everyday greetings and replies')} onPress={() => router.push('/phrasebook')} />
-          <GradientTile icon="help-circle" tone="amber" full title={t('Lango quizzes')} text={t('Test what you know about the Lango people, their land and famous Langos')} onPress={() => router.push('/quiz')} />
+          {features.greetings ? <GradientTile icon="chatbubble-ellipses" tone="slate" title={t('Phrasebook')} text={t('Everyday greetings and replies')} onPress={() => router.push('/phrasebook')} /> : null}
+          <GradientTile icon="git-compare" tone="green" title={t('Compare words')} text={t('The languages of every community, side by side')} onPress={() => router.push('/compare')} />
+          {features.quizzes ? <GradientTile icon="help-circle" tone="amber" full title={t('Lango quizzes')} text={t('Test what you know about the Lango people, their land and famous Langos')} onPress={() => router.push('/quiz')} /> : null}
           <GradientTile icon="add-circle" tone="green" full style={{ marginTop: 0 }} title={t('Suggest a word')} text={t('Add a word or a name; our language team reviews it')} onPress={() => router.push({ pathname: '/contribute/new', params: { type: 'language', kind: 'word' } })} />
         </View>
       </View>

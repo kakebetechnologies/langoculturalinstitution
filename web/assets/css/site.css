@@ -1065,3 +1065,32 @@ body.auth .au{padding-bottom:64px}body.mc .mc-body{padding-bottom:64px}
 }
 @media(max-width:1100px){.hx__card--l,.hx__card--r{width:160px;height:270px}.hx__card--c{width:196px;height:330px}.hx-explore{grid-template-columns:repeat(2,1fr)}.hx-stats{grid-template-columns:repeat(2,1fr)}.hx-stats li:nth-child(3){border-left:0}}
 @media(max-width:980px){.hx__in{grid-template-columns:1fr;min-height:0;padding-top:70px;padding-bottom:110px}.hx__cards{justify-content:flex-start;margin-top:8px}.hx-mosaic{grid-template-columns:repeat(2,1fr)}.hx-cta__body{padding:40px 28px}}
+
+
+/* ---- communities (Lango, Acholi) ---- */
+.commsw{display:inline-flex;gap:2px;padding:2px;border-radius:99px;background:rgba(255,255,255,.14);margin-right:10px}
+.commsw a{padding:2px 12px;border-radius:99px;font-weight:700;font-size:.8rem;color:inherit;opacity:.85}
+.commsw a.on{background:#fddd16;color:#16181d;opacity:1}
+.nav__foot .commsw{background:#eee;margin:0 0 10px}
+.nav__foot .commsw a{color:#16181d}
+/* the photographs and emblem on the Lango pages are Lango's: another community's pages use plain panels until it has its own */
+.community-acholi .pagehero__panel{background-image:none!important;background-color:#16181d}
+.community-acholi .collage{display:none}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cmp-card{background:#fff;border-radius:16px;padding:18px 20px;box-shadow:0 2px 10px rgba(22,24,29,.07);margin-bottom:18px}
+.cmp-card h3{margin:0 0 12px;font-size:1.05rem}
+.cmp-col h4{margin:0 0 8px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#c9111c}
+.cmp-col ul{list-style:none;margin:0;padding:0}
+.cmp-col li{padding:7px 0;border-top:1px solid #eee}
+.cmp-col li:first-child{border-top:0}
+.cmp-col b{font-size:1.05rem}
+.cmp-col small{display:block;color:#6b727d}
+.cmp-note{background:#fff8d6;border-radius:12px;padding:12px 16px;margin:0 0 18px;font-size:.92rem}
+@media(max-width:700px){.cmp-grid{grid-template-columns:1fr}}
+.community-acholi .hx__bg,.community-acholi .hx__cards,.community-acholi .hx__credit,.community-acholi .hx-ex img,.community-acholi .hx-cta img,.community-acholi .mh-hero img{display:none}
+.community-acholi .hx{background:linear-gradient(135deg,#16181d,#3a1216)}
+.community-acholi .hx-ex{aspect-ratio:auto;min-height:150px;background:#16181d}
+.community-acholi .mh-hero{background:linear-gradient(135deg,#16181d,#3a1216)}
+
+.trans__pick{display:inline-flex;align-items:center;gap:10px}
+.trans__pick select{padding:8px 12px;border-radius:99px;border:1px solid #d8dbe1;background:#fff;font:inherit;font-weight:600}

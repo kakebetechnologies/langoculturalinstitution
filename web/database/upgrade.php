@@ -442,7 +442,9 @@ function lci_upgrade(PDO $pdo): array
         if ($val('SELECT COUNT(*) FROM settings WHERE k=?', [$k]) == 0) { $ins('settings', ['k' => $k, 'v' => $v]); $log[] = "setting $k"; }
     }
 
-    return array_merge($log, lci_rebrand($pdo));
+    // communities (Lango, Acholi): their own copies of the content tables, and the Acholi content
+    require_once __DIR__ . '/communities.php';
+    return array_merge($log, lci_rebrand($pdo), lci_communities($pdo));
 }
 
 /**

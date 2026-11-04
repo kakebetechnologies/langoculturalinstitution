@@ -46,8 +46,10 @@ page_start('', ['class' => 'home']);
     <div class="mh-head"><h2><?php _e('Explore'); ?></h2></div>
     <div class="mh-tiles"><?php foreach ($explore as [$ic, $lb, $pt]): ?><a href="<?= e(url($pt)) ?>"><span><?= icon($ic) ?></span><b><?= e($lb) ?></b></a><?php endforeach; ?></div>
 
+    <?php if (community() === 'lango'): ?>
     <div class="mh-head"><h2><?php _e('Moments from Lango'); ?></h2><a href="<?= e(url('media')) ?>"><?php _e('All'); ?> <?= icon('arrow') ?></a></div>
     <div class="mh-scroll"><?php foreach ($moments as $m) echo $moment($m); ?></div>
+    <?php endif; ?>
 
     <?php if ($notables): ?>
     <div class="mh-head"><h2><?php _e('Notable Langos'); ?></h2><a href="<?= e(url('people')) ?>"><?php _e('All'); ?> <?= icon('arrow') ?></a></div>
@@ -109,6 +111,7 @@ page_start('', ['class' => 'home']);
   </div>
 </section>
 
+<?php if (community() === 'lango'): ?>
 <section class="section section--cream dsk">
   <div class="container">
     <div class="sec-row"><div><span class="eyebrow"><?php _e('Gallery'); ?></span><h2><?php _e('Moments from Lango'); ?></h2></div><a class="link" href="<?= e(url('media')) ?>"><?php _e('All photos'); ?> <?= icon('arrow') ?></a></div>
@@ -127,6 +130,7 @@ page_start('', ['class' => 'home']);
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <section class="section section--tight dsk">
   <div class="container"><div class="langband">

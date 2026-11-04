@@ -23,6 +23,39 @@ $entry = function (array $r): string {
 
 $suggestCard = fn() => '<div class="box box--dark"><h4>' . icon('plus') . ' ' . e(__('Know a word we are missing?')) . '</h4><p>' . e(__('Names of animals, birds, plants, places, foods, everyday words — add it with its English meaning. Our language team reviews every suggestion before it joins the dictionary.')) . '</p><a class="btn btn--gold btn--sm" href="' . e(url('contribute', ['type' => 'language'])) . '">' . e(__('Suggest a word')) . '</a></div>';
 
+/* =============================== compare Lango and Acholi =============================== */
+if ($sub === 'compare') {
+    $term = mb_substr(get('q'), 0, 60);
+    $cmp = $term !== '' ? compare_words($term) : ['term' => '', 'groups' => [], 'available' => []];
+    page_start('Compare Lango and Acholi words', ['hero' => ['eyebrow' => 'Language', 'title' => 'Compare Lango and Acholi words', 'sub' => 'Lango and Acholi are closely related Luo languages. Type an English word, a Leb Lango word or a Leb Acholi word to see the words of both side by side.', 'crumbs' => [[__('Language'), 'language'], ['Compare', null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
+    ?>
+<section class="section"><div class="container" style="max-width:980px">
+  <form class="searchbar" method="get" action="<?= e(url('language/compare')) ?>" role="search" style="margin-bottom:22px">
+    <input type="search" name="q" value="<?= e($term) ?>" placeholder="water, pii, pi ..." aria-label="Word to compare" autofocus>
+    <button class="btn btn--primary" type="submit"><?= icon('search') ?> Compare</button>
+  </form>
+  <p class="cmp-note"><b>Likely equivalents, not checked ones.</b> The two dictionaries are matched through their English meanings. A language reviewer has not confirmed that a Lango word and an Acholi word on the same line mean the same thing in every use, and related languages share words that differ in meaning.</p>
+  <?php if (!empty($cmp['available']) && empty($cmp['available']['acholi'])): ?><p class="cmp-note">The Acholi dictionary is not published yet, so only Lango words are shown.</p><?php endif; ?>
+  <?php if ($term !== '' && !$cmp['groups']): ?><p>Nothing was found for &ldquo;<?= e($term) ?>&rdquo;. Try an English word such as <a href="<?= e(url('language/compare', ['q' => 'water'])) ?>">water</a>.</p><?php endif; ?>
+  <?php foreach ($cmp['groups'] as $g): ?>
+    <div class="cmp-card"><h3><?= e($g['english']) ?></h3>
+      <div class="cmp-grid">
+        <?php foreach ($cmp['communities'] ?? [] as $ci): $code = $ci['code']; ?>
+          <div class="cmp-col"><h4><?= e($ci['language']) ?></h4>
+            <?php if (!$g[$code]): ?><p><small>No match yet</small></p><?php else: ?><ul>
+              <?php foreach ($g[$code] as $w): ?><li><b><?= e($w['headword']) ?></b><?= $w['pos'] ? ' <small style="display:inline">' . e($w['pos']) . '</small>' : '' ?><small><?= e($w['english']) ?><?= $w['verified'] ? ' · checked' : '' ?></small></li><?php endforeach; ?>
+            </ul><?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  <?php endforeach; ?>
+</div></section>
+<?php
+    page_end();
+    return;
+}
+
 /* =============================== dictionary =============================== */
 if ($sub === 'dictionary') {
     $qs = mb_substr(get('q'), 0, 80);
@@ -60,7 +93,7 @@ if ($sub === 'dictionary') {
         <div class="dsearch__opts">
           <span class="seg" role="group" aria-label="<?= e(__('Search in')) ?>">
             <label><input type="radio" name="dir" value="all" <?= $dir === 'all' ? 'checked' : '' ?>><span><?php _e('Both'); ?></span></label>
-            <label><input type="radio" name="dir" value="lg" <?= $dir === 'lg' ? 'checked' : '' ?>><span>Leb Lango</span></label>
+            <label><input type="radio" name="dir" value="lg" <?= $dir === 'lg' ? 'checked' : '' ?>><span><?= e(community_info()['language']) ?></span></label>
             <label><input type="radio" name="dir" value="en" <?= $dir === 'en' ? 'checked' : '' ?>><span>English</span></label>
           </span>
           <a class="dsearch__tr" href="<?= e(url('language/translate')) ?>"><?= icon('globe') ?> <?php _e('Translate a word with the AI translator'); ?> <?= icon('arrow') ?></a>
@@ -105,24 +138,31 @@ if ($sub === 'dictionary') {
 /* =============================== translator =============================== */
 if ($sub === 'translate') {
     $text = mb_substr(trim((string)($_GET['text'] ?? '')), 0, 600);
-    $dir = get('dir') === 'lango-en' ? 'lango-en' : 'en-lango';
-    $res = ($text !== '' && throttle('translate', 60, 600)) ? lango_translate($text, $dir) : null;
-    $greet = array_slice(require ROOT . '/app/data/greetings.php', 0, 6);
+    $langs = translation_languages();
+    $codes = array_column($langs, 'code');
+    $from = in_array(get('from'), $codes, true) ? get('from') : (get('dir') === 'lango-en' ? community() : 'en');
+    $to = in_array(get('to'), $codes, true) ? get('to') : ($from === 'en' ? community() : 'en');
+    if ($to === $from) $to = $from === 'en' ? community() : 'en';
+    $nameOf = fn(string $c) => $langs[array_search($c, $codes, true)]['name'];
+    $res = ($text !== '' && throttle('translate', 60, 600)) ? translate_between($text, $from, $to) : null;
+    $greet = array_slice(community_greetings(), 0, 6);
     page_start(__('AI Lango Translator'), ['hero' => ['eyebrow' => __('Language & translation'), 'title' => __('AI Lango translator'), 'sub' => __('Translate words between English and Leb Lango using the Lango dictionary. Whole sentences are coming soon.'), 'crumbs' => [[__('Language'), 'language'], [__('Translator'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section section--tight"><div class="container">
       <form class="trans" id="transform" method="get" action="<?= e(url('language/translate')) ?>">
         <div class="trans__bar">
-          <span class="seg" role="group" aria-label="<?= e(__('Direction')) ?>">
-            <label><input type="radio" name="dir" value="en-lango" <?= $dir === 'en-lango' ? 'checked' : '' ?>><span>English → Leb Lango</span></label>
-            <label><input type="radio" name="dir" value="lango-en" <?= $dir === 'lango-en' ? 'checked' : '' ?>><span>Leb Lango → English</span></label>
+          <span class="seg trans__pick">
+            <select name="from" id="tx-from" aria-label="Translate from"><?php foreach ($langs as $l): ?><option value="<?= e($l['code']) ?>"<?= $from === $l['code'] ? ' selected' : '' ?>><?= e($l['name']) ?></option><?php endforeach; ?></select>
+            <span aria-hidden="true">→</span>
+            <select name="to" id="tx-to" aria-label="Translate to"><?php foreach ($langs as $l): ?><option value="<?= e($l['code']) ?>"<?= $to === $l['code'] ? ' selected' : '' ?>><?= e($l['name']) ?></option><?php endforeach; ?></select>
+          </span></label>
           </span>
           <span class="trans__hint"><?php _e('Letters like ε, ɔ and ŋ are optional — type e, o and ng.'); ?></span>
         </div>
         <div class="trans__panes">
-          <div class="trans__pane"><label for="tx-in" id="tx-in-label"><?= $dir === 'en-lango' ? e(__('English')) : 'Leb Lango' ?></label>
+          <div class="trans__pane"><label for="tx-in" id="tx-in-label"><?= e($nameOf($from)) ?></label>
             <textarea id="tx-in" name="text" rows="6" maxlength="600" placeholder="<?= e(__('Type a word…')) ?>"><?= e($text) ?></textarea></div>
-          <div class="trans__pane trans__pane--out"><label id="tx-out-label"><?= $dir === 'en-lango' ? 'Leb Lango' : e(__('English')) ?></label>
+          <div class="trans__pane trans__pane--out"><label id="tx-out-label"><?= e($nameOf($to)) ?></label>
             <div class="trans__out" id="tx-out" aria-live="polite"><?= $res ? e(!empty($res['coming_soon']) ? $res['message'] : $res['translation']) : '<span class="trans__ph">' . e(__('The translation appears here.')) . '</span>' ?></div>
             <div class="trans__unk" id="tx-unk"><?php if ($res && !empty($res['coming_soon'])): ?><?php _e('Look up each word:'); ?> <?php foreach ($res['words'] as $uw): ?><a href="<?= e(url('language/dictionary', ['q' => $uw])) ?>"><?= e($uw) ?></a> <?php endforeach; ?><?php elseif ($res && $res['unknown_words']): ?><?php _e('Not in the dictionary yet:'); ?> <?php foreach ($res['unknown_words'] as $uw): ?><a href="<?= e(url('contribute', ['type' => 'language', 'word' => $uw])) ?>"><?= e($uw) ?></a> <?php endforeach; ?><?php endif; ?></div></div>
         </div>
@@ -132,8 +172,8 @@ if ($sub === 'translate') {
     </div></section>
     <section class="section section--tight" style="padding-top:8px"><div class="container article">
       <div>
-        <h2 style="font-size:1.35rem"><?php _e('Try a greeting'); ?></h2>
-        <div class="sugg trans__sugg" id="tx-sugg"><?php foreach ($greet as [$lg, $en]): ?><button type="button" data-text="<?= e($lg) ?>" data-dir="lango-en"><?= e($lg) ?></button><?php endforeach; ?></div>
+        <?php if ($greet): ?><h2 style="font-size:1.35rem"><?php _e('Try a greeting'); ?></h2>
+        <div class="sugg trans__sugg" id="tx-sugg"><?php foreach ($greet as [$lg, $en]): ?><button type="button" data-text="<?= e($lg) ?>" data-dir="lango-en"><?= e($lg) ?></button><?php endforeach; ?></div><?php endif; ?>
         <h2 style="font-size:1.35rem;margin-top:30px"><?php _e('How the translator works'); ?></h2>
         <div class="prose" style="font-size:.95rem;line-height:1.75">
           <p><?php _e('Words and the set phrases of the dictionary are translated now, using the Lango dictionary and the worked examples of the Practical Lango Grammar. Translating whole sentences is coming soon: Leb Lango grammar is rich, since verbs carry the subject as a prefix and tone changes meaning, and we want sentences to be right before we offer them.'); ?></p>
@@ -189,7 +229,7 @@ if ($sub === 'proverbs') {
 if ($sub === 'lessons') {
     $les = all("SELECT * FROM lessons WHERE status='published' ORDER BY FIELD(level,'beginner','intermediate','advanced'), sort, id");
     $lesson = !empty($seg[2]) ? one("SELECT * FROM lessons WHERE id=? AND status='published'", [(int)$seg[2]]) : null;
-    $greet = require ROOT . '/app/data/greetings.php';
+    $greet = community_greetings();
     page_start(__('Learn Leb Lango'), ['hero' => ['eyebrow' => __('Language & translation'), 'title' => __('Learn Leb Lango'), 'sub' => __('Greetings and lessons for the diaspora, for youth and for everyone who wants to speak with their elders.'), 'crumbs' => [[__('Language'), 'language'], [__('Lessons'), null]], 'image' => 'assets/img/photos/hero-field.jpg']]);
     ?>
     <section class="section"><div class="container" style="max-width:920px">
@@ -197,9 +237,9 @@ if ($sub === 'lessons') {
         <a href="<?= e(url('language/lessons')) ?>">← <?php _e('All lessons'); ?></a><h2 style="margin-top:14px"><?= e($lesson['title']) ?></h2><div class="prose"><?= rich($lesson['body']) ?></div><?php if ($lesson['audio']): ?><audio controls style="width:100%" src="<?= e(media_url($lesson['audio'])) ?>"></audio><?php endif; ?>
       <?php else: ?>
         <?php if ($les): ?><h2 style="font-size:1.4rem"><?php _e('Lessons'); ?></h2><div class="grid" style="margin-bottom:40px"><?php foreach ($les as $l): ?><a class="evrow" href="<?= e(url('language/lessons/' . $l['id'])) ?>"><span class="tag"><?= e($l['level']) ?></span><div><h4><?= e($l['title']) ?></h4></div></a><?php endforeach; ?></div><?php endif; ?>
-        <h2 style="font-size:1.4rem"><?php _e('Everyday greetings'); ?></h2>
+        <?php if ($greet): ?><h2 style="font-size:1.4rem"><?php _e('Everyday greetings'); ?></h2>
         <p style="color:var(--muted)"><?php _e('Real greetings and replies from the worked examples of the Practical Lango Grammar. Spelling follows the book.'); ?></p>
-        <div class="greet"><?php foreach ($greet as [$lg, $en]): ?><div class="greet__row"><b><?= e($lg) ?></b><span><?= e($en) ?></span></div><?php endforeach; ?></div>
+        <div class="greet"><?php foreach ($greet as [$lg, $en]): ?><div class="greet__row"><b><?= e($lg) ?></b><span><?= e($en) ?></span></div><?php endforeach; ?></div><?php endif; ?>
         <?php if (!$les): ?><p style="margin-top:26px"><?php _e('More lessons are being prepared by our language experts.'); ?> <a href="<?= e(url('language/dictionary')) ?>"><?php _e('Meanwhile, explore the dictionary.'); ?></a></p><?php endif; ?>
       <?php endif; ?>
     </div></section>
@@ -211,7 +251,7 @@ if ($sub !== '') not_found();
 $wotd = word_of_day();
 $np = (int)val("SELECT COUNT(*) FROM proverbs WHERE status='published'");
 $cats = all("SELECT category, COUNT(*) n FROM dictionary WHERE status='published' AND category IS NOT NULL AND category<>'' GROUP BY category ORDER BY n DESC LIMIT 8");
-$greet = array_slice(require ROOT . '/app/data/greetings.php', 0, 6);
+$greet = array_slice(community_greetings(), 0, 6);
 page_start(__('Language'), ['hero' => ['eyebrow' => __('Leb Lango'), 'title' => __('Our language, our identity'), 'sub' => __('A living dictionary, an AI translator, proverbs and lessons — and a way for every Lango speaker to help keep Leb Lango alive.'), 'crumbs' => [[__('Language'), null]], 'image' => 'assets/img/photos/hero-hill.jpg']]);
 ?>
 <section class="section"><div class="container">
@@ -244,7 +284,8 @@ page_start(__('Language'), ['hero' => ['eyebrow' => __('Leb Lango'), 'title' => 
   <div>
     <div class="eyebrow"><?php _e('Start speaking'); ?></div>
     <h2><?php _e('Everyday greetings'); ?></h2>
-    <div class="greet"><?php foreach ($greet as [$lg, $en]): ?><div class="greet__row"><b><?= e($lg) ?></b><span><?= e($en) ?></span></div><?php endforeach; ?></div>
+    <?php if ($greet): ?><div class="greet"><?php foreach ($greet as [$lg, $en]): ?><div class="greet__row"><b><?= e($lg) ?></b><span><?= e($en) ?></span></div><?php endforeach; ?></div>
+    <?php else: ?><p style="color:var(--muted)">Greetings and lessons will be added with Leb Acholi speakers. Until then the dictionary and the comparison page are the place to start.</p><?php endif; ?>
     <p style="margin-top:14px"><a class="link" href="<?= e(url('language/lessons')) ?>"><?php _e('More greetings and lessons'); ?> <?= icon('arrow') ?></a></p>
   </div>
   <div style="display:grid;gap:20px">

@@ -174,3 +174,11 @@ body.login::before{border-color:rgba(255,255,255,.07)}
 body.login::after{background:rgba(255,255,255,.06)}
 .login__box{border-radius:30px}
 @media(max-width:900px){.side{border-radius:0 26px 26px 0}}
+
+
+/* ---- the community being edited (Lango or Acholi) ---- */
+.side__comm{display:flex;align-items:center;gap:10px;padding:8px 18px 12px}
+.side__comm small{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.side__comm span{display:inline-flex;padding:2px;border-radius:99px;background:rgba(255,255,255,.14)}
+.side__comm a{padding:3px 12px;border-radius:99px;font-weight:700;font-size:.8rem;color:inherit}
+.side__comm a.on{background:#fddd16;color:#16181d}

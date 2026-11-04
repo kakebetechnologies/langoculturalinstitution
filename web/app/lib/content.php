@@ -226,9 +226,11 @@ function assistant_entity_answer(string $q): ?array
 /** English↔Lango translation engine (dictionary + textbook sentences), extended with community-approved words. */
 function translator(): TranslationEngine
 {
-    static $eng = null;
-    if ($eng) return $eng;
+    static $engines = [];   // one translator per community: a request can translate for two of them
+    $c = community();
+    if (isset($engines[$c])) return $engines[$c];
     require_once ROOT . '/app/lib/TranslationEngine.php';
+    if ($c !== 'lango') return $engines[$c] = community_translator();
     $dir = ROOT . '/app/data/translator/';
     $load = fn(string $f) => json_decode((string)file_get_contents($dir . $f), true) ?: [];
     $en = $load('english_lango_index.json'); $lg = $load('lango_english_dictionary.json'); $ph = $load('sentence_phrases.json');
@@ -250,7 +252,30 @@ function translator(): TranslationEngine
     // folded keys so "kop ango" finds "kɔp aŋo" (existing exact keys are kept)
     foreach ($lg as $k => $v) { $f = lango_fold((string)$k); if (!isset($lg[$f])) $lg[$f] = $v; }
     foreach ($l2e as $k => $v) { $f = lango_fold((string)$k); if (!isset($l2e[$f])) $l2e[$f] = $v; }
-    return $eng = new TranslationEngine($en, $lg, $e2l, $l2e);
+    return $engines[$c] = new TranslationEngine($en, $lg, $e2l, $l2e);
+}
+
+/**
+ * The translator of a community other than Lango: words and set phrases from its own dictionary table, nothing else (the textbook sentences
+ * that Lango's translator also knows are Lango's only, and no other community has such a list yet).
+ */
+function community_translator(): TranslationEngine
+{
+    $en = []; $lg = [];
+    foreach (all("SELECT lango, english FROM dictionary WHERE status='published'") as $r) {
+        $key = mb_strtolower(trim($r['lango']));
+        $meanings = array_values(array_filter(array_map('trim', preg_split('/[;,·]/u', $r['english']))));
+        if ($key === '' || !$meanings) continue;
+        $lg[$key]['lango'] = $r['lango'];
+        $lg[$key]['english_meanings'] = array_values(array_unique(array_merge($lg[$key]['english_meanings'] ?? [], $meanings)));
+        foreach ($meanings as $m) {
+            $mk = mb_strtolower($m);
+            $en[$mk]['headword'] = $en[$mk]['headword'] ?? $m;
+            $en[$mk]['translations'] = array_values(array_unique(array_merge($en[$mk]['translations'] ?? [], [$r['lango']])));
+        }
+    }
+    foreach ($lg as $k => $v) { $f = lango_fold((string)$k); if (!isset($lg[$f])) $lg[$f] = $v; }
+    return new TranslationEngine($en, $lg, [], []);
 }
 
 /** Translate text; Lango input is folded to plain letters so ordinary keyboards work. */

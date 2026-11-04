@@ -14,6 +14,7 @@ The JSON API behind the Lango App (`../app`) and the open-data page at `/develop
 | Errors | `{ "message": "…", "errors": { "field": "…" } }` with the usual status code (401, 404, 422, 429 …). |
 | Sign-in | `Authorization: Bearer lci_…` — a token from `/auth/login` or `/auth/register`. Only a SHA-256 hash is stored. |
 | Language | `?lang=lg` or the `X-App-Lang: lg` header returns Leb Lango where an expert has translated it, English otherwise. |
+| Community | `X-App-Community: lango` (default) or `acholi`, or `?community=`, chooses whose content every endpoint answers with (clans or chiefdoms, districts, people, history, heritage, dictionary...). A signed-in member's own community (`user.community`) is used instead. See `docs/COMMUNITIES.md`. |
 | Sessions | None. `/api/v1/` never starts a PHP session or sets a cookie. |
 | Limits | Sign-in, registration, uploads, the translator and the assistant are rate limited (HTTP 429, table `rate_limits`). |
 | CORS | Open for the PWA and the dev server; `OPTIONS` pre-flights are answered. |
@@ -129,3 +130,13 @@ A member who chose a clan can join that clan's group. `user.clan_group` (in `/me
 | GET | `/i18n` | The Leb Lango phrases entered so far (`{ "English phrase": "Leb Lango" }`) |
 
 The older open-data endpoints documented at `/developers` keep working unchanged.
+
+## Communities (Lango, Acholi)
+
+| Method | Path | Notes |
+|---|---|---|
+| GET | `/communities` | The communities that are switched on (Admin, Communities): `{ data: [{ code, name, language, people, register, registers, leader, region, capital, words }], current, languages }`. `/ping` carries the same list |
+| POST | `/translate` | `text` and `from`, `to` (each `en` or a community code; older apps send `direction` instead). Between two communities' languages the answer has `likely: true` and `candidates`: matched through English, not checked |
+| GET | `/compare?q=` | Words of Lango and Acholi side by side, found through their English meanings. `q` may be an English word or a word of either language. → `{ data: { term, groups: [{ english, lango: [word], acholi: [word] }], available: { lango: n, acholi: n } } }`, each word `{ headword, english, pos, verified }`. Pairs are likely equivalents, never checked ones |
+| PATCH | `/me` | Also accepts `community` (`lango` or `acholi`): the member's clan details are kept for the community they leave and restored when they come back |
+| POST | `/auth/register`, `/auth/login` | Send `X-App-Community`: a new account belongs to that community, and signing in with it selects it |

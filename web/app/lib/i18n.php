@@ -16,6 +16,7 @@ function lang(): string
         if (!headers_sent() && !(defined('API_V1') && API_V1)) setcookie('lci_lang', $want, ['expires' => time() + 31536000, 'path' => BASE === '' ? '/' : BASE . '/', 'samesite' => 'Lax']);
     }
     $l = $_SESSION['lang'] ?? ($_COOKIE['lci_lang'] ?? 'en');
+    if (community() !== 'lango') return $l = 'en';   // Leb Lango wording belongs to the Lango community; another community's pages are in English
     return $l = ($l === 'lg' ? 'lg' : 'en');
 }
 
@@ -37,7 +38,7 @@ function __(string $s): string
         $tr[$h] = null;
     }
     if (lang() === 'lg' && !empty($tr[$h])) return (string)$tr[$h];
-    return $s;
+    return community() === 'lango' ? $s : community_words($s);
 }
 
 function &i18n_cache(): array

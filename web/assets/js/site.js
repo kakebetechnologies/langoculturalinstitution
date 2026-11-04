@@ -114,17 +114,17 @@
   var tf = $('#transform');
   if (tf) {
     var tin = $('#tx-in'), tout = $('#tx-out'), tunk = $('#tx-unk'), tgo = $('#tx-go');
-    var dirOf = function () { var r = $('input[name=dir]:checked', tf); return r ? r.value : 'en-lango'; };
+    var fromSel = $('#tx-from', tf), toSel = $('#tx-to', tf);
+    var nameOf = function (sel) { return sel.options[sel.selectedIndex].textContent; };
     var labels = function () {
-      var en2lg = dirOf() === 'en-lango';
-      $('#tx-in-label').textContent = en2lg ? 'English' : 'Leb Lango';
-      $('#tx-out-label').textContent = en2lg ? 'Leb Lango' : 'English';
+      $('#tx-in-label').textContent = nameOf(fromSel);
+      $('#tx-out-label').textContent = nameOf(toSel);
     };
     var run = function () {
       var text = tin.value.trim();
       if (!text) { tout.innerHTML = '<span class="trans__ph">The translation appears here.</span>'; tunk.textContent = ''; return; }
       tgo.disabled = true; tout.classList.add('busy');
-      fetch(LCI.base + '/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': LCI.csrf }, body: JSON.stringify({ text: text, direction: dirOf() }) })
+      fetch(LCI.base + '/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': LCI.csrf }, body: JSON.stringify({ text: text, from: fromSel.value, to: toSel.value }) })
         .then(function (r) { return r.json(); })
         .then(function (j) {
           if (j.error) { tout.textContent = j.error; tunk.textContent = ''; return; }
@@ -146,16 +146,20 @@
               tunk.appendChild(a); tunk.appendChild(document.createTextNode(' '));
             });
           }
-          if (history.replaceState) history.replaceState(null, '', '?dir=' + encodeURIComponent(dirOf()) + '&text=' + encodeURIComponent(text));
+          if (history.replaceState) history.replaceState(null, '', '?from=' + encodeURIComponent(fromSel.value) + '&to=' + encodeURIComponent(toSel.value) + '&text=' + encodeURIComponent(text));
         })
         .catch(function () { tout.textContent = 'Sorry — the translator could not be reached. Please try again.'; })
         .then(function () { tgo.disabled = false; tout.classList.remove('busy'); });
     };
     tf.addEventListener('submit', function (e) { e.preventDefault(); run(); });
-    $$('input[name=dir]', tf).forEach(function (r) { r.addEventListener('change', function () { labels(); if (tin.value.trim()) run(); }); });
+    [fromSel, toSel].forEach(function (sel) {
+      sel.addEventListener('change', function () {
+        if (fromSel.value === toSel.value) { var other = Array.prototype.find.call((sel === fromSel ? toSel : fromSel).options, function (o) { return o.value !== sel.value; }); if (other) (sel === fromSel ? toSel : fromSel).value = other.value; }
+        labels(); if (tin.value.trim()) run();
+      });
+    });
     $$('#tx-sugg button').forEach(function (b) {
       b.addEventListener('click', function () {
-        var r = $('input[name=dir][value=' + b.dataset.dir + ']', tf); if (r) r.checked = true;
         tin.value = b.dataset.text; labels(); run(); tin.focus();
       });
     });

@@ -6,6 +6,7 @@
 // show up in that admin screen ready to translate.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import api from './api';
+import { communityWords, useCommunity } from './community';
 import { setLangValue } from './lang';
 import { readJson, writeJson } from './localFiles';
 import STRINGS from './strings.json';
@@ -22,6 +23,7 @@ const hash = (s) => {
 export function I18nProvider({ children }) {
   const [lang, setLangState] = useState('en');
   const [dict, setDict] = useState({});
+  const { info } = useCommunity();
 
   useEffect(() => {
     (async () => {
@@ -57,11 +59,12 @@ export function I18nProvider({ children }) {
 
   const t = useCallback(
     (key, vars) => {
-      let out = lang === 'lg' && dict[key] ? dict[key] : key;
+      const translated = lang === 'lg' && info.code === 'lango' && dict[key];   // Leb Lango wording belongs to the Lango community
+      let out = translated ? dict[key] : communityWords(key, info);
       if (vars) for (const [k, v] of Object.entries(vars)) out = out.split(`{${k}}`).join(String(v));
       return out;
     },
-    [lang, dict],
+    [lang, dict, info],
   );
 
   const value = useMemo(() => ({ lang, setLang, t }), [lang, setLang, t]);

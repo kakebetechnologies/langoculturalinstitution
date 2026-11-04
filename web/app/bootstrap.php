@@ -41,12 +41,15 @@ require_once __DIR__ . '/lib/helpers.php';
 require_once __DIR__ . '/lib/i18n.php';
 require_once __DIR__ . '/lib/auth.php';
 require_once __DIR__ . '/lib/upload.php';
+require_once __DIR__ . '/lib/community_api.php';
+// Which community (Lango or Acholi) this visit is about; every query below this line reads that community's content.
+if (PHP_SAPI !== 'cli' && !API_V1) community_web_init();
 
 // After a deploy, brings the database up to date by itself (new tables or columns, one-time clean-ups): nobody has to run a script on the server.
 // config/schema_rev.txt (git-ignored, closed to the web) records the revision already applied; a lock stops two requests running it at once,
 // and a folder that cannot be written to simply skips this (the same update is available as php database/upgrade-cli.php).
 if (PHP_SAPI !== 'cli') {
-    $lciRev = '2026-10-31-lango-6';
+    $lciRev = '2026-11-04-communities-2';
     $lciMark = ROOT . '/config/schema_rev.txt';
     if (@file_get_contents($lciMark) !== $lciRev && is_writable(dirname($lciMark))) {
         $lciLock = @fopen($lciMark . '.lock', 'c');

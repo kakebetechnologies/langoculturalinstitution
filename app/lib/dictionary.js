@@ -3,9 +3,11 @@
 // ordinary keyboard (e for ε, o for ɔ, ng for ŋ) exactly like the website does.
 import { useEffect, useState } from 'react';
 import api from './api';
+import { getCommunity, useCommunity } from './community';
 import { readJson, removeFile, writeJson } from './localFiles';
 
-const FILE = 'dictionary.json';
+const fileFor = () => (getCommunity() === 'lango' ? 'dictionary.json' : `dictionary-${getCommunity()}.json`);   // one saved dictionary per community
+let loadedFor = 'lango';
 let store = null; // { version, at, entries: [[lango, english, pos, category, verified, community]] }
 let folded = null;
 const listeners = new Set();
@@ -21,8 +23,13 @@ function index() {
 }
 
 export async function loadOffline() {
+  if (loadedFor !== getCommunity()) {   // the community was switched: forget the other one's dictionary
+    store = null;
+    folded = null;
+    loadedFor = getCommunity();
+  }
   if (!store) {
-    store = await readJson(FILE);
+    store = await readJson(fileFor());
     if (store) index();
   }
   return store;
@@ -34,7 +41,7 @@ export async function downloadDictionary() {
   const { data } = await api.get('/dictionary/export', { params: store ? { version: store.version } : {}, timeout: 90000 });
   if (data.unchanged) return { count: store.entries.length, unchanged: true };
   store = { version: data.version, at: Date.now(), entries: data.entries };
-  await writeJson(FILE, store);
+  await writeJson(fileFor(), store);
   index();
   return { count: store.entries.length, unchanged: false };
 }
@@ -42,19 +49,20 @@ export async function downloadDictionary() {
 export function removeOffline() {
   store = null;
   folded = null;
-  removeFile(FILE);
+  removeFile(fileFor());
   listeners.forEach((l) => l());
 }
 
 /** `{ ready, count, at }` for the settings screen and the dictionary search. */
 export function useOfflineDictionary() {
   const [, bump] = useState(0);
+  const { community } = useCommunity();
   useEffect(() => {
     const l = () => bump((n) => n + 1);
     listeners.add(l);
     loadOffline().then(l);
     return () => listeners.delete(l);
-  }, []);
+  }, [community]);
   return { ready: !!store, count: store?.entries.length ?? 0, at: store?.at ?? null };
 }
 

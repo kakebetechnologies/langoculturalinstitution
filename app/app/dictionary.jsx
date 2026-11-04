@@ -15,6 +15,7 @@ import WordCard from '../components/WordCard';
 import { COLORS, FONTS, MAX_FONT_SCALE, RADIUS, SPACING } from '../constants/theme';
 import api, { errorMessage } from '../lib/api';
 import { browseOffline, searchOffline, useOfflineDictionary } from '../lib/dictionary';
+import { useCommunity } from '../lib/community';
 import { useT } from '../lib/i18n';
 import { isOffline } from '../lib/net';
 
@@ -22,6 +23,7 @@ const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
 export default function Dictionary() {
   const { t } = useT();
+  const { info } = useCommunity();
   const params = useLocalSearchParams();
   const offlineDict = useOfflineDictionary();
   const [q, setQ] = useState(typeof params.q === 'string' ? params.q : '');
@@ -66,7 +68,7 @@ export default function Dictionary() {
           </Pressable>
         ) : null}
       </View>
-      <Segmented value={dir} onChange={setDir} options={[{ value: 'all', label: t('Both') }, { value: 'lg', label: 'Leb Lango' }, { value: 'en', label: 'English' }]} style={{ marginTop: 10 }} />
+      <Segmented value={dir} onChange={setDir} options={[{ value: 'all', label: t('Both') }, { value: 'lg', label: info.language }, { value: 'en', label: 'English' }]} style={{ marginTop: 10 }} />
       {!q ? (
         <FlatList
           data={LETTERS}

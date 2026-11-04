@@ -55,3 +55,7 @@ npm-debug.log*
 
 # Play Store bundles built by EAS (download them from expo.dev; too big for git)
 *.aab
+
+# The Acholi dictionary data is a scan of a book that is under copyright (Blackings, LINCOM 2009): it must never be committed or deployed with the site.
+# Load it into a database with web/database/import-acholi-dictionary.php (see web/docs/COMMUNITIES.md).
+acholi-data/

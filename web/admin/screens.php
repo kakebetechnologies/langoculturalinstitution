@@ -222,7 +222,10 @@ function screen_settings(): void
     if (is_post()) {
         csrf_check();
         $err = [];
-        foreach ($groups as $g) foreach ($g as $k => $_) q('INSERT INTO settings (k,v) VALUES (?,?) ON DUPLICATE KEY UPDATE v=VALUES(v)', [$k, post($k)]);
+        foreach ($groups as $g) foreach ($g as $k => $_) {
+            $key = community() !== 'lango' && in_array($k, ['site_name', 'org_subtitle', 'site_tagline', 'clan_total'], true) ? community() . '.' . $k : $k;   // another community's own wording
+            q('INSERT INTO settings (k,v) VALUES (?,?) ON DUPLICATE KEY UPDATE v=VALUES(v)', [$key, post($k)]);
+        }
         foreach ($images as $k => $_) {
             try {
                 $up = save_upload($k, 'image');

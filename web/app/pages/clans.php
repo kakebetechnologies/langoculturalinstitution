@@ -65,7 +65,7 @@ page_start(__('Clan Explorer'), ['hero' => ['eyebrow' => __('Heritage'), 'title'
       <?php foreach ($districts as $d): ?><a class="pill <?= $dist === $d['slug'] ? 'on' : '' ?>" href="<?= e(url('clans', ['district' => $d['slug']])) ?>"><?= e($d['name']) ?></a><?php endforeach; ?>
     </div>
     <?php if ($rows): ?>
-      <p style="color:var(--muted)"><?= $registered ?> / <?= (int)setting('clan_total', '149') ?> <?php _e('clans on the website so far — more are being added'); ?> · <?= $total ?> <?php _e('shown'); ?></p>
+      <p style="color:var(--muted)"><?= $registered ?><?= ($clanTotal = (int)setting('clan_total', community() === 'lango' ? '149' : '0')) > 0 ? ' / ' . $clanTotal : '' ?> <?php _e('clans on the website so far — more are being added'); ?> · <?= $total ?> <?php _e('shown'); ?></p>
       <div class="grid g4">
         <?php foreach ($rows as $c): ?>
           <a class="tile reveal" href="<?= e(url('clans/' . $c['slug'])) ?>">

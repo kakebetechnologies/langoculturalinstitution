@@ -19,6 +19,7 @@ import { useFonts } from 'expo-font';
 import { COLORS } from '../constants/theme';
 import { loadServerAddress } from '../lib/api';
 import { AuthProvider, useAuth } from '../lib/auth';
+import { CommunityProvider } from '../lib/community';
 import { I18nProvider } from '../lib/i18n';
 import { useOfflineSync } from '../lib/outbox';
 import { usePushSetup } from '../lib/push';
@@ -68,10 +69,12 @@ export default function RootLayout() {
   if (!addressReady) return null;
 
   return (
-    <I18nProvider>
-      <AuthProvider>
-        <Navigator fontsLoaded={fontsLoaded} />
-      </AuthProvider>
-    </I18nProvider>
+    <CommunityProvider>
+      <I18nProvider>
+        <AuthProvider>
+          <Navigator fontsLoaded={fontsLoaded} />
+        </AuthProvider>
+      </I18nProvider>
+    </CommunityProvider>
   );
 }

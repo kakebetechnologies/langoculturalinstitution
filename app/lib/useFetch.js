@@ -3,6 +3,7 @@
 // loading, error and empty states the same way. `error` is only set when there is nothing at all to show.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import api, { errorMessage } from './api';
+import { useCommunity } from './community';
 import { readJson, writeJson } from './localFiles';
 
 const hash = (s) => {
@@ -14,8 +15,9 @@ const hash = (s) => {
 export function useFetch(path, { params, enabled = true, cache = true } = {}) {
   const [state, setState] = useState({ data: null, loading: enabled, refreshing: false, error: null, stale: false });
   const latest = useRef(0);
+  const { community } = useCommunity();   // each community has its own saved copy, and a switch loads the new one
   const paramsKey = JSON.stringify(params ?? {});
-  const cacheName = `cache/${hash(path + paramsKey)}.json`;
+  const cacheName = `cache/${hash(community + path + paramsKey)}.json`;
 
   const load = useCallback(
     async (mode = 'load') => {

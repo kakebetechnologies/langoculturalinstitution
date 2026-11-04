@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/clan_group_api.php';
 require_once __DIR__ . '/google_auth.php';
+require_once __DIR__ . '/community_api.php';
 require_once __DIR__ . '/daily_api.php';
 require_once __DIR__ . '/media_api.php';
 
@@ -146,6 +147,7 @@ function api_user_json(array $u): array
         'points' => (int)$u['points'], 'level' => contributor_level((int)$u['points']), 'badges' => user_badges((int)$u['id']),
         'counts' => ['total' => $n(''), 'approved' => $n("AND status IN ('approved','published')"), 'pending' => $n("AND status IN ('pending','under_review','needs_info')")],
         'joined' => $u['created_at'], 'clan_group' => clan_group_summary($u), 'streaks' => streaks_json($u),
+        'community' => isset(communities()[$u['culture'] ?? '']) ? $u['culture'] : community_default(),
         'google' => !empty($u['google_sub']),   // signed up with Google: no password of their own, so deleting the account is confirmed with the email address
     ];
 }
@@ -270,7 +272,7 @@ function api_create_contribution(array $u): array
     $row = ['code' => $code, 'user_id' => $u['id'], 'name' => mb_substr($u['name'], 0, 150), 'email' => $u['email'], 'phone' => $u['phone'], 'type' => $type, 'title' => mb_substr($title, 0, 220), 'description' => mb_substr($desc, 0, 8000),
         'clan_id' => $clanId, 'contributor_clan_id' => $clanId, 'contributor_clan_other' => $clanOther, 'district_id' => (int)($in['district_id'] ?? 0) ?: null, 'location_text' => mb_substr((string)($in['location_text'] ?? ''), 0, 190) ?: null,
         'lat' => $lat, 'lng' => $lng, 'observed_on' => preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)($in['observed_on'] ?? '')) ? $in['observed_on'] : null,
-        'media_file' => $file, 'media_kind' => $mkind, 'rights' => in_array($in['rights'] ?? '', ['retain', 'cc_by', 'lci'], true) ? $in['rights'] : 'retain', 'client_ref' => $ref ?: null];
+        'culture' => community(), 'media_file' => $file, 'media_kind' => $mkind, 'rights' => in_array($in['rights'] ?? '', ['retain', 'cc_by', 'lci'], true) ? $in['rights'] : 'retain', 'client_ref' => $ref ?: null];
     if ($isWord) $row += ['word_cat' => $prov ? 'proverb' : (isset(WORD_CATS[$in['word_cat'] ?? '']) ? $in['word_cat'] : null), 'word_pos' => $prov ? 'phrase' : (isset(WORD_POS[$in['word_pos'] ?? '']) ? $in['word_pos'] : null),
         'example_lg' => $prov ? null : (mb_substr((string)($in['example_lg'] ?? ''), 0, 500) ?: null), 'word_note' => $prov ? (mb_substr((string)($in['note'] ?? ''), 0, 500) ?: null) : null, 'credit' => !empty($in['credit']) ? 1 : 0];
     insert('contributions', $row);
@@ -284,12 +286,13 @@ function api_app(string $res, array $seg): void
     $m = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $id = $seg[3] ?? ''; $sub = $seg[4] ?? '';
     $user = api_user();
+    community(community_pick($user));   // everything below reads and writes this community's tables
     daily_api($res, $id, $sub, $m, $user);   // streaks, daily word, weekly challenge, leaderboards (exits when it handles the request)
     media_api($res, $id, $sub, $m, $user);   // podcast, radio, Bible and how to give (same)
 
     switch ($res) {
         case 'ping':
-            json_out(['status' => 'ok', 'name' => setting('site_name', 'Lango'), 'version' => 'v1', 'google' => google_enabled(), 'time' => date('c')]);
+            json_out(['status' => 'ok', 'name' => setting('site_name', 'Lango'), 'version' => 'v1', 'google' => google_enabled(), 'time' => date('c'), 'community' => community(), 'communities' => community_list()]);
 
         /* ---------- accounts ---------- */
         case 'auth':
@@ -307,7 +310,7 @@ function api_app(string $res, array $seg): void
                 if (($in['clan_id'] ?? '') === 'other' && !$clanOther) $e['clan_other'] = 'Please type the name of your clan.';
                 if ($e) api_err(reset($e), 422, $e);
                 $uid = insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'clan_id' => $clanId, 'clan_other' => $clanOther,
-                    'country' => mb_substr((string)($in['country'] ?? ''), 0, 80) ?: null, 'phone' => mb_substr((string)($in['phone'] ?? ''), 0, 40) ?: null]);
+                    'country' => mb_substr((string)($in['country'] ?? ''), 0, 80) ?: null, 'phone' => mb_substr((string)($in['phone'] ?? ''), 0, 40) ?: null, 'culture' => community()]);
                 $tok = api_issue_token($uid, (string)($in['device_name'] ?? 'Lango app'));
                 json_out(['token' => $tok, 'user' => api_user_json(one('SELECT * FROM users WHERE id=?', [$uid]))], 201);
             }
@@ -326,6 +329,7 @@ function api_app(string $res, array $seg): void
                 }
                 if (!$row || !password_verify($pw, $row['password_hash'])) api_err('Incorrect email, phone or password.', 422, ['login' => 'Incorrect email, phone or password.']);
                 q('UPDATE users SET last_login=NOW() WHERE id=?', [$row['id']]);
+                $row = member_set_community($row, community());   // the community chosen on the sign-in screen (the member can change it later in Settings)
                 json_out(['token' => api_issue_token((int)$row['id'], (string)($in['device_name'] ?? 'Lango app')), 'user' => api_user_json($row)]);
             }
             if ($id === 'token' || $id === 'logout') {
@@ -355,7 +359,7 @@ function api_app(string $res, array $seg): void
                 if (val('SELECT COUNT(*) FROM users WHERE email=? OR google_sub=?', [$row['email'], $row['google_sub']])) api_err('There is already an account for this Google address. Please continue with Google again.', 409);
                 $name = trim((string)($in['name'] ?? '')) ?: (string)$row['name'] ?: (string)strstr((string)$row['email'], '@', true);
                 $uid = insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $row['email'], 'password_hash' => password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT), 'role' => 'contributor',
-                    'clan_id' => $clanId, 'clan_other' => $clanOther, 'google_sub' => $row['google_sub'], 'country' => mb_substr((string)($in['country'] ?? ''), 0, 80) ?: null]);
+                    'clan_id' => $clanId, 'clan_other' => $clanOther, 'google_sub' => $row['google_sub'], 'country' => mb_substr((string)($in['country'] ?? ''), 0, 80) ?: null, 'culture' => community()]);
                 q('DELETE FROM google_codes WHERE code_hash=?', [$row['code_hash']]);
                 json_out(['token' => api_issue_token($uid, $device), 'user' => api_user_json(one('SELECT * FROM users WHERE id=?', [$uid])), 'is_new_user' => true], 201);
             }
@@ -367,6 +371,10 @@ function api_app(string $res, array $seg): void
                 if ($m === 'GET') json_out(['data' => api_user_json($u)]);
                 if ($m === 'PATCH' || $m === 'PUT' || $m === 'POST') {
                     $in = api_in(); $data = [];
+                    if (isset($in['community']) && isset(communities()[(string)$in['community']]) && $in['community'] !== ($u['culture'] ?? 'lango')) {   // Settings: Lango or Acholi
+                        $u = member_set_community($u, (string)$in['community']);
+                        community((string)$u['culture']);
+                    }
                     if (isset($in['name'])) { $nm = trim((string)$in['name']); if ($nm === '') api_err('Please enter your name.', 422, ['name' => 'Please enter your name.']); $data['name'] = mb_substr($nm, 0, 150); }
                     if (array_key_exists('phone', $in)) $data['phone'] = mb_substr(trim((string)$in['phone']), 0, 40) ?: null;
                     if (array_key_exists('country', $in)) $data['country'] = mb_substr(trim((string)$in['country']), 0, 80) ?: null;
@@ -573,11 +581,20 @@ function api_app(string $res, array $seg): void
             $rows = all("SELECT p.*, c.name clan FROM proverbs p LEFT JOIN clans c ON c.id=p.clan_id WHERE p.status='published' ORDER BY p.id DESC LIMIT 200");
             json_out(['data' => array_map(fn($r) => ['id' => (int)$r['id'], 'lango' => $r['lango'], 'english' => $r['english'], 'meaning' => $r['meaning'], 'verified' => (bool)$r['verified'], 'credit' => $r['contributor'] ?: ($r['clan'] ? $r['clan'] . ' clan' : null)], $rows)]);
 
+        case 'communities':
+            json_out(['data' => community_list(), 'current' => community(), 'languages' => translation_languages()]);
+
+        case 'compare':   // words of Lango and Acholi side by side, matched through their English meanings (never presented as checked)
+            api_throttle('compare', 120, 600);
+            $r = compare_words(get('q'));
+            json_out(['data' => $r, 'note' => 'Matched through English meanings; likely equivalents, not checked by language experts.']);
+
         case 'welcome':   // the photographs of the opening screen, set in Admin, Content, App opening photos (no sign-in needed: it is the first screen)
             json_out(['data' => array_map(fn($p) => ['id' => (int)$p['id'], 'image' => api_abs($p['image']), 'caption' => $p['title'], 'credit' => $p['credit'], 'focus' => $p['focus']],
                 all("SELECT * FROM welcome_photos WHERE status='published' AND image<>'' ORDER BY sort, id LIMIT 12"))]);
 
         case 'greetings':
+            if (community() !== 'lango') json_out(['data' => [], 'source' => null]);   // the worked examples of the Practical Lango Grammar are Lango's
             json_out(['data' => array_map(fn($g) => ['lango' => $g[0], 'english' => $g[1]], require ROOT . '/app/data/greetings.php'), 'source' => 'Practical Lango Grammar']);
 
         case 'translate':
@@ -585,7 +602,11 @@ function api_app(string $res, array $seg): void
             $in = $m === 'POST' ? api_in() : $_GET;
             $text = mb_substr(trim((string)($in['text'] ?? '')), 0, 600);
             if ($text === '') api_err('Type something to translate.', 422, ['text' => 'Type something to translate.']);
-            json_out(['data' => lango_translate($text, ($in['direction'] ?? '') === 'lango-en' ? 'lango-en' : 'en-lango'), 'note' => 'Dictionary-based translation; not a full machine-translation model.']);
+            $langs = array_column(translation_languages(), 'code');   // from and to: 'en' or a community's code (older apps send direction=en-lango or lango-en)
+            $from = (string)($in['from'] ?? ''); $to = (string)($in['to'] ?? '');
+            if ($from === '' || $to === '') { $from = ($in['direction'] ?? '') === 'lango-en' ? community() : 'en'; $to = $from === 'en' ? community() : 'en'; }
+            if (!in_array($from, $langs, true) || !in_array($to, $langs, true) || $from === $to) api_err('Choose two different languages.', 422, ['to' => 'Choose two different languages.']);
+            json_out(['data' => translate_between($text, $from, $to), 'languages' => translation_languages(), 'note' => 'Dictionary-based translation; not a full machine-translation model. Between the languages of two communities the result is a likely equivalent matched through English.']);
 
         case 'assistant':
             if ($m !== 'POST') api_err('Method not allowed.', 405);

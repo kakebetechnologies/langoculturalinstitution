@@ -94,7 +94,7 @@ if (is_post()) {
     if ($err) { flash($err, 'error'); redirect($self); }
 
     if ($makeAccount) {
-        insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'clan_id' => $clanId, 'clan_other' => $clanOther, 'phone' => post('phone') ?: null]);
+        insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'clan_id' => $clanId, 'clan_other' => $clanOther, 'phone' => post('phone') ?: null, 'culture' => community()]);
         login_user($email, $pw);
         $u = user();
     }

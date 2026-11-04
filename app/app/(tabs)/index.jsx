@@ -30,6 +30,7 @@ import { COLORS, FONTS, MAX_FONT_SCALE, RADIUS, SHADOW, SHADOW_SM, SPACING, TONE
 import { useAuth } from '../../lib/auth';
 import { useDailyCheckIn } from '../../lib/checkin';
 import { dayParts, firstName, fmtTime } from '../../lib/format';
+import { useCommunity } from '../../lib/community';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
 
@@ -53,6 +54,9 @@ const CARD_TONES = ['red', 'sky', 'amber', 'green'];
 
 export default function Home() {
   const { t } = useT();
+  const { features } = useCommunity();
+  const explore = EXPLORE;
+  const listen = LISTEN.filter((x) => (x.href === '/radio' ? features.radio : x.href === '/podcast' ? features.podcast : x.href === '/bible' ? features.bible : true));
   const insets = useSafeAreaInsets();
   const { user, refresh } = useAuth();
   const { milestone, clear } = useDailyCheckIn(user, refresh);
@@ -141,7 +145,7 @@ export default function Home() {
             </Pressable>
           ) : null}
 
-          <RadioCard style={{ marginTop: SPACING.md }} />
+          {features.radio ? <RadioCard style={{ marginTop: SPACING.md }} /> : null}
 
           {user ? (
             <Card onPress={() => router.push('/(tabs)/me')} style={styles.stats}>
@@ -185,20 +189,20 @@ export default function Home() {
 
           <SectionHeader title={t('Explore')} actionLabel={t('All')} onAction={() => router.push('/(tabs)/explore')} style={{ marginTop: SPACING.lg }} />
           <View style={styles.grid}>
-            {EXPLORE.map((x) => (
+            {explore.map((x) => (
               <IconTile key={x.href} icon={x.icon} label={t(x.label)} tone={x.tone} onPress={() => router.push(x.href)} />
             ))}
           </View>
 
           <SectionHeader title={t('Listen and read')} style={{ marginTop: SPACING.md }} />
           <View style={styles.grid}>
-            {LISTEN.map((x) => (
+            {listen.map((x) => (
               <IconTile key={x.href} icon={x.icon} label={t(x.label)} tone={x.tone} onPress={() => router.push(x.href)} />
             ))}
           </View>
         </View>
 
-        <MomentsStrip style={{ marginTop: SPACING.md }} />
+        {features.moments ? <MomentsStrip style={{ marginTop: SPACING.md }} /> : null}
 
         <StateView loading={loading} error={error} onRetry={retry}>
           {home ? (
@@ -245,7 +249,7 @@ export default function Home() {
 
               <View style={styles.body}>
                 <SectionHeader title={t('Today in Lango')} style={{ marginBottom: 0 }} />
-                <ChallengeCard challenge={home.challenge} />
+                {features.daily ? <ChallengeCard challenge={home.challenge} /> : null}
                 <StoryCard story={home.story} />
                 <ClanOfWeekCard clan={home.clan_of_week} />
                 <PhotoCard photo={home.photo_of_day} />

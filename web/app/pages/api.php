@@ -7,7 +7,7 @@ require_once ROOT . '/app/lib/app_api.php';
 /* CORS preflight, for the installable web version (PWA) of the Lango app */
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With, X-Auth-Token, X-App-Lang');
+    header('Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With, X-Auth-Token, X-App-Lang, X-App-Community');
     header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
     header('Access-Control-Max-Age: 86400');
     http_response_code(204);
@@ -45,7 +45,11 @@ if ($a === 'translate') {
     if (!throttle('translate', 60, 600)) json_out(['error' => __('You are translating very quickly — please wait a moment.')], 429);
     $text = mb_substr(trim((string)($body['text'] ?? '')), 0, 600);
     if ($text === '') json_out(['error' => 'No text provided.'], 400);
-    json_out(lango_translate($text, ($body['direction'] ?? '') === 'lango-en' ? 'lango-en' : 'en-lango'));
+    $langs = array_column(translation_languages(), 'code');
+    $from = (string)($body['from'] ?? ''); $to = (string)($body['to'] ?? '');
+    if ($from === '' || $to === '') { $from = ($body['direction'] ?? '') === 'lango-en' ? community() : 'en'; $to = $from === 'en' ? community() : 'en'; }
+    if (!in_array($from, $langs, true) || !in_array($to, $langs, true) || $from === $to) json_out(['error' => 'Choose two different languages.'], 422);
+    json_out(translate_between($text, $from, $to));
 }
 
 if ($a !== 'v1') json_out(['name' => 'Lango Open Data API', 'version' => 'v1', 'docs' => url('developers')], $a === '' ? 200 : 404);

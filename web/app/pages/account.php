@@ -168,7 +168,7 @@ if ($sub === 'register') {
         elseif (val('SELECT COUNT(*) FROM users WHERE email=?', [$email])) $err = __('An account with this email already exists. Try signing in.');
         if ($err) { flash($err, 'error'); redirect($back); }
         insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $email, 'password_hash' => password_hash($pw, PASSWORD_DEFAULT), 'role' => 'contributor', 'clan_id' => $clanId, 'clan_other' => $clanOther,
-            'country' => post('country') ?: null, 'phone' => post('phone') ?: null]);
+            'country' => post('country') ?: null, 'phone' => post('phone') ?: null, 'culture' => community()]);
         clear_old();
         login_user($email, $pw);
         flash(__('Welcome to the Lango community!'));
@@ -208,7 +208,7 @@ if ($sub === 'google') {
         if ($err) { flash($err, 'error'); redirect('account/google'); }
         $name = trim(post('name')) ?: (string)$g['name'] ?: (string)strstr((string)$g['email'], '@', true);
         $uid = insert('users', ['name' => mb_substr($name, 0, 150), 'email' => $g['email'], 'password_hash' => password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT), 'role' => 'contributor',
-            'clan_id' => $clanId, 'clan_other' => $clanOther, 'google_sub' => $g['sub']]);
+            'clan_id' => $clanId, 'clan_other' => $clanOther, 'google_sub' => $g['sub'], 'culture' => community()]);
         unset($_SESSION['gw_new']);
         login_member(one('SELECT * FROM users WHERE id=?', [$uid]));
         flash(__('Welcome to the Lango community!'));

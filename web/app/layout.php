@@ -66,10 +66,21 @@ function icon(string $n, string $cls = ''): string
 
 function nav_items(): array
 {
+    if (community() !== 'lango') {   // another community: only what it has (no Bible, radio, media or library of Lango's)
+        return [
+            [__('Lango'), 'about', [[__('About Lango'), 'about'], [__('History'), 'history'], [__('Districts'), 'districts'], [__('Notable Langos'), 'people']]],
+            [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols']]],
+            [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], ['Compare Lango and Acholi', 'language/compare'], [__('Suggest a Word'), 'contribute?type=language']]],
+            [__('Library'), 'assistant', [[__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
+            [__('News & Events'), 'news', [[__('News & Blog'), 'news'], [__('Events'), 'events']]],
+            [__('Contribute'), 'contribute', []],
+            [__('Contact'), 'contact', []],
+        ];
+    }
     return [
         [__('Lango'), 'about', [[__('About Lango'), 'about'], [__('History'), 'history'], [__('Districts'), 'districts'], [__('Notable Langos'), 'people']]],
         [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols'], [__('Biodiversity'), 'species']]],
-        [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], [__('Learn Leb Lango'), 'language/lessons'], [__('Suggest a Word'), 'contribute?type=language']]],
+        [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], [__('Learn Leb Lango'), 'language/lessons'], ['Compare Lango and Acholi', 'language/compare'], [__('Suggest a Word'), 'contribute?type=language']]],
         [__('Library'), 'library', [[__('Library'), 'library'], [__('Documents'), 'library/documents'], [__('Media Center'), 'media'], [__('Lango Bible'), 'bible'], [__('Professionals'), 'professionals'], [__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
         [__('News & Events'), 'news', [[__('News & Blog'), 'news'], [__('Events'), 'events']]],
         [__('Contribute'), 'contribute', []],
@@ -104,7 +115,7 @@ function page_start(string $title, array $o = []): void
 <link rel="stylesheet" href="<?= e(asset('assets/css/site.css')) ?>">
 <?php if (!empty($o['leaflet'])): ?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"><?php endif; ?>
 </head>
-<body class="<?= e($o['class'] ?? '') ?>">
+<body class="<?= e(trim(($o['class'] ?? '') . ' community-' . community())) ?>">
 <a class="skip" href="#main"><?php _e('Skip to content'); ?></a>
 <div class="site">
 <div class="flagbar" aria-hidden="true"></div>
@@ -117,7 +128,8 @@ function page_start(string $title, array $o = []): void
     <?php foreach (['facebook' => 'facebook', 'x' => 'x-social', 'youtube' => 'youtube', 'instagram' => 'instagram'] as $k => $ic): if (setting($k)): ?>
       <a class="topbar__soc" href="<?= e(setting($k)) ?>" target="_blank" rel="noopener" aria-label="<?= e(ucfirst($k)) ?>"><?= icon($ic) ?></a>
     <?php endif; endforeach; ?>
-    <span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>" hreflang="en">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>" hreflang="luo">Leb Lango</a></span>
+    <span class="commsw" role="group" aria-label="Community"><?php foreach (communities() as $code => $ci): ?><a href="<?= e($here . '?community=' . $code) ?>" class="<?= community() === $code ? 'on' : '' ?>"><?= e($ci['name']) ?></a><?php endforeach; ?></span>
+    <?php if (community() === 'lango'): ?><span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>" hreflang="en">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>" hreflang="luo">Leb Lango</a></span><?php endif; ?>
     <?php if (user()): ?><a href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(explode(' ', user()['name'])[0]) ?></a>
     <?php else: ?><a href="<?= e(url('account/login')) ?>"><?php _e('Sign in'); ?></a><?php endif; ?>
   </div>
@@ -131,7 +143,8 @@ function page_start(string $title, array $o = []): void
       </li>
     <?php endforeach; ?>
     <li class="nav__foot">
-      <span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>">Leb Lango</a></span>
+      <span class="commsw" role="group" aria-label="Community"><?php foreach (communities() as $code => $ci): ?><a href="<?= e($here . '?community=' . $code) ?>" class="<?= community() === $code ? 'on' : '' ?>"><?= e($ci['name']) ?></a><?php endforeach; ?></span>
+      <?php if (community() === 'lango'): ?><span class="langsw" role="group" aria-label="Language"><a href="<?= e($here . '?lang=en') ?>" class="<?= !$isLg ? 'on' : '' ?>">English</a><i>/</i><a href="<?= e($here . '?lang=lg') ?>" class="<?= $isLg ? 'on' : '' ?>">Leb Lango</a></span><?php endif; ?>
       <?php if (user()): ?><a class="nav__acct" href="<?= e(url('account')) ?>"><?= icon('user') ?> <?= e(user()['name']) ?></a>
       <?php else: ?><a class="nav__acct" href="<?= e(url('account/login')) ?>"><?= icon('user') ?> <?php _e('Sign in'); ?></a><?php endif; ?>
       <a class="btn btn--primary btn--block" href="<?= e(url(user() ? 'account' : 'contribute')) ?>"><?= icon(user() ? 'user' : 'camera') ?> <?= user() ? __('My culture') : __('Share what you know') ?></a>

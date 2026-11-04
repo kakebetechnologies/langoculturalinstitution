@@ -10,12 +10,14 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppText from '../../components/AppText';
 import Button from '../../components/Button';
+import CommunitySwitch from '../../components/CommunitySwitch';
 import GoogleButton from '../../components/GoogleButton';
 import Logo from '../../components/Logo';
 import PhotoSlideshow from '../../components/PhotoSlideshow';
 import { OPENING } from '../../constants/moments';
 import { COLORS, FONTS, RADIUS, SPACING } from '../../constants/theme';
 import { isTestServer } from '../../lib/api';
+import { useCommunity } from '../../lib/community';
 import { useT } from '../../lib/i18n';
 import { useFetch } from '../../lib/useFetch';
 
@@ -31,6 +33,7 @@ const shortCredit = (c) =>
 
 export default function Welcome() {
   const { t } = useT();
+  const { info } = useCommunity();
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const { next } = useLocalSearchParams();
@@ -73,9 +76,11 @@ export default function Welcome() {
         <View style={{ flex: 1 }} />
         <View style={styles.brand}>
           <Logo size={58} tile />
-          <AppText style={styles.wordmark}>Lango</AppText>
+          <AppText style={styles.wordmark}>{info.name}</AppText>
           <AppText style={styles.tagline}>{t('Your culture. Your clan. Your language.')}</AppText>
         </View>
+
+        <CommunitySwitch onDark style={{ marginBottom: SPACING.sm }} />
 
         <View style={styles.buttons}>
           <GoogleButton next={params.next} divider={false} />

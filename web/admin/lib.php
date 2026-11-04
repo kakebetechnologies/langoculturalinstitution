@@ -29,6 +29,7 @@ function special_modules(): array
         'clan_requests' => ['Clan requests', 'users', ADM_CONTENT, 'Heritage'],
         'clan_messages' => ['Clan messages', 'chat', ADM_STAFF, 'Moderation'],
         'bible_import'  => ['Import Bible text', 'upload', ADM_CONTENT, 'Listen & read'],
+        'communities'   => ['Communities', 'globe', ADM_ALL, 'System'],
         'settings'      => ['Site settings', 'settings', ADM_ALL, 'System'],
         'translations'  => ['Translations', 'globe', ['super_admin', 'admin', 'editor'], 'System'],
         'audit'         => ['Audit log', 'list', ADM_ALL, 'System'],
@@ -89,6 +90,7 @@ function admin_start(string $title, string $active, string $actions = ''): void
 </head><body>
 <aside class="side" id="side">
   <a class="side__brand" href="<?= e(aurl()) ?>"><?= logo_url() ? '<img class="mark-img" src="' . e(logo_url()) . '" alt="">' : '<span class="mark">L</span>' ?><span><b>Lango Admin</b><small><?= e(setting('site_name', 'Lango Cultural Institution')) ?></small></span></a>
+  <div class="side__comm"><small>Editing</small><span><?php foreach (communities(true) as $code => $ci): ?><a href="<?= e(url('admin/', ['community' => $code] + array_diff_key($_GET, ['community' => 1]))) ?>" class="<?= community() === $code ? 'on' : '' ?>"><?= e($ci['name']) ?></a><?php endforeach; ?></span></div>
   <nav>
     <?php foreach ($order as $g): if (empty($groups[$g])) continue; ?>
       <div class="side__group"><?= e($g) ?></div>
