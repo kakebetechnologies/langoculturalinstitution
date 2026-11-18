@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MyCulture App: investor summary</title>
+<style>
+@font-face { font-family: 'Clarity'; font-weight: 400; src: url('fonts/ClarityCity_400Regular.ttf'); }
+@font-face { font-family: 'Clarity'; font-weight: 600; src: url('fonts/ClarityCity_600SemiBold.ttf'); }
+@font-face { font-family: 'Clarity'; font-weight: 700; src: url('fonts/ClarityCity_700Bold.ttf'); }
+@font-face { font-family: 'Clarity'; font-weight: 800; src: url('fonts/ClarityCity_800ExtraBold.ttf'); }
+@page { size: A4; margin: 0; }
+:root { --ink: #15171a; --muted: #5b6168; --line: #e4e0d6; --cream: #faf6ec; --red: #ee1a26; --yellow: #fddd16; --sky: #00adf1; --grey: #8e9c9d; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #fff; }
+body { font-family: 'Clarity', 'Segoe UI', Arial, sans-serif; color: var(--ink); font-size: 8.7pt; line-height: 1.42; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 210mm; height: 297mm; padding: 9.5mm 13mm 8mm; position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; }
+.page:last-child { page-break-after: auto; }
+.top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 2.4mm; border-bottom: 1.4px solid var(--ink); margin-bottom: 3mm; }
+.brand { display: flex; align-items: center; gap: 2.6mm; font-weight: 800; font-size: 11.5pt; letter-spacing: -.01em; }
+.brand img { height: 9.5mm; width: auto; }
+.top .meta { font-size: 7.4pt; color: var(--muted); text-align: right; line-height: 1.3; }
+.bar { height: 1.2mm; display: flex; margin-bottom: 3mm; }
+.bar i { flex: 1; } .bar i:nth-child(1){background:var(--ink)} .bar i:nth-child(2){background:var(--red)} .bar i:nth-child(3){background:var(--yellow)} .bar i:nth-child(4){background:var(--sky)}
+.eyebrow { font-size: 7pt; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--red); margin-bottom: 1.6mm; }
+h1 { font-size: 21pt; line-height: 1.08; letter-spacing: -.025em; font-weight: 800; margin-bottom: 2mm; }
+h2 { font-size: 14.5pt; line-height: 1.12; letter-spacing: -.02em; font-weight: 800; margin-bottom: 1.6mm; }
+h3 { font-size: 7.4pt; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-bottom: 1.4mm; }
+h4 { font-size: 9pt; font-weight: 700; line-height: 1.25; margin-bottom: .6mm; }
+p { margin-bottom: 1.8mm; }
+.lead { font-size: 9pt; line-height: 1.42; color: #2a2e33; }
+.muted { color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 2.6mm 0 3.4mm; }
+.stats div { padding: 1.8mm 2.4mm; border-left: 1px solid var(--line); }
+.stats div:first-child { border-left: 0; padding-left: 0; }
+.stats b { display: block; font-size: 14.5pt; line-height: 1.05; font-weight: 800; letter-spacing: -.02em; }
+.stats span { font-size: 7.4pt; color: var(--muted); line-height: 1.25; display: block; margin-top: .5mm; }
+.cols { display: grid; grid-template-columns: 1fr 57mm; gap: 6mm; }
+.feat { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm; margin: 1.6mm 0 2mm; }
+.feat div { background: var(--cream); border-radius: 2.2mm; padding: 2mm 2.6mm; }
+.feat svg, .card svg, .aud svg { width: 4.2mm; height: 4.2mm; color: var(--red); display: block; margin-bottom: .6mm; }
+.feat h4 { font-size: 8.6pt; } .feat p { font-size: 7.9pt; color: var(--muted); margin: 0; line-height: 1.35; }
+.trust { display: flex; flex-wrap: wrap; gap: 1.6mm 2.4mm; font-size: 7.6pt; margin-top: 1mm; }
+.trust span { display: inline-flex; align-items: center; gap: 1.2mm; }
+.trust span:before { content: ''; width: 1.8mm; height: 1.8mm; border-radius: 50%; background: var(--yellow); box-shadow: inset 0 0 0 .4mm var(--ink); }
+.phones { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4mm 2.6mm; align-content: start; }
+.ph { text-align: center; }
+.ph .f { border: .9mm solid var(--ink); border-radius: 4.2mm; overflow: hidden; background: #fff; box-shadow: 0 1.2mm 2.6mm rgba(0,0,0,.14); }
+.ph img { display: block; width: 100%; }
+.ph small { display: block; font-size: 6.8pt; color: var(--muted); margin-top: 1mm; font-weight: 600; }
+.sec { margin-top: 3.2mm; }
+.aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+.aud-grid > div > h3 { border-bottom: 1px solid var(--line); padding-bottom: 1mm; margin-bottom: 1.6mm; }
+.aud { display: grid; grid-template-columns: 5.2mm 1fr; gap: 0 2.4mm; margin-bottom: 1.5mm; }
+.aud svg { margin: .6mm 0 0; width: 4.6mm; height: 4.6mm; }
+.aud h4 { font-size: 8.6pt; } .aud p { font-size: 7.9pt; color: var(--muted); margin: 0; line-height: 1.35; }
+.foot span:last-child { white-space: nowrap; }
+.foot { margin-top: auto; padding-top: 2.4mm; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 6mm; font-size: 6.9pt; color: var(--muted); line-height: 1.3; }
+/* page 2 */
+.arch { display: grid; grid-template-columns: 1fr 58mm; gap: 6mm; margin: 2.4mm 0 0; align-items: stretch; }
+.layers { display: flex; flex-direction: column; gap: 1.6mm; }
+.layer { border-radius: 2.2mm; padding: 1.4mm 3mm; flex: 1; display: grid; grid-template-columns: 27mm 1fr; gap: 3mm; align-items: center; }
+.layer b { font-size: 7pt; letter-spacing: .06em; text-transform: uppercase; font-weight: 800; line-height: 1.25; }
+.layer span { font-size: 7.9pt; line-height: 1.35; }
+.l3 { background: var(--ink); color: #fff; } .l3 b { color: var(--yellow); }
+.l2 { background: var(--yellow); } .l1 { background: var(--cream); border: 1px solid var(--line); }
+.chips { background: var(--cream); border-radius: 2.2mm; padding: 1.8mm 3mm; }
+.chips h3 { margin-bottom: 1.2mm; }
+.chip { display: flex; align-items: center; justify-content: space-between; border-radius: 1.8mm; padding: 1.3mm 2.4mm; margin-bottom: 1.2mm; font-weight: 700; font-size: 8.4pt; background: #fff; border: 1px solid var(--line); }
+.chip em { font-style: normal; font-size: 6.6pt; letter-spacing: .06em; text-transform: uppercase; font-weight: 800; padding: .5mm 1.6mm; border-radius: 3mm; }
+.chip .live { background: #e1f4e6; color: #146c2e; } .chip .built { background: #fff1b8; color: #7a5b00; }
+.chip.next { border-style: dashed; color: var(--muted); font-weight: 600; background: transparent; }
+.chips small { display: block; font-size: 7.2pt; color: var(--muted); line-height: 1.3; margin-top: 1mm; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.2mm; margin-top: 1.6mm; }
+.card { border: 1px solid var(--line); border-radius: 2.2mm; padding: 2mm 2.8mm 2.2mm; display: grid; grid-template-columns: 4.4mm 1fr; column-gap: 1.6mm; align-items: center; }
+.card svg { margin: 0 !important; }
+.card p { grid-column: 1 / -1; margin-top: .8mm !important; }
+.card p { font-size: 7.9pt; color: var(--muted); margin: 0; line-height: 1.37; }
+.tx { display: grid; grid-template-columns: 74mm 1fr; gap: 6mm; align-items: center; background: var(--ink); color: #fff; border-radius: 2.6mm; padding: 2.8mm 3.6mm; margin-top: 3mm; }
+.tx .flow { display: grid; grid-template-columns: 1fr 5mm 1fr 5mm 1fr; align-items: center; text-align: center; gap: 0; }
+.tx .flow div { background: rgba(255,255,255,.1); border-radius: 1.8mm; padding: 2mm 1mm; }
+.tx .flow small { display: block; font-size: 6.2pt; letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); font-weight: 800; }
+.tx .flow b { font-size: 12.5pt; font-weight: 800; line-height: 1.15; }
+.tx .flow i { font-style: normal; text-align: center; color: var(--yellow); font-weight: 800; }
+.tx p { font-size: 8pt; line-height: 1.4; margin: 0; color: #e9e9e9; }
+.tx p b { color: #fff; }
+.road { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 2mm; border-top: 2px solid var(--ink); }
+.step { padding: 2.4mm 3mm 0 0; position: relative; }
+.step + .step { padding-left: 3mm; border-left: 1px solid var(--line); }
+.step:before { content: ''; position: absolute; top: -3.2mm; left: 0; width: 2.6mm; height: 2.6mm; border-radius: 50%; background: var(--red); }
+.step + .step:before { left: 3mm; }
+.step:nth-child(2):before { background: var(--yellow); } .step:nth-child(3):before { background: var(--sky); } .step:nth-child(4):before { background: var(--grey); }
+.step h4 { font-size: 8.8pt; margin-bottom: .4mm; } .step .when { font-size: 7pt; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; color: var(--muted); display: block; margin-bottom: .8mm; }
+.step p { font-size: 7.8pt; line-height: 1.37; color: #2f3338; margin-bottom: 1.2mm; }
+.tag { display: inline-block; font-size: 7pt; font-weight: 700; background: var(--cream); border: 1px solid var(--line); border-radius: 1.6mm; padding: .4mm 1.8mm; }
+.sus { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.6mm; margin-top: 1.6mm; }
+.sus div { border-top: 2px solid var(--ink); padding-top: 1.4mm; font-size: 7.7pt; line-height: 1.36; color: #2f3338; }
+.sus b { display: block; font-size: 8.4pt; color: var(--ink); margin-bottom: .3mm; }
+.two ul { list-style: none; }
+.two li { font-size: 7.9pt; line-height: 1.38; padding-left: 3.4mm; position: relative; margin-bottom: 1.2mm; }
+.two li:before { content: ''; position: absolute; left: 0; top: 1.5mm; width: 1.7mm; height: 1.7mm; border-radius: 50%; background: var(--red); }
+.two li b { font-weight: 700; }
+.ask { background: var(--yellow); border-radius: 2.6mm; padding: 2.6mm 3.6mm; margin-top: 3mm; display: grid; grid-template-columns: 1fr 58mm; gap: 6mm; align-items: center; }
+.ask h3 { color: var(--ink); } .ask p { font-size: 8.4pt; margin: 0; line-height: 1.4; }
+.ask .who { font-size: 7.9pt; line-height: 1.45; border-left: 1.2px solid rgba(0,0,0,.35); padding-left: 4mm; }
+.ask .who b { font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<!-- ===================== PAGE 1 ===================== -->
+<section class="page">
+  <div class="top">
+    <div class="brand"><img src="logo-mark.png" alt=""><span>MyCulture App<br><span style="font-weight:600;font-size:7.6pt;color:var(--muted)">One app for every tribe in Uganda</span></span></div>
+    <div class="meta"><b style="color:var(--ink)">Investor summary</b><br>November 2026 &middot; Kakebe Technologies Limited</div>
+  </div>
+  <div class="bar"><i></i><i></i><i></i><i></i></div>
+
+  <div class="eyebrow">Culture &middot; Language &middot; Data</div>
+  <h1>One app for Uganda's languages and cultures.</h1>
+  <p class="lead">MyCulture works today for Lango, its model community, is built for Acholi, and is designed so that any other community can be added without starting again. Together they become a national home for language, heritage and cultural data: the local data Ugandan languages need before technology can understand them.</p>
+
+  <div class="stats">
+    <div><b>2,800+</b><span>dictionary words, searchable offline</span></div>
+    <div><b>25</b><span>clans with their totems and prohibitions</span></div>
+    <div><b>10</b><span>districts and cities documented</span></div>
+    <div><b>30</b><span>heritage entries, each with sources</span></div>
+    <div><b>2</b><span>communities built: Lango live, Acholi ready for review</span></div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h3>The problem</h3>
+      <p>Uganda recognises <b>65 indigenous communities</b> and has about <b>41 living languages</b>. Most of that knowledge is spoken, not written: when elders pass away it goes with them, children learn in English, and AI and translation tools barely understand Ugandan languages. Africa has more than 2,000 languages, and most have almost no localised digital data.</p>
+
+      <h3 style="margin-top:2.4mm">What we built</h3>
+      <p>A free <b>mobile app, website, admin system and open data API</b> that document, teach and share a community's culture in one trusted place. Anyone can contribute; language experts and clan leaders review before anything is marked verified.</p>
+
+      <div class="feat">
+        <div><i data-i="book"></i><h4>Learn</h4><p>Dictionary, translator, proverbs, phrasebook, word of the day, quizzes.</p></div>
+        <div><i data-i="users"></i><h4>Belong</h4><p>Clans, districts, notable people, history, timeline and heritage sites.</p></div>
+        <div><i data-i="headphones"></i><h4>Listen and read</h4><p>Radio, podcast, events, news and the Bible, all in one app.</p></div>
+        <div><i data-i="camera"></i><h4>Contribute</h4><p>Add words, photos and stories, even offline, and follow them through review.</p></div>
+      </div>
+      <div class="trust"><span>Nothing is "verified" until an expert says so</span><span>Every photo and source credited</span><span>The community keeps its rights</span></div>
+    </div>
+
+    <div class="phones">
+      <div class="ph"><div class="f"><img src="shots/welcome.jpg" alt=""></div><small>Welcome and sign-in</small></div>
+      <div class="ph"><div class="f"><img src="shots/learn.jpg" alt=""></div><small>Learn</small></div>
+      <div class="ph"><div class="f"><img src="shots/translate-result.jpg" alt=""></div><small>Translator</small></div>
+      <div class="ph"><div class="f"><img src="shots/heritage.jpg" alt=""></div><small>Heritage</small></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2 style="font-size:13.5pt">Who it is for</h2>
+    <div class="aud-grid">
+      <div>
+        <h3>Communities and cultural institutions</h3>
+        <div class="aud"><i data-i="grad"></i><div><h4>Children and young people</h4><p>Learn the mother tongue and their clan in a form they enjoy.</p></div></div>
+        <div class="aud"><i data-i="users"></i><div><h4>Elders and clan leaders</h4><p>Record and verify what they know; guard what is sensitive.</p></div></div>
+        <div class="aud"><i data-i="shield"></i><div><h4>Cultural institutions and chiefdoms</h4><p>A trusted digital archive they review and the community owns.</p></div></div>
+        <div class="aud"><i data-i="globe"></i><div><h4>The diaspora</h4><p>A way home for Ugandans abroad: language, clan and place.</p></div></div>
+      </div>
+      <div>
+        <h3>Institutions and partners</h3>
+        <div class="aud"><i data-i="book"></i><div><h4>Schools, teachers and curriculum bodies</h4><p>Mother-tongue material with sources, for lessons and quizzes.</p></div></div>
+        <div class="aud"><i data-i="database"></i><div><h4>Government ministries and agencies</h4><p>Culture, education, ICT: a national repository and evidence for policy.</p></div></div>
+        <div class="aud"><i data-i="message"></i><div><h4>Universities, researchers and AI teams</h4><p>Reviewed, consented language data through an open API.</p></div></div>
+        <div class="aud"><i data-i="pin"></i><div><h4>Tourism, media, NGOs and development partners</h4><p>Heritage, festivals and stories, accurately told and credited.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><span>Figures are from the live platform (myculture.online), November 2026. Population and language counts: Constitution of Uganda, Third Schedule; Makerere University.</span><span>1 / 2</span></div>
+</section>
+
+<!-- ===================== PAGE 2 ===================== -->
+<section class="page">
+  <div class="top">
+    <div class="brand"><img src="logo-mark.png" alt=""><span>MyCulture App<br><span style="font-weight:600;font-size:7.6pt;color:var(--muted)">One app for every tribe in Uganda</span></span></div>
+    <div class="meta"><b style="color:var(--ink)">Investor summary</b><br>November 2026 &middot; Kakebe Technologies Limited</div>
+  </div>
+
+  <div class="eyebrow">The national plan</div>
+  <h2>One platform for every tribe, and a national data repository.</h2>
+  <p class="lead" style="font-size:8.9pt">The platform is built once; each community's content sits beside it. A new community is created in the admin panel, filled and reviewed by its own editors, and switched on when ready. People choose their community at sign-in; <b>translation and word comparison work across communities.</b></p>
+
+  <div class="arch">
+    <div class="layers">
+      <div class="layer l3"><b>Layer 3<br>National hub (next)</b><span>Search across communities, a national dictionary and heritage atlas, an open data portal and AI services.</span></div>
+      <div class="layer l2"><b>Layer 2<br>Each community</b><span>Dictionary, clans or chiefdoms, districts, heritage, people, history, quizzes, radio and more: written and reviewed by its own editors.</span></div>
+      <div class="layer l1"><b>Layer 1<br>Built once</b><span>Mobile app, website, admin and review system, open API, offline use, Google sign-in.</span></div>
+    </div>
+    <div class="chips">
+      <h3>Communities</h3>
+      <div class="chip">Lango (the model) <em class="live">Live</em></div>
+      <div class="chip">Acholi <em class="built">Built</em></div>
+      <div class="chip next">Next communities</div>
+      <small>Acholi goes live once Acholi speakers have reviewed it.</small>
+    </div>
+  </div>
+
+  <div class="sec" style="margin-top:3.6mm">
+    <h3>Use cases</h3>
+    <div class="cards">
+      <div class="card"><i data-i="grad"></i><h4>Schools and learning</h4><p>Lessons and quizzes with sources. NCDC (2025) recommends 26 languages for lower primary, Leb Lango included.</p></div>
+      <div class="card"><i data-i="heart"></i><h4>Children</h4><p>Word of the day, short quizzes, stories, points and streaks: language and clan in a form children enjoy.</p></div>
+      <div class="card"><i data-i="database"></i><h4>National data repository</h4><p>One reviewed register of languages, clans, districts, heritage and people, open to researchers by API.</p></div>
+      <div class="card"><i data-i="message"></i><h4>Translation</h4><p>English, Leb Lango and Leb Acholi today (words, set phrases). Next: sentences, speech, more languages.</p></div>
+      <div class="card"><i data-i="pin"></i><h4>Heritage and tourism</h4><p>Sites, ceremonies, crafts and festivals made visible and protected, each with its credit.</p></div>
+      <div class="card"><i data-i="mic"></i><h4>Language data for AI</h4><p>Verified words, sentences and recordings become a community-owned dataset for AI tools.</p></div>
+    </div>
+  </div>
+
+  <div class="tx">
+    <div class="flow">
+      <div><small>Leb Lango</small><b>pii</b></div><i>&harr;</i>
+      <div><small>English</small><b>water</b></div><i>&harr;</i>
+      <div><small>Leb Acholi</small><b>pi</b></div>
+    </div>
+    <p><b>Translation across Uganda, then East Africa.</b> Between two community languages the app pivots through English and calls the result a likely equivalent until experts confirm it. Public AI language-data projects for Uganda name only a few languages (Luganda, Runyankore-Rukiga, Lumasaba, Acholi); most, Leb Lango included, are missing. We gather that data, community by community.</p>
+  </div>
+
+  <div class="sec" style="margin-top:4.2mm">
+    <h3>The road ahead</h3>
+    <div class="road">
+      <div class="step"><span class="when">Now &middot; 2026</span><h4>Proof</h4><p>Lango, the model community, live at myculture.online; Android app in Play testing; Acholi built.</p></div>
+      <div class="step"><span class="when">Next 12 months</span><h4>Launch and pilot</h4><p>Launch Lango and Acholi publicly; sentence translation, recordings, a schools pilot, three more communities.</p><span class="tag">Draft: about UGX 1.05 bn (USD 286k)</span></div>
+      <div class="step"><span class="when">Years 2 to 3</span><h4>National rollout</h4><p>All 65 communities with their own editors; national hub, heritage atlas, open data portal.</p><span class="tag">Draft: about UGX 9.5 bn (USD 2.6M)</span></div>
+      <div class="step"><span class="when">Beyond</span><h4>East Africa</h4><p>Languages that cross borders: the Luo family (Lango, Acholi) reaches South Sudan and Kenya. Start with partner institutions.</p></div>
+    </div>
+  </div>
+
+  <div class="sec" style="margin-top:3.4mm">
+    <h3>How it can sustain itself (proposed)</h3>
+    <div class="sus">
+      <div><b>Public programmes</b>Culture, education and ICT agencies, and curriculum bodies.</div>
+      <div><b>Schools and training</b>Licences for mother-tongue learning in schools.</div>
+      <div><b>Language data services</b>Licensed data and translation, with consent and a share back.</div>
+      <div><b>Grants and giving</b>Grants, CSR and diaspora giving; a donation page is built in.</div>
+    </div>
+  </div>
+
+  <div class="ask">
+    <div>
+      <h3>What we are looking for</h3>
+      <p>Seed investment and partners for the next 12 months: a ministry or curriculum-body pilot, a university data partner, and a mobile-network or media partner for reach.</p>
+    </div>
+    <div class="who"><b>Kakebe Technologies Limited</b><br>Lira City, Uganda<br>Sedrick Otolo, Director<br>0777 676 206 &middot; ot.sedrick@gmail.com<br>myculture.online</div>
+  </div>
+
+  <div class="foot"><span>Budgets are draft planning figures for discussion (exchange rate assumed at UGX 3,650 per USD), not quotes. Dictionary translations between communities are likely equivalents, not expert-checked.</span><span>2 / 2</span></div>
+</section>
+
+<script>
+const S = (p) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+const ICONS = {
+  book: S('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'),
+  users: S('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'),
+  headphones: S('<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'),
+  camera: S('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>'),
+  shield: S('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>'),
+  globe: S('<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'),
+  grad: S('<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'),
+  database: S('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.7-4 3-9 3s-9-1.3-9-3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/>'),
+  pin: S('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
+  heart: S('<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>'),
+  message: S('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'),
+  mic: S('<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/>')
+};
+document.querySelectorAll('i[data-i]').forEach((el) => { const d = document.createElement('span'); d.innerHTML = ICONS[el.dataset.i] || ''; el.replaceWith(d.firstChild); });
+</script>
+</body>
+</html>

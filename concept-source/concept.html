@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MyCulture: a national digital home for Uganda's cultures</title>
+<style>
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_400Regular.ttf');font-weight:400}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_500Medium.ttf');font-weight:500}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_600SemiBold.ttf');font-weight:600}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_700Bold.ttf');font-weight:700}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_800ExtraBold.ttf');font-weight:800}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_700Bold_Italic.ttf');font-weight:700;font-style:italic}
+@page{size:A4;margin:0}
+:root{--red:#ee1a26;--red-d:#c9111c;--yellow:#fddd16;--sky:#00adf1;--sky-d:#0786b8;--ink:#16181d;--text:#4f5662;--muted:#7b8390;--paper:#fbf8ec;--cream:#f6f3ec;--line:#e8e4da;--navy:#16181d;--green:#1e9e5a}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#8a8f98;font-family:'Clarity City','Inter',system-ui,sans-serif;color:var(--ink);font-size:9.3pt;line-height:1.5}
+.page{position:relative;width:210mm;height:297mm;overflow:hidden;background:var(--cream);page-break-after:always;margin:0 auto}
+@media screen{.page{margin:8mm auto;box-shadow:0 4mm 12mm rgba(0,0,0,.35)}}
+h1,h2,h3,h4,p{margin:0}
+.flag{position:absolute;left:0;right:0;top:0;height:2.4mm;background:linear-gradient(90deg,var(--red) 0 33.4%,var(--yellow) 0 66.7%,var(--sky) 0);z-index:20}
+.eyebrow{font-weight:800;font-size:7.4pt;letter-spacing:.2em;text-transform:uppercase;color:var(--red-d)}
+.pad{position:absolute;left:14mm;right:14mm}
+.foot{position:absolute;left:14mm;right:14mm;bottom:8mm;display:flex;justify-content:space-between;align-items:center;font-size:7.2pt;color:var(--muted);font-weight:600}
+.foot b{color:var(--ink);font-weight:800}
+.page h2{font-size:23pt;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.ico{display:inline-grid;place-items:center;width:9.5mm;height:9.5mm;border-radius:3mm;flex:none}
+.ico svg{width:5.2mm;height:5.2mm}
+.ico.r{background:#fde8e9;color:var(--red-d)}.ico.y{background:#fff3b8;color:#7a5c00}.ico.s{background:#e0f5fe;color:var(--sky-d)}.ico.g{background:#e3f5ea;color:#146b3c}.ico.k{background:var(--ink);color:#fff}
+.card{background:#fff;border-radius:4mm;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 2.2mm 6mm rgba(22,24,29,.07)}
+
+/* ---------- phone mock-up ---------- */
+.phone{position:relative;width:var(--w);aspect-ratio:1000/2104;padding:calc(var(--w)*.026);background:linear-gradient(145deg,#2b2e35,#0c0d10 55%,#24262c);border-radius:calc(var(--w)*.155);box-shadow:0 6mm 14mm rgba(0,0,0,.28),0 1.2mm 3mm rgba(0,0,0,.2),inset 0 0 0 .25mm rgba(255,255,255,.12)}
+.phone__s{position:relative;width:100%;height:100%;border-radius:calc(var(--w)*.13);overflow:hidden;background:#fff}
+.phone__s>img{display:block;width:100%;height:100%;object-fit:cover}
+.sb{position:absolute;left:0;right:0;top:0;height:calc(var(--w)*.12);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--w)*.085);font-weight:700;font-size:calc(var(--w)*.036);color:#111}
+.sb svg{height:calc(var(--w)*.032);width:auto;fill:currentColor}
+.sb .r{display:flex;gap:calc(var(--w)*.014);align-items:center}
+.phone.dark .sb{color:#fff}
+.isl{position:absolute;left:50%;top:calc(var(--w)*.03);transform:translateX(-50%);width:calc(var(--w)*.27);height:calc(var(--w)*.075);background:#050506;border-radius:99px}
+.hi{position:absolute;left:50%;bottom:calc(var(--w)*.022);transform:translateX(-50%);width:calc(var(--w)*.34);height:calc(var(--w)*.012);background:#16181d;border-radius:99px;opacity:.85}
+.phone.dark .hi{background:#fff}
+
+/* ---------- browser mock-up ---------- */
+.browser{width:var(--w);border-radius:2.4mm;overflow:hidden;background:#fff;box-shadow:0 5mm 12mm rgba(0,0,0,.25),0 1mm 2.5mm rgba(0,0,0,.18)}
+.browser__bar{height:6mm;background:#eceff3;display:flex;align-items:center;gap:1.4mm;padding:0 2.6mm}
+.browser__bar i{width:1.7mm;height:1.7mm;border-radius:50%;background:#c4c9d1}.browser__bar i:nth-child(1){background:#ff6058}.browser__bar i:nth-child(2){background:#ffbd2e}.browser__bar i:nth-child(3){background:#27c93f}
+.browser__bar span{margin-left:2mm;flex:1;height:3.6mm;border-radius:99px;background:#fff;font-size:5.4pt;line-height:3.6mm;padding:0 2.4mm;color:#6b727d;font-weight:600}
+.browser img{display:block;width:100%}
+
+/* ======================= PAGE 1 : cover ======================= */
+.cover{background:var(--navy);color:#fff}
+.cover__photo{position:absolute;inset:0 0 auto 0;height:182mm;background:url('art/sunset-lira.jpg') 50% 78%/cover}
+.cover__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,24,29,.62) 0%,rgba(22,24,29,.1) 26%,rgba(22,24,29,.25) 55%,var(--navy) 98%)}
+.cover__top{position:absolute;left:14mm;right:14mm;top:10mm;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.cover__top .brand{display:flex;align-items:center;gap:3mm}
+.cover__top .logo{width:11mm;height:12.6mm;border-radius:2.4mm;background:#fff;display:grid;place-items:center}
+.cover__top .logo img{width:7.4mm;height:9.4mm;object-fit:contain}
+.cover__top .brand b{font-size:15pt;font-weight:800;letter-spacing:-.01em}
+.cover__top .tag{font-size:7.2pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8);border:.3mm solid rgba(255,255,255,.4);border-radius:99px;padding:1.6mm 4mm}
+.cover .ph{position:absolute;z-index:4}
+.cover__text{position:absolute;left:14mm;right:14mm;top:162mm;z-index:6}
+.cover__text .eyebrow{color:var(--yellow)}
+.cover__text h1{font-size:30pt;line-height:1.04;font-weight:800;letter-spacing:-.025em;margin:3mm 0 3mm}
+.cover__text h1 em{color:var(--yellow);font-style:italic;font-weight:700}
+.cover__text .lead{font-size:12pt;color:rgba(255,255,255,.86);max-width:180mm}
+.chips{display:flex;gap:2.2mm;margin-top:5mm;flex-wrap:wrap}
+.chips span{font-size:7.6pt;font-weight:700;padding:1.7mm 3.6mm;border-radius:99px;background:rgba(255,255,255,.12);border:.25mm solid rgba(255,255,255,.28)}
+.cover__stats{position:absolute;left:14mm;right:14mm;top:252mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;z-index:6}
+.cover__stats div{background:rgba(255,255,255,.08);border:.25mm solid rgba(255,255,255,.18);border-radius:3.6mm;padding:3.4mm 4mm}
+.cover__stats b{display:block;font-size:18pt;font-weight:800;color:var(--yellow);letter-spacing:-.02em;line-height:1.1}
+.cover__stats small{font-size:7.4pt;color:rgba(255,255,255,.78);font-weight:600}
+.cover__foot{position:absolute;left:14mm;right:14mm;bottom:9mm;display:flex;justify-content:space-between;font-size:7.6pt;color:rgba(255,255,255,.7);font-weight:600;z-index:6}
+
+/* ======================= concept note layout ======================= */
+.inner{position:absolute;left:14mm;right:14mm;top:11mm;bottom:15mm;display:flex;flex-direction:column}
+.pg h2{font-size:21pt;line-height:1.1;font-weight:800;letter-spacing:-.02em;margin-top:2mm}
+.pg .intro{margin-top:2.4mm;color:var(--text);font-size:9.4pt;line-height:1.48}
+.pg .intro b{color:var(--ink)}
+.g{display:grid;gap:3mm}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.c5{grid-template-columns:repeat(5,1fr)}.c6{grid-template-columns:repeat(6,1fr)}
+.sech{font-size:11pt;font-weight:800;margin:5.4mm 0 2.8mm;display:flex;align-items:center;gap:2.4mm}
+.sech small{font-size:7.6pt;font-weight:600;color:var(--muted)}
+.tile{padding:3.6mm 4mm}
+.tile h4{font-size:9.2pt;font-weight:800;margin:2.2mm 0 .8mm;line-height:1.25}
+.tile p{font-size:7.9pt;line-height:1.42;color:var(--text)}
+.tile ul{margin:0;padding:0;list-style:none}
+.tile li{font-size:7.8pt;line-height:1.4;color:var(--text);padding-left:3.2mm;position:relative;margin-bottom:.7mm}
+.tile li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.5mm;height:1.5mm;border-radius:50%;background:var(--red)}
+.dark{background:var(--ink);color:#fff;border-radius:4mm;padding:4.6mm 5.2mm}
+.dark h3{font-size:10.6pt;font-weight:800;color:var(--yellow);margin-bottom:2.2mm}
+.dark p{font-size:8.2pt;line-height:1.46;color:rgba(255,255,255,.9)}
+.dark ul{margin:0;padding:0;list-style:none}
+.dark li{font-size:8pt;line-height:1.42;padding-left:3.6mm;position:relative;color:rgba(255,255,255,.92);margin-bottom:1.3mm}
+.dark li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.6mm;height:1.6mm;border-radius:50%;background:var(--yellow)}
+.grad{background:linear-gradient(135deg,#14161b,#2b1015 62%,#7a0f18);color:#fff;border-radius:4.4mm;padding:4.6mm 5.6mm}
+.grad h3{font-size:11.6pt;font-weight:800;color:var(--yellow);margin-bottom:2.6mm}
+.shotrow{display:flex;justify-content:space-between;align-items:flex-start;padding:0 3mm}
+.shotrow figure{margin:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.shotrow figcaption{margin-top:3.4mm;font-size:9.4pt;font-weight:800}
+.shotrow figcaption small{display:block;font-size:7.4pt;font-weight:500;color:var(--text);line-height:1.38;max-width:41mm;margin:.6mm auto 0}
+.stat{padding:3.2mm 3.6mm;border-radius:3.6mm;background:#fff;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 1.6mm 4.4mm rgba(22,24,29,.06);border-top:1.2mm solid var(--red)}
+.stat:nth-child(4n+2){border-color:var(--yellow)}.stat:nth-child(4n+3){border-color:var(--sky)}.stat:nth-child(4n){border-color:var(--green)}
+.stat b{display:block;font-size:17pt;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.stat small{display:block;font-size:7.4pt;color:var(--muted);font-weight:600;line-height:1.3;margin-top:.6mm}
+.stat em{display:block;font-style:normal;font-size:6.2pt;color:var(--muted);margin-top:.8mm;font-weight:600;opacity:.85}
+.tagx{display:inline-block;font-size:6.2pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.5mm 1.8mm;border-radius:99px;vertical-align:1px}
+.tagx.built{background:#e3f5ea;color:#146b3c}.tagx.prop{background:#fff3b8;color:#7a5c00}
+.src{font-size:6.2pt;line-height:1.38;color:var(--muted);margin-top:auto}
+.numlist{counter-reset:n;margin:0;padding:0;list-style:none}
+.numlist li{counter-increment:n;position:relative;padding-left:8mm;margin-bottom:2.6mm;font-size:8.2pt;line-height:1.42;color:var(--text)}
+.numlist li b{display:block;color:var(--ink);font-size:8.8pt;font-weight:800}
+.numlist li::before{content:counter(n);position:absolute;left:0;top:.1mm;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:7.8pt;display:grid;place-items:center}
+.numlist li:nth-child(2)::before{background:var(--yellow);color:var(--ink)}.numlist li:nth-child(3)::before{background:var(--sky)}.numlist li:nth-child(4)::before{background:var(--green)}.numlist li:nth-child(5)::before{background:var(--ink)}.numlist li:nth-child(6)::before{background:var(--red)}
+.lay{border-radius:3.6mm;padding:3mm 4mm;color:#fff}
+.lay h4{font-size:9.4pt;font-weight:800}.lay small{display:block;font-size:7.5pt;line-height:1.4;opacity:.93;margin-top:.6mm}
+.lay .k{display:block;font-size:6.4pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-bottom:.5mm}
+.l3{background:linear-gradient(135deg,#14161b,#2b1015 60%,#7a0f18)}.l2{background:linear-gradient(135deg,var(--red-d),var(--red))}.l1{background:linear-gradient(135deg,#0786b8,#00adf1)}
+.join{padding:3mm 3mm 3.2mm}
+.join .n{display:grid;place-items:center;width:6mm;height:6mm;border-radius:50%;font-weight:800;font-size:8pt;color:#fff;background:var(--red)}
+.join .n2{background:var(--yellow);color:var(--ink)}.join .n3{background:var(--sky)}.join .n4{background:var(--green)}.join .n5{background:var(--ink)}.join .n6{background:var(--red)}
+.join h4{margin:1.8mm 0 .6mm}.join p{font-size:7.2pt;line-height:1.38}
+.roadx{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.roadx::before{content:"";position:absolute;left:3mm;right:3mm;top:2.6mm;height:.8mm;background:linear-gradient(90deg,var(--red),var(--yellow),var(--sky),var(--green));border-radius:2px}
+.rdx{position:relative;padding-top:7mm}
+.rdx::before{content:"";position:absolute;left:1mm;top:.2mm;width:4.8mm;height:4.8mm;border-radius:50%;background:var(--red);border:1mm solid var(--cream);box-shadow:0 0 0 .3mm var(--line)}
+.rdx:nth-child(2)::before{background:var(--yellow)}.rdx:nth-child(3)::before{background:var(--sky)}.rdx:nth-child(4)::before{background:var(--green)}
+.rdx b{display:block;font-size:8.6pt;font-weight:800}.rdx small{display:block;font-size:7.4pt;line-height:1.38;color:var(--text);margin-top:.5mm}
+.rdx .when{font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--red-d);margin-bottom:.5mm;display:block}
+.asks{margin:0;padding:0;list-style:none;counter-reset:q;display:grid;gap:1.8mm}
+.asks li{counter-increment:q;position:relative;padding-left:7mm;font-size:8pt;line-height:1.4;color:rgba(255,255,255,.93)}
+.asks li::before{content:counter(q);position:absolute;left:0;top:-.1mm;width:5mm;height:5mm;border-radius:50%;background:var(--yellow);color:var(--ink);font-weight:800;font-size:7.4pt;display:grid;place-items:center}
+.next90{margin-top:3mm;padding-top:2.4mm;border-top:.25mm solid rgba(255,255,255,.22);font-size:7.6pt;line-height:1.42;color:rgba(255,255,255,.9)}.next90 b{color:var(--yellow)}
+.p2 .stat b{font-size:14pt}.p2 .stat small{min-height:8mm}
+.risk{display:flex;gap:3mm;align-items:flex-start;margin-bottom:3.2mm}
+.risk .ico{width:8.4mm;height:8.4mm;border-radius:2.6mm}.risk .ico svg{width:4.6mm;height:4.6mm}
+.risk b{display:block;font-size:8.8pt;font-weight:800;line-height:1.25}
+.risk p{font-size:7.8pt;line-height:1.42;color:var(--text);margin-top:.5mm}
+.open{padding:3mm 3.4mm}.open p{margin-top:1.6mm;font-size:7.5pt;line-height:1.4}
+.who{padding:4mm 4.2mm}.who h4{font-size:11pt;margin:2.4mm 0 1.6mm}
+.who .ev{font-size:7.6pt;line-height:1.42;color:var(--text);margin-bottom:1.6mm}
+.who ul{margin-top:2.4mm;padding-top:2.2mm;border-top:.25mm solid var(--line)}
+.who li{padding-left:0;margin-bottom:2mm;font-size:7.6pt}.who li::before{display:none}
+.who li .tagx{margin-right:1.4mm}
+.dark b{color:#fff}
+.vflow{display:grid;grid-template-columns:1fr 6mm 1fr 6mm 1fr 6mm 1fr;align-items:stretch;gap:1mm;margin-top:4mm}
+.vflow i{display:grid;place-items:center;color:var(--muted);font-style:normal}.vflow i svg{width:4.4mm;height:4.4mm}
+.vb{padding:3mm 3.4mm;border-radius:3.6mm;color:#fff}
+.vb b{display:block;font-size:9pt;font-weight:800}.vb small{display:block;font-size:7.2pt;line-height:1.36;opacity:.93;margin-top:.7mm}
+.v1{background:var(--red)}.v2{background:#a97d00}.v3{background:var(--sky-d)}.v4{background:var(--ink)}
+.val{padding:3.4mm 3.8mm}.val h4{font-size:9.2pt}.val p{font-size:7.6pt;line-height:1.42}
+.gl{margin:0;padding:0;list-style:none}
+.gl li{font-size:7.8pt;line-height:1.42;padding-left:3.6mm;position:relative;color:rgba(255,255,255,.93);margin-bottom:1.8mm}
+.gl li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.6mm;height:1.6mm;border-radius:50%;background:var(--yellow)}
+
+.who .ev{font-size:8.1pt}.who li{font-size:8pt}
+.p5 .dark p{font-size:8.7pt;line-height:1.5}.p5 .tile li{font-size:8.2pt;line-height:1.46;margin-bottom:1.8mm}
+.val p{font-size:8pt}.val h4{font-size:9.6pt}
+.p6 .gl li{font-size:8.2pt}
+.p2 .risk p{font-size:8.1pt}.p2 .open p{font-size:7.9pt}
+.p2 .dark p{font-size:8.7pt;line-height:1.5}
+
+.still{display:flex;flex-wrap:wrap;gap:1.6mm 2mm;align-items:center;margin-top:3.2mm;padding:2.6mm 3.2mm;border-radius:3mm;background:#fff3b8}
+.still b{font-size:7.6pt;font-weight:800;color:#6b5200;margin-right:1.2mm}
+.still span{font-size:7pt;font-weight:700;padding:.8mm 2.4mm;border-radius:99px;background:rgba(255,255,255,.75);color:var(--ink)}
+.p7 .intro{font-size:9pt}
+.p7 .join p{font-size:7pt;line-height:1.34}
+
+.still{margin-top:2.6mm;padding:2mm 3mm;gap:1.2mm 1.6mm}.still b{font-size:7pt}.still span{font-size:6.6pt;padding:.6mm 2mm}
+.lay{padding:2.4mm 4mm}.p7 .sech{margin:3mm 0 2.2mm}
+
+</style>
+</head>
+<body>
+<!-- ================================================== PAGE 1 : cover ================================================== -->
+<section class="page cover">
+  <div class="cover__photo"></div>
+  <div class="flag"></div>
+  <div class="cover__top">
+    <div class="brand"><span class="logo"><img src="art/logo-mark.png" alt=""></span><b>MyCulture</b></div>
+    <span class="tag">Concept note &middot; November 2026</span>
+  </div>
+  <div class="ph" style="left:20mm;top:42mm;transform:rotate(-7deg)"><div class="phone" style="--w:52mm"><div class="phone__s"><img src="shots/home.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+  <div class="ph" style="right:22mm;top:42mm;transform:rotate(7deg)"><div class="phone" style="--w:52mm"><div class="phone__s"><img src="shots/dictionary.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+  <div class="ph" style="left:73mm;top:22mm;z-index:5"><div class="phone dark" style="--w:64mm"><div class="phone__s"><img src="shots/welcome.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+  <div class="cover__text">
+    <div class="eyebrow">Culture &middot; Language &middot; Heritage &middot; Data</div>
+    <h1>A national digital home for <em>Uganda&rsquo;s cultures.</em></h1>
+    <p class="lead">One platform where every community documents, teaches and keeps its own language and heritage, reviewed by its own people and open to the nation. Working today for Lango, built for Acholi, ready for the next community.</p>
+    <div class="chips"><span>Mobile app</span><span>Website</span><span>Review system</span><span>Open data API</span><span>Lango as the working model</span></div>
+  </div>
+  <div class="cover__stats">
+    <div><b>2,800+</b><small>words in the dictionary</small></div>
+    <div><b>25</b><small>clans with their prohibitions</small></div>
+    <div><b>30</b><small>heritage entries with sources</small></div>
+    <div><b>2</b><small>communities built: Lango, Acholi</small></div>
+  </div>
+  <div class="cover__foot"><span>For the Honourable Minister of Gender, Labour and Social Development &middot; Kakebe Technologies Limited, Lira City</span><span>1 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 2 : the case ================================================== -->
+<section class="page pg p2">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">Why this matters, and why now</div>
+    <h2>Uganda&rsquo;s cultures live in memory. Now is the time to keep them.</h2>
+    <p class="intro">Uganda recognises <b>65 indigenous communities</b> and has more than <b>40 indigenous languages</b>. Much of what makes each community distinct, its words, clans, proverbs, songs and histories, is spoken rather than written. When an elder dies, or a family moves to town or abroad, it can be lost. The technology that could help is built mostly for other languages.</p>
+
+    <div class="g c5" style="margin-top:4.4mm;gap:2.6mm">
+      <div class="stat"><b>65</b><small>indigenous communities in the Constitution&rsquo;s Third Schedule</small><em>56 in 1995; 9 added in 2005</em></div>
+      <div class="stat"><b>40+</b><small>indigenous languages spoken in Uganda</small><em>Ministry statement, Feb 2026</em></div>
+      <div class="stat"><b>7 m to under 700</b><small>people per community, from the Baganda to the Vonoma</small><em>Census 2024, as reported</em></div>
+      <div class="stat"><b>3 in 4</b><small>Ugandans are aged 30 or younger</small><em>Census 2024 (UBOS)</em></div>
+      <div class="stat"><b>43%</b><small>of people aged 10+ own a phone; 9% used the internet</small><em>Census 2024</em></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1fr 1fr;gap:6mm;margin-top:3mm">
+      <div>
+        <div class="sech">The risk</div>
+        <div class="risk"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div><b>Elders carry the knowledge.</b><p>The Ministry&rsquo;s own plan for older persons calls them &ldquo;guardians of traditions and cultural values&rdquo; and notes that little of it is documented.</p></div></div>
+        <div class="risk"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.7-4 3-9 3s-9-1.3-9-3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/></svg></span><div><b>The national record is thin.</b><p>Uganda told UNESCO in 2023 that its heritage inventory holds 98 elements and is used only &ldquo;minimally&rdquo;, because the budget cannot reach 176 districts and over 16 cultural institutions.</p></div></div>
+        <div class="risk"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div><b>Technology skips most of our languages.</b><p>Lango is absent from the main open Ugandan language training datasets. In a 2026 benchmark, a leading AI model scored less than half as well on Nilotic languages as on Bantu ones.</p></div></div>
+      </div>
+      <div>
+        <div class="sech">The opening</div>
+        <div class="g c2" style="gap:2.4mm">
+          <div class="card tile open"><span class="tagx built">Mandate</span><p>The Ministry leads culture, the 2003 UNESCO Convention (ratified 2009) and the national inventory. The 2006 Culture Policy commits to documentation, a cultural information system and local-language dictionaries.</p></div>
+          <div class="card tile open"><span class="tagx built">Momentum</span><p>On 4 November 2026 cultural leaders at State House proposed a &ldquo;Digital Cultural Park&rdquo;. The Ministry&rsquo;s service standards promise digitised heritage on a national online portal.</p></div>
+          <div class="card tile open"><span class="tagx built">Plans</span><p>NDP IV aims to lift culture and creative industries from 3.1% to 5% of GDP by 2029/30, led by the Ministry. Mother-tongue teaching is policy in Primary 1 to 3.</p></div>
+          <div class="card tile open"><span class="tagx built">Language</span><p>The theme of Mother Language Day 2026 was &ldquo;Harnessing technology to document and develop Uganda&rsquo;s indigenous languages&rdquo;.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dark" style="margin-top:6mm">
+      <h3>The gap between intention and the record</h3>
+      <p>UNESCO&rsquo;s 2026 AI readiness assessment for Uganda recommends keeping national language datasets for at-risk languages as protected, open national assets. The 2006 Culture Policy already names the lack of culture statistics as the sub-sector&rsquo;s major challenge. <b style="color:var(--yellow)">MyCulture is a working answer</b>: built, tested on one community, and ready to be extended with the Ministry, one community at a time.</p>
+    </div>
+
+    <p class="src" style="margin-top:auto">Sources: Constitution of Uganda, Third Schedule and Constitution (Amendment) Act 2005; Ministry of Gender statement reported by Xinhua, 19 Feb 2026; UBOS Census 2024 as reported (Kampala Post 4 Oct 2024; Monitor 9 Mar 2026; UBOS Youth Day 2025 as reported; UNFPA 28 Jun 2024; Business Focus 22 Oct 2024); Ministry of Gender, National Plan of Action for Older Persons 2012; Uganda&rsquo;s periodic report to UNESCO on the 2003 Convention, Dec 2023; Sunbird AI SALT-31, 2026; Makerere/Sunbird/Google WAXAL dataset documentation; State House press release 4 Nov 2026; MGLSD Service Delivery Standards 2025/26 to 2029/30; National Planning Authority, NDP IV (2025); Uganda National Culture Policy 2006; UNESCO and Ministry of ICT, Uganda AI Readiness Assessment 2026.</p>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Concept note</span><span>2 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 3 : the innovation ================================================== -->
+<section class="page pg p3">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">The innovation</div>
+    <h2>One platform, built once. Filled by each community, in its own language.</h2>
+    <p class="intro">MyCulture is a free <b>mobile app, website, review system and open data API</b>. It documents, teaches and shares a community&rsquo;s culture in one trusted place. Any member can contribute; a reviewer checks each contribution before it is published, and only a reviewer can mark it verified. Every screen below is the real app, working on the Lango model.</p>
+
+    <div class="shotrow" style="margin-top:4mm">
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/dictionary.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Dictionary<small>Over 2,800 words, searchable in Leb Lango or English and kept on the phone for offline use.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/clans.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Clans<small>25 clans with totems and prohibitions, each marked &ldquo;awaiting verification&rdquo; until reviewed.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/heritage.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Heritage<small>Attire, crafts, music and ceremonies, with sources and, where known, photo credits.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/quizzes.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Quizzes<small>Every answer shows the fact behind it and where it comes from.</small></figcaption></figure>
+    </div>
+
+    <div class="g c4" style="margin-top:4.4mm">
+      <div class="card tile"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><h4>Learn</h4><p>Dictionary, word translator, proverbs, phrasebook, word of the day and quizzes.</p></div>
+      <div class="card tile"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h4>Belong</h4><p>Clans, districts, notable people, history, timeline and heritage sites.</p></div>
+      <div class="card tile"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span><h4>Listen and read</h4><p>Radio, podcast, events and news screens, with links to the Bible; editors add the content.</p></div>
+      <div class="card tile"><span class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h4>Contribute</h4><p>Add words, photos, stories and clan history, even without internet, and follow each one through review.</p></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1.25fr 1fr;margin-top:4.4mm;flex:1">
+      <div class="dark">
+        <h3>Lango is the working model</h3>
+        <ul>
+          <li>Live for Lango at myculture.online, with an Android test version. Most content comes from published sources and is <b style="color:#fff">awaiting review by Lango experts</b>; the review process is built.</li>
+          <li><b style="color:#fff">Acholi is already built</b> beside it (districts, chiefdoms, heritage, history). It goes live once Acholi speakers have reviewed it and the dictionary rights are cleared.</li>
+          <li>A new community is created in the admin panel and kept switched off until it is filled; a person then chooses their community at sign-in.</li>
+          <li>Words can be compared <b style="color:#fff">across communities</b>; results are marked as likely equivalents until experts confirm them.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="g c2" style="gap:2.6mm">
+          <div class="stat"><b>2,800+</b><small>dictionary words</small></div>
+          <div class="stat"><b>25</b><small>clans listed</small></div>
+          <div class="stat"><b>10</b><small>districts and cities</small></div>
+          <div class="stat"><b>30</b><small>heritage entries</small></div>
+        </div>
+        <p style="font-size:7.2pt;line-height:1.4;color:var(--muted);margin-top:2.6mm">Figures are from the live platform, November 2026. No clan or heritage entry is yet marked expert-verified; entries stay marked &ldquo;awaiting verification&rdquo; until a clan leader or language expert reviews them.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Concept note</span><span>3 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 4 : how it works and trust ================================================== -->
+<section class="page pg p4">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">How it works</div>
+    <h2>Communities write it. Experts review it. Everyone can use it.</h2>
+    <p class="intro">Knowledge moves through a simple loop, and at every step the community stays in charge of what is said about it.</p>
+
+    <div class="g" style="grid-template-columns:1fr 70mm;margin-top:5mm;gap:7mm">
+      <ol class="numlist" style="margin-top:1mm">
+        <li><b>Share</b>A member adds a word, photo, story, proverb or clan history in the app or on the website. It is saved on the phone and sent when there is a connection.</li>
+        <li><b>Review</b>Language experts, clan leaders and moderators check it in the admin system and approve, return or decline it. Nothing is called verified until a reviewer says so.</li>
+        <li><b>Publish</b>Approved material appears in the app, the website and the open API, with its credit and its status.</li>
+        <li><b>Learn and use</b>Learners, schools, the diaspora, researchers and planners use it. Points, streaks and badges reward contributors.</li>
+        <li><b>Improve</b>What people search for and cannot find shows where to collect next.</li>
+      </ol>
+      <div style="display:flex;gap:4mm;justify-content:center;align-items:flex-start">
+        <div style="margin-top:6mm"><div class="phone" style="--w:32mm"><div class="phone__s"><img src="shots/contribute.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+        <div><div class="phone" style="--w:32mm"><div class="phone__s"><img src="shots/track.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+      </div>
+    </div>
+
+    <div class="dark" style="margin-top:5mm">
+      <h3>Trust is built in</h3>
+      <div class="g c2" style="gap:1mm 7mm">
+        <ul>
+          <li><b style="color:#fff">Community-owned.</b> Content is shared with consent and the community keeps its rights to what it shares.</li>
+          <li><b style="color:#fff">Expert-verified.</b> A reviewer decides what is published, and &ldquo;verified&rdquo; is shown only when a reviewer has marked it so.</li>
+        </ul>
+        <ul>
+          <li><b style="color:#fff">Credited.</b> Photographs, sources and contributions carry credit lines, and contributors choose whether their name is shown.</li>
+          <li><b style="color:#fff">Private and safe.</b> Members sign in, the location data inside photos is removed, and a member can ask to delete their account and data.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g" style="grid-template-columns:76mm 1fr;gap:6mm;margin-top:5.4mm;flex:1;align-items:start">
+      <div>
+        <div class="browser" style="--w:76mm"><div class="browser__bar"><i></i><i></i><i></i><span>myculture.online</span></div><img src="shots/site_home.jpg" alt=""></div>
+        <p style="font-size:7pt;color:var(--muted);font-weight:600;line-height:1.4;margin-top:2.2mm">The same reviewed data feeds three doors: the app, the website shown here and the open API. The home-page counters also include photographs and documents, not only heritage entries.</p>
+      </div>
+      <div>
+        <div class="sech" style="margin-top:0">Built for real conditions</div>
+        <div class="g c2" style="gap:2.6mm">
+          <div class="card tile"><span class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M12 18h.01"/></svg></span><h4>Phone first, offline</h4><p>The dictionary is saved on the phone, and contributions are kept until a signal returns.</p></div>
+          <div class="card tile"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><h4>Local letters</h4><p>Search finds Leb Lango words with their special letters, even when typed on an ordinary keyboard.</p></div>
+          <div class="card tile"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.7-4 3-9 3s-9-1.3-9-3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/></svg></span><h4>Open by design</h4><p>A documented API lets schools, researchers and government read published content. Access terms are still to be added.</p></div>
+          <div class="card tile"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h4>Sacred knowledge</h4><p>Contributors are asked not to submit sacred or restricted knowledge, and moderators may withhold it.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Concept note</span><span>4 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 5 : women, youth and elders ================================================== -->
+<section class="page pg p5">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">Gender, youth and elders</div>
+    <h2>Culture is carried by women, youth and elders. The platform is built around them.</h2>
+    <p class="intro">The Ministry&rsquo;s mandate joins gender, community development, youth and older persons. These are the people who hold and pass on Uganda&rsquo;s cultures, and who most need to be heard in its record. MyCulture is designed to include them. Where it does not yet, this page says so, marked <span class="tagx built">built today</span> or <span class="tagx prop">proposed</span>.</p>
+
+    <div class="g c3" style="margin-top:4.6mm;gap:3.2mm">
+      <div class="card tile who">
+        <span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><h4>Women</h4>
+        <p class="ev">UNESCO notes that women are prominent bearers of intangible heritage, such as foodways learned from mother to daughter, yet calls &ldquo;the invisibility of women&rsquo;s contribution&rdquo; a major issue and asks that inventories be gender-representative.</p>
+        <p class="ev">Phone ownership is 64% for women and 80% for men (FinScope 2023); internet use is 8% for women and 11% for men (Census 2024).</p>
+        <ul>
+          <li><span class="tagx built">built</span> Oral histories recorded as audio; contributions saved offline until a signal returns; any member can contribute.</li>
+          <li><span class="tagx prop">proposed</span> Assisted contribution through women&rsquo;s groups and district community development officers; women on every editorial board; a yearly report to the Ministry on the share of women contributors.</li>
+        </ul>
+      </div>
+      <div class="card tile who">
+        <span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><h4>Youth</h4>
+        <p class="ev">About three in four Ugandans are 30 or younger. The National Youth Action Plan (2016) lists &ldquo;Youth, culture and gender&rdquo; as a priority area, and aims to promote youth cultural expression.</p>
+        <p class="ev">The Ministry implements the National Youth Policy, so young people&rsquo;s culture and ICT use already sit within its remit.</p>
+        <ul>
+          <li><span class="tagx built">built</span> Word of the day, weekly challenge, quizzes with sources, points, streaks and badges; contributing from a phone.</li>
+          <li><span class="tagx prop">proposed</span> Schools and youth clubs as contributors; paid district &ldquo;culture champions&rdquo; who record, photograph and help with review.</li>
+        </ul>
+      </div>
+      <div class="card tile who">
+        <span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h4>Elders</h4>
+        <p class="ev">The Ministry&rsquo;s plan for older persons calls them a &ldquo;depository of customs, traditions, skills and wisdom&rdquo;, says there is limited documentation, and commits to capture their knowledge.</p>
+        <p class="ev">It also notes that most traditional healers and birth attendants are older persons.</p>
+        <ul>
+          <li><span class="tagx built">built</span> An oral-history form with audio recording; moderators and clan leaders review before anything is published.</li>
+          <li><span class="tagx prop">proposed</span> Recording days with cultural institutions, using the consent steps in the Ministry&rsquo;s 2014 inventory guide, and elders&rsquo; own choice of what stays private.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g c2" style="gap:5mm;margin-top:5mm;align-items:start">
+      <div class="dark">
+        <h3>Culture as a force for positive change</h3>
+        <p>The Ministry works with cultural institutions on child marriage, teenage pregnancy and harmful practices. In December 2024 cultural leaders from several institutions committed to &ldquo;identify, publicize and raise awareness of positive cultural resources&rdquo;. In April 2026 Sabiny elders were building an alternative initiation curriculum that keeps girls&rsquo; mentoring and ends cutting.</p>
+        <p style="margin-top:2mm">A cultural platform can carry such resources and the Ministry&rsquo;s messages, <b style="color:var(--yellow)">agreed with cultural institutions, never imposed by the platform.</b></p>
+      </div>
+      <div class="card tile" style="padding:4.6mm 5mm">
+        <h4 style="margin:0 0 2mm;font-size:10.4pt">Safeguards we would keep</h4>
+        <ul>
+          <li><b>Consent first.</b> UNESCO&rsquo;s ethical principles ask for free, prior and informed consent. The Ministry&rsquo;s own guide asks for it at four levels: cultural leaders, district leaders, knowledge bearers and each person interviewed.</li>
+          <li><b>Documentation can expose.</b> Writing a practice down can &ldquo;freeze&rdquo; it or end its privacy, so communities decide what is public and what is not.</li>
+          <li><b>Measure who takes part.</b> The share of women, young people and elders among contributors and reviewers is reported, not assumed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="src" style="margin-top:auto">Sources: UNESCO, Intangible Cultural Heritage and Gender, 2015; EPRC policy brief on FinScope 2023, Feb 2026; UBOS Census 2024 as reported (Business Focus, 22 Oct 2024); UBOS Youth Day 2025 as reported and UNFPA preliminary census results, 28 Jun 2024; National Youth Action Plan 2016 (government monitoring report, 2022); Ministry of Gender, National Plan of Action for Older Persons, 2012; Uganda Standard, 9 Dec 2024; Daily Monitor, 1 Apr 2026; Ministry of Gender, National Strategy on Inventorying Intangible Cultural Heritage, 2014; UNESCO Ethical Principles for Safeguarding ICH, 2015; Chiweshe and Mutopo, 2019.</p>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Concept note</span><span>5 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 6 : value to Uganda ================================================== -->
+<section class="page pg p6">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">The value to Uganda</div>
+    <h2>One reviewed record of the nation&rsquo;s cultures, put to work six ways.</h2>
+    <p class="intro">Every reviewed word, clan, story and recording stays with its community and also joins a national register. The register is worth more than the sum of its parts, because each use below draws on the same record.</p>
+
+    <div class="vflow">
+      <div class="vb v1"><b>Communities</b><small>share what they know, with consent</small></div>
+      <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></i>
+      <div class="vb v2"><b>Review</b><small>their own experts check and credit it</small></div>
+      <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></i>
+      <div class="vb v3"><b>National register</b><small>one open, sourced, community-owned record</small></div>
+      <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></i>
+      <div class="vb v4"><b>Six uses</b><small>below, each from the same record</small></div>
+    </div>
+
+    <div class="g c3" style="margin-top:4.4mm;gap:3mm">
+      <div class="card tile val"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><h4>Keeps cultures alive</h4><p>Uganda&rsquo;s national heritage inventory holds 98 elements and is used only &ldquo;minimally&rdquo;. MyCulture gives each community a living record it can review and keep adding to.</p></div>
+      <div class="card tile val"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span><h4>Teaches children in their own language</h4><p>Mother-tongue teaching has been policy in Primary 1 to 3 since 2007, and NCDC&rsquo;s 2025 study recommends 26 languages, including Leb Lango and Acholi. Dictionary, proverbs and sourced quizzes are ready lesson material.</p></div>
+      <div class="card tile val"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><h4>Builds jobs and creative industries</h4><p>NDP IV aims to lift culture and creative industries from 3.1% to 5% of GDP by 2029/30; the sector gave 386,000 jobs in 2021/22. Findable heritage, sites and events, and paid local editors and recorders, feed that goal.</p></div>
+      <div class="card tile val"><span class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><h4>Gives planners evidence</h4><p>The 2006 Culture Policy names missing culture statistics as the sub-sector&rsquo;s major challenge, and the National Planning Authority&rsquo;s 2025 study asks for stronger data systems. A dated, sourced register with an open API answers both.</p></div>
+      <div class="card tile val"><span class="ico k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></span><h4>Puts Ugandan languages into AI</h4><p>UNESCO&rsquo;s 2026 assessment recommends national language datasets as protected national assets. Reviewed, consented data stays community-governed and lets Ugandans build tools in their own languages.</p></div>
+      <div class="card tile val"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></span><h4>Unites without flattening</h4><p>Vision 2040 commits Uganda to unity in diversity. Every community is shown on equal terms, in its own words, and the diaspora has a way home.</p></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1.12fr 1fr;gap:5mm;margin-top:4.6mm;align-items:start">
+      <div class="card tile" style="padding:4.6mm 5mm">
+        <span class="tagx built">Proof that it scales</span>
+        <h4 style="font-size:10.6pt;margin:2mm 0 1.4mm">FirstVoices, British Columbia</h4>
+        <p style="font-size:8.2pt;line-height:1.46">Launched in 2003 with 15 language sites, FirstVoices had grown to more than 80 language sites by 2024. One platform serves dozens of First Nations; each keeps full ownership and control of its content and can keep sacred material behind a login. It is hosted by a public body, the First Peoples&rsquo; Cultural Council, and free to the communities.</p>
+        <p style="font-size:8.2pt;line-height:1.46;margin-top:1.6mm"><b>What Uganda can borrow:</b> a public host, community ownership, private areas for sensitive knowledge, and grants that reach communities as well as the platform.</p>
+      </div>
+      <div class="grad">
+        <h3>Why the Ministry is the right home</h3>
+        <ul class="gl">
+          <li>It leads culture, and under the 2023 Museums and Monuments Act the Ministry responsible for culture administers intangible heritage.</li>
+          <li>It already runs the national inventory and a culture and creative sector register, which MyCulture complements: a content record, not a list of practitioners.</li>
+          <li>District community development offices carry out Ministry policy and already run its programmes for women, youth and older persons.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="src" style="margin-top:auto">Sources: Uganda&rsquo;s periodic report to UNESCO on the 2003 Convention, Dec 2023; Thematic Curriculum Policy (UNESCO report) and The Observer, 24 Sep 2025 on NCDC; National Planning Authority, NDP IV, 2025 and Diagnostic Study of Cultural and Creative Industries, 2025; Uganda National Culture Policy 2006; UNESCO and Ministry of ICT, AI Readiness Assessment for Uganda, 2026; Uganda Vision 2040; First Peoples&rsquo; Cultural Council release, 21 Feb 2024; Museums and Monuments Act 2023; MGLSD website; Bugiri District Local Government.</p>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Concept note</span><span>6 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 7 : scaling nationally ================================================== -->
+<section class="page pg p7">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">From one community to the nation</div>
+    <h2>A repeatable model: add one community at a time, until Uganda is covered.</h2>
+    <p class="intro">Lango proves the method. The platform is built once, so what changes from one community to the next is its content and the people who review it. The admin adds a community without new software; Acholi is the first test.</p>
+
+    <div class="g" style="grid-template-columns:58mm 1fr;gap:6mm;margin-top:3mm;align-items:center">
+      <div style="width:58mm;height:59.5mm"><svg viewBox="0 0 400 410" xmlns="http://www.w3.org/2000/svg" font-family="Clarity City, sans-serif"><circle cx="200" cy="200" r="168" fill="none" stroke="#e8e4da" stroke-width="1.5" stroke-dasharray="3 6"/><circle cx="200" cy="200" r="110" fill="#fff" stroke="#f0ece0" stroke-width="1.5"/><line x1="200" y1="200" x2="200.0" y2="50.0" stroke="#ee1a26" stroke-width="3"  opacity="1"/><line x1="200" y1="200" x2="306.1" y2="93.9" stroke="#e0a800" stroke-width="3"  opacity="1"/><line x1="200" y1="200" x2="350.0" y2="200.0" stroke="#cfc9b8" stroke-width="2" stroke-dasharray="4 5" opacity="0.9"/><line x1="200" y1="200" x2="306.1" y2="306.1" stroke="#cfc9b8" stroke-width="2" stroke-dasharray="4 5" opacity="0.9"/><line x1="200" y1="200" x2="200.0" y2="350.0" stroke="#cfc9b8" stroke-width="2" stroke-dasharray="4 5" opacity="0.9"/><line x1="200" y1="200" x2="93.9" y2="306.1" stroke="#cfc9b8" stroke-width="2" stroke-dasharray="4 5" opacity="0.9"/><line x1="200" y1="200" x2="50.0" y2="200.0" stroke="#cfc9b8" stroke-width="2" stroke-dasharray="4 5" opacity="0.9"/><line x1="200" y1="200" x2="93.9" y2="93.9" stroke="#cfc9b8" stroke-width="2" stroke-dasharray="4 5" opacity="0.9"/><circle cx="200" cy="200" r="52" fill="#16181d"/><text x="200" y="196" text-anchor="middle" fill="#fddd16" font-weight="800" font-size="15" letter-spacing="1.5">UGANDA</text><text x="200" y="213" text-anchor="middle" fill="#fff" font-weight="700" font-size="9.5" opacity=".85">National hub</text><circle cx="200.0" cy="50.0" r="37" fill="#ee1a26"/><text x="200.0" y="49.0" text-anchor="middle" fill="#fff" font-weight="800" font-size="13">Lango</text><text x="200.0" y="61.0" text-anchor="middle" fill="#ffe9a0" font-weight="800" font-size="6.4" letter-spacing=".6">LIVE · MODEL</text><circle cx="306.1" cy="93.9" r="33" fill="#fddd16"/><text x="306.1" y="92.9" text-anchor="middle" fill="#16181d" font-weight="800" font-size="12">Acholi</text><text x="306.1" y="104.9" text-anchor="middle" fill="#6b5200" font-weight="800" font-size="7" letter-spacing=".8">BUILT</text><circle cx="350.0" cy="200.0" r="30" fill="#fff" stroke="#00adf1" stroke-width="2.4" stroke-dasharray="5 4"/><text x="350.0" y="204.0" text-anchor="middle" fill="#16181d" font-weight="700" font-size="10">West Nile</text><circle cx="306.1" cy="306.1" r="30" fill="#fff" stroke="#1e9e5a" stroke-width="2.4" stroke-dasharray="5 4"/><text x="306.1" y="310.1" text-anchor="middle" fill="#16181d" font-weight="700" font-size="10">Karamoja</text><circle cx="200.0" cy="350.0" r="30" fill="#fff" stroke="#fddd16" stroke-width="2.4" stroke-dasharray="5 4"/><text x="200.0" y="354.0" text-anchor="middle" fill="#16181d" font-weight="700" font-size="10">Teso</text><circle cx="93.9" cy="306.1" r="30" fill="#fff" stroke="#00adf1" stroke-width="2.4" stroke-dasharray="5 4"/><text x="93.9" y="310.1" text-anchor="middle" fill="#16181d" font-weight="700" font-size="10">Busoga</text><circle cx="50.0" cy="200.0" r="30" fill="#fff" stroke="#ee1a26" stroke-width="2.4" stroke-dasharray="5 4"/><text x="50.0" y="204.0" text-anchor="middle" fill="#16181d" font-weight="700" font-size="10">Buganda</text><circle cx="93.9" cy="93.9" r="30" fill="#fff" stroke="#1e9e5a" stroke-width="2.4" stroke-dasharray="5 4"/><text x="93.9" y="97.9" text-anchor="middle" fill="#16181d" font-weight="700" font-size="10">Ankole</text><text x="200" y="402" text-anchor="middle" fill="#7b8390" font-weight="600" font-size="9.5">Illustrative: sub-regions whose communities could follow</text></svg></div>
+      <div style="display:flex;flex-direction:column;gap:2.4mm">
+        <div class="lay l3"><span class="k">Layer 3 &middot; the national hub (next)</span><h4>One national picture</h4><small>Search across communities, a national dictionary and heritage atlas, an open data portal and language services.</small></div>
+        <div class="lay l2"><span class="k">Layer 2 &middot; each community</span><h4>Its own content and editors</h4><small>Dictionary, clans or chiefdoms, districts, heritage, people, history and quizzes, written and reviewed by that community.</small></div>
+        <div class="lay l1"><span class="k">Layer 1 &middot; built once</span><h4>The shared platform</h4><small>Mobile app, website, admin and review system, open API, offline use and sign-in.</small></div>
+      </div>
+    </div>
+
+    <div class="sech" style="margin-top:3.4mm">How a community joins <small>the same six steps, each time</small></div>
+    <div class="g c6" style="gap:2.2mm">
+      <div class="card tile join"><b class="n n1">1</b><h4>Invite</h4><p>The community&rsquo;s cultural institution or leaders agree to take part.</p></div>
+      <div class="card tile join"><b class="n n2">2</b><h4>Create</h4><p>The community is set up in the admin and kept switched off while it is filled.</p></div>
+      <div class="card tile join"><b class="n n3">3</b><h4>Appoint</h4><p>Editors are named: language experts, clan leaders, women and youth.</p></div>
+      <div class="card tile join"><b class="n n4">4</b><h4>Seed</h4><p>Starter content is collected and reviewed, with sources and credits.</p></div>
+      <div class="card tile join"><b class="n n5">5</b><h4>Switch on</h4><p>The community goes live in the app, the website and the API.</p></div>
+      <div class="card tile join"><b class="n n6">6</b><h4>Grow</h4><p>Members contribute, editors review, and gaps guide what to collect next.</p></div>
+    </div>
+
+    <div class="still"><b>Still to build for national scale:</b><span>per-community editor roles</span><span>Ministry reporting view</span><span>API access terms</span><span>expert review of entries</span><span>sentence translation</span><span>Leb Lango wording</span><span>scheduled backups</span><span>Play Store release</span></div>
+
+    <div class="sech" style="margin-top:3.4mm">The road ahead <small>in phases, each ending in a decision</small></div>
+    <div class="roadx">
+      <div class="rdx"><span class="when">Now</span><b>Proof</b><small>Lango live, Acholi built, admin and open API ready.</small></div>
+      <div class="rdx"><span class="when">First 12 months</span><b>Pilot with the Ministry</b><small>Launch Lango and Acholi, add three communities from different regions, run a schools pilot. First 90 days: endorsement, working group, pilot agreement.</small></div>
+      <div class="rdx"><span class="when">Years 2 to 3</span><b>National rollout</b><small>Remaining communities in waves, each led by its own editors.</small></div>
+      <div class="rdx"><span class="when">After</span><b>National hub</b><small>One national dictionary and atlas, cross-community search, open data portal.</small></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1fr 1.18fr;gap:4mm;margin-top:3.6mm;flex:1">
+      <div class="card tile" style="padding:4mm 4.4mm">
+        <h4 style="margin-top:0;font-size:10pt">Who steers it</h4>
+        <ul>
+          <li><b>National steering committee</b>, chaired by the Ministry, with cultural institutions, education, ICT and universities.</li>
+          <li><b>Community editorial boards</b> decide what is verified and what stays private.</li>
+          <li><b>Rights stay with communities;</b> the Ministry holds the national register.</li>
+        </ul>
+      </div>
+      <div class="grad">
+        <h3>What we ask of the Ministry</h3>
+        <ol class="asks">
+          <li>Endorse MyCulture as a national cultural platform.</li>
+          <li>Convene a technical working group to guide the pilot and align it with national culture and digital policy.</li>
+          <li>Open doors to cultural institutions and district community development officers.</li>
+          <li>Agree a 12-month pilot for the first communities.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Kakebe Technologies Limited, Lira City &middot; myculture.online</span><span>7 / 7</span></div>
+</section>
+
+</body>
+</html>
