@@ -1,0 +1,8 @@
+# working files of the screenshot pipeline (rebuild: node source/capture_ios.js, then python source/make_ios.py)
+source/raw/
+source/*.log
+source/sheet-*.png
+source/contact.png
+source/heritage_crop.png
+source/_one.html
+screenshots/*.zip

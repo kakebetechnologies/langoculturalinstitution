@@ -79,7 +79,12 @@ First release of MyCulture: the Lango and Acholi communities, a dictionary you c
 | Price | Free |
 | Availability | All countries and regions (or choose Uganda and the countries you want) |
 
-**Screenshots (required before review, not for TestFlight).** iPhone 6.9-inch: 1320 x 2868 (or 1290 x 2796), 3 to 10 images. The Play Store screenshots in `play-store/` are 1080 x 1920 and cannot be used as they are. `app.json` has `supportsTablet: true`, so App Store Connect will also ask for iPad 13-inch screenshots (2064 x 2752); set it to `false` in the next build if you want phones only.
+**Screenshots (required before review, not for TestFlight).** Ready in `app-store/screenshots/`, 8 of each, in the order to upload them:
+- `iphone-6.3/01.png` to `08.png`, 1206 x 2622: drop them on **iPhone with Dynamic Island (medium display)** (App Store Connect accepts 1206 x 2622 and 1179 x 2556 there). Apple scales them up for the larger iPhone sizes.
+- `ipad-13/01.png` to `08.png`, 2064 x 2752: drop them on **iPad 13" display**. `app.json` has `supportsTablet: true`, so App Store Connect asks for them; set it to `false` in the next build if you want phones only.
+- iPhone Duo and Apple Watch: leave empty (not needed).
+
+They are marketing screenshots: a headline, one line under it and real screens of the app (iPhone: one phone; iPad: two). The screens are taken from the app running as a visitor at the exact iPhone size (`source/capture_ios.js`, needs the Expo web server on :8095 and the local site), the pictures are laid out by `source/make_ios.py` and rendered with Edge. A review of the first version corrected the wording to what the app really does: "starting with Lango" (Acholi is new and thin), "Save it once to use offline" (the dictionary is not downloaded automatically), "clearly marked until they are verified" (no clan is verified yet), and no "any word" or "history" claims. Re-check the captions whenever the app changes.
 
 ## 3. App Privacy (the "nutrition label")
 
