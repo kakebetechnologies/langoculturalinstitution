@@ -44,7 +44,7 @@ export default function Done() {
             title={t('Share')}
             variant="outline"
             icon="share-outline"
-            onPress={() => Share.share({ message: t('I just contributed to the Lango archive with the Lango App. Tracking code: {code}', { code }) }).catch(() => {})}
+            onPress={() => Share.share({ message: t('I just contributed to the Lango archive with MyCulture. Tracking code: {code}', { code }) }).catch(() => {})}
           />
         ) : null}
         <Button title={t('Contribute another')} variant={isQueued ? 'primary' : 'outline'} onPress={() => router.replace('/(tabs)/contribute')} />

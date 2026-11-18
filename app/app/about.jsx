@@ -31,7 +31,7 @@ export default function About() {
       <StateView loading={loading && !a} error={error} onRetry={retry}>
         {a ? (
           <>
-            <AppText style={{ marginBottom: SPACING.md }}>{t('The Lango App puts Lango heritage, language and clan records in your pocket: discover your heritage, register your clan, contribute cultural and natural observations, learn Leb Lango and connect with the global Lango community.')}</AppText>
+            <AppText style={{ marginBottom: SPACING.md }}>{t('MyCulture puts Lango heritage, language and clan records in your pocket: discover your heritage, register your clan, contribute cultural and natural observations, learn Leb Lango and connect with the global Lango community.')}</AppText>
             <SectionHeader title={t('Contact')} />
             {a.address ? <InfoRow icon="location-outline" title={a.address} /> : null}
             {a.email ? <InfoRow icon="mail-outline" title={a.email} onPress={() => Linking.openURL(`mailto:${a.email}`).catch(() => {})} /> : null}
@@ -41,7 +41,7 @@ export default function About() {
         ) : null}
       </StateView>
       <AppText variant="caption" style={{ textAlign: 'center', marginTop: SPACING.xl }}>
-        {t('Lango App {v} · built by Kakebe Technologies Limited', { v: Constants.expoConfig?.version ?? '' })}
+        {t('MyCulture {v} · built by Kakebe Technologies Limited', { v: Constants.expoConfig?.version ?? '' })}
       </AppText>
     </Screen>
   );

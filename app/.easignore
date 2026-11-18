@@ -1,0 +1,17 @@
+# What EAS Build leaves out of the upload (used instead of .gitignore when the build is started with EAS_NO_VCS=1).
+# The packages are installed again on the build server, so node_modules is never sent; neither are local build outputs.
+node_modules/
+.expo/
+dist/
+dist-web/
+web-build/
+/android
+/ios
+.env
+*.apk
+*.aab
+*.jks
+*.p12
+*.p8
+*.key
+*.mobileprovision

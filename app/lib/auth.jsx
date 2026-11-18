@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Platform } from 'react-native';
 import api from './api';
-import { useCommunity } from './community';
+import { getCommunity, useCommunity } from './community';
 import { readJson, removeDir, removeFile, writeJson } from './localFiles';
 import { googleBrowserSignIn, setPendingGoogle } from './google';
 import { forgetOutbox } from './outbox';
@@ -110,6 +110,7 @@ export function AuthProvider({ children }) {
   // "Continue with Google": resolves { user } for a member who is signed in, { pending } for a new person who still has to choose a clan,
   // or null if the person closed the browser. Throws for the button to show.
   const signInWithGoogle = useCallback(async () => {
+    const chosen = getCommunity(); // the community picked on the screen (Lango or Acholi)
     const got = await googleBrowserSignIn();
     if (!got) return null;
     const { data } = await api.post('/auth/google/exchange', { code: got.code, verifier: got.verifier, device_name: device() });
@@ -117,7 +118,17 @@ export function AuthProvider({ children }) {
       setPendingGoogle({ code: got.code, verifier: got.verifier, profile: data.profile });
       return { pending: data.profile };
     }
-    return { user: await start(data) };
+    // A member who is already registered keeps their account, but signing in with the other community chosen switches them to it, as signing in with email does.
+    let me = data.user;
+    if (chosen && me?.community && me.community !== chosen) {
+      try {
+        const switched = await api.patch('/me', { community: chosen }, { headers: { Authorization: `Bearer ${data.token}` } });
+        me = switched.data?.data ?? me;
+      } catch {
+        // the member keeps their own community; it can be changed in Settings
+      }
+    }
+    return { user: await start({ ...data, user: me }) };
   }, [start]);
 
   // Finishes a new Google person's account once they have chosen a clan.

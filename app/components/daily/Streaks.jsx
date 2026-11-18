@@ -65,7 +65,7 @@ export function MilestoneSheet({ days, onClose }) {
           <Ionicons name="flame" size={44} color={COLORS.white} />
         </View>
         <AppText style={[styles.big, { fontSize: 26, marginTop: SPACING.md }]}>{t('{n}-day streak', { n: days })}</AppText>
-        <AppText style={{ textAlign: 'center', marginTop: 6 }}>{t('You have opened the Lango App {n} days in a row. Apwoyo matek!', { n: days })}</AppText>
+        <AppText style={{ textAlign: 'center', marginTop: 6 }}>{t('You have opened MyCulture {n} days in a row. Apwoyo matek!', { n: days })}</AppText>
         <Button title={t('Continue')} onPress={onClose} style={{ marginTop: SPACING.lg, alignSelf: 'stretch' }} />
       </View>
     </Sheet>

@@ -8,7 +8,7 @@ import { readJson, removeFile, writeJson } from './localFiles';
 
 const fileFor = () => (getCommunity() === 'lango' ? 'dictionary.json' : `dictionary-${getCommunity()}.json`);   // one saved dictionary per community
 let loadedFor = 'lango';
-let store = null; // { version, at, entries: [[lango, english, pos, category, verified, community]] }
+let store = null; // { version, at, entries: [[lango, english, pos, category, verified, community, doubtful]] }
 let folded = null;
 const listeners = new Set();
 
@@ -66,7 +66,7 @@ export function useOfflineDictionary() {
   return { ready: !!store, count: store?.entries.length ?? 0, at: store?.at ?? null };
 }
 
-const toWord = (e, i) => ({ id: `o${i}`, lango: e[0], english: e[1], pos: e[2] || null, category: e[3] || null, verified: !!e[4], community: !!e[5], offline: true });
+const toWord = (e, i) => ({ id: `o${i}`, lango: e[0], english: e[1], pos: e[2] || null, category: e[3] || null, verified: !!e[4], community: !!e[5], doubtful: !!e[6], offline: true });
 
 /** Searches the downloaded dictionary. dir: 'all' | 'lg' | 'en'. Returns up to `limit` words, best matches first. */
 export function searchOffline(query, dir = 'all', limit = 60) {

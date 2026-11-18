@@ -32,7 +32,7 @@ const PAGES = {
       ['Contributing', 'When you contribute, you confirm the work is yours or you have permission to share it. You keep your rights. By choosing a sharing option you allow this app to display it in the archive in line with that option. Contributions are moderated and may be edited for clarity, declined, or have sensitive details removed.'],
       ['Sacred and restricted knowledge', 'Some knowledge is private to clans or ceremonies. Please do not submit material that you have not been permitted to share. Moderators may withhold anything culturally sensitive.'],
       ['Data licence', 'Published data may be reused with credit to Lango unless otherwise stated.'],
-      ['Donations', 'Pledges are recorded and confirmed once they arrive. Gifts help keep the Lango App running.'],
+      ['Donations', 'Pledges are recorded and confirmed once they arrive. Gifts help keep MyCulture running.'],
     ],
   },
 };

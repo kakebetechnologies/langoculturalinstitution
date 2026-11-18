@@ -288,7 +288,7 @@ export default function Home() {
                   <AppText variant="eyebrow" style={{ color: COLORS.yellow }}>
                     {t('Support the app')}
                   </AppText>
-                  <AppText style={styles.donateTitle}>{t('Help keep the Lango App free and running')}</AppText>
+                  <AppText style={styles.donateTitle}>{t('Help keep MyCulture free and running')}</AppText>
                   <View style={styles.donateBtn}>
                     <Ionicons name="heart" size={16} color={COLORS.navy} />
                     <AppText style={{ fontFamily: FONTS.semibold, color: COLORS.navy }}>{t('Support now')}</AppText>

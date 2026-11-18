@@ -31,7 +31,7 @@ export default function AudioRecorder({ onDone, onError }) {
       } else {
         const perm = await AudioModule.requestRecordingPermissionsAsync();
         if (!perm.granted) {
-          onError?.(t('Allow the microphone for Lango App in your phone settings to record.'));
+          onError?.(t('Allow the microphone for MyCulture in your phone settings to record.'));
         } else {
           await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
           await recorder.prepareToRecordAsync();

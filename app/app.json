@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Lango App",
+    "name": "MyCulture",
     "slug": "lango-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -33,8 +33,8 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
       "output": "single",
-      "name": "Lango App",
-      "shortName": "Lango",
+      "name": "MyCulture",
+      "shortName": "MyCulture",
       "description": "Lango heritage, language, clans and community contributions.",
       "themeColor": "#16181D",
       "backgroundColor": "#FBF8EC"
@@ -58,7 +58,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Lango App uses the microphone so you can record an elder's story or how a word is pronounced."
+          "microphonePermission": "MyCulture uses the microphone so you can record an elder's story or how a word is pronounced."
         }
       ],
       [
@@ -72,14 +72,14 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Lango App uses your location only to tag where you saw a plant, animal, ceremony or heritage site."
+          "locationWhenInUsePermission": "MyCulture uses your location only to tag where you saw a plant, animal, ceremony or heritage site."
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "Lango App needs your photos so you can add them to a contribution.",
-          "cameraPermission": "Lango App uses the camera so you can photograph what you want to contribute."
+          "photosPermission": "MyCulture needs your photos so you can add them to a contribution.",
+          "cameraPermission": "MyCulture uses the camera so you can photograph what you want to contribute."
         }
       ],
       [

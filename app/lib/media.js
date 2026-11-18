@@ -21,7 +21,7 @@ export function mediaFrom(kind, asset) {
 export async function takePhoto() {
   if (Platform.OS !== 'web') {
     const perm = await ImagePicker.requestCameraPermissionsAsync();
-    if (!perm.granted) return { error: 'Allow the camera for Lango App in your phone settings to take a photo.' };
+    if (!perm.granted) return { error: 'Allow the camera for MyCulture in your phone settings to take a photo.' };
   }
   const res = await ImagePicker.launchCameraAsync({ mediaTypes: ['images'], quality: 0.7, exif: false });
   return res.canceled ? null : { media: mediaFrom('image', res.assets[0]) };

@@ -82,7 +82,7 @@ export default function Settings() {
 
   async function toggleDaily(on) {
     setDaily(on);
-    const ok = await setDailyReminder(on, t('Word of the day'), t('Open Lango App to learn today’s Leb Lango word.'));
+    const ok = await setDailyReminder(on, t('Word of the day'), t('Open MyCulture to learn today’s Leb Lango word.'));
     if (!ok) {
       setDaily(false);
       setNote(t('Reminders are not available here, or notifications are blocked in your phone settings.'));
@@ -135,7 +135,7 @@ export default function Settings() {
       <Card>
         <AppText variant="subheading">{offline.ready ? t('{n} words saved on this phone', { n: offline.count.toLocaleString('en-US') }) : t('Not downloaded yet')}</AppText>
         <AppText variant="caption" style={{ marginTop: 2, marginBottom: 12 }}>
-          {offline.ready ? t('Downloaded {d}. Search works with no internet.', { d: fmtDate(new Date(offline.at).toISOString().slice(0, 10)) }) : t('About {n} words, a few hundred KB. Then search works with no internet, in both directions.', { n: info.code === 'lango' ? '2,800' : '4,900' })}
+          {offline.ready ? t('Downloaded {d}. Search works with no internet.', { d: fmtDate(new Date(offline.at).toISOString().slice(0, 10)) }) : t('About {n} words, a few hundred KB. Then search works with no internet, in both directions.', { n: info.code === 'lango' ? '2,800' : '4,300' })}
         </AppText>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Button title={offline.ready ? t('Update') : t('Download')} icon="cloud-download-outline" small onPress={download} loading={busy === 'dl'} />
@@ -200,7 +200,7 @@ export default function Settings() {
 
       <Pressable onPress={tapVersion} accessibilityRole="text">
         <AppText variant="caption" style={{ marginTop: SPACING.xl, textAlign: 'center' }}>
-          Lango App {Constants.expoConfig?.version ?? ''}
+          MyCulture {Constants.expoConfig?.version ?? ''}
           {showServer ? `\n${API_ROOT}` : ''}
         </AppText>
       </Pressable>

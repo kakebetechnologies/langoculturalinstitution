@@ -5,7 +5,7 @@ import * as Location from 'expo-location';
 export async function currentPlace() {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') return { error: 'Allow location for Lango App in your phone settings, or describe the place in words.' };
+    if (status !== 'granted') return { error: 'Allow location for MyCulture in your phone settings, or describe the place in words.' };
     const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
     return { lat: Number(here.coords.latitude.toFixed(6)), lng: Number(here.coords.longitude.toFixed(6)) };
   } catch {

@@ -1,5 +1,6 @@
 // One dictionary entry: the Leb Lango word big in serif, its part of speech and topic, the English meanings separated by dots,
-// an example sentence when there is one, and a "Checked" / "Community" tag (offline entries say so quietly).
+// an example sentence when there is one, and a "Checked" / "Community" tag (offline entries say so quietly). An entry of a scanned dictionary (Acholi) that the
+// scan itself doubts says so ("Doubtful"), so nobody learns a possibly wrong word as if it were sure.
 import { StyleSheet, View } from 'react-native';
 import { COLORS, FONTS, RADIUS, SPACING, SHADOW } from '../constants/theme';
 import { useT } from '../lib/i18n';
@@ -20,7 +21,7 @@ export default function WordCard({ word }) {
         </AppText>
         {word.pos ? <AppText style={styles.pos}>{word.pos}</AppText> : null}
         <View style={{ flex: 1 }} />
-        {word.community ? <Pill label={t('Community')} icon="people" tone="gold" /> : word.verified ? <Pill label={t('Checked')} icon="checkmark" tone="sky" /> : null}
+        {word.community ? <Pill label={t('Community')} icon="people" tone="gold" /> : word.verified ? <Pill label={t('Checked')} icon="checkmark" tone="sky" /> : word.doubtful ? <Pill label={t('Doubtful, check with a speaker')} icon="alert-circle" tone="gold" /> : null}
       </View>
       <AppText style={styles.meaning} selectable>
         {senses.join('  ·  ')}

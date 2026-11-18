@@ -50,10 +50,10 @@ export async function enablePush() {
   const N = notifications();
   if (!N) return { ok: false, message: 'Push notifications work in the installed Android and iPhone app. The list of notifications inside the app always works.' };
   try {
-    if (Platform.OS === 'android') await N.setNotificationChannelAsync('default', { name: 'Lango App', importance: N.AndroidImportance.DEFAULT });
+    if (Platform.OS === 'android') await N.setNotificationChannelAsync('default', { name: 'MyCulture', importance: N.AndroidImportance.DEFAULT });
     let { status } = await N.getPermissionsAsync();
     if (status !== 'granted') status = (await N.requestPermissionsAsync()).status;
-    if (status !== 'granted') return { ok: false, message: 'Allow notifications for Lango App in your phone settings.' };
+    if (status !== 'granted') return { ok: false, message: 'Allow notifications for MyCulture in your phone settings.' };
     const token = await pushToken(N);
     if (!token) return { ok: false, message: 'Notifications are not set up on this build yet. The in-app list still works.' };
     await api.post('/me/device', { token, platform: Platform.OS });

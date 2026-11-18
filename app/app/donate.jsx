@@ -1,5 +1,5 @@
 // Donate (POST /api/v1/donations): choose an amount and currency, a payment method (MTN MoMo, Airtel Money, Visa, Mastercard,
-// PayPal, bank transfer) and once / monthly / yearly. Giving keeps the Lango App running.
+// PayPal, bank transfer) and once / monthly / yearly. Giving keeps MyCulture running.
 // The pledge is recorded and confirmed once it arrives. How to pay with each method is what the site owner wrote in Site
 // settings (GET /giving); the screen shows it, and gives the reference to quote when paying.
 import { useState } from 'react';
@@ -87,7 +87,7 @@ export default function Donate() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScreenHeader title={t('Support the Lango App')} />
+      <ScreenHeader title={t('Support MyCulture')} />
       <KeyboardScroll contentContainerStyle={{ padding: SPACING.md, paddingBottom: SPACING.xxl }} keyboardShouldPersistTaps="handled">
         {banner ? (
           <View style={styles.banner} accessibilityRole="alert">
