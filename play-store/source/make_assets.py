@@ -19,8 +19,9 @@ STATUS = ('<div class="sb"><span>9:41</span><span class="r">'
 
 
 def phone(name, width, dark=False):
-    return ('<div class="phone%s" style="--w:%dpx"><div class="phone__s"><img src="../../briefing-source/shots/%s.jpg" alt="">%s<span class="isl"></span><span class="hi"></span></div></div>'
-            % (' dark' if dark else '', width, name, STATUS))
+    folder = '../../showcase-source/shots/app' if name == 'translate-result' else '../../briefing-source/shots'   # real screens of the app
+    return ('<div class="phone%s" style="--w:%dpx"><div class="phone__s"><img src="%s/%s.jpg" alt="">%s<span class="isl"></span><span class="hi"></span></div></div>'
+            % (' dark' if dark else '', width, folder, name, STATUS))
 
 
 CSS = """
@@ -45,13 +46,13 @@ body{margin:0;background:#888;font-family:'Clarity City',system-ui,sans-serif;co
 # ---------- the eight screenshots ----------
 SHOTS = [
     ('welcome', 'Your culture. Your clan. Your language.', 'Sign in with Google or your email.', True, '#16181d', '#fff', '#fddd16'),
-    ('home', 'Everything about Lango, in one place', 'A word a day, radio, stories and your clan.', False, '#fddd16', '#16181d', '#16181d'),
-    ('dictionary', 'A Lango dictionary in your pocket', 'Search Leb Lango or English, even offline.', False, '#e0f5fe', '#16181d', '#0786b8'),
+    ('home', "Uganda's cultures, in one place", 'Lango first, with Acholi and more to follow. A word a day and your clan.', False, '#fddd16', '#16181d', '#16181d'),
+    ('dictionary', 'A dictionary in your pocket', 'Search Leb Lango or English, even offline.', False, '#e0f5fe', '#16181d', '#0786b8'),
     ('clan', 'Know your clan', 'Totems, prohibitions and history, clearly marked until verified.', False, '#fde8e9', '#16181d', '#c9111c'),
     ('heritage', 'Heritage, with its sources', 'Attire, crafts, music and ceremonies, each with its credit.', False, '#fff3b8', '#16181d', '#7a5c00'),
     ('quizResult', 'Quizzes that teach', 'Every answer shows the fact behind it and where it comes from.', False, '#e3f5ea', '#16181d', '#146b3c'),
     ('contribute', 'Add what you know', 'Share a word, a story or a photo. It is reviewed before it is published.', False, '#fde8e9', '#16181d', '#c9111c'),
-    ('events', 'Never miss a Lango date', 'Events, anniversaries and festivals, with a countdown.', False, '#e0f5fe', '#16181d', '#0786b8'),
+    ('translate-result', 'Look up any word', 'Single words and set phrases, English to Leb Lango and back.', False, '#e0f5fe', '#16181d', '#0786b8'),
 ]
 cards = []
 for i, (name, head, sub, dark, bg, fg, accent) in enumerate(SHOTS, 1):
@@ -78,14 +79,14 @@ feature = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><title>L
 .logo{position:absolute;left:56px;top:50px;width:78px;height:88px;border-radius:16px;background:#fff;display:grid;place-items:center;z-index:3}
 .logo img{width:54px;height:68px;object-fit:contain}
 .t{position:absolute;left:56px;top:170px;width:500px;z-index:3}
-.t b{display:block;font-size:92px;line-height:1;font-weight:800;letter-spacing:-.03em}
+.t b{display:block;font-size:80px;line-height:1;font-weight:800;letter-spacing:-.03em}
 .t span{display:block;margin-top:14px;font-size:34px;line-height:1.25;font-weight:600;color:#fddd16}
 .t i{display:block;margin-top:22px;font-style:normal;font-size:24px;font-weight:600;color:rgba(255,255,255,.82)}
 .p1{position:absolute;left:600px;top:70px;transform:rotate(7deg);z-index:2}
 .p2{position:absolute;left:790px;top:110px;transform:rotate(-4deg);z-index:2}
 </style></head><body><section class="feature" id="f1"><div class="flag"></div>
 <div class="logo"><img src="../../briefing-source/art/logo-mark.png" alt=""></div>
-<div class="t"><b>Lango</b><span>Everything about Lango, in one place.</span><i>Language &middot; Clans &middot; Heritage &middot; Community</i></div>
+<div class="t"><b>MyCulture</b><span>Uganda's cultures, in one place.</span><i>Language &middot; Clans &middot; Heritage &middot; Community</i></div>
 <div class="p1">%s</div><div class="p2">%s</div></section></body></html>''' % (CSS, phone('home', 250), phone('dictionary', 250))
 open(os.path.join(HERE, 'feature.html'), 'w', encoding='utf-8').write(feature)
 print('written: icon-512.png, source/screens.html, source/feature.html')

@@ -1,4 +1,4 @@
-# Lango on Google Play: submission pack
+# MyCulture on Google Play: submission pack
 
 Package `tech.kakebe.lango`, version 1.0.0, built with EAS (`eas build -p android --profile production`, an app bundle `.aab` signed with the EAS-managed upload key).
 Everything below was written from what the app actually does; replace anything in [square brackets].
@@ -8,53 +8,50 @@ Everything below was written from what the app actually does; replace anything i
 | File | Use in Play Console |
 |---|---|
 | `icon-512.png` | Store listing, App icon (512 x 512) |
-| `feature-graphic-1024x500.png` | Store listing, Feature graphic |
+| `feature-graphic-1024x500.png` | Store listing, Feature graphic (says MyCulture) |
 | `screenshots/phone-01.png` to `phone-08.png` | Store listing, Phone screenshots (1080 x 1920, 9:16) |
-| `source/` | `make_assets.py` and `render_assets.js` rebuild all of the above from the briefing's real screenshots |
+| `source/` | `make_assets.py` then `render_edge.py` (Edge command line; `render_assets.js` needs puppeteer) rebuild all of the above from real screenshots of the app |
 
 ## 2. Store listing text
 
-**App name (30 max):** Lango: Language & Culture
+**App name (30 max):** MyCulture
 
-**Short description (80 max, 78 used):** Learn Leb Lango, find your clan, explore Lango heritage and add what you know.
+**Short description (80 max, 70 used):** Uganda's languages and cultures: learn, explore and add what you know.
 
-**Full description (4000 max):**
+**Full description (4000 max)** (the same text as the App Store listing; 1,632 used):
 
 ```
-Lango is a free app about the Lango people of northern Uganda: their language, clans, heritage and community, all in one place.
+MyCulture is a free app for learning, keeping and sharing the languages and cultures of Uganda, one community at a time. It starts with the Lango people of northern Uganda and the Acholi, and is built so that other communities can follow.
 
-Learn Leb Lango
-• Search the dictionary in Leb Lango or English, even without internet
+Choose your community when you start, and the words, clans or chiefdoms, districts, history and heritage you see are that community's own. The Acholi edition is new and is still being filled in.
+
+LEARN THE LANGUAGE
+• Search the dictionary in Leb Lango or English, and save it on your phone to use without internet
 • Look up words and set phrases with the translator
 • Proverbs, greetings and everyday phrases
 • A new word every day, quizzes with sources and a weekly language challenge
 
-Know your clan and your people
-• Clans with their totems and prohibitions, clearly marked until language experts and clan leaders have verified them
-• Notable Langos, history and districts, with sources and photo credits
+KNOW YOUR PEOPLE
+• Clans (Lango) and chiefdoms (Acholi), with their totems and traditions
+• Districts, notable people and history, with sources and photo credits
 • Heritage: attire, crafts, music and ceremonies
-• Join the group of your clan
+• Join the group of your clan and meet other members
 
-Listen, read and follow
-• Lango Radio and Podcast, which keep playing in the background
-• Events, anniversaries and festivals, with a countdown
-• The Lango Bible, opened at the chapter you choose
-
-Add what you know
+ADD WHAT YOU KNOW
 • Share a word, proverb, story, photo or recording
 • Every contribution is reviewed before it is published
 • Works offline: your contribution is sent when you are connected again
 • Earn points, badges and streaks
 
-Careful and transparent
+CAREFUL AND TRANSPARENT
 • Sources and credits are shown throughout
-• Nothing is marked verified until a language expert or clan leader says so
-• Sign in with Google or your email, and delete your account at any time in the app
+• Nothing is marked verified until a language expert or community leader says so, and much of the content is still waiting for that review
+• Sign in with Google or with your email, and delete your account at any time in the app
 
-Lango is an independent community project. It is free and has no advertising.
+MyCulture is an independent community project by Kakebe Technologies Limited. It is free and has no advertising.
 ```
 
-**Release notes (500 max):** First release of Lango: dictionary, clans, heritage, quizzes, radio and podcast, events and community contributions.
+**Release notes (500 max):** First release of MyCulture: the Lango and Acholi communities, a dictionary you can save offline, clans and chiefdoms, heritage, history, quizzes and a daily word, and a way for members to add what they know.
 
 **Category:** Education (second choice: Books & Reference). **Tags:** Education, Language learning, Culture.
 **Default language:** English. **Contact:** website https://myculture.online, email [a monitored address, for example info@myculture.online once the mailbox exists].
@@ -103,7 +100,7 @@ Do not reuse a real member's account.
 - **Foreground service, media playback** (Lango Radio and Podcast): "The service starts only when the person taps play on Radio or Podcast and shows playback controls in the notification." Google asks for a short screen recording: open Radio, play, leave the app, show the notification controls.
 - **Location:** foreground only (while the app is open), used only to tag a contribution. No background location.
 - **Camera, microphone, photos:** asked only when the person taps to take a photo, record or attach one.
-- **Giving ("Support the Lango App"):** the app only shows how to give outside the app and records a pledge; it does not take payments. If Google asks, say exactly that.
+- **Giving ("Support MyCulture"):** the app only shows how to give outside the app and records a pledge; it does not take payments. If Google asks, say exactly that.
 
 ## 7. Before you press "Send for review"
 
