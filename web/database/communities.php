@@ -24,6 +24,9 @@ function lci_communities(PDO $pdo): array
     $addCol('users', 'culture', "VARCHAR(16) NOT NULL DEFAULT 'lango'");
     $addCol('users', 'culture_state', 'TEXT NULL');   // the clan details of the community the member is not in now, kept for when they switch back
     $addCol('contributions', 'culture', "VARCHAR(16) NOT NULL DEFAULT 'lango'");
+    // a dictionary entry's short English meanings (|water|, matched exactly) and how far the scan can be trusted (3 = both halves of the book agree, 2 = one half and the spelling matches, 1 = doubtful, NULL = not graded: Lango's)
+    $addCol('dictionary', 'gloss', 'VARCHAR(500) NULL');
+    $addCol('dictionary', 'grade', 'TINYINT NULL');
     $pdo->exec("ALTER TABLE users MODIFY culture VARCHAR(16) NOT NULL DEFAULT 'lango'");
     $pdo->exec("ALTER TABLE contributions MODIFY culture VARCHAR(16) NOT NULL DEFAULT 'lango'");
 

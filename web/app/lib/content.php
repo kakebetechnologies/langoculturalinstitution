@@ -11,7 +11,8 @@ function daily_word_filter(string $t = ''): string
     static $verifiedOnly = null;   // once language reviewers have checked a good number of entries, only those are used
     $verifiedOnly ??= (int)val("SELECT COUNT(*) FROM dictionary WHERE status='published' AND verified=1") >= 100;
     $p = $t === '' ? '' : $t . '.';
-    return ($verifiedOnly ? "{$p}verified=1 AND " : '') . "{$p}status='published' AND CHAR_LENGTH({$p}english)<70 AND CHAR_LENGTH({$p}lango)<24 AND {$p}lango NOT LIKE '% %' AND {$p}english NOT REGEXP '" . DAILY_SENSITIVE . "' AND {$p}lango NOT REGEXP '[0-9]'";
+    // a scanned dictionary's entries (Acholi) carry a grade: the daily word and the quizzes use only those the scan is surer of (2 and 3), never a doubtful one (1)
+    return ($verifiedOnly ? "{$p}verified=1 AND " : '') . "({$p}grade IS NULL OR {$p}grade>=2) AND {$p}status='published' AND CHAR_LENGTH({$p}english)<70 AND CHAR_LENGTH({$p}lango)<24 AND {$p}lango NOT LIKE '% %' AND {$p}english NOT REGEXP '" . DAILY_SENSITIVE . "' AND {$p}lango NOT REGEXP '[0-9]'";
 }
 
 function word_of_day(): ?array
@@ -261,18 +262,41 @@ function translator(): TranslationEngine
  */
 function community_translator(): TranslationEngine
 {
-    $en = []; $lg = [];
-    foreach (all("SELECT lango, english FROM dictionary WHERE status='published'") as $r) {
+    $en = []; $lg = []; $score = ['lg' => [], 'en' => []];
+    foreach (all("SELECT lango, english, gloss, grade FROM dictionary WHERE status='published' ORDER BY COALESCE(grade,0) DESC, (gloss=CONCAT('|', english, '|')) DESC, id") as $r) {
         $key = mb_strtolower(trim($r['lango']));
-        $meanings = array_values(array_filter(array_map('trim', preg_split('/[;,·]/u', $r['english']))));
+        $meanings = dictionary_meanings($r);
         if ($key === '' || !$meanings) continue;
         $lg[$key]['lango'] = $r['lango'];
         $lg[$key]['english_meanings'] = array_values(array_unique(array_merge($lg[$key]['english_meanings'] ?? [], $meanings)));
-        foreach ($meanings as $m) {
+        foreach ($meanings as $i => $m) {
             $mk = mb_strtolower($m);
             $en[$mk]['headword'] = $en[$mk]['headword'] ?? $m;
             $en[$mk]['translations'] = array_values(array_unique(array_merge($en[$mk]['translations'] ?? [], [$r['lango']])));
+            // how sure the scan is of this word for this meaning: its grade, and whether the meaning is the entry's first (its main sense)
+            $s = (int)$r['grade'] * 2 + ($i === 0 ? 1 : 0);
+            $score['lg'][$key][$m] = max($score['lg'][$key][$m] ?? 0, $s);
+            $score['en'][$mk][$r['lango']] = max($score['en'][$mk][$r['lango']] ?? 0, $s);
         }
+    }
+    // What a lookup answers (only where the entries are graded: another community's own words answer with the first entry, as before).
+    // Acholi to English: up to three meanings, the surest first ("burn; set alight; eye"). English to Acholi: the words the scan is surest of, at most
+    // three, so two words that are equally sure ("father": wor, won) both show and a weaker one does not follow them.
+    $order = function (array $scores): array {
+        $rank = array_flip(array_keys($scores));
+        uksort($scores, fn($a, $b) => [$scores[$b], $rank[$a]] <=> [$scores[$a], $rank[$b]]);
+        return $scores;
+    };
+    foreach ($score['lg'] as $k => $sc) {
+        $sc = $order($sc);
+        if (max($sc) < 2) continue;
+        $lg[$k]['english_meanings'] = array_values(array_unique(array_merge([implode('; ', array_slice(array_keys($sc), 0, 3))], $lg[$k]['english_meanings'])));
+    }
+    foreach ($score['en'] as $k => $sc) {
+        $sc = $order($sc);
+        if (max($sc) < 2) continue;
+        $top = array_keys(array_filter($sc, fn($s) => $s === max($sc)));
+        $en[$k]['translations'] = array_values(array_unique(array_merge([implode('; ', array_slice($top, 0, 3))], $en[$k]['translations'])));
     }
     foreach ($lg as $k => $v) { $f = lango_fold((string)$k); if (!isset($lg[$f])) $lg[$f] = $v; }
     return new TranslationEngine($en, $lg, [], []);

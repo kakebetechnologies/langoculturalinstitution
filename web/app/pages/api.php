@@ -77,7 +77,8 @@ switch ($res) {
         $rows = all("SELECT c.name, c.slug, c.totem, c.totem_type, d.name district, c.summary, c.leader_name, c.leader_title, c.verified FROM clans c LEFT JOIN districts d ON d.id=c.district_id WHERE c.status='published' AND (c.name LIKE ? OR c.totem LIKE ?) ORDER BY c.name LIMIT $limit OFFSET $off", [$like, $like]);
         json_out(['data' => $rows, 'page' => $page]);
     case 'dictionary':
-        $rows = all("SELECT lango, english, pos, example_lg, example_en, verified FROM dictionary WHERE status='published' AND (lango LIKE ? OR english LIKE ?) ORDER BY (lango=?) DESC, CHAR_LENGTH(lango) LIMIT $limit OFFSET $off", [$like, $like, get('q')]);
+        [$order, $ordPar] = get('q') !== '' ? dictionary_order(get('q')) : ['ORDER BY CHAR_LENGTH(lango), lango', []];
+        $rows = all("SELECT lango, english, pos, example_lg, example_en, verified FROM dictionary WHERE status='published' AND (lango LIKE ? OR english LIKE ?) $order LIMIT $limit OFFSET $off", array_merge([$like, $like], $ordPar));
         json_out(['data' => $rows, 'page' => $page]);
     case 'translate':
         $text = mb_substr(trim(get('text')), 0, 600);

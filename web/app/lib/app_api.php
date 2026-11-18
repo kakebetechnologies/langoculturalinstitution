@@ -224,7 +224,8 @@ function api_post(array $p, bool $full = false): array
 function api_word(array $w): array
 {
     return ['id' => (int)$w['id'], 'lango' => $w['lango'], 'english' => $w['english'], 'pos' => $w['pos'], 'category' => $w['category'], 'example_lg' => $w['example_lg'], 'example_en' => $w['example_en'],
-        'audio' => api_abs($w['audio']), 'verified' => (bool)$w['verified'], 'community' => str_starts_with((string)$w['source'], 'Community'), 'contributor' => $w['contributor']];
+        'audio' => api_abs($w['audio']), 'verified' => (bool)$w['verified'], 'community' => str_starts_with((string)$w['source'], 'Community'), 'contributor' => $w['contributor'],
+        'doubtful' => isset($w['grade']) && $w['grade'] !== null && (int)$w['grade'] === 1 && !$w['verified']];   // an entry of a scanned dictionary that the scan itself doubts
 }
 
 function api_contribution(array $c): array
@@ -345,6 +346,7 @@ function api_app(string $res, array $seg): void
                     q('DELETE FROM google_codes WHERE code_hash=?', [$row['code_hash']]);
                     $member = one('SELECT * FROM users WHERE id=? AND is_active=1', [$row['user_id']]) ?? api_err('This account is not available.', 403);
                     q('UPDATE users SET last_login=NOW() WHERE id=?', [$member['id']]);
+                    $member = member_set_community($member, community());   // the community chosen on the sign-in screen, as with email sign-in
                     json_out(['token' => api_issue_token((int)$member['id'], $device), 'user' => api_user_json($member), 'is_new_user' => false]);
                 }
                 if ($sub === 'exchange') {   // a new person: the code stays valid a little longer while they choose their clan
@@ -553,10 +555,10 @@ function api_app(string $res, array $seg): void
         /* ---------- language ---------- */
         case 'dictionary':
             if ($id === 'export') {
-                $rows = all("SELECT lango, english, pos, category, verified, source FROM dictionary WHERE status='published' ORDER BY fold, lango");
-                $ver = md5(count($rows) . '|' . (string)val("SELECT MAX(id) FROM dictionary") . '|' . (string)val("SELECT SUM(verified) FROM dictionary"));
+                $rows = all("SELECT lango, english, pos, category, verified, source, grade FROM dictionary WHERE status='published' ORDER BY fold, lango");
+                $ver = md5(count($rows) . '|' . (string)val("SELECT MAX(id) FROM dictionary") . '|' . (string)val("SELECT SUM(verified) FROM dictionary") . '|' . (string)val("SELECT SUM(grade) FROM dictionary"));
                 if (get('version') === $ver) json_out(['version' => $ver, 'unchanged' => true]);
-                json_out(['version' => $ver, 'count' => count($rows), 'entries' => array_map(fn($r) => [$r['lango'], $r['english'], $r['pos'] ?: '', $r['category'] ?: '', (int)$r['verified'], str_starts_with((string)$r['source'], 'Community') ? 1 : 0], $rows)]);
+                json_out(['version' => $ver, 'count' => count($rows), 'entries' => array_map(fn($r) => [$r['lango'], $r['english'], $r['pos'] ?: '', $r['category'] ?: '', (int)$r['verified'], str_starts_with((string)$r['source'], 'Community') ? 1 : 0, $r['grade'] !== null && (int)$r['grade'] === 1 && !(int)$r['verified'] ? 1 : 0], $rows)]);
             }
             [$page, $limit, $off] = api_paging(30);
             $qs = mb_substr(get('q'), 0, 80); $dir = in_array(get('dir'), ['lg', 'en'], true) ? get('dir') : 'all';
@@ -571,8 +573,7 @@ function api_app(string $res, array $seg): void
             } elseif ($letter !== '') { $where[] = 'fold LIKE ?'; $par[] = $letter . '%'; }
             if ($cat !== '') { $where[] = 'category=?'; $par[] = $cat; }
             $w = implode(' AND ', $where);
-            $order = $qs !== '' ? 'ORDER BY (lango=?) DESC, (fold=?) DESC, (english=?) DESC, (fold LIKE ?) DESC, CHAR_LENGTH(lango), lango' : 'ORDER BY fold, lango';
-            $ordPar = $qs !== '' ? [$qs, lango_fold($qs), $qs, like_escape(lango_fold($qs)) . '%'] : [];
+            [$order, $ordPar] = $qs !== '' ? dictionary_order($qs) : ['ORDER BY fold, lango', []];
             $total = (int)val("SELECT COUNT(*) FROM dictionary WHERE $w", $par);
             $rows = all("SELECT * FROM dictionary WHERE $w $order LIMIT $limit OFFSET $off", array_merge($par, $ordPar));
             json_out(['data' => array_map('api_word', $rows), 'page' => $page, 'meta' => api_meta($page, $limit, $total), 'categories' => WORD_CATS]);

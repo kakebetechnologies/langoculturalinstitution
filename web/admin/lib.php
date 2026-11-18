@@ -504,6 +504,8 @@ function crud_import(string $key, array $mod): void
             if (isset($row['district'])) { $row['district_id'] = $distL[strtolower($row['district'])] ?? null; unset($row['district']); }
             foreach ($mod['fields'] as $k => $fd) if (($fd['type'] ?? '') === 'slug') $row[$k] = unique_slug($mod['table'], slugify($row[$fd['from']] ?? $row[$cfg['required']]));
             if (isset($cfg['status'])) $row['status'] = $cfg['status'];
+            if (isset($row['grade']) && !in_array((int)$row['grade'], [1, 2, 3], true)) unset($row['grade']);
+            if (!empty($cfg['before']) && isset($mod['before'])) $mod['before']($row, true, null);   // a module that asks for it (the dictionary: the plain-letter spelling that search uses)
             insert($mod['table'], $row); $n++;
         }
         fclose($h);

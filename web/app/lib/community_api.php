@@ -50,10 +50,46 @@ function member_set_community(array $u, string $to): array
     return one('SELECT * FROM users WHERE id=?', [$u['id']]) ?? $u;
 }
 
+/**
+ * The short English meanings of a dictionary row. A row from the Acholi scan carries them as `gloss` (|water|), already cleaned; any other row
+ * (Lango's, a contributed word) has them split out of its English text.
+ */
+function dictionary_meanings(array $r): array
+{
+    if (!empty($r['gloss'])) return array_values(array_filter(explode('|', (string)$r['gloss']), fn($g) => $g !== ''));
+    $out = [];
+    foreach (preg_split('/[;,·\/]/u', (string)preg_replace('/\([^)]*\)/u', '', (string)($r['english'] ?? ''))) as $g) {
+        $g = mb_strtolower(trim((string)preg_replace('/^(?:a|an|the|to)\s+/u', '', trim($g))));
+        if ($g !== '' && mb_strlen($g) <= 40 && !in_array($g, $out, true)) $out[] = $g;
+    }
+    return $out;
+}
+
+/**
+ * The entries of the current community's dictionary whose meaning is this English word. An entry with short meanings (the Acholi scan) matches only
+ * on them, so a long definition never matches a word that merely appears in it; any other entry matches on a whole word of its English text.
+ * Entries the scan confirms on both halves come first.
+ */
+function dictionary_by_english(string $g, int $limit = 5): array
+{
+    $g = mb_strtolower(trim($g));
+    $gl = '%|' . like_escape($g) . '|%';
+    return all("SELECT lango, english, pos, verified, grade FROM dictionary WHERE status='published' AND (gloss LIKE ? OR (grade IS NULL AND english REGEXP ?))
+        ORDER BY (gloss LIKE ?) DESC, COALESCE(grade,0) DESC, (english=?) DESC, (gloss LIKE ?) DESC, (english LIKE ?) DESC, verified DESC, CHAR_LENGTH(english), lango LIMIT " . (int)$limit,
+        [$gl, '\\b' . preg_quote($g, '/') . '\\b', $gl, $g, '|' . like_escape($g) . '|%', like_escape($g) . '%']);
+}
+
+/** The ORDER BY (and its values) for a dictionary search: the word itself, the exact English meaning, the entries the scan confirms, then the closest spelling. */
+function dictionary_order(string $qs): array
+{
+    return ['ORDER BY (lango=?) DESC, (fold=?) DESC, (english=?) DESC, (gloss LIKE ?) DESC, COALESCE(grade,0) DESC, (fold LIKE ?) DESC, CHAR_LENGTH(lango), lango',
+        [$qs, lango_fold($qs), $qs, '%|' . like_escape(mb_strtolower($qs)) . '|%', like_escape(lango_fold($qs)) . '%']];
+}
+
 /** One dictionary entry as the comparison shows it. */
 function compare_entry(array $r): array
 {
-    return ['headword' => $r['lango'], 'english' => $r['english'], 'pos' => $r['pos'] ?: null, 'verified' => (bool)$r['verified']];
+    return ['headword' => $r['lango'], 'english' => $r['english'], 'pos' => $r['pos'] ?: null, 'verified' => (bool)$r['verified'], 'confirmed' => ($r['grade'] ?? null) === null ? null : (int)$r['grade'] >= 3];
 }
 
 /**
@@ -71,11 +107,8 @@ function compare_words(string $term, int $groups = 6, int $each = 5): array
     if ($term === '') return ['term' => '', 'groups' => [], 'available' => $available, 'communities' => $names];
 
     $glosses = [];
-    $add = function (string $text) use (&$glosses): void {
-        foreach (preg_split('/[;,·\/]/u', preg_replace('/\([^)]*\)/u', '', $text)) as $g) {
-            $g = mb_strtolower(trim($g));
-            if ($g !== '' && mb_strlen($g) <= 40 && !in_array($g, $glosses, true)) $glosses[] = $g;
-        }
+    $add = function (array $row) use (&$glosses): void {
+        foreach (dictionary_meanings($row) as $g) if (!in_array($g, $glosses, true)) $glosses[] = $g;
     };
     $like = '%' . like_escape($term) . '%'; $fold = '%' . like_escape(lango_fold($term)) . '%';
     $plain = mb_strtolower($term);
@@ -86,8 +119,8 @@ function compare_words(string $term, int $groups = 6, int $each = 5): array
     }
     if ($isEnglish) $glosses[] = $plain;
     foreach ($codes as $c) {
-        $rows = with_community($c, fn() => all("SELECT english FROM dictionary WHERE status='published' AND (lango=? OR fold=? OR fold LIKE ?) ORDER BY (lango=?) DESC, CHAR_LENGTH(english) LIMIT 4", [$term, lango_fold($term), $fold, $term]));
-        foreach ($rows as $r) $add($r['english']);
+        $rows = with_community($c, fn() => all("SELECT english, gloss FROM dictionary WHERE status='published' AND (lango=? OR fold=? OR fold LIKE ?) ORDER BY (lango=?) DESC, (fold=?) DESC, COALESCE(grade,0) DESC, CHAR_LENGTH(english) LIMIT 4", [$term, lango_fold($term), $fold, $term, lango_fold($term)]));
+        foreach ($rows as $r) $add($r);
     }
     $glosses = array_slice($glosses, 0, $groups);
 
@@ -95,9 +128,7 @@ function compare_words(string $term, int $groups = 6, int $each = 5): array
     foreach ($glosses as $g) {
         $row = ['english' => $g];
         foreach ($codes as $c) {
-            $row[$c] = with_community($c, fn() => array_map('compare_entry', all(
-                "SELECT lango, english, pos, verified FROM dictionary WHERE status='published' AND english REGEXP ? ORDER BY (english=?) DESC, verified DESC, CHAR_LENGTH(english), lango LIMIT " . (int)$each,
-                ['\\b' . preg_quote($g, '/') . '\\b', $g])));
+            $row[$c] = with_community($c, fn() => array_map('compare_entry', dictionary_by_english($g, $each)));
         }
         if ($row['lango'] || $row['acholi']) $out[] = $row;
     }
@@ -183,13 +214,8 @@ function translation_languages(): array
 function community_glosses(string $term, string $c, int $max = 6): array
 {
     $out = [];
-    $rows = with_community($c, fn() => all("SELECT english FROM dictionary WHERE status='published' AND (lango=? OR fold=?) ORDER BY (lango=?) DESC, verified DESC, CHAR_LENGTH(english) LIMIT 4", [$term, lango_fold($term), $term]));
-    foreach ($rows as $r) {
-        foreach (preg_split('/[;,·\/]/u', (string)preg_replace('/\([^)]*\)/u', '', (string)$r['english'])) as $g) {
-            $g = mb_strtolower(trim((string)preg_replace('/^(?:a|an|the|to)\s+/u', '', trim($g))));
-            if ($g !== '' && mb_strlen($g) <= 40 && !in_array($g, $out, true)) $out[] = $g;
-        }
-    }
+    $rows = with_community($c, fn() => all("SELECT english, gloss FROM dictionary WHERE status='published' AND (lango=? OR fold=? OR fold LIKE ?) ORDER BY (lango=?) DESC, (fold=?) DESC, COALESCE(grade,0) DESC, (gloss=CONCAT('|', english, '|')) DESC, verified DESC, CHAR_LENGTH(english) LIMIT 4", [$term, lango_fold($term), like_escape(lango_fold($term)) . ' (%', $term, lango_fold($term)]));
+    foreach ($rows as $r) foreach (dictionary_meanings($r) as $g) if (!in_array($g, $out, true)) $out[] = $g;
     return array_slice($out, 0, $max);
 }
 
@@ -206,20 +232,33 @@ function translate_between(string $text, string $from, string $to): array
 
     $text = lango_fold($text, false);
     preg_match_all("/[\p{L}\p{M}]+(?:['\-][\p{L}\p{M}]+)*/u", $text, $w);
-    $glosses = community_glosses($text, $from);
+    $glosses = community_glosses($text, $from, 6);
     if (!$glosses) {
         if (count($w[0]) > 1) return ['translation' => '', 'unknown_words' => [], 'coming_soon' => true, 'words' => array_slice(array_values(array_unique($w[0])), 0, 12),
             'message' => 'Sentence translation is coming soon. For now translate one word at a time.'];
         return ['translation' => '', 'unknown_words' => [$text]];
     }
-    $cand = [];
-    foreach ($glosses as $g) {
-        $rows = with_community($to, fn() => all("SELECT lango, english, verified FROM dictionary WHERE status='published' AND english REGEXP ? ORDER BY (english=?) DESC, verified DESC, CHAR_LENGTH(english), lango LIMIT 4", ['\b' . preg_quote($g, '/') . '\b', $g]));
-        foreach ($rows as $r) if (!isset($cand[$r['lango']])) $cand[$r['lango']] = ['headword' => $r['lango'], 'english' => $r['english'], 'meaning' => $g, 'verified' => (bool)$r['verified']];
+    // every word of the other dictionary that carries one of this word's meanings; one that carries several of them is the likelier equivalent
+    $cand = []; $n = 0;
+    foreach ($glosses as $i => $g) {
+        $seen = [];
+        foreach (with_community($to, fn() => dictionary_by_english($g, 4)) as $r) {
+            $k = $r['lango'];
+            if (isset($seen[$k])) continue;
+            $seen[$k] = true;
+            $whole = $r['grade'] !== null || mb_strtolower(trim((string)$r['english'])) === $g;   // an entry of the scan matches on a whole short meaning; another on its whole English text
+            $cand[$k] ??= ['headword' => $k, 'english' => $r['english'], 'meaning' => $g, 'verified' => (bool)$r['verified'], 'confirmed' => $r['grade'] === null ? null : (int)$r['grade'] >= 3,
+                'score' => 0.0, 'grade' => (int)$r['grade'], 'whole' => false, 'first' => $i, 'n' => $n++];
+            $cand[$k]['score'] += 1 / (1 + $i);   // a meaning counts less the further down the word's list it is
+            $cand[$k]['whole'] = $cand[$k]['whole'] || $whole;
+        }
     }
-    $top = array_slice(array_values($cand), 0, 5);
-    // the answer is the words whose whole meaning is the English word; the other matches (a water pot, a worm that lives in water) stay in the candidates
-    $exact = array_values(array_filter($top, fn($c) => mb_strtolower(trim((string)$c['english'])) === $c['meaning']));
-    $answer = array_slice($exact ?: $top, 0, $exact ? 3 : 1);
-    return ['translation' => implode('; ', array_column($answer, 'headword')), 'unknown_words' => $top ? [] : [$text], 'likely' => true, 'via' => $glosses, 'candidates' => $top];
+    uasort($cand, fn($a, $b) => [round($b['score'], 3), $b['grade'], (int)$b['whole'], $a['first'], $a['n']] <=> [round($a['score'], 3), $a['grade'], (int)$a['whole'], $b['first'], $b['n']]);
+    $cand = array_values($cand);
+    $top = $cand ? $cand[0]['score'] : 0;
+    // the answer: the words that carry the word's main meanings, at most three (a water pot, a worm that lives in water, stay in the candidates)
+    $answer = array_slice(array_values(array_filter($cand, fn($c) => $c['score'] >= $top * 0.6 && $c['grade'] >= $cand[0]['grade'] && (!$cand[0]['whole'] || $c['whole']))), 0, 3);   // and not less sure than the first, nor, when the first is a whole meaning, a mere mention
+    $clean = fn($c) => array_diff_key($c, ['score' => 1, 'grade' => 1, 'whole' => 1, 'first' => 1, 'n' => 1]);
+    return ['translation' => implode('; ', array_column($answer, 'headword')), 'unknown_words' => $answer ? [] : [$text], 'likely' => true, 'via' => $glosses,
+        'candidates' => array_map($clean, array_slice($cand, 0, 6))];
 }

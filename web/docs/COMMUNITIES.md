@@ -53,8 +53,52 @@ a book under copyright ("All rights reserved"), and it is unchecked scanning out
 * `--publish` shows it publicly. Only do that once the publisher's (or the author's) written permission is in hand, or after replacing the data with a
   source you may publish. `--replace` removes the earlier import first.
 * Entries are stored unchecked (`verified = 0`) with the source "Blackings 2009 (scanned, unchecked)". The daily word and the weekly challenge use only
-  published entries, so they stay empty for Acholi until its dictionary is published.
-* The folder is in `.gitignore`: never commit or deploy it. The live database only gets it if you run the import there.
+  published entries the scan is surer of (grade 2 or 3), so a doubtful word (grade 1) is never taught as a question; they stay empty for Acholi until its
+  dictionary is published.
+* In the app and the API (`doubtful: true`, and a 7th item in `/dictionary/export`) a grade 1 entry that no reviewer has verified carries the tag
+  "Doubtful, check with a speaker".
+* The folder is in `.gitignore`: never commit or deploy it. The live database only gets it if you run the import there, or import the CSV below.
+
+### Getting it onto another copy of the site (for example the live one), after permission
+
+`php database/export-acholi-import.php` writes `acholi-data/acholi_dictionary_import.csv` (git ignores it) from this computer's cleaned Acholi dictionary.
+In the other site's admin, set the sidebar **Editing** switch to Acholi, open **Language, Dictionary, Import CSV** and upload that file. The import keeps each
+entry's short meanings (`gloss`) and scan grade, sets the plain-letter spelling that search uses, and **publishes the entries**, so upload it only when you mean to.
+Acholi speakers can then work through the list: filter **Scan check** to "Doubtful", correct the entry (and its short meanings), tick **Verified**, and set the
+scan check to "Both halves agree".
+
+### How the importer cleans the scan
+
+The book has two halves, and the importer cross-checks them (it never invents a word: everything stored is in the scan).
+
+* The English-Acholi half writes Acholi as it is pronounced (tones, doubled long vowels: *mììn*, *wòòr*); the Acholi-English half writes the plain
+  headword (*min*). Words of the first half are stored in the spelling of the second (tones removed, a doubled vowel written once, *ario* read as
+  *aryo* where that is the headword).
+* Each entry gets a `grade` (the `dictionary.grade` column; Lango's entries have none): **3** both halves give the word with the same English meaning,
+  **2** one half gives it and its spelling is a headword of the Acholi-English half, **1** the spelling cannot be matched (may be a scanning error)
+  or the scan flags the entry, or the entry looks like two merged entries (a very long run-on sense).
+* Each entry has a `gloss`, its short English meanings between pipes (`|water|`), which is what the translator, the comparison and the dictionary
+  search match exactly. A long definition ("short form of the first person pronoun") therefore never matches an English word that merely occurs in it.
+* An entry that the other half already gives is stored once. An entry of one half is not shown as a second row.
+* Left out as debris: English inflections ("abandoning"), senses that are a stray letter or carry cross-reference numbers (and what follows such a
+  number, which belongs to the next entry), words with capitals or digits, spellings with letters Acholi does not use (f, h, q, v, x, z) that the other
+  half does not have, phrases with the book's own labels ("noun", "the suffix -e"), and example lines that are a bracketed pronunciation or a label.
+  A headword the scan repeats in part ("dwe dw") is read as the word ("dwe"). The 97 entries the scan flagged for a pronunciation that does not match
+  are kept at grade 1; the few without a translation are dropped.
+
+### How lookups use it
+
+* Acholi to English (`community_translator()` in `app/lib/content.php`): up to three meanings, the surest first (*dano*: human being; person; human).
+* English to Acholi: the word or words with the best score (grade, and whether the meaning is the entry's first), at most three, so two equally sure
+  words both show (*father*: wor; won) and a weaker one does not follow.
+* Between Lango and Acholi (`translate_between()` in `app/lib/community_api.php`): the word's English meanings, the first ones weighing most, are looked
+  up in the other dictionary; the words that carry the main meanings are the answer (`likely: true`), the rest are `candidates`, each with
+  `confirmed` (true when both halves agree; null for Lango's entries, which have no grade).
+* Search (website, app API): the word itself, the exact English meaning, the confirmed entries, then the closest spelling. Lango's ordering is unchanged.
+
+What is still uncertain: it is OCR of a printed book that the scan README itself calls unchecked. Grade 3 is solid; grade 2 is probably right; grade 1
+(about one in seven entries) needs a reader. Words with several equally sure entries (*big*: dwong, min, cogi) cannot be told apart from the scan.
+Some basic words are missing or doubtful because the scan is: there is no *hello*; *father* comes out as *wor* (the scan's reading) and *won*.
 
 ## Acholi content that is included
 

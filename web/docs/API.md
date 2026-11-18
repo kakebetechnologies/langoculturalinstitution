@@ -63,7 +63,7 @@ Everything below is built from content already in the archive (the dictionary, h
 | GET | `/clans/leaderboard?sort=members|contributions|learners` | Every published clan with its numbers and rank, and `mine` for a signed-in member |
 | GET | `/clans/{id}/stats` | One clan's numbers and rank |
 
-Quiz words come from the dictionary: only entries reviewers have verified once there are at least 100 of them (until then all published entries), never long or multi-word entries, and never the words in `DAILY_SENSITIVE` (web/app/lib/content.php).
+Quiz words come from the dictionary: only entries reviewers have verified once there are at least 100 of them (until then all published entries), never an entry of a scanned dictionary that the scan doubts (grade 1), never long or multi-word entries, and never the words in `DAILY_SENSITIVE` (web/app/lib/content.php).
 
 ## Listen & read
 
@@ -111,7 +111,7 @@ A member who chose a clan can join that clan's group. `user.clan_group` (in `/me
 | `/library` | Published documents with download links |
 | `/news`, `/news/{slug}` | Articles. While none is published, `web` lists articles, profiles and documentaries on other websites: `[ { title, source, url, kind, person } ]` |
 | `/dictionary` | Search (`?q=&dir=lg|en|all&cat=&letter=`), paged |
-| `/dictionary/export` | The whole dictionary for offline use; pass `?version=` to get `{ unchanged: true }` when nothing changed |
+| `/dictionary/export` | The whole dictionary for offline use: `entries` are `[headword, english, pos, category, verified, community, doubtful]`; pass `?version=` to get `{ unchanged: true }` when nothing changed. Each word in `/dictionary` has `doubtful` too: an entry of a scanned dictionary (Acholi) that the scan itself doubts and no reviewer has verified |
 | `/proverbs`, `/greetings` | Published proverbs (none are pre-loaded); greetings from the Practical Lango Grammar |
 | `/translate` | `text`, `direction=en-lango|lango-en` — dictionary-based, not machine translation. Only a single word, a set phrase of the dictionary or a worked textbook sentence is translated; for anything longer the answer is `{ coming_soon: true, message, words: [...] }` so the app can offer each word in the dictionary |
 | `/assistant` | POST `q` — answers only from reviewed content, with sources |
@@ -136,7 +136,7 @@ The older open-data endpoints documented at `/developers` keep working unchanged
 | Method | Path | Notes |
 |---|---|---|
 | GET | `/communities` | The communities that are switched on (Admin, Communities): `{ data: [{ code, name, language, people, register, registers, leader, region, capital, words }], current, languages }`. `/ping` carries the same list |
-| POST | `/translate` | `text` and `from`, `to` (each `en` or a community code; older apps send `direction` instead). Between two communities' languages the answer has `likely: true` and `candidates`: matched through English, not checked |
-| GET | `/compare?q=` | Words of Lango and Acholi side by side, found through their English meanings. `q` may be an English word or a word of either language. → `{ data: { term, groups: [{ english, lango: [word], acholi: [word] }], available: { lango: n, acholi: n } } }`, each word `{ headword, english, pos, verified }`. Pairs are likely equivalents, never checked ones |
+| POST | `/translate` | `text` and `from`, `to` (each `en` or a community code; older apps send `direction` instead). Between two communities' languages the answer has `likely: true` and `candidates` (each `{ headword, english, meaning, verified, confirmed }`): matched through English, not checked. From a community's language to English the answer can list up to three meanings ("human being; person; human"), and English to a community's language up to three equally sure words ("wor; won") |
+| GET | `/compare?q=` | Words of Lango and Acholi side by side, found through their English meanings. `q` may be an English word or a word of either language. → `{ data: { term, groups: [{ english, lango: [word], acholi: [word] }], available: { lango: n, acholi: n } } }`, each word `{ headword, english, pos, verified, confirmed }` (`confirmed`: true when both halves of the scanned Acholi dictionary agree on it, false when they do not, null where there is no such grading, as for Lango). Pairs are likely equivalents, never checked ones |
 | PATCH | `/me` | Also accepts `community` (`lango` or `acholi`): the member's clan details are kept for the community they leave and restored when they come back |
 | POST | `/auth/register`, `/auth/login` | Send `X-App-Community`: a new account belongs to that community, and signing in with it selects it |

@@ -74,8 +74,7 @@ if ($sub === 'dictionary') {
     } elseif ($letter !== '' && $browsing) { $where[] = 'fold LIKE ?'; $par[] = $letter . '%'; }
     if ($cat !== '') { $where[] = 'category=?'; $par[] = $cat; }
     $w = implode(' AND ', $where);
-    $order = $qs !== '' ? 'ORDER BY (lango=?) DESC, (fold=?) DESC, (english=?) DESC, (fold LIKE ?) DESC, CHAR_LENGTH(lango), lango' : 'ORDER BY fold, lango';
-    $ordPar = $qs !== '' ? [$qs, lango_fold($qs), $qs, like_escape(lango_fold($qs)) . '%'] : [];
+    [$order, $ordPar] = $qs !== '' ? dictionary_order($qs) : ['ORDER BY fold, lango', []];
     $total = (int)val("SELECT COUNT(*) FROM dictionary WHERE $w", $par);
     $pg = paginate($total, 24);
     $rows = all("SELECT * FROM dictionary WHERE $w $order LIMIT {$pg['per']} OFFSET {$pg['offset']}", array_merge($par, $ordPar));

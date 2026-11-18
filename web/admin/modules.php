@@ -305,13 +305,15 @@ return [
     /* ------------------------------- LANGUAGE ------------------------------- */
     'dictionary' => [
         'label' => 'Dictionary', 'icon' => 'book', 'group' => 'Language', 'table' => 'dictionary', 'roles' => $cont, 'title' => 'lango', 'order' => 'lango',
-        'list' => ['lango', 'english', 'pos', 'category', 'verified', 'status'], 'search' => ['lango', 'english'], 'filters' => ['category', 'verified', 'status'],
-        'import' => ['columns' => ['lango', 'english', 'pos', 'example_lg', 'example_en'], 'required' => 'lango', 'status' => 'published'],
+        'list' => ['lango', 'english', 'pos', 'category', 'grade', 'verified', 'status'], 'search' => ['lango', 'english'], 'filters' => ['category', 'grade', 'verified', 'status'],
+        'import' => ['columns' => ['lango', 'english', 'pos', 'example_lg', 'example_en', 'gloss', 'grade', 'source'], 'required' => 'lango', 'status' => 'published', 'before' => true],
         'before' => function (array &$d) { if (isset($d['lango'])) $d['fold'] = mb_substr(lango_fold($d['lango']), 0, 200); },
         'fields' => [
             'lango' => ['label' => 'Leb Lango', 'required' => true], 'english' => ['label' => 'English meaning', 'required' => true], 'pos' => ['label' => 'Part of speech'],
             'category' => ['type' => 'select', 'options' => WORD_CATS], 'contributor' => ['label' => 'Credit (contributor)', 'help' => 'Shown beside community-suggested words.'],
             'example_lg' => ['label' => 'Example (Leb Lango)'], 'example_en' => ['label' => 'Example (English)'], 'audio' => ['type' => 'file', 'kind' => 'audio', 'label' => 'Pronunciation audio'],
+            'gloss' => ['label' => 'Short meanings', 'help' => 'Scanned dictionaries only (Acholi): the short English meanings between bars, like |water|. The translator and the comparison match these exactly; correct them when you correct the meaning.'],
+            'grade' => ['type' => 'select', 'label' => 'Scan check', 'options' => [3 => 'Both halves of the book agree', 2 => 'One half, spelling matched', 1 => 'Doubtful: check with a speaker'], 'help' => 'Scanned dictionaries only (Acholi): how far the scan can be trusted. Set to "Both halves agree" once a speaker has checked the entry, and tick Verified.'],
             'source' => [], 'verified' => $bool + ['label' => 'Verified by a language expert'],
             'status' => ['type' => 'select', 'options' => $PUB, 'required' => true, 'default' => 'published'],
         ],

@@ -49,7 +49,7 @@ if (PHP_SAPI !== 'cli' && !API_V1) community_web_init();
 // config/schema_rev.txt (git-ignored, closed to the web) records the revision already applied; a lock stops two requests running it at once,
 // and a folder that cannot be written to simply skips this (the same update is available as php database/upgrade-cli.php).
 if (PHP_SAPI !== 'cli') {
-    $lciRev = '2026-11-04-communities-2';
+    $lciRev = '2026-11-04-communities-3';
     $lciMark = ROOT . '/config/schema_rev.txt';
     if (@file_get_contents($lciMark) !== $lciRev && is_writable(dirname($lciMark))) {
         $lciLock = @fopen($lciMark . '.lock', 'c');
