@@ -66,12 +66,14 @@ function icon(string $n, string $cls = ''): string
 
 function nav_items(): array
 {
-    if (community() !== 'lango') {   // another community: only what it has (no Bible, radio, media or library of Lango's)
+    if (community() !== 'lango') {   // another community: only what it has (its own Bible when a link is set; no radio, media or library of Lango's)
+        $library = [[__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']];
+        if (trim(setting('bible_link_full')) !== '') array_unshift($library, [__('Lango Bible'), 'bible']);   // reads "Acholi Bible" there
         return [
             [__('Lango'), 'about', [[__('About Lango'), 'about'], [__('History'), 'history'], [__('Districts'), 'districts'], [__('Notable Langos'), 'people']]],
             [__('Heritage'), 'heritage', [[__('Clan Explorer'), 'clans'], [__('Ceremonies & Traditions'), 'heritage/ceremonies'], [__('Attire & Crafts'), 'heritage/attire'], [__('Music, Dance & Stories'), 'heritage/music'], [__('Symbols & Sites'), 'heritage/symbols']]],
             [__('Language'), 'language', [[__('Dictionary'), 'language/dictionary'], [__('AI Translator'), 'language/translate'], [__('Proverbs'), 'language/proverbs'], ['Compare Lango and Acholi', 'language/compare'], [__('Suggest a Word'), 'contribute?type=language']]],
-            [__('Library'), 'assistant', [[__('AI Cultural Assistant'), 'assistant'], [__('Open Data & API'), 'developers']]],
+            [__('Library'), 'assistant', $library],
             [__('News & Events'), 'news', [[__('News & Blog'), 'news'], [__('Events'), 'events']]],
             [__('Contribute'), 'contribute', []],
             [__('Contact'), 'contact', []],

@@ -70,7 +70,16 @@ function bible_links(): array
 
 function bible_link_note(): string
 {
-    return trim((string)setting('bible_link_note')) ?: 'The Lango Bible is published by the Bible Society of Uganda. These links open it on Bible.com, where you can read it and listen to it.';
+    $own = trim((string)setting('bible_link_note'));
+    if ($own !== '') return $own;
+    if (community() === 'lango') return 'The Lango Bible is published by the Bible Society of Uganda. These links open it on Bible.com, where you can read it and listen to it.';
+    return 'The ' . community_info()['name'] . ' Bible is published by the Bible Society of Uganda. This link opens it on Bible.com, where you can read it and listen to it.';
+}
+
+/** The name of the Bible in the app and on the site: the setting, else "<community> Bible" (Lango Bible, Acholi Bible). */
+function bible_title(): string
+{
+    return trim((string)setting('bible_title')) ?: (community() === 'lango' ? 'Lango Bible' : community_info()['name'] . ' Bible');
 }
 
 /** Pay-to instructions entered in Site settings for one payment method (empty text and no link when it has none). */
@@ -145,7 +154,7 @@ function media_api(string $res, string $id, string $sub, string $m, ?array $user
             if ($id === '') {
                 $books = all('SELECT b.id, b.code, b.testament, b.name_en, b.name_lg, COALESCE(MAX(v.chapter), 0) chapters, COUNT(v.id) verses FROM bible_books b LEFT JOIN bible_verses v ON v.book_id=b.id GROUP BY b.id ORDER BY b.id');
                 $books = array_map(fn($b) => ['id' => (int)$b['id'], 'code' => $b['code'], 'testament' => $b['testament'], 'name' => $b['name_lg'] ?: $b['name_en'], 'name_en' => $b['name_en'], 'name_lg' => $b['name_lg'] ?: null, 'chapters' => (int)$b['chapters'], 'chapters_total' => BIBLE_CHAPTERS[$b['code']] ?? 0, 'verses' => (int)$b['verses']], $books);
-                json_out(['data' => ['title' => setting('bible_title') ?: 'Lango Bible', 'copyright' => setting('bible_copyright') ?: null, 'ready' => (bool)array_sum(array_column($books, 'verses')), 'links' => bible_links(), 'link_note' => bible_link_note(), 'books' => $books]]);
+                json_out(['data' => ['title' => bible_title(), 'copyright' => setting('bible_copyright') ?: null, 'ready' => (bool)array_sum(array_column($books, 'verses')), 'links' => bible_links(), 'link_note' => bible_link_note(), 'books' => $books]]);
             }
             if ($id === 'search') {
                 api_throttle('biblesearch', 60, 600);
@@ -173,7 +182,7 @@ function media_api(string $res, string $id, string $sub, string $m, ?array $user
             elseif ($nb = one('SELECT book_id, MIN(chapter) chapter FROM bible_verses WHERE book_id>? GROUP BY book_id ORDER BY book_id LIMIT 1', [$bk])) $next = ['book_id' => (int)$nb['book_id'], 'chapter' => (int)$nb['chapter']];
             json_out(['data' => ['book' => ['id' => (int)$book['id'], 'name' => $book['name_lg'] ?: $book['name_en'], 'name_en' => $book['name_en'], 'chapters' => $chapters], 'chapter' => $ch,
                 'verses' => array_map(fn($v) => ['n' => (int)$v['verse'], 'text' => $v['text']], $verses), 'prev' => $prev, 'next' => $next,
-                'title' => setting('bible_title') ?: 'Lango Bible', 'copyright' => setting('bible_copyright') ?: null]]);
+                'title' => bible_title(), 'copyright' => setting('bible_copyright') ?: null]]);
 
         /* ---------- Giving ---------- */
         case 'giving':

@@ -35,7 +35,7 @@ page_start(__('Lango Bible'), ['hero' => ['eyebrow' => __('Library'), 'title' =>
       $groups = $key === 'nt' ? ['new' => __('New Testament')] : ['old' => __('Old Testament'), 'new' => __('New Testament')];
       if ($key === 'nt' && isset($byKey['full'])) continue;   // the full Bible already has the New Testament
       foreach ($groups as $tm => $label): ?>
-        <h2 style="font-size:1.3rem;margin:30px 0 12px"><?= e($label) ?><?= $key === 'nt' ? ' · La79' : '' ?></h2>
+        <h2 style="font-size:1.3rem;margin:30px 0 12px"><?= e($label) ?><?= $key === 'nt' && community() === 'lango' ? ' · La79' : '' ?></h2>
         <div class="bookgrid">
           <?php foreach ($books as $b): if ($b['testament'] !== $tm) continue; $tot = BIBLE_CHAPTERS[$b['code']] ?? 0; if (!$tot) continue; ?>
             <details class="bookitem"><summary><?= e($bname($b)) ?> <small><?= $tot ?></small></summary>

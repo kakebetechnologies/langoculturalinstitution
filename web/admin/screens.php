@@ -207,7 +207,7 @@ function screen_settings(): void
             'give_mtn_momo' => 'MTN Mobile Money: how to pay (number and account name)', 'give_airtel_money' => 'Airtel Money: how to pay (number and account name)',
             'give_bank' => 'Bank transfer: how to pay (bank, account name and number)', 'give_paypal' => 'PayPal: how to pay (the PayPal email)', 'give_paypal_url' => 'PayPal link (https://…, optional)',
             'give_card' => 'Visa / Mastercard: how to pay', 'give_card_url' => 'Card payment link (https://…, from your payment provider, optional)'],
-        'Lango Bible (the app and the website)' => ['bible_title' => 'Name of the Bible shown in the app (default: Lango Bible)', 'bible_copyright' => 'Copyright and permission line shown under every chapter',
+        community_info()['name'] . ' Bible (the app and the website)' => ['bible_title' => 'Name of the Bible shown in the app (default: ' . community_info()['name'] . ' Bible)', 'bible_copyright' => 'Copyright and permission line shown under every chapter',
             'bible_link_full' => 'Link to the full Bible online (https://…, blank = none)', 'bible_link_nt' => 'Link to the New Testament online (https://…, blank = none)', 'bible_link_note' => 'Line shown above those links (blank = the default about the Bible Society of Uganda)'],
         'Google sign-in (the app)' => ['google_client_id' => 'Google client ID', 'google_client_secret' => 'Google client secret'],
     ];
@@ -223,7 +223,7 @@ function screen_settings(): void
         csrf_check();
         $err = [];
         foreach ($groups as $g) foreach ($g as $k => $_) {
-            $key = community() !== 'lango' && in_array($k, ['site_name', 'org_subtitle', 'site_tagline', 'clan_total'], true) ? community() . '.' . $k : $k;   // another community's own wording
+            $key = community() !== 'lango' && (in_array($k, ['site_name', 'org_subtitle', 'site_tagline', 'clan_total'], true) || strncmp($k, 'bible_', 6) === 0) ? community() . '.' . $k : $k;   // another community's own wording and its own Bible
             q('INSERT INTO settings (k,v) VALUES (?,?) ON DUPLICATE KEY UPDATE v=VALUES(v)', [$key, post($k)]);
         }
         foreach ($images as $k => $_) {

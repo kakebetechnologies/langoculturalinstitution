@@ -76,6 +76,23 @@ function lci_communities(PDO $pdo): array
     $st = $pdo->prepare('INSERT IGNORE INTO settings (k, v) VALUES (?, ?)');
     $st->execute(['acholi.clan_total', '54']);
     if ($st->rowCount()) $log[] = 'setting acholi.clan_total';
+
+    // The Acholi Bible (Acoli Baibul 1985, Bible Society of Uganda): the 66 books under the names that edition gives them, and the link to it on Bible.com.
+    // The text is not copied; each chapter opens in the reader there. A name or link an editor changed in the admin is left alone.
+    $bibleSeed = __DIR__ . '/content/acholi_bible.php';
+    if (is_file($bibleSeed) && $has('ac_bible_books') && $has('bible_books')) {
+        $bible = require $bibleSeed;
+        $pdo->exec('INSERT IGNORE INTO ac_bible_books (id, code, testament, name_en) SELECT id, code, testament, name_en FROM bible_books');
+        $fill = $pdo->prepare("UPDATE ac_bible_books SET name_lg=? WHERE code=? AND (name_lg IS NULL OR name_lg='')");
+        $named = 0;
+        foreach ($bible['books'] as $code => $name) { $fill->execute([$name, $code]); $named += $fill->rowCount(); }
+        if ($named) $log[] = "ac_bible_books: $named book names";
+        $st->execute(['acholi.bible_link_full', $bible['url']]);
+        if ($st->rowCount()) $log[] = 'setting acholi.bible_link_full';
+    } elseif ($has('ac_bible_books')) {
+        $log[] = 'WARNING: database/content/acholi_bible.php is missing, so the Acholi Bible books and link were not added';
+        error_log('LCI upgrade: database/content/acholi_bible.php is missing');
+    }
     return $log;
 }
 

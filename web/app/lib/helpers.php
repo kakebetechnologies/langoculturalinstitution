@@ -141,6 +141,7 @@ function setting(string $k, string $default = ''): string
         if ($k === 'site_name') return $i['name'];
         if ($k === 'site_tagline') return 'Everything about ' . $i['name'] . ', in one place.';
         if ($k === 'org_subtitle' || $k === 'clan_total') return $default;
+        if (strncmp($k, 'bible_', 6) === 0) return $default;   // each community has its own Bible: never the Lango links, title or copyright line
     }
     $v = $all[$k] ?? '';
     return trim((string)$v) !== '' ? (string)$v : $default;

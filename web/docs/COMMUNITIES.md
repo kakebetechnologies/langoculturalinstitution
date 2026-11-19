@@ -28,6 +28,11 @@ switch it on.
 * Who decides the community: a signed-in member's own; otherwise the request (`X-App-Community` header or `?community=` for the API, a session and cookie
   for the website); otherwise the default (Lango). Only communities that are on are accepted, except in the admin panel.
 * A member's clan belongs to one community. Switching keeps the clan details of the one they leave (`users.culture_state`) and restores them.
+* The **Bible** is each community's own and is never copied: its book names are in its own `bible_books` table and its text is read on Bible.com. The
+  address is the setting `<code>.bible_link_full` (Acholi: `https://www.bible.com/versions/559-aco85-acoli-baibul`, the Acoli Baibul 1985 of the Bible
+  Society of Uganda; the upgrade adds it and the 66 Acholi book names from `database/content/acholi_bible.php` when they are missing, and never overwrites an
+  edit; a book name an editor empties is filled again from the file on the next upgrade, and if the file is missing the upgrade logs a warning). Settings starting with `bible_` do not fall back to Lango's, so a community without a link shows none instead of Lango's. Admin, Site settings,
+  with **Editing** set to the community, edits them. The app and the website need no change for another tribe: add its edition link and book names.
 * Wording: for another community the website and app swap the names and clan words (Lango to Acholi, clan to chiefdom, Awitong to Rwot) and rewrite the
   few phrases that state a Lango fact, using the community's own region and capital (`community_words()` in `app/lib/community_api.php`,
   `communityWords()` in `app/lib/community.jsx`). The Lango emblem and the opening photographs are Lango's and are not shown for another community; the

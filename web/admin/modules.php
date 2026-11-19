@@ -424,7 +424,7 @@ return [
         'fields' => [
             'name_en' => ['readonly' => true, 'label' => 'Book (English)'], 'code' => ['readonly' => true, 'label' => 'Code'],
             'testament' => ['type' => 'select', 'options' => ['old' => 'Old Testament', 'new' => 'New Testament'], 'readonly' => true],
-            'name_lg' => ['label' => 'Book name in Leb Lango', 'help' => 'Type the name exactly as the Lango Bible writes it. The app shows the English name until you do.'],
+            'name_lg' => ['label' => 'Book name in the community\'s language', 'help' => 'Type the name exactly as this community\'s Bible writes it (use Editing in the sidebar to choose the community). The app shows the English name until you do.'],
         ],
     ],
     'bible_verses' => [
