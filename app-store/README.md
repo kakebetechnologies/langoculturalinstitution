@@ -21,7 +21,7 @@ Character limits are Apple's; each block below is within its limit.
 **Promotional text (170 max, can be changed any time):**
 
 ```
-Learn Leb Lango, find your clan, explore Lango and Acholi heritage and add what you know. Free, no ads, reviewed by the community.
+Learn Leb Lango, find your clan, explore Lango and Acholi heritage and add what you know. Free, no ads, and every contribution is reviewed.
 ```
 
 **Description (4000 max):**
@@ -60,8 +60,10 @@ MyCulture is an independent community project by Kakebe Technologies Limited. It
 **Keywords (100 max, comma-separated, no spaces after commas):**
 
 ```
-lango,acholi,leb lango,dictionary,heritage,clans,proverbs,translator,history,quiz,africa,learn
+lango,acholi,leb lango,luo,dictionary,heritage,clans,proverbs,translator,history,quiz,learn,africa
 ```
+
+(98 characters. "Uganda", "languages" and "cultures" are left out because the subtitle already carries them.)
 
 **What's New in this version (4000 max):**
 
@@ -109,21 +111,23 @@ Not collected: financial info, health, contacts, browsing history, diagnostics o
 
 | Field | Value |
 |---|---|
-| Sign-in required | Yes: give a reviewer account. Create it yourself on https://myculture.online (sign up with an email and password, not Google) and do not reuse a real member's account |
-| Contact | [your name], [phone with country code, e.g. +256 777 676 206], [email you check] |
+| Sign-in required | Yes: give a reviewer account. Create it yourself in the app or on https://myculture.online/register (an email and a password, not Google; sign-up is instant and needs no email check). Use a password you do not use anywhere else, keep the account only for Apple, and do not reuse a real member's account |
+| Contact | Sedrick Otolo (Kakebe Technologies Limited), [phone with country code], [an email you check: info@myculture.online is the one the site's Contact page shows] |
 
 **Notes for the reviewer:**
 
 ```
-MyCulture documents and teaches the languages and cultures of Ugandan communities. Lango is the first full community; Acholi is new and still being filled in. At the start the person chooses Lango or Acholi, then signs in with email or Google (Create an account is free and instant). Use the demo account above to see all features.
+MyCulture documents and teaches the languages and cultures of Ugandan communities. Lango is the first full community; Acholi is new and still being filled in. On the first screens the person chooses Lango or Acholi, then signs in with email and password or with Google. Creating an account is free and instant, and email and password sign-up is always available, so no third-party account is needed. Use the demo account above to see every feature.
 
-User-generated content: members can send words, photos, recordings and clan group messages. Every contribution is reviewed by moderators before it is published; group messages can be reported (three reports hide a message) and moderators can remove content and accounts.
+Where to look: Home (word of the day), Explore (heritage, clans or chiefdoms, history, districts, notable people, Bible), Learn (dictionary, translator, proverbs, phrasebook, quizzes), Contribute (suggest a word, add a proverb, a story, a photo or a recording) and Me (profile, settings, Delete account). The app needs an internet connection; the dictionary can be saved once in Settings for offline search.
+
+User-generated content: members can send words, photos, recordings and clan group messages. Every contribution is reviewed by moderators before it is published; group messages can be reported (three reports hide a message) and moderators can remove content and accounts. Contact for reports: info@myculture.online.
 
 Account deletion: Me, Edit profile, Delete account (also at https://myculture.online/account/delete).
 
 Permissions: the camera, microphone, photos and location are requested only when the person taps to attach a photo, record or tag a place for a contribution. Location is used only while the app is open.
 
-The Bible screen opens bible.com pages; the app does not copy that text. Some sections (radio, podcast, events, news) show content only after the editors add it, so they may be empty. There are no in-app purchases and no ads.
+The Bible screens show chapters from the Bible Society of Uganda's pages on Bible.com inside the app; the app does not store or copy that text. Some sections (radio, podcast, events, news) show content only after the editors add it, so they may be empty. There are no in-app purchases and no ads.
 ```
 
 Export compliance: already answered in the app (`ITSAppUsesNonExemptEncryption = false`: HTTPS only), so no extra questions.
@@ -151,5 +155,5 @@ The build appears in TestFlight about 10 to 30 minutes after EAS finishes upload
 
 1. **Sign in with Apple.** The app offers "Continue with Google"; Apple's rule 4.8 asks for an equivalent privacy-preserving login (Sign in with Apple, or a login that hides the email and does not track). Email and password sign-up already exists; if the review insists, Sign in with Apple has to be added.
 2. **User-generated content (rule 1.2)** wants filtering, a way to report, a way to block abusive users and published contact details. Reporting a group message and moderator removal exist; blocking a member does not yet.
-3. **Name on the phone.** The app still shows as "Lango App" under its icon (`name` in `app.json`) and uses the Lango emblem. Change `name` to `MyCulture` in the next build so it matches the store name.
-4. **Acholi dictionary** is empty on the live site until its import file is uploaded (see `web/docs/COMMUNITIES.md`); a reviewer who picks Acholi will see that.
+3. **Name on the phone.** Done: build 4 (1.0.0) shows "MyCulture" under its icon. The app still uses the Lango emblem as its logo.
+4. **Acholi dictionary.** Live since 18 Nov 2026: 4,252 words, 577 of them tagged "Doubtful, check with a speaker". A reviewer who picks Acholi will see the rest of the Acholi edition thin (no quizzes, no proverbs, no radio), which the description and the notes say plainly. Its source (Blackings 2009) is copyrighted; settle that with the publisher before the public release.

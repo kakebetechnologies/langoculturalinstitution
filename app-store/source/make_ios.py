@@ -92,7 +92,33 @@ open(os.path.join(HERE, 'ipad.html'), 'w', encoding='utf-8').write(page('MyCultu
 .shot h2{left:152px;right:152px;top:130px;font-size:150px;line-height:1.04}
 .shot p{left:152px;right:152px;top:470px;font-size:66px;line-height:1.3}
 """))
-print('written: source/iphone.html, source/ipad.html')
+
+# ---------- Google Play: 1080 x 1920 phone screenshots and the 1024 x 500 feature graphic (one phone, like the iPhone set)
+play = []
+for i, (head, sub, bg, fg, accent, one, _two) in enumerate(SHOTS, 1):
+    play.append('<section class="shot" id="s%d" style="background:%s;color:%s"><div class="flag"></div><h2>%s</h2><p style="color:%s">%s</p>%s</section>'
+                % (i, bg, fg, head, accent, sub, phone(one, 800, 'left:140px;top:520px')))
+open(os.path.join(HERE, 'play.html'), 'w', encoding='utf-8').write(page('MyCulture Google Play screenshots', 1080, 1920, play, """
+.shot{width:1080px;height:1920px}.flag{height:18px}
+.shot h2{left:80px;right:80px;top:104px;font-size:88px;line-height:1.04}
+.shot p{left:80px;right:100px;top:336px;font-size:42px;line-height:1.3}
+"""))
+open(os.path.join(HERE, 'feature.html'), 'w', encoding='utf-8').write(page('MyCulture feature graphic', 1024, 500, [
+    '<section class="feature" id="s1"><div class="flag"></div><div class="logo"><img src="../../briefing-source/art/logo-mark.png" alt=""></div>'
+    '<div class="t"><b>MyCulture</b><span>Uganda\'s cultures,<br>starting with Lango.</span><i>Language &middot; Clans &middot; Heritage &middot; Community</i></div>'
+    + phone('home', 250, 'left:600px;top:70px;transform:rotate(7deg)') + phone('dictionary', 250, 'left:790px;top:110px;transform:rotate(-4deg)') + '</section>'], """
+.feature{position:relative;width:1024px;height:500px;overflow:hidden;background:#16181d url('../../briefing-source/art/sunset-lira.jpg') 50% 70%/cover;color:#fff}
+.feature::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(22,24,29,.94) 0%,rgba(22,24,29,.78) 46%,rgba(22,24,29,.25) 100%)}
+.feature .flag{height:10px;z-index:3}
+.feature .logo{position:absolute;left:56px;top:50px;width:78px;height:88px;border-radius:16px;background:#fff;display:grid;place-items:center;z-index:3}
+.feature .logo img{width:54px;height:68px;object-fit:contain}
+.feature .t{position:absolute;left:56px;top:170px;width:520px;z-index:3}
+.feature .t b{display:block;font-size:80px;line-height:1;font-weight:800;letter-spacing:-.03em}
+.feature .t span{display:block;margin-top:14px;font-size:32px;line-height:1.25;font-weight:600;color:#fddd16}
+.feature .t i{display:block;margin-top:22px;font-style:normal;font-size:24px;font-weight:600;color:rgba(255,255,255,.82)}
+.feature .phone{z-index:2}
+"""))
+print('written: source/iphone.html, ipad.html, play.html, feature.html')
 if '--html-only' in sys.argv:
     sys.exit(0)
 
@@ -116,11 +142,21 @@ def shot(html, png, w, h):
 
 
 tmp = os.path.join(HERE, '_one.html')
-for name, folder, w, h in (('iphone', 'iphone-6.3', 1206, 2622), ('ipad', 'ipad-13', 2064, 2752)):
-    os.makedirs(os.path.join(OUT, folder), exist_ok=True)
+PLAY = os.path.normpath(os.path.join(HERE, '..', '..', 'play-store'))
+# which sets to render: python make_ios.py [ios] [play]   (no argument = ios)
+want = [a for a in sys.argv[1:] if not a.startswith('--')] or ['ios']
+jobs = []
+if 'ios' in want:
+    jobs += [('iphone', os.path.join(OUT, 'iphone-6.3'), '%02d.png', 1206, 2622, len(SHOTS)), ('ipad', os.path.join(OUT, 'ipad-13'), '%02d.png', 2064, 2752, len(SHOTS))]
+if 'play' in want:
+    jobs += [('play', os.path.join(PLAY, 'screenshots'), 'phone-%02d.png', 1080, 1920, len(SHOTS))]
+if 'play' in want or 'feature' in want:
+    jobs += [('feature', PLAY, 'feature-graphic-1024x500.png', 1024, 500, 1)]
+for name, folder, pattern, w, h, count in jobs:
+    os.makedirs(folder, exist_ok=True)
     src = open(os.path.join(HERE, name + '.html'), encoding='utf-8').read()
-    for i in range(1, len(SHOTS) + 1):
-        open(tmp, 'w', encoding='utf-8').write(src.replace('</style>', '.shot{margin:0 !important}body{margin:0;background:#fff}.shot:not(#s%d){display:none}</style>' % i, 1))
-        shot(tmp, os.path.join(OUT, folder, '%02d.png' % i), w, h)
-        print('rendered', folder, i)
+    for i in range(1, count + 1):
+        open(tmp, 'w', encoding='utf-8').write(src.replace('</style>', '.shot,.feature{margin:0 !important}body{margin:0;background:#fff}.shot:not(#s%d),.feature:not(#s%d){display:none}</style>' % (i, i), 1))
+        shot(tmp, os.path.join(folder, pattern % i if '%' in pattern else pattern), w, h)
+        print('rendered', name, i)
 os.remove(tmp)

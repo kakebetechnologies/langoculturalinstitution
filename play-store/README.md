@@ -10,7 +10,7 @@ Everything below was written from what the app actually does; replace anything i
 | `icon-512.png` | Store listing, App icon (512 x 512) |
 | `feature-graphic-1024x500.png` | Store listing, Feature graphic (says MyCulture) |
 | `screenshots/phone-01.png` to `phone-08.png` | Store listing, Phone screenshots (1080 x 1920, 9:16) |
-| `source/` | `make_assets.py` then `render_edge.py` (Edge command line; `render_assets.js` needs puppeteer) rebuild all of the above from real screenshots of the app |
+| `source/` | `make_assets.py` writes the 512 px icon only. The screenshots and the feature graphic are now built together with the App Store ones: `node ../app-store/source/capture_ios.js` (real screens at iPhone size) then `python ../app-store/source/make_ios.py play`. Captions were checked against the code: "starting with Lango", the dictionary works offline after one download, no clan is verified yet |
 
 ## 2. Store listing text
 
