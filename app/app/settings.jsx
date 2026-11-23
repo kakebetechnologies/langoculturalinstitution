@@ -7,6 +7,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import AppText from '../components/AppText';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import BlockedMembers from '../components/clan/BlockedMembers';
 import CommunitySwitch from '../components/CommunitySwitch';
 import Screen from '../components/Screen';
 import SectionHeader from '../components/SectionHeader';
@@ -164,6 +165,13 @@ export default function Settings() {
           </View>
         ) : null}
       </Card>
+
+      {user?.clan ? (
+        <>
+          <SectionHeader title={t('Blocked members')} style={{ marginTop: SPACING.lg }} />
+          <BlockedMembers clanId={user.clan.id} />
+        </>
+      ) : null}
 
       <SectionHeader title={t('Storage and connection')} style={{ marginTop: SPACING.lg }} />
       <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>

@@ -1,5 +1,6 @@
 // The message wall of a clan group: everyone in the group reads and writes here. New messages arrive by polling every few seconds
-// while the screen is open. Long-press a message to report it (or delete it, if it is yours or you look after the clan).
+// while the screen is open. Long-press a message to report it, to block its author (their messages disappear for you; Settings, Blocked members
+// undoes it), or to delete it if it is yours or you look after the clan.
 // Plain text only, up to 1000 characters.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
@@ -134,6 +135,17 @@ export default function ClanMessages({ clanId, onRead }) {
     }
   }
 
+  async function block(m) {
+    try {
+      await api.post(`/clans/${clanId}/blocks`, { user_id: m.user.id });
+      setItems((prev) => prev.filter((x) => x.user.id !== m.user.id));
+      setMenu(null);
+    } catch (e) {
+      setMenu(null);
+      setSendError(errorMessage(e));
+    }
+  }
+
   const canRemove = (m) => m.mine || MODERATORS.includes(user?.role);
 
   return (
@@ -233,6 +245,15 @@ export default function ClanMessages({ clanId, onRead }) {
               <Pressable onPress={() => report(menu)} style={styles.action} accessibilityRole="button">
                 <Ionicons name="flag-outline" size={20} color={COLORS.primaryDark} />
                 <AppText style={styles.actionText}>{t('Report this message')}</AppText>
+              </Pressable>
+            ) : null}
+            {!menu.mine && menu.user?.id ? (
+              <Pressable onPress={() => block(menu)} style={styles.action} accessibilityRole="button" accessibilityHint={t('Their messages will be hidden from you. You can unblock them in Settings.')}>
+                <Ionicons name="ban-outline" size={20} color={COLORS.danger} />
+                <View style={{ flex: 1 }}>
+                  <AppText style={[styles.actionText, { color: COLORS.danger }]}>{t('Block this member')}</AppText>
+                  <AppText variant="caption">{t('Their messages will be hidden from you. You can unblock them in Settings.')}</AppText>
+                </View>
               </Pressable>
             ) : null}
             {canRemove(menu) ? (

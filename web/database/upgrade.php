@@ -129,6 +129,11 @@ function lci_upgrade(PDO $pdo): array
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, message_id INT UNSIGNED NOT NULL, user_id INT UNSIGNED NOT NULL, reason VARCHAR(200) NULL,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (message_id, user_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // a member can block another member of the clan group: the blocked person's messages and name are hidden from the one who blocked (App Store rule 1.2)
+    $pdo->exec("CREATE TABLE IF NOT EXISTS user_blocks (
+        blocker_id INT UNSIGNED NOT NULL, blocked_id INT UNSIGNED NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (blocker_id, blocked_id), KEY (blocked_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
     // daily habit: one row per member per day per kind of activity (opened the app, learned the word of the day), quiz results, best streak
     $pdo->exec("CREATE TABLE IF NOT EXISTS activity_days (

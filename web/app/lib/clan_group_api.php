@@ -118,12 +118,33 @@ function clan_group_api(int $clanId, string $sub, array $seg, string $m): never
 
     if ($sub === 'members' && $m === 'GET') {
         [$page, $limit, $off] = api_paging(50);
-        $total = (int)val('SELECT COUNT(*) FROM users WHERE clan_id=? AND clan_joined_at IS NOT NULL AND is_active=1 AND (clan_hidden=0 OR id=?)', [$clanId, $u['id']]);
-        $rows = all("SELECT id, name, points, role, clan_joined_at FROM users WHERE clan_id=? AND clan_joined_at IS NOT NULL AND is_active=1 AND (clan_hidden=0 OR id=?)
-                     ORDER BY (role='clan_leader') DESC, name LIMIT $limit OFFSET $off", [$clanId, $u['id']]);
+        $total = (int)val('SELECT COUNT(*) FROM users WHERE clan_id=? AND clan_joined_at IS NOT NULL AND is_active=1 AND (clan_hidden=0 OR id=?) AND id NOT IN (SELECT blocked_id FROM user_blocks WHERE blocker_id=?)', [$clanId, $u['id'], $u['id']]);
+        $rows = all("SELECT id, name, points, role, clan_joined_at FROM users WHERE clan_id=? AND clan_joined_at IS NOT NULL AND is_active=1 AND (clan_hidden=0 OR id=?) AND id NOT IN (SELECT blocked_id FROM user_blocks WHERE blocker_id=?)
+                     ORDER BY (role='clan_leader') DESC, name LIMIT $limit OFFSET $off", [$clanId, $u['id'], $u['id']]);
         $data = array_map(fn($r) => ['id' => (int)$r['id'], 'name' => $r['name'], 'level' => contributor_level((int)$r['points'])['name'], 'leader' => $r['role'] === 'clan_leader',
             'you' => (int)$r['id'] === (int)$u['id'], 'joined' => $r['clan_joined_at']], $rows);
         json_out(['data' => $data, 'meta' => api_meta($page, $limit, $total) + ['group_size' => clan_group_members($clanId), 'hidden' => clan_group_members($clanId) - (int)val('SELECT COUNT(*) FROM users WHERE clan_id=? AND clan_joined_at IS NOT NULL AND is_active=1 AND clan_hidden=0', [$clanId])]]);
+    }
+
+    if ($sub === 'blocks') {   // block a member of the group: their messages and name disappear for you; you can unblock at any time
+        $uid = (int)($seg[5] ?? 0);
+        if ($m === 'GET' && $uid === 0) {
+            $rows = all('SELECT u.id, u.name FROM user_blocks b JOIN users u ON u.id=b.blocked_id WHERE b.blocker_id=? ORDER BY b.created_at DESC', [$u['id']]);
+            json_out(['data' => array_map(fn($r) => ['id' => (int)$r['id'], 'name' => $r['name'] ?: 'Member'], $rows)]);
+        }
+        if ($m === 'POST' && $uid === 0) {
+            $target = (int)(api_in()['user_id'] ?? 0);
+            if ($target === (int)$u['id']) api_err('You cannot block yourself.', 422);
+            $them = one('SELECT id, name FROM users WHERE id=?', [$target]) ?? api_err('We could not find that member.', 404);
+            q('INSERT IGNORE INTO user_blocks (blocker_id, blocked_id) VALUES (?,?)', [$u['id'], $target]);
+            notify('user_blocked', 'A member was blocked in a clan group (' . $clan['name'] . ')', mb_substr((string)$them['name'], 0, 120), 'admin/?m=clan_messages');
+            json_out(['ok' => true]);
+        }
+        if ($m === 'DELETE' && $uid > 0) {
+            q('DELETE FROM user_blocks WHERE blocker_id=? AND blocked_id=?', [$u['id'], $uid]);
+            json_out(['ok' => true]);
+        }
+        api_err('Method not allowed.', 405);
     }
 
     if ($sub === 'messages') {
@@ -131,9 +152,9 @@ function clan_group_api(int $clanId, string $sub, array $seg, string $m): never
         if ($m === 'GET' && $mid === 0) {
             $limit = max(1, min(60, (int)get('limit', '40')));
             $after = (int)get('after', '0'); $before = (int)get('before', '0');
-            $sel = "SELECT m.*, u.name, u.points FROM clan_messages m LEFT JOIN users u ON u.id=m.user_id WHERE m.clan_id=? AND m.status='visible'";
-            if ($after > 0) $rows = all("$sel AND m.id>? ORDER BY m.id ASC LIMIT $limit", [$clanId, $after]);
-            else $rows = array_reverse(all("$sel" . ($before > 0 ? ' AND m.id<?' : '') . " ORDER BY m.id DESC LIMIT $limit", $before > 0 ? [$clanId, $before] : [$clanId]));
+            $sel = "SELECT m.*, u.name, u.points FROM clan_messages m LEFT JOIN users u ON u.id=m.user_id WHERE m.clan_id=? AND m.status='visible' AND (m.user_id IS NULL OR m.user_id NOT IN (SELECT blocked_id FROM user_blocks WHERE blocker_id=?))";
+            if ($after > 0) $rows = all("$sel AND m.id>? ORDER BY m.id ASC LIMIT $limit", [$clanId, $u['id'], $after]);
+            else $rows = array_reverse(all("$sel" . ($before > 0 ? ' AND m.id<?' : '') . " ORDER BY m.id DESC LIMIT $limit", $before > 0 ? [$clanId, $u['id'], $before] : [$clanId, $u['id']]));
             if ($before === 0 && $rows) q('UPDATE users SET clan_seen_id=GREATEST(clan_seen_id, ?) WHERE id=?', [(int)end($rows)['id'], $u['id']]);
             json_out(['data' => array_map(fn($r) => clan_group_message_json($r, (int)$u['id']), $rows), 'has_more' => $before > 0 || $after === 0 ? count($rows) === $limit : false]);
         }

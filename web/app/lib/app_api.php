@@ -170,6 +170,7 @@ function member_delete_account(array $u): void
     q('DELETE FROM clan_messages WHERE user_id=?', [$u['id']]);
     foreach (['activity_days', 'quiz_scores', 'quiz_results'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);   // streaks and quiz results go with the account
     foreach (['api_tokens', 'device_tokens', 'user_notifications'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);
+    q('DELETE FROM user_blocks WHERE blocker_id=? OR blocked_id=?', [$u['id'], $u['id']]);
     q('DELETE FROM users WHERE id=? AND role=?', [$u['id'], 'contributor']);
 }
 
