@@ -1,0 +1,23 @@
+/* ======================= PAGE 1 : cover ======================= */
+.cover{background:var(--navy);color:#fff}
+.cover__photo{position:absolute;inset:0 0 auto 0;height:182mm;background:url('art/sunset-lira.jpg') 50% 78%/cover}
+.cover__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,24,29,.62) 0%,rgba(22,24,29,.1) 26%,rgba(22,24,29,.25) 55%,var(--navy) 98%)}
+.cover__top{position:absolute;left:14mm;right:14mm;top:10mm;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.cover__top .brand{display:flex;align-items:center;gap:3mm}
+.cover__top .logo{width:11mm;height:12.6mm;border-radius:2.4mm;background:#fff;display:grid;place-items:center}
+.cover__top .logo img{width:7.4mm;height:9.4mm;object-fit:contain}
+.cover__top .brand b{font-size:15pt;font-weight:800;letter-spacing:-.01em}
+.cover__top .tag{font-size:7.2pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8);border:.3mm solid rgba(255,255,255,.4);border-radius:99px;padding:1.6mm 4mm}
+.cover .ph{position:absolute;z-index:4}
+.cover__text{position:absolute;left:14mm;right:14mm;top:162mm;z-index:6}
+.cover__text .eyebrow{color:var(--yellow)}
+.cover__text h1{font-size:30pt;line-height:1.04;font-weight:800;letter-spacing:-.025em;margin:3mm 0 3mm}
+.cover__text h1 em{color:var(--yellow);font-style:italic;font-weight:700}
+.cover__text .lead{font-size:12pt;color:rgba(255,255,255,.86);max-width:180mm}
+.chips{display:flex;gap:2.2mm;margin-top:5mm;flex-wrap:wrap}
+.chips span{font-size:7.6pt;font-weight:700;padding:1.7mm 3.6mm;border-radius:99px;background:rgba(255,255,255,.12);border:.25mm solid rgba(255,255,255,.28)}
+.cover__stats{position:absolute;left:14mm;right:14mm;top:252mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;z-index:6}
+.cover__stats div{background:rgba(255,255,255,.08);border:.25mm solid rgba(255,255,255,.18);border-radius:3.6mm;padding:3.4mm 4mm}
+.cover__stats b{display:block;font-size:18pt;font-weight:800;color:var(--yellow);letter-spacing:-.02em;line-height:1.1}
+.cover__stats small{font-size:7.4pt;color:rgba(255,255,255,.78);font-weight:600}
+.cover__foot{position:absolute;left:14mm;right:14mm;bottom:9mm;display:flex;justify-content:space-between;font-size:7.6pt;color:rgba(255,255,255,.7);font-weight:600;z-index:6}

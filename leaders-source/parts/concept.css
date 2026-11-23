@@ -1,0 +1,124 @@
+/* ======================= concept note layout ======================= */
+.inner{position:absolute;left:14mm;right:14mm;top:11mm;bottom:15mm;display:flex;flex-direction:column}
+.pg h2{font-size:21pt;line-height:1.1;font-weight:800;letter-spacing:-.02em;margin-top:2mm}
+.pg .intro{margin-top:2.4mm;color:var(--text);font-size:9.4pt;line-height:1.48}
+.pg .intro b{color:var(--ink)}
+.g{display:grid;gap:3mm}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.c5{grid-template-columns:repeat(5,1fr)}.c6{grid-template-columns:repeat(6,1fr)}
+.sech{font-size:11pt;font-weight:800;margin:5.4mm 0 2.8mm;display:flex;align-items:center;gap:2.4mm}
+.sech small{font-size:7.6pt;font-weight:600;color:var(--muted)}
+.tile{padding:3.6mm 4mm}
+.tile h4{font-size:9.2pt;font-weight:800;margin:2.2mm 0 .8mm;line-height:1.25}
+.tile p{font-size:7.9pt;line-height:1.42;color:var(--text)}
+.tile ul{margin:0;padding:0;list-style:none}
+.tile li{font-size:7.8pt;line-height:1.4;color:var(--text);padding-left:3.2mm;position:relative;margin-bottom:.7mm}
+.tile li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.5mm;height:1.5mm;border-radius:50%;background:var(--red)}
+.dark{background:var(--ink);color:#fff;border-radius:4mm;padding:4.6mm 5.2mm}
+.dark h3{font-size:10.6pt;font-weight:800;color:var(--yellow);margin-bottom:2.2mm}
+.dark p{font-size:8.2pt;line-height:1.46;color:rgba(255,255,255,.9)}
+.dark ul{margin:0;padding:0;list-style:none}
+.dark li{font-size:8pt;line-height:1.42;padding-left:3.6mm;position:relative;color:rgba(255,255,255,.92);margin-bottom:1.3mm}
+.dark li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.6mm;height:1.6mm;border-radius:50%;background:var(--yellow)}
+.grad{background:linear-gradient(135deg,#14161b,#2b1015 62%,#7a0f18);color:#fff;border-radius:4.4mm;padding:4.6mm 5.6mm}
+.grad h3{font-size:11.6pt;font-weight:800;color:var(--yellow);margin-bottom:2.6mm}
+.shotrow{display:flex;justify-content:space-between;align-items:flex-start;padding:0 3mm}
+.shotrow figure{margin:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.shotrow figcaption{margin-top:3.4mm;font-size:9.4pt;font-weight:800}
+.shotrow figcaption small{display:block;font-size:7.4pt;font-weight:500;color:var(--text);line-height:1.38;max-width:41mm;margin:.6mm auto 0}
+.stat{padding:3.2mm 3.6mm;border-radius:3.6mm;background:#fff;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 1.6mm 4.4mm rgba(22,24,29,.06);border-top:1.2mm solid var(--red)}
+.stat:nth-child(4n+2){border-color:var(--yellow)}.stat:nth-child(4n+3){border-color:var(--sky)}.stat:nth-child(4n){border-color:var(--green)}
+.stat b{display:block;font-size:17pt;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.stat small{display:block;font-size:7.4pt;color:var(--muted);font-weight:600;line-height:1.3;margin-top:.6mm}
+.stat em{display:block;font-style:normal;font-size:6.2pt;color:var(--muted);margin-top:.8mm;font-weight:600;opacity:.85}
+.tagx{display:inline-block;font-size:6.2pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.5mm 1.8mm;border-radius:99px;vertical-align:1px}
+.tagx.built{background:#e3f5ea;color:#146b3c}.tagx.prop{background:#fff3b8;color:#7a5c00}
+.src{font-size:6.2pt;line-height:1.38;color:var(--muted);margin-top:auto}
+.numlist{counter-reset:n;margin:0;padding:0;list-style:none}
+.numlist li{counter-increment:n;position:relative;padding-left:8mm;margin-bottom:2.6mm;font-size:8.2pt;line-height:1.42;color:var(--text)}
+.numlist li b{display:block;color:var(--ink);font-size:8.8pt;font-weight:800}
+.numlist li::before{content:counter(n);position:absolute;left:0;top:.1mm;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:7.8pt;display:grid;place-items:center}
+.numlist li:nth-child(2)::before{background:var(--yellow);color:var(--ink)}.numlist li:nth-child(3)::before{background:var(--sky)}.numlist li:nth-child(4)::before{background:var(--green)}.numlist li:nth-child(5)::before{background:var(--ink)}.numlist li:nth-child(6)::before{background:var(--red)}
+.lay{border-radius:3.6mm;padding:3mm 4mm;color:#fff}
+.lay h4{font-size:9.4pt;font-weight:800}.lay small{display:block;font-size:7.5pt;line-height:1.4;opacity:.93;margin-top:.6mm}
+.lay .k{display:block;font-size:6.4pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-bottom:.5mm}
+.l3{background:linear-gradient(135deg,#14161b,#2b1015 60%,#7a0f18)}.l2{background:linear-gradient(135deg,var(--red-d),var(--red))}.l1{background:linear-gradient(135deg,#0786b8,#00adf1)}
+.join{padding:3mm 3mm 3.2mm}
+.join .n{display:grid;place-items:center;width:6mm;height:6mm;border-radius:50%;font-weight:800;font-size:8pt;color:#fff;background:var(--red)}
+.join .n2{background:var(--yellow);color:var(--ink)}.join .n3{background:var(--sky)}.join .n4{background:var(--green)}.join .n5{background:var(--ink)}.join .n6{background:var(--red)}
+.join h4{margin:1.8mm 0 .6mm}.join p{font-size:7.2pt;line-height:1.38}
+.roadx{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.roadx::before{content:"";position:absolute;left:3mm;right:3mm;top:2.6mm;height:.8mm;background:linear-gradient(90deg,var(--red),var(--yellow),var(--sky),var(--green));border-radius:2px}
+.rdx{position:relative;padding-top:7mm}
+.rdx::before{content:"";position:absolute;left:1mm;top:.2mm;width:4.8mm;height:4.8mm;border-radius:50%;background:var(--red);border:1mm solid var(--cream);box-shadow:0 0 0 .3mm var(--line)}
+.rdx:nth-child(2)::before{background:var(--yellow)}.rdx:nth-child(3)::before{background:var(--sky)}.rdx:nth-child(4)::before{background:var(--green)}
+.rdx b{display:block;font-size:8.6pt;font-weight:800}.rdx small{display:block;font-size:7.4pt;line-height:1.38;color:var(--text);margin-top:.5mm}
+.rdx .when{font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--red-d);margin-bottom:.5mm;display:block}
+.asks{margin:0;padding:0;list-style:none;counter-reset:q;display:grid;gap:1.8mm}
+.asks li{counter-increment:q;position:relative;padding-left:7mm;font-size:8pt;line-height:1.4;color:rgba(255,255,255,.93)}
+.asks li::before{content:counter(q);position:absolute;left:0;top:-.1mm;width:5mm;height:5mm;border-radius:50%;background:var(--yellow);color:var(--ink);font-weight:800;font-size:7.4pt;display:grid;place-items:center}
+.next90{margin-top:3mm;padding-top:2.4mm;border-top:.25mm solid rgba(255,255,255,.22);font-size:7.6pt;line-height:1.42;color:rgba(255,255,255,.9)}.next90 b{color:var(--yellow)}
+.p2 .stat b{font-size:14pt}.p2 .stat small{min-height:8mm}
+.risk{display:flex;gap:3mm;align-items:flex-start;margin-bottom:3.2mm}
+.risk .ico{width:8.4mm;height:8.4mm;border-radius:2.6mm}.risk .ico svg{width:4.6mm;height:4.6mm}
+.risk b{display:block;font-size:8.8pt;font-weight:800;line-height:1.25}
+.risk p{font-size:7.8pt;line-height:1.42;color:var(--text);margin-top:.5mm}
+.open{padding:3mm 3.4mm}.open p{margin-top:1.6mm;font-size:7.5pt;line-height:1.4}
+.who{padding:4mm 4.2mm}.who h4{font-size:11pt;margin:2.4mm 0 1.6mm}
+.who .ev{font-size:7.6pt;line-height:1.42;color:var(--text);margin-bottom:1.6mm}
+.who ul{margin-top:2.4mm;padding-top:2.2mm;border-top:.25mm solid var(--line)}
+.who li{padding-left:0;margin-bottom:2mm;font-size:7.6pt}.who li::before{display:none}
+.who li .tagx{margin-right:1.4mm}
+.dark b{color:#fff}
+.vflow{display:grid;grid-template-columns:1fr 6mm 1fr 6mm 1fr 6mm 1fr;align-items:stretch;gap:1mm;margin-top:4mm}
+.vflow i{display:grid;place-items:center;color:var(--muted);font-style:normal}.vflow i svg{width:4.4mm;height:4.4mm}
+.vb{padding:3mm 3.4mm;border-radius:3.6mm;color:#fff}
+.vb b{display:block;font-size:9pt;font-weight:800}.vb small{display:block;font-size:7.2pt;line-height:1.36;opacity:.93;margin-top:.7mm}
+.v1{background:var(--red)}.v2{background:#a97d00}.v3{background:var(--sky-d)}.v4{background:var(--ink)}
+.val{padding:3.4mm 3.8mm}.val h4{font-size:9.2pt}.val p{font-size:7.6pt;line-height:1.42}
+.gl{margin:0;padding:0;list-style:none}
+.gl li{font-size:7.8pt;line-height:1.42;padding-left:3.6mm;position:relative;color:rgba(255,255,255,.93);margin-bottom:1.8mm}
+.gl li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.6mm;height:1.6mm;border-radius:50%;background:var(--yellow)}
+
+.who .ev{font-size:8.1pt}.who li{font-size:8pt}
+.p5 .dark p{font-size:8.7pt;line-height:1.5}.p5 .tile li{font-size:8.2pt;line-height:1.46;margin-bottom:1.8mm}
+.val p{font-size:8pt}.val h4{font-size:9.6pt}
+.p6 .gl li{font-size:8.2pt}
+.p2 .risk p{font-size:8.1pt}.p2 .open p{font-size:7.9pt}
+.p2 .dark p{font-size:8.7pt;line-height:1.5}
+
+.still{display:flex;flex-wrap:wrap;gap:1.6mm 2mm;align-items:center;margin-top:3.2mm;padding:2.6mm 3.2mm;border-radius:3mm;background:#fff3b8}
+.still b{font-size:7.6pt;font-weight:800;color:#6b5200;margin-right:1.2mm}
+.still span{font-size:7pt;font-weight:700;padding:.8mm 2.4mm;border-radius:99px;background:rgba(255,255,255,.75);color:var(--ink)}
+.p7 .intro{font-size:9pt}
+.p7 .join p{font-size:7pt;line-height:1.34}
+
+.still{margin-top:2.6mm;padding:2mm 3mm;gap:1.2mm 1.6mm}.still b{font-size:7pt}.still span{font-size:6.6pt;padding:.6mm 2mm}
+.lay{padding:2.4mm 4mm}.p7 .sech{margin:3mm 0 2.2mm}
+
+/* ---- introduction for the Awitong and the Won Nyaci ---- */
+.p4 .val p{font-size:8.5pt;line-height:1.46}.p4 .val h4{font-size:10pt}.p4 .who .ev{font-size:8.4pt;line-height:1.46}.p4 .who h4{font-size:10.4pt}
+.p4 .intro{font-size:10pt}.p3 .intro{font-size:9.8pt}
+.p5 .tile li{font-size:8.5pt;line-height:1.46;margin-bottom:1.7mm}.p5 .dark li{font-size:9.2pt;line-height:1.46;margin-bottom:2.2mm}.p5 .dark h3{font-size:12pt}
+.p5 .lay small{font-size:8pt}.p5 .lay h4{font-size:10.4pt}
+.p6 .tile li{font-size:8.3pt;line-height:1.44;margin-bottom:1.3mm}.p6 .stat b{font-size:15pt}
+.p6 .rdx small{font-size:7.8pt}.p6 .rdx b{font-size:9.2pt}
+.p6 .intro{font-size:9.8pt}
+.p7 .asks li{font-size:8.7pt;line-height:1.44}.p7 .tile li{font-size:8.3pt;line-height:1.42;margin-bottom:1.4mm}
+.p7 .join p{font-size:7.9pt;line-height:1.4}.p7 .join h4{font-size:9.6pt}
+.p7 .faq h4{margin-top:0}.p7 .faq p{font-size:7.9pt}
+.p7 .dark p{font-size:9.4pt;line-height:1.5}.p7 .dark h3{font-size:12.4pt;line-height:1.25}
+.p2 .stat small{min-height:0}
+
+.p7 .join p{font-size:7.6pt;line-height:1.38}.p7 .faq p{font-size:7.6pt;line-height:1.38}.p7 .sech{margin:3.6mm 0 2mm}.p7 .intro{font-size:9.4pt}
+.p7 .asks li{font-size:8.5pt}
+.p5 .tile li{font-size:8.7pt}
+
+/* ---- after the review: contrast, balanced headings ---- */
+.l1{background:linear-gradient(135deg,#055f88,#0877a8)}.l2{background:linear-gradient(135deg,#a70f19,#d4141f)}
+.v2{background:#8a6500}.v1{background:#d3121d}.v3{background:#056b99}
+.pg h2,.pg h3,.pg h4,.cover__text h1{text-wrap:balance}
+.vb small{font-size:7.5pt;opacity:1}.lay small{opacity:1;font-size:8pt}
+.p5 .lay small{font-size:7.8pt}
+
+.p7 .tile li{font-size:8pt;line-height:1.38;margin-bottom:1.1mm}.p7 .asks li{font-size:8.3pt;line-height:1.4}.p7 .asks{gap:1.5mm}.p5 .tile li{font-size:8.4pt;line-height:1.42;margin-bottom:1.3mm}.p5 .dark li{font-size:8.6pt;line-height:1.42;margin-bottom:1.5mm}

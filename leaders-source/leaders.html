@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MyCulture for Lango: an introduction for the Awitong and the Won Nyaci</title>
+<style>
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_400Regular.ttf');font-weight:400}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_500Medium.ttf');font-weight:500}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_600SemiBold.ttf');font-weight:600}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_700Bold.ttf');font-weight:700}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_800ExtraBold.ttf');font-weight:800}
+@font-face{font-family:'Clarity City';src:url('fonts/ClarityCity_700Bold_Italic.ttf');font-weight:700;font-style:italic}
+@page{size:A4;margin:0}
+:root{--red:#ee1a26;--red-d:#c9111c;--yellow:#fddd16;--sky:#00adf1;--sky-d:#0786b8;--ink:#16181d;--text:#4f5662;--muted:#7b8390;--paper:#fbf8ec;--cream:#f6f3ec;--line:#e8e4da;--navy:#16181d;--green:#1e9e5a}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#8a8f98;font-family:'Clarity City','Inter',system-ui,sans-serif;color:var(--ink);font-size:9.3pt;line-height:1.5}
+.page{position:relative;width:210mm;height:297mm;overflow:hidden;background:var(--cream);page-break-after:always;margin:0 auto}
+@media screen{.page{margin:8mm auto;box-shadow:0 4mm 12mm rgba(0,0,0,.35)}}
+h1,h2,h3,h4,p{margin:0}
+.flag{position:absolute;left:0;right:0;top:0;height:2.4mm;background:linear-gradient(90deg,var(--red) 0 33.4%,var(--yellow) 0 66.7%,var(--sky) 0);z-index:20}
+.eyebrow{font-weight:800;font-size:7.4pt;letter-spacing:.2em;text-transform:uppercase;color:var(--red-d)}
+.pad{position:absolute;left:14mm;right:14mm}
+.foot{position:absolute;left:14mm;right:14mm;bottom:8mm;display:flex;justify-content:space-between;align-items:center;font-size:7.2pt;color:var(--muted);font-weight:600}
+.foot b{color:var(--ink);font-weight:800}
+.page h2{font-size:23pt;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.ico{display:inline-grid;place-items:center;width:9.5mm;height:9.5mm;border-radius:3mm;flex:none}
+.ico svg{width:5.2mm;height:5.2mm}
+.ico.r{background:#fde8e9;color:var(--red-d)}.ico.y{background:#fff3b8;color:#7a5c00}.ico.s{background:#e0f5fe;color:var(--sky-d)}.ico.g{background:#e3f5ea;color:#146b3c}.ico.k{background:var(--ink);color:#fff}
+.card{background:#fff;border-radius:4mm;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 2.2mm 6mm rgba(22,24,29,.07)}
+
+/* ---------- phone mock-up ---------- */
+.phone{position:relative;width:var(--w);aspect-ratio:1000/2104;padding:calc(var(--w)*.026);background:linear-gradient(145deg,#2b2e35,#0c0d10 55%,#24262c);border-radius:calc(var(--w)*.155);box-shadow:0 6mm 14mm rgba(0,0,0,.28),0 1.2mm 3mm rgba(0,0,0,.2),inset 0 0 0 .25mm rgba(255,255,255,.12)}
+.phone__s{position:relative;width:100%;height:100%;border-radius:calc(var(--w)*.13);overflow:hidden;background:#fff}
+.phone__s>img{display:block;width:100%;height:100%;object-fit:cover}
+.sb{position:absolute;left:0;right:0;top:0;height:calc(var(--w)*.12);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--w)*.085);font-weight:700;font-size:calc(var(--w)*.036);color:#111}
+.sb svg{height:calc(var(--w)*.032);width:auto;fill:currentColor}
+.sb .r{display:flex;gap:calc(var(--w)*.014);align-items:center}
+.phone.dark .sb{color:#fff}
+.isl{position:absolute;left:50%;top:calc(var(--w)*.03);transform:translateX(-50%);width:calc(var(--w)*.27);height:calc(var(--w)*.075);background:#050506;border-radius:99px}
+.hi{position:absolute;left:50%;bottom:calc(var(--w)*.022);transform:translateX(-50%);width:calc(var(--w)*.34);height:calc(var(--w)*.012);background:#16181d;border-radius:99px;opacity:.85}
+.phone.dark .hi{background:#fff}
+
+/* ---------- browser mock-up ---------- */
+.browser{width:var(--w);border-radius:2.4mm;overflow:hidden;background:#fff;box-shadow:0 5mm 12mm rgba(0,0,0,.25),0 1mm 2.5mm rgba(0,0,0,.18)}
+.browser__bar{height:6mm;background:#eceff3;display:flex;align-items:center;gap:1.4mm;padding:0 2.6mm}
+.browser__bar i{width:1.7mm;height:1.7mm;border-radius:50%;background:#c4c9d1}.browser__bar i:nth-child(1){background:#ff6058}.browser__bar i:nth-child(2){background:#ffbd2e}.browser__bar i:nth-child(3){background:#27c93f}
+.browser__bar span{margin-left:2mm;flex:1;height:3.6mm;border-radius:99px;background:#fff;font-size:5.4pt;line-height:3.6mm;padding:0 2.4mm;color:#6b727d;font-weight:600}
+.browser img{display:block;width:100%}
+
+/* ======================= PAGE 1 : cover ======================= */
+.cover{background:var(--navy);color:#fff}
+.cover__photo{position:absolute;inset:0 0 auto 0;height:182mm;background:url('art/sunset-lira.jpg') 50% 78%/cover}
+.cover__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,24,29,.62) 0%,rgba(22,24,29,.1) 26%,rgba(22,24,29,.25) 55%,var(--navy) 98%)}
+.cover__top{position:absolute;left:14mm;right:14mm;top:10mm;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.cover__top .brand{display:flex;align-items:center;gap:3mm}
+.cover__top .logo{width:11mm;height:12.6mm;border-radius:2.4mm;background:#fff;display:grid;place-items:center}
+.cover__top .logo img{width:7.4mm;height:9.4mm;object-fit:contain}
+.cover__top .brand b{font-size:15pt;font-weight:800;letter-spacing:-.01em}
+.cover__top .tag{font-size:7.2pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8);border:.3mm solid rgba(255,255,255,.4);border-radius:99px;padding:1.6mm 4mm}
+.cover .ph{position:absolute;z-index:4}
+.cover__text{position:absolute;left:14mm;right:14mm;top:162mm;z-index:6}
+.cover__text .eyebrow{color:var(--yellow)}
+.cover__text h1{font-size:30pt;line-height:1.04;font-weight:800;letter-spacing:-.025em;margin:3mm 0 3mm}
+.cover__text h1 em{color:var(--yellow);font-style:italic;font-weight:700}
+.cover__text .lead{font-size:12pt;color:rgba(255,255,255,.86);max-width:180mm}
+.chips{display:flex;gap:2.2mm;margin-top:5mm;flex-wrap:wrap}
+.chips span{font-size:7.6pt;font-weight:700;padding:1.7mm 3.6mm;border-radius:99px;background:rgba(255,255,255,.12);border:.25mm solid rgba(255,255,255,.28)}
+.cover__stats{position:absolute;left:14mm;right:14mm;top:252mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;z-index:6}
+.cover__stats div{background:rgba(255,255,255,.08);border:.25mm solid rgba(255,255,255,.18);border-radius:3.6mm;padding:3.4mm 4mm}
+.cover__stats b{display:block;font-size:18pt;font-weight:800;color:var(--yellow);letter-spacing:-.02em;line-height:1.1}
+.cover__stats small{font-size:7.4pt;color:rgba(255,255,255,.78);font-weight:600}
+.cover__foot{position:absolute;left:14mm;right:14mm;bottom:9mm;display:flex;justify-content:space-between;font-size:7.6pt;color:rgba(255,255,255,.7);font-weight:600;z-index:6}
+
+/* ======================= concept note layout ======================= */
+.inner{position:absolute;left:14mm;right:14mm;top:11mm;bottom:15mm;display:flex;flex-direction:column}
+.pg h2{font-size:21pt;line-height:1.1;font-weight:800;letter-spacing:-.02em;margin-top:2mm}
+.pg .intro{margin-top:2.4mm;color:var(--text);font-size:9.4pt;line-height:1.48}
+.pg .intro b{color:var(--ink)}
+.g{display:grid;gap:3mm}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.c5{grid-template-columns:repeat(5,1fr)}.c6{grid-template-columns:repeat(6,1fr)}
+.sech{font-size:11pt;font-weight:800;margin:5.4mm 0 2.8mm;display:flex;align-items:center;gap:2.4mm}
+.sech small{font-size:7.6pt;font-weight:600;color:var(--muted)}
+.tile{padding:3.6mm 4mm}
+.tile h4{font-size:9.2pt;font-weight:800;margin:2.2mm 0 .8mm;line-height:1.25}
+.tile p{font-size:7.9pt;line-height:1.42;color:var(--text)}
+.tile ul{margin:0;padding:0;list-style:none}
+.tile li{font-size:7.8pt;line-height:1.4;color:var(--text);padding-left:3.2mm;position:relative;margin-bottom:.7mm}
+.tile li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.5mm;height:1.5mm;border-radius:50%;background:var(--red)}
+.dark{background:var(--ink);color:#fff;border-radius:4mm;padding:4.6mm 5.2mm}
+.dark h3{font-size:10.6pt;font-weight:800;color:var(--yellow);margin-bottom:2.2mm}
+.dark p{font-size:8.2pt;line-height:1.46;color:rgba(255,255,255,.9)}
+.dark ul{margin:0;padding:0;list-style:none}
+.dark li{font-size:8pt;line-height:1.42;padding-left:3.6mm;position:relative;color:rgba(255,255,255,.92);margin-bottom:1.3mm}
+.dark li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.6mm;height:1.6mm;border-radius:50%;background:var(--yellow)}
+.grad{background:linear-gradient(135deg,#14161b,#2b1015 62%,#7a0f18);color:#fff;border-radius:4.4mm;padding:4.6mm 5.6mm}
+.grad h3{font-size:11.6pt;font-weight:800;color:var(--yellow);margin-bottom:2.6mm}
+.shotrow{display:flex;justify-content:space-between;align-items:flex-start;padding:0 3mm}
+.shotrow figure{margin:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.shotrow figcaption{margin-top:3.4mm;font-size:9.4pt;font-weight:800}
+.shotrow figcaption small{display:block;font-size:7.4pt;font-weight:500;color:var(--text);line-height:1.38;max-width:41mm;margin:.6mm auto 0}
+.stat{padding:3.2mm 3.6mm;border-radius:3.6mm;background:#fff;box-shadow:0 .4mm 1mm rgba(22,24,29,.05),0 1.6mm 4.4mm rgba(22,24,29,.06);border-top:1.2mm solid var(--red)}
+.stat:nth-child(4n+2){border-color:var(--yellow)}.stat:nth-child(4n+3){border-color:var(--sky)}.stat:nth-child(4n){border-color:var(--green)}
+.stat b{display:block;font-size:17pt;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.stat small{display:block;font-size:7.4pt;color:var(--muted);font-weight:600;line-height:1.3;margin-top:.6mm}
+.stat em{display:block;font-style:normal;font-size:6.2pt;color:var(--muted);margin-top:.8mm;font-weight:600;opacity:.85}
+.tagx{display:inline-block;font-size:6.2pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.5mm 1.8mm;border-radius:99px;vertical-align:1px}
+.tagx.built{background:#e3f5ea;color:#146b3c}.tagx.prop{background:#fff3b8;color:#7a5c00}
+.src{font-size:6.2pt;line-height:1.38;color:var(--muted);margin-top:auto}
+.numlist{counter-reset:n;margin:0;padding:0;list-style:none}
+.numlist li{counter-increment:n;position:relative;padding-left:8mm;margin-bottom:2.6mm;font-size:8.2pt;line-height:1.42;color:var(--text)}
+.numlist li b{display:block;color:var(--ink);font-size:8.8pt;font-weight:800}
+.numlist li::before{content:counter(n);position:absolute;left:0;top:.1mm;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:7.8pt;display:grid;place-items:center}
+.numlist li:nth-child(2)::before{background:var(--yellow);color:var(--ink)}.numlist li:nth-child(3)::before{background:var(--sky)}.numlist li:nth-child(4)::before{background:var(--green)}.numlist li:nth-child(5)::before{background:var(--ink)}.numlist li:nth-child(6)::before{background:var(--red)}
+.lay{border-radius:3.6mm;padding:3mm 4mm;color:#fff}
+.lay h4{font-size:9.4pt;font-weight:800}.lay small{display:block;font-size:7.5pt;line-height:1.4;opacity:.93;margin-top:.6mm}
+.lay .k{display:block;font-size:6.4pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-bottom:.5mm}
+.l3{background:linear-gradient(135deg,#14161b,#2b1015 60%,#7a0f18)}.l2{background:linear-gradient(135deg,var(--red-d),var(--red))}.l1{background:linear-gradient(135deg,#0786b8,#00adf1)}
+.join{padding:3mm 3mm 3.2mm}
+.join .n{display:grid;place-items:center;width:6mm;height:6mm;border-radius:50%;font-weight:800;font-size:8pt;color:#fff;background:var(--red)}
+.join .n2{background:var(--yellow);color:var(--ink)}.join .n3{background:var(--sky)}.join .n4{background:var(--green)}.join .n5{background:var(--ink)}.join .n6{background:var(--red)}
+.join h4{margin:1.8mm 0 .6mm}.join p{font-size:7.2pt;line-height:1.38}
+.roadx{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.roadx::before{content:"";position:absolute;left:3mm;right:3mm;top:2.6mm;height:.8mm;background:linear-gradient(90deg,var(--red),var(--yellow),var(--sky),var(--green));border-radius:2px}
+.rdx{position:relative;padding-top:7mm}
+.rdx::before{content:"";position:absolute;left:1mm;top:.2mm;width:4.8mm;height:4.8mm;border-radius:50%;background:var(--red);border:1mm solid var(--cream);box-shadow:0 0 0 .3mm var(--line)}
+.rdx:nth-child(2)::before{background:var(--yellow)}.rdx:nth-child(3)::before{background:var(--sky)}.rdx:nth-child(4)::before{background:var(--green)}
+.rdx b{display:block;font-size:8.6pt;font-weight:800}.rdx small{display:block;font-size:7.4pt;line-height:1.38;color:var(--text);margin-top:.5mm}
+.rdx .when{font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--red-d);margin-bottom:.5mm;display:block}
+.asks{margin:0;padding:0;list-style:none;counter-reset:q;display:grid;gap:1.8mm}
+.asks li{counter-increment:q;position:relative;padding-left:7mm;font-size:8pt;line-height:1.4;color:rgba(255,255,255,.93)}
+.asks li::before{content:counter(q);position:absolute;left:0;top:-.1mm;width:5mm;height:5mm;border-radius:50%;background:var(--yellow);color:var(--ink);font-weight:800;font-size:7.4pt;display:grid;place-items:center}
+.next90{margin-top:3mm;padding-top:2.4mm;border-top:.25mm solid rgba(255,255,255,.22);font-size:7.6pt;line-height:1.42;color:rgba(255,255,255,.9)}.next90 b{color:var(--yellow)}
+.p2 .stat b{font-size:14pt}.p2 .stat small{min-height:8mm}
+.risk{display:flex;gap:3mm;align-items:flex-start;margin-bottom:3.2mm}
+.risk .ico{width:8.4mm;height:8.4mm;border-radius:2.6mm}.risk .ico svg{width:4.6mm;height:4.6mm}
+.risk b{display:block;font-size:8.8pt;font-weight:800;line-height:1.25}
+.risk p{font-size:7.8pt;line-height:1.42;color:var(--text);margin-top:.5mm}
+.open{padding:3mm 3.4mm}.open p{margin-top:1.6mm;font-size:7.5pt;line-height:1.4}
+.who{padding:4mm 4.2mm}.who h4{font-size:11pt;margin:2.4mm 0 1.6mm}
+.who .ev{font-size:7.6pt;line-height:1.42;color:var(--text);margin-bottom:1.6mm}
+.who ul{margin-top:2.4mm;padding-top:2.2mm;border-top:.25mm solid var(--line)}
+.who li{padding-left:0;margin-bottom:2mm;font-size:7.6pt}.who li::before{display:none}
+.who li .tagx{margin-right:1.4mm}
+.dark b{color:#fff}
+.vflow{display:grid;grid-template-columns:1fr 6mm 1fr 6mm 1fr 6mm 1fr;align-items:stretch;gap:1mm;margin-top:4mm}
+.vflow i{display:grid;place-items:center;color:var(--muted);font-style:normal}.vflow i svg{width:4.4mm;height:4.4mm}
+.vb{padding:3mm 3.4mm;border-radius:3.6mm;color:#fff}
+.vb b{display:block;font-size:9pt;font-weight:800}.vb small{display:block;font-size:7.2pt;line-height:1.36;opacity:.93;margin-top:.7mm}
+.v1{background:var(--red)}.v2{background:#a97d00}.v3{background:var(--sky-d)}.v4{background:var(--ink)}
+.val{padding:3.4mm 3.8mm}.val h4{font-size:9.2pt}.val p{font-size:7.6pt;line-height:1.42}
+.gl{margin:0;padding:0;list-style:none}
+.gl li{font-size:7.8pt;line-height:1.42;padding-left:3.6mm;position:relative;color:rgba(255,255,255,.93);margin-bottom:1.8mm}
+.gl li::before{content:"";position:absolute;left:0;top:1.9mm;width:1.6mm;height:1.6mm;border-radius:50%;background:var(--yellow)}
+
+.who .ev{font-size:8.1pt}.who li{font-size:8pt}
+.p5 .dark p{font-size:8.7pt;line-height:1.5}.p5 .tile li{font-size:8.2pt;line-height:1.46;margin-bottom:1.8mm}
+.val p{font-size:8pt}.val h4{font-size:9.6pt}
+.p6 .gl li{font-size:8.2pt}
+.p2 .risk p{font-size:8.1pt}.p2 .open p{font-size:7.9pt}
+.p2 .dark p{font-size:8.7pt;line-height:1.5}
+
+.still{display:flex;flex-wrap:wrap;gap:1.6mm 2mm;align-items:center;margin-top:3.2mm;padding:2.6mm 3.2mm;border-radius:3mm;background:#fff3b8}
+.still b{font-size:7.6pt;font-weight:800;color:#6b5200;margin-right:1.2mm}
+.still span{font-size:7pt;font-weight:700;padding:.8mm 2.4mm;border-radius:99px;background:rgba(255,255,255,.75);color:var(--ink)}
+.p7 .intro{font-size:9pt}
+.p7 .join p{font-size:7pt;line-height:1.34}
+
+.still{margin-top:2.6mm;padding:2mm 3mm;gap:1.2mm 1.6mm}.still b{font-size:7pt}.still span{font-size:6.6pt;padding:.6mm 2mm}
+.lay{padding:2.4mm 4mm}.p7 .sech{margin:3mm 0 2.2mm}
+
+/* ---- introduction for the Awitong and the Won Nyaci ---- */
+.p4 .val p{font-size:8.5pt;line-height:1.46}.p4 .val h4{font-size:10pt}.p4 .who .ev{font-size:8.4pt;line-height:1.46}.p4 .who h4{font-size:10.4pt}
+.p4 .intro{font-size:10pt}.p3 .intro{font-size:9.8pt}
+.p5 .tile li{font-size:8.5pt;line-height:1.46;margin-bottom:1.7mm}.p5 .dark li{font-size:9.2pt;line-height:1.46;margin-bottom:2.2mm}.p5 .dark h3{font-size:12pt}
+.p5 .lay small{font-size:8pt}.p5 .lay h4{font-size:10.4pt}
+.p6 .tile li{font-size:8.3pt;line-height:1.44;margin-bottom:1.3mm}.p6 .stat b{font-size:15pt}
+.p6 .rdx small{font-size:7.8pt}.p6 .rdx b{font-size:9.2pt}
+.p6 .intro{font-size:9.8pt}
+.p7 .asks li{font-size:8.7pt;line-height:1.44}.p7 .tile li{font-size:8.3pt;line-height:1.42;margin-bottom:1.4mm}
+.p7 .join p{font-size:7.9pt;line-height:1.4}.p7 .join h4{font-size:9.6pt}
+.p7 .faq h4{margin-top:0}.p7 .faq p{font-size:7.9pt}
+.p7 .dark p{font-size:9.4pt;line-height:1.5}.p7 .dark h3{font-size:12.4pt;line-height:1.25}
+.p2 .stat small{min-height:0}
+
+.p7 .join p{font-size:7.6pt;line-height:1.38}.p7 .faq p{font-size:7.6pt;line-height:1.38}.p7 .sech{margin:3.6mm 0 2mm}.p7 .intro{font-size:9.4pt}
+.p7 .asks li{font-size:8.5pt}
+.p5 .tile li{font-size:8.7pt}
+
+/* ---- after the review: contrast, balanced headings ---- */
+.l1{background:linear-gradient(135deg,#055f88,#0877a8)}.l2{background:linear-gradient(135deg,#a70f19,#d4141f)}
+.v2{background:#8a6500}.v1{background:#d3121d}.v3{background:#056b99}
+.pg h2,.pg h3,.pg h4,.cover__text h1{text-wrap:balance}
+.vb small{font-size:7.5pt;opacity:1}.lay small{opacity:1;font-size:8pt}
+.p5 .lay small{font-size:7.8pt}
+
+.p7 .tile li{font-size:8pt;line-height:1.38;margin-bottom:1.1mm}.p7 .asks li{font-size:8.3pt;line-height:1.4}.p7 .asks{gap:1.5mm}.p5 .tile li{font-size:8.4pt;line-height:1.42;margin-bottom:1.3mm}.p5 .dark li{font-size:8.6pt;line-height:1.42;margin-bottom:1.5mm}
+
+</style>
+</head>
+<body>
+<!-- ================================================== PAGE 1 : cover ================================================== -->
+<section class="page cover">
+  <div class="cover__photo"></div>
+  <div class="flag"></div>
+  <div class="cover__top">
+    <div class="brand"><span class="logo"><img src="art/logo-mark.png" alt=""></span><b>MyCulture</b></div>
+    <span class="tag">Introduction &middot; November 2026</span>
+  </div>
+  <div class="ph" style="left:20mm;top:42mm;transform:rotate(-7deg)"><div class="phone" style="--w:52mm"><div class="phone__s"><img src="shots/learn.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+  <div class="ph" style="right:22mm;top:42mm;transform:rotate(7deg)"><div class="phone" style="--w:52mm"><div class="phone__s"><img src="shots/dictionary.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+  <div class="ph" style="left:73mm;top:22mm;z-index:5"><div class="phone" style="--w:64mm"><div class="phone__s"><img src="shots/culture-lango.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div></div>
+  <div class="cover__text">
+    <div class="eyebrow">For the clan heads (Owitong) and the leaders of Lango</div>
+    <h1>The language, clans and heritage of Lango, <em>kept for the next generation.</em></h1>
+    <p class="lead">MyCulture is a free app and website where Lango people can learn Leb Lango, find their clan and add what the elders know, with a way for Lango people to check every entry before it is called true. It has been built and is being tested now. We bring it to you first, so that it is guided by those whose culture it keeps.</p>
+    <div class="chips"><span>Free to use</span><span>No advertising</span><span>Marked until checked</span><span>Dictionary works offline</span><span>Built and in testing</span></div>
+  </div>
+  <div class="cover__stats">
+    <div><b>2,830</b><small>words in the dictionary</small></div>
+    <div><b>25</b><small>clans listed so far</small></div>
+    <div><b>30</b><small>heritage entries</small></div>
+    <div><b>0</b><small>clans or heritage entries verified yet: that is where you come in</small></div>
+  </div>
+  <div class="cover__foot"><span>An introduction for the clan heads and the leaders of Lango &middot; Kakebe Technologies Limited, Lira City</span><span>1 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 2 : why it matters ================================================== -->
+<section class="page pg p2">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">Why this matters</div>
+    <h2>The knowledge of Lango lives in people. It needs a safe home.</h2>
+    <p class="intro">Clan histories, totems and the rules that go with them, proverbs, songs, the words for things the young no longer hear: much of it is carried in the memory of the elders. Lango children grow up among English at school, phones and town life. What is not passed on while the elders are with us can be lost when they are gone.</p>
+
+    <div class="g c3" style="margin-top:4mm">
+      <div class="stat"><b>2.5 million</b><small>people live in the Lango sub-region</small><em>2,546,118 in the 2024 census (UBOS), up from 2,061,694 in 2014</em></div>
+      <div class="stat"><b>1923</b><small>the year of the best-known early book on the Lango, written by an outsider (J.&nbsp;H.&nbsp;Driberg)</small><em>Out of copyright; one of our starting sources</em></div>
+      <div class="stat"><b>21 Feb</b><small>International Mother Language Day: a day to honour every mother tongue</small><em>Proclaimed by UNESCO; observed every year</em></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1.1fr 1fr;gap:4mm;margin-top:4.4mm">
+      <div class="dark">
+        <h3>What is hard today</h3>
+        <ul>
+          <li><b>No easy way</b> to look up Leb Lango words with their meanings on a phone, without internet.</li>
+          <li><b>Clan information is scattered,</b> and much of what is written was written by people who are not Lango.</li>
+          <li><b>Young Lango in towns and abroad</b> cannot easily find their clan, its totem or its story.</li>
+          <li><b>Elders, clans and institutions already hold this knowledge.</b> They have few ways to check and correct what is written about them online.</li>
+        </ul>
+      </div>
+      <div class="card tile" style="padding:4.4mm 4.8mm">
+        <h4 style="margin-top:0;font-size:10.4pt">How we began, and what we did not do</h4>
+        <ul>
+          <li>The starting material comes from <b>published sources, each credited on the site</b>: the Practical Lango Grammar and the original Lango dictionary project (the words and the phrasebook), Driberg&rsquo;s <i>The Lango</i> (1923, out of copyright), Wikipedia, the 2024 census and the Lango Bible (read on Bible.com, not copied).</li>
+          <li>Clan pages carry the mark <b>&ldquo;awaiting verification&rdquo;</b> until Lango people check them. Other entries show a Verified mark only once someone has checked them.</li>
+          <li>We have <b>not written Lango culture ourselves.</b> Where there is no source yet, the app says &ldquo;history being documented&rdquo; instead of guessing.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grad" style="margin-top:4.4mm">
+      <h3>The need, in one sentence</h3>
+      <p style="font-size:10.6pt;line-height:1.46;color:rgba(255,255,255,.95)">A trusted home for Lango language, clans and heritage, <b style="color:#fff">where Lango people decide what is true</b>, and where every young Lango, at home or far away, can learn it.</p>
+    </div>
+
+    <div class="g" style="grid-template-columns:1fr 1fr;gap:4mm;margin-top:4.4mm">
+      <div class="card tile" style="padding:4mm 4.8mm;display:flex;flex-direction:column">
+        <h4 style="margin-top:0;font-size:11pt">An elder is a library</h4>
+        <p style="font-size:9.4pt;line-height:1.55;margin-top:1.6mm">At UNESCO in 1960, Amadou Hampâté Bâ of Mali said of the keepers of oral tradition: &ldquo;I consider the death of each of these traditionalists as the burning of an unexploited cultural fund.&rdquo; It is often summed up as: when an old man dies, a library burns. MyCulture is one way to write down, with their consent, what the elders of Lango choose to hand on.</p>
+        <p class="src" style="margin-top:auto;padding-top:2.6mm;font-size:6.8pt">Amadou Hampâté Bâ, UNESCO General Conference, 1 December 1960, as rendered in the UNESCO Courier. The &ldquo;library&rdquo; wording is a later popular paraphrase of his words.</p>
+      </div>
+      <div class="card tile" style="padding:4mm 4.8mm;display:flex;flex-direction:column">
+        <h4 style="margin-top:0;font-size:11pt">Language belongs in school</h4>
+        <p style="font-size:9.4pt;line-height:1.55;margin-top:1.6mm">Since 2007, Uganda&rsquo;s thematic curriculum has provided for teaching the early primary grades in the local language of the area. Teachers and parents in Lango need good, trusted material in Leb Lango. MyCulture can become one source of it, once Lango language experts have checked it. It is for people aged 13 and over today; a version for schools would need its own safeguards and your advice first.</p>
+        <p class="src" style="margin-top:auto;padding-top:2.6mm;font-size:6.8pt">National Curriculum Development Centre (NCDC). The lower-primary curriculum is under review.</p>
+      </div>
+    </div>
+
+    <div class="still" style="margin-top:4.4mm;padding:3.2mm 4mm;gap:1.6mm 2.2mm"><b style="font-size:8.4pt">MyCulture is not:</b><span style="font-size:7.4pt;padding:1mm 2.4mm">a replacement for the elders</span><span style="font-size:7.4pt;padding:1mm 2.4mm">the authority on Lango culture</span><span style="font-size:7.4pt;padding:1mm 2.4mm">owned by any one person or clan</span></div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Introduction for the clan heads and the leaders of Lango</span><span>2 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 3 : what MyCulture is ================================================== -->
+<section class="page pg p3">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">What MyCulture is</div>
+    <h2>One place for the language, the clans and the heritage of Lango.</h2>
+    <p class="intro">MyCulture is a <b>free phone app (for Android and iPhone, in testing) and a website</b> at myculture.online. Anyone can learn from it. Members can add what they know, and a reviewer checks each contribution before it is shown. Every screen below is the real app as it is today.</p>
+
+    <div class="shotrow" style="margin-top:4mm">
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/dictionary.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Dictionary<small>2,830 words, searched in Leb Lango or English, and saved on the phone from Settings for use without internet.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/heritage-attire.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Heritage<small>Attire, crafts, music, dance and ceremonies, with the source named where it is known.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/learn.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Learn<small>Dictionary, word translator, proverbs and a phrasebook of greetings.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:38mm"><div class="phone__s"><img src="shots/quizzes.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Quizzes<small>Four quizzes on the Lango people, clans, warriors and famous Langos.</small></figcaption></figure>
+    </div>
+
+    <div class="g c4" style="margin-top:4.4mm">
+      <div class="card tile"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><h4>Learn the language</h4><p>Dictionary, word translator, 17 proverbs, a phrasebook of greetings, a word every day and quizzes.</p></div>
+      <div class="card tile"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h4>Know your people</h4><p>25 clans listed so far, districts, notable Langos, the story of the Lango, a timeline and heritage sites.</p></div>
+      <div class="card tile"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span><h4>Listen and read</h4><p>The Lango Bible of the Bible Society of Uganda opens inside the app. Places for radio and elders&rsquo; stories are ready.</p></div>
+      <div class="card tile"><span class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h4>Add what you know</h4><p>A word, a proverb, a story, a photo or a recording, even without internet, and follow it through review.</p></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1.25fr 1fr;margin-top:4.4mm;flex:1">
+      <div class="dark">
+        <h3>Made to be trusted and easy to share</h3>
+        <ul>
+          <li><b>Free to use,</b> with no advertising and no selling of anyone&rsquo;s personal data. Giving to help keep it running is optional.</li>
+          <li><b>Sources and credits</b> are named where they are known: most heritage entries name their source, and a photo&rsquo;s credit appears where it is known.</li>
+          <li><b>The dictionary works without internet</b> once saved from Settings, and contributions wait until the phone is connected.</li>
+          <li><b>Clan groups:</b> each clan has a group for signed-in members who say they belong to it. Messages can be reported (three reports hide one), and moderators and the clan&rsquo;s leader can remove messages. Belonging is not yet checked by the Awitong.</li>
+          <li>A person can <b>delete their account</b> at any time in the app.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="g c2" style="gap:2.6mm">
+          <div class="stat"><b>2,830</b><small>dictionary words</small></div>
+          <div class="stat"><b>25</b><small>clans listed so far</small></div>
+          <div class="stat"><b>30</b><small>heritage entries</small></div>
+          <div class="stat"><b>10</b><small>districts and cities</small></div>
+        </div>
+        <p style="font-size:7.2pt;line-height:1.4;color:var(--muted);margin-top:2.6mm">Figures are from the live platform, November 2026. The app is in English today; its wording in Leb Lango still has to be written by language experts. The same app also holds a separate, newer Acholi edition.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Introduction for the clan heads and the leaders of Lango</span><span>3 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 4 : value for Lango culture ================================================== -->
+<section class="page pg p4">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">The value for Lango culture</div>
+    <h2>What MyCulture can give to the Lango people.</h2>
+    <p class="intro">The aim is simple: that a Lango child, anywhere, can learn the language of the grandparents, find the clan and its story, and know that Lango elders stand behind what is read.</p>
+
+    <div class="g c3" style="margin-top:3.6mm">
+      <div class="card tile val"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><h4>The language stays in use</h4><p>2,830 words with meanings, 17 proverbs, greetings and phrases. A grandchild can look up a grandmother&rsquo;s word and keep the dictionary on the phone. Recordings and example sentences are still to be added, with the elders.</p></div>
+      <div class="card tile val"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h4>Each clan can have a page</h4><p>25 of the roughly 150 clans in the Foundation&rsquo;s own plan are listed so far, with the customs recorded for them. The page has a place for the <b>Awitong&rsquo;s name and photo</b>, and members can join the group of their clan. We need your help to add the rest.</p></div>
+      <div class="card tile val"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><h4>Heritage and history</h4><p>30 heritage entries (attire, crafts, music, ceremonies, sites), the story of the Lango, 10 districts, 8 notable Langos and 12 species of the land, with sources.</p></div>
+      <div class="card tile val"><span class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><h4>The young learn every day</h4><p>A word of the day, quizzes with the fact behind each answer, points and streaks turn learning into a habit. The app is for people aged 13 and over today.</p></div>
+      <div class="card tile val"><span class="ico k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><h4>Lango everywhere</h4><p>A Lango person in Kampala, in another country or on a farm reaches the same record. The Lango Bible of the Bible Society of Uganda opens inside the app.</p></div>
+      <div class="card tile val"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><h4>A record that lasts</h4><p>Stories, photos and recordings given by elders, with their consent, can be kept beyond one generation and credited to those who gave them.</p></div>
+    </div>
+
+    <div class="sech" style="margin-top:4.6mm">From the elder to the child <small>how knowledge moves through MyCulture</small></div>
+    <div class="vflow" style="margin-top:0">
+      <div class="vb v1"><b>The elder shares</b><small>A word, a story, a clan history, a photograph or a recording.</small></div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></i>
+      <div class="vb v2"><b>A member adds it</b><small>In the app, even without internet; it waits to be sent.</small></div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></i>
+      <div class="vb v3"><b>It is checked</b><small>A reviewer first; as we propose, clan leaders and language experts then confirm or correct.</small></div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></i>
+      <div class="vb v4"><b>Everyone learns</b><small>Shown with its source, and with the name of the giver where they agree.</small></div>
+    </div>
+
+    <div class="g c3" style="margin-top:4.6mm">
+      <div class="card tile who"><span class="ico y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg></span><h4>For the clan heads and the elders</h4><p class="ev">Recognition, a record of what you know in your own words, and a say over what is called true. Your clan page can carry your name once you have an account.</p></div>
+      <div class="card tile who"><span class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span><h4>For the young and the schools</h4><p class="ev">A friendly way to learn Leb Lango and the history of the Lango on the phone they already hold. A version for schools would need its own safeguards, and your advice first.</p></div>
+      <div class="card tile who"><span class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><h4>For Lango institutions</h4><p class="ev">Clans, churches, schools and cultural bodies can use the same tools and the same marks. No one body controls what is called verified.</p></div>
+    </div>
+    <div class="grad" style="margin-top:4.6mm;flex:1;display:flex;flex-direction:column;justify-content:center;padding:3.6mm 5.6mm">
+      <h3 style="margin-bottom:1.4mm">How we hope to know it has worked</h3>
+      <p style="font-size:9.8pt;line-height:1.48;color:rgba(255,255,255,.95)">A Lango child opens the app, finds the clan of her grandmother, reads what the Awitong has confirmed, and learns a word her grandfather used. <b style="color:#fff">And none of it is called true unless Lango people said so.</b></p>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Introduction for the clan heads and the leaders of Lango</span><span>4 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 5 : you decide what is true ================================================== -->
+<section class="page pg p5">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">Your authority</div>
+    <h2>MyCulture does not decide what is Lango. You do.</h2>
+    <p class="intro">The platform gives Lango people the tools to check and correct. This is how the marks work today, and what we propose so that the final word is yours.</p>
+
+    <div class="g c3" style="margin-top:3.6mm">
+      <div class="lay l1"><span class="k">Step 1 &middot; shown with its source</span><h4>Published</h4><small>Shown only after an editor or reviewer has published it, with its source and, where known, its credit.</small></div>
+      <div class="lay l2"><span class="k">Step 2 &middot; the mark on clans</span><h4>Awaiting verification</h4><small>Every clan page carries this mark now, because no one has checked them yet. Other entries show a Verified mark only once someone has checked them.</small></div>
+      <div class="lay l3"><span class="k">Step 3 &middot; your decision</span><h4>Verified</h4><small>Set today by an editor or administrator. We propose that the editors are people you name, and that nothing is marked without the confirmation of a clan leader or language expert.</small></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1fr 1fr;gap:4mm;margin-top:4.2mm">
+      <div class="card tile" style="padding:4mm 4.4mm">
+        <h4 style="margin-top:0;font-size:10pt">Built and working now <span class="tagx built">Built</span></h4>
+        <ul>
+          <li><b>Review before showing:</b> a contribution from a member is read by a reviewer first. Today a reviewer&rsquo;s approval publishes a word at once.</li>
+          <li><b>An account for each Awitong</b> (a clan leader), in the website&rsquo;s admin panel: edit the clan&rsquo;s page (changes show at once and earlier versions are kept), see the clan&rsquo;s contributions, with contact details, and approve or decline them. Only an editor can publish a new page or mark it verified.</li>
+          <li><b>Credit by choice</b> for words and proverbs; for photos, stories and recordings the app asks how they may be used.</li>
+          <li><b>Delete my account</b> at any time; no advertising; no selling of personal data; sources named on most heritage entries.</li>
+        </ul>
+      </div>
+      <div class="card tile" style="padding:4mm 4.4mm">
+        <h4 style="margin-top:0;font-size:10pt">What we propose, to shape with you <span class="tagx prop">Proposed</span></h4>
+        <ul>
+          <li><b>A Lango review team</b> that you name: language elders for words and proverbs, and a leader for each clan to confirm its page. Each clan decides who speaks for it; where a clan is divided we will not choose.</li>
+          <li><b>Rules for sensitive knowledge:</b> what is public, what is for the clan only, what is not recorded, and whether clans should be ranked against each other at all (the app has a clan leaderboard today).</li>
+          <li><b>Consent for recordings:</b> a simple form so elders agree how their words and photos are used.</li>
+          <li><b>Leb Lango wording</b> for the app, written by language experts.</li>
+          <li><b>Terms to agree with you:</b> our principle is that the knowledge belongs to the Lango people. Today contributors keep their rights and published items are open to reuse with credit (CC BY 4.0); the real terms are agreed with you before release.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1fr 38mm;gap:5mm;margin-top:4mm;flex:1;align-items:center">
+      <div class="dark" style="padding:4.2mm 5.2mm">
+        <h3>Our promises</h3>
+        <ul>
+          <li>We will never sell personal data or show advertising.</li>
+          <li>Lango knowledge will not be given or licensed to outside parties, such as researchers or AI developers, without the agreement of the Lango leaders you name.</li>
+          <li>What is live now comes from published sources such as Driberg&rsquo;s 1923 book. Tell us what should be withdrawn and we will take it down.</li>
+          <li>Where we do not know, the app says so; we do not guess. We will report plainly what has been checked and what has not.</li>
+        </ul>
+      </div>
+      <figure style="margin:0;display:flex;flex-direction:column;align-items:center;text-align:center"><div class="phone" style="--w:30mm"><div class="phone__s"><img src="shots/clan.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption style="margin-top:2mm;font-size:6.6pt;line-height:1.34;color:var(--text);font-weight:500">A clan page today, with the mark &ldquo;awaiting verification&rdquo; and the place for the Awitong&rsquo;s name. This clan has a totem; most do not yet.</figcaption></figure>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Introduction for the clan heads and the leaders of Lango</span><span>5 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 6 : where we are ================================================== -->
+<section class="page pg p6">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">Where we are</div>
+    <h2>Built, and being tested now. The phone apps are not yet in the stores.</h2>
+    <p class="intro">The app, the website and the review system are working. The phone apps are being tested by a small group and are not yet in the app stores; the website at myculture.online is already open to anyone. We are showing it to you <b>before the apps are released</b>, because Lango leaders should shape it, not meet it afterwards. Tell us what should be changed, held back or withdrawn, and we will act on it.</p>
+
+    <div class="shotrow" style="margin-top:3.4mm">
+      <figure><div class="phone" style="--w:34mm"><div class="phone__s"><img src="shots/history.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Our History<small>The story of the Lango in brief, in sections, with its sources.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:34mm"><div class="phone__s"><img src="shots/explore.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Explore<small>Heritage, clans, history, districts, species and the Bible.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:34mm"><div class="phone__s"><img src="shots/contribute.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Contribute<small>Share a word, a proverb, a story, a photo or a recording.</small></figcaption></figure>
+      <figure><div class="phone" style="--w:34mm"><div class="phone__s"><img src="shots/phrasebook.jpg" alt=""><div class="sb"><span>9:41</span><span class="r"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.4 5.7 9a3.3 3.3 0 0 1 4.6 0zM3.7 6.9a6.3 6.3 0 0 1 8.6 0l-1.3 1.4a4.4 4.4 0 0 0-6 0zM1.2 4.3a9.8 9.8 0 0 1 13.6 0l-1.3 1.4a7.9 7.9 0 0 0-11 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" /><rect x="24" y="4" width="2" height="4" rx="1" opacity=".45"/></svg></span></div><span class="isl"></span><span class="hi"></span></div></div><figcaption>Phrasebook<small>Real greetings and replies, with the book they come from named.</small></figcaption></figure>
+    </div>
+
+    <div class="g" style="grid-template-columns:1.1fr 1fr;gap:4mm;margin-top:4mm">
+      <div class="card tile" style="padding:3.8mm 4.2mm">
+        <h4 style="margin-top:0;font-size:10pt">In the app today <small style="font-weight:600;color:var(--muted)">(live platform, November 2026)</small></h4>
+        <div class="g c3" style="gap:2mm;margin-top:2mm">
+          <div class="stat"><b>2,830</b><small>dictionary words</small></div>
+          <div class="stat"><b>25</b><small>clans listed</small></div>
+          <div class="stat"><b>30</b><small>heritage entries</small></div>
+          <div class="stat"><b>17</b><small>proverbs</small></div>
+          <div class="stat"><b>37</b><small>quiz questions, in 4 quizzes</small></div>
+          <div class="stat"><b>8</b><small>notable Langos</small></div>
+        </div>
+        <p style="font-size:7pt;line-height:1.4;color:var(--muted);margin-top:2mm">Almost all of it comes from published sources. No clan, heritage entry or proverb has been marked verified; one dictionary word, a test entry, is. Two clans have a totem named so far, and 20 of the 30 heritage entries name their source.</p>
+      </div>
+      <div class="card tile" style="padding:3.8mm 4.2mm">
+        <h4 style="margin-top:0;font-size:10pt">What is not ready, said plainly</h4>
+        <ul>
+          <li>The <b>Leb Lango wording</b> of the app itself (it is in English today).</li>
+          <li><b>Whole-sentence translation:</b> the translator handles single words and set phrases.</li>
+          <li><b>Recordings and example sentences</b> for the words.</li>
+          <li><b>Expert verification</b> of words, clans and heritage.</li>
+          <li><b>Clan leaders&rsquo; names and photos</b> on the clan pages, and a check of who belongs to which clan.</li>
+          <li><b>Elders&rsquo; stories,</b> to be gathered with consent, and release in the app stores.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sech" style="margin-top:4mm">The road ahead <small>each step waits for your guidance</small></div>
+    <div class="roadx">
+      <div class="rdx"><span class="when">Now</span><b>Testing</b><small>Testers use the app on phones; faults are fixed. A demonstration for the leaders of Lango.</small></div>
+      <div class="rdx"><span class="when">Next</span><b>Your guidance</b><small>A Lango review team is named, and rules for sensitive knowledge are agreed.</small></div>
+      <div class="rdx"><span class="when">Then</span><b>Verified and richer</b><small>Clan leaders confirm their clans, language experts check the words, and elders&rsquo; stories are recorded with consent.</small></div>
+      <div class="rdx"><span class="when">After</span><b>Release</b><small>In the app stores, with Leb Lango wording, once you are content.</small></div>
+    </div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Introduction for the clan heads and the leaders of Lango</span><span>6 / 7</span></div>
+</section>
+
+<!-- ================================================== PAGE 7 : our invitation ================================================== -->
+<section class="page pg p7">
+  <div class="flag"></div>
+  <div class="inner">
+    <div class="eyebrow">Our invitation</div>
+    <h2>Walk with us: what we ask, and what you can expect.</h2>
+    <p class="intro">MyCulture is only as good as the people who check it. We ask for your guidance first, before the apps are released to the public.</p>
+
+    <div class="g" style="grid-template-columns:1.2fr 1fr;gap:4.4mm;margin-top:3.6mm">
+      <div class="grad">
+        <h3>What we ask of the clan heads and the leaders of Lango</h3>
+        <ol class="asks">
+          <li><b style="color:#fff">Receive a demonstration</b> of the app on a phone, at a time and place you choose, and tell us what is wrong or missing.</li>
+          <li><b style="color:#fff">Give your guidance:</b> what should be changed, held back or withdrawn. We will not use anyone&rsquo;s name or blessing in publicity without their written agreement.</li>
+          <li><b style="color:#fff">Name a Lango review team:</b> language elders for the words and proverbs, and a leader for each clan to confirm its page. Each clan decides who speaks for it.</li>
+          <li><b style="color:#fff">Set the rules for sensitive knowledge:</b> what is public, what stays within the clan, and what is not recorded.</li>
+          <li><b style="color:#fff">Help us gather</b> elders&rsquo; stories and the missing clans, with consent and credit.</li>
+        </ol>
+        <p class="next90"><b>Our first step is small:</b> a demonstration of about forty-five minutes, with time for your questions.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3.4mm">
+        <div class="card tile" style="padding:3.8mm 4.2mm">
+          <h4 style="margin-top:0;font-size:10pt">What you can expect from us</h4>
+          <ul>
+            <li><b>No charge</b> to any Lango person, clan head or clan for pages, accounts, training or use. Kakebe carries the running costs for now; giving is optional.</li>
+            <li><b>Your say first:</b> what you ask us to withdraw, we will take down.</li>
+            <li><b>Credit</b> for every source we know and every person who gives knowledge, if they agree.</li>
+            <li><b>Training</b> for reviewers and for each leader who takes an account, and <b>plain reports</b> on what has been checked.</li>
+          </ul>
+        </div>
+        <div class="card tile" style="padding:3.8mm 4.2mm">
+          <h4 style="margin-top:0;font-size:10pt">Who we are</h4>
+          <p style="font-size:7.8pt;line-height:1.44;color:var(--text)">Kakebe Technologies Limited, a software company in Lira City. MyCulture is an <b>independent community project</b>, not an arm of the Lango Cultural Foundation or of any government office; it takes no side in any question of who holds any title. The app also holds a newer Acholi edition; each community&rsquo;s knowledge is governed by its own leaders.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sech" style="margin-top:3mm">What happens when you say yes <small>the same simple steps</small></div>
+    <div class="g c4" style="gap:2.6mm">
+      <div class="card tile join"><b class="n n1">1</b><h4>We meet</h4><p>A demonstration for the clan heads and the leaders of Lango, with your questions.</p></div>
+      <div class="card tile join"><b class="n n2">2</b><h4>You name the team</h4><p>Language elders and a leader for each clan to review.</p></div>
+      <div class="card tile join"><b class="n n3">3</b><h4>We check together</h4><p>The 25 clans and the words are confirmed, corrected or removed.</p></div>
+      <div class="card tile join"><b class="n n4">4</b><h4>We release</h4><p>Only when you are content, on terms agreed with you.</p></div>
+    </div>
+
+    <div class="sech" style="margin-top:3mm">Questions you may have</div>
+    <div class="g c4" style="gap:2.6mm">
+      <div class="card tile join faq"><h4>Does it replace the elders?</h4><p>No. It depends on them. It is a notebook the elders can fill, correct and keep for their grandchildren.</p></div>
+      <div class="card tile join faq"><h4>Who owns what is recorded?</h4><p>Our principle is that the Lango people do. Today contributors keep their rights; the terms are for you to shape with us before release.</p></div>
+      <div class="card tile join faq"><h4>What if something is wrong?</h4><p>Tell your reviewer or us. An editor corrects or removes it, and a clan leader with an account can correct their clan&rsquo;s page.</p></div>
+      <div class="card tile join faq"><h4>Does it cost anything?</h4><p>No. It is free to use, with no advertising. Giving to help keep it running is optional.</p></div>
+    </div>
+
+    <div class="g" style="grid-template-columns:1fr 62mm;gap:4mm;margin-top:3.6mm;align-items:stretch">
+      <div class="dark" style="padding:3.6mm 5mm"><h3 style="font-size:11.2pt;line-height:1.25">Thank you for your time and your care for Lango.</h3><p style="font-size:8.4pt;line-height:1.44;margin-top:1mm">Lango culture is kept by its people. MyCulture is a tool in the hands of those who keep it, and we would be honoured to put it in yours.</p></div>
+      <div class="card tile" style="padding:3.2mm 4.2mm"><h4 style="margin-top:0;font-size:9.4pt">Contact</h4><p style="font-size:7.6pt;line-height:1.44;color:var(--text)"><b style="color:var(--ink)">Sedrick Otolo, Director</b>, Kakebe Technologies Limited, Lira City<br>0777 676 206 &middot; ot.sedrick@gmail.com<br>myculture.online</p></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>MyCulture</b> &middot; Kakebe Technologies Limited, Lira City &middot; myculture.online</span><span>7 / 7</span></div>
+</section>
+
+</body>
+</html>

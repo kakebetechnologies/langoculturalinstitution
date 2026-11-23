@@ -114,21 +114,42 @@ Not collected: financial info, health, contacts, browsing history, diagnostics o
 | Sign-in required | Yes: give a reviewer account. Create it yourself in the app or on https://myculture.online/register (an email and a password, not Google; sign-up is instant and needs no email check). Use a password you do not use anywhere else, keep the account only for Apple, and do not reuse a real member's account |
 | Contact | Sedrick Otolo (Kakebe Technologies Limited), [phone with country code], [an email you check: info@myculture.online is the one the site's Contact page shows] |
 
-**Notes for the reviewer:**
+**Notes for the reviewer (also the reply to Guideline 2.1, Information Needed; 3,650 of 4,000 characters):**
 
 ```
-MyCulture documents and teaches the languages and cultures of Ugandan communities. Lango is the first full community; Acholi is new and still being filled in. On the first screens the person chooses Lango or Acholi, then signs in with email and password or with Google. Creating an account is free and instant, and email and password sign-up is always available, so no third-party account is needed. Use the demo account above to see every feature.
+APP PURPOSE AND AUDIENCE
+MyCulture is a free educational app that documents, teaches and shares the languages and cultures of Ugandan communities, one community at a time. Lango (northern Uganda) is the first full community; Acholi is new and still being filled in. The problem: much of this knowledge (words, proverbs, clan histories, heritage) lives only in the memory of elders and in scattered books, and young people and the diaspora have no trusted place to learn it. MyCulture gives them a dictionary that works offline, clan and heritage pages with their sources, quizzes, and a way for community members to add what they know, reviewed by moderators before it is published. Audience: members of the Lango and Acholi communities, their diaspora, and learners of Leb Lango and Leb Acholi, aged 13 and over.
 
-Where to look: Home (word of the day), Explore (heritage, clans or chiefdoms, history, districts, notable people, Bible), Learn (dictionary, translator, proverbs, phrasebook, quizzes), Contribute (suggest a word, add a proverb, a story, a photo or a recording) and Me (profile, settings, Delete account). The app needs an internet connection; the dictionary can be saved once in Settings for offline search.
+HOW TO USE IT (DEMO ACCOUNT)
+Email: [reviewer email]   Password: [reviewer password]
+On the first screens choose Lango or Acholi (switch at the top), then sign in. Creating an account is free and instant; "Continue with Google" is optional. Main features: Home (word of the day), Explore (heritage, clans, history, districts, Bible), Learn (dictionary in Leb Lango or English, translator for single words and set phrases, proverbs, phrasebook, quizzes), Contribute (suggest a word, add a proverb, a story, a photo or a recording) and Me (profile, settings, Delete account). The dictionary can be saved for offline use in Settings. Clan group: choose a clan on your profile, open Clan group and tap Join to read and write messages.
 
-User-generated content: members can send words, photos, recordings and clan group messages. Every contribution is reviewed by moderators before it is published; group messages can be reported (three reports hide a message) and moderators can remove content and accounts. Contact for reports: info@myculture.online.
+USER-GENERATED CONTENT AND SAFETY
+Members can send contributions (words, proverbs, stories, photos, recordings) and clan group messages. Contributions are reviewed by moderators before they are published. In the clan group, press and hold any message to REPORT it (three reports hide it until a moderator reviews it, and moderators are notified) or to BLOCK its author (their messages and name disappear for you; undo in Settings, Blocked members). Moderators can remove messages and members and switch off accounts. Contact: info@myculture.online.
 
-Account deletion: Me, Edit profile, Delete account (also at https://myculture.online/account/delete).
+ACCOUNT DELETION
+Me, Edit profile, Delete account (also https://myculture.online/account/delete).
 
-Permissions: the camera, microphone, photos and location are requested only when the person taps to attach a photo, record or tag a place for a contribution. Location is used only while the app is open.
+EXTERNAL SERVICES
+Our own server at myculture.online (PHP and MySQL) for accounts, content and the API; Google Sign-In (optional); Expo (EAS) for app delivery and updates and Expo's push notification service (optional notifications); bible.com, where the Bible Society of Uganda's Bible chapters open inside the app (the app does not store that text); Wikipedia and Wikimedia Commons content stored with credit (CC BY-SA). There is no advertising, analytics, in-app purchase, payment processor or third-party AI service. The Support screen only explains how to give by mobile money, bank, PayPal or a card link outside the app; giving is optional and unlocks nothing.
 
-The Bible screens show chapters from the Bible Society of Uganda's pages on Bible.com inside the app; the app does not store or copy that text. Some sections (radio, podcast, events, news) show content only after the editors add it, so they may be empty. There are no in-app purchases and no ads.
+REGIONS
+The app works the same in every region. What differs is the community the person chooses (Lango or Acholi), not their location. The interface is in English today.
+
+THIRD-PARTY MATERIAL
+Not a regulated service. Sources are credited in the app: J. H. Driberg, The Lango (1923, public domain), Wikipedia and Wikimedia Commons (CC BY-SA, with credits), the Practical Lango Grammar and the Lango dictionary project, and the Bible Society of Uganda's Bible read on bible.com. Content is marked as awaiting verification until community reviewers check it.
+
+SCREEN RECORDING
+[link or file name]: recorded on an iPhone with the latest iOS, from launching the app: first screens, sign-up, sign-in, the main features, a contribution, reporting and blocking a message, and account deletion.
 ```
+
+**Screen recording to make (Apple asks for it in the Notes: 1 recording, on a real iPhone with the latest iOS, starting from launching the app):**
+1. Delete the app, install the new TestFlight build, open it: the first screens (switch Lango and Acholi), then **Create an account** with a new email (show it is free and instant).
+2. Home, Explore (Heritage, Clan Explorer, History, Bible: open a chapter), Learn (dictionary search, translator, quizzes).
+3. **Contribute**: suggest a word and send it ("reviewed before it is published").
+4. **User-generated content**: pick a clan on the profile, open Clan group, Join, write a message. With a second account (on another phone, or sign in as the demo account) post a message, then on the first phone press and hold it: show **Report this message** and **Block this member**, then Settings, **Blocked members**, Unblock.
+5. **Delete account**: Me, Edit profile, Delete account, confirm (do this last, with a throw-away account; the demo account stays).
+6. Say aloud, or add captions, that there are no paid features. Upload the file somewhere Apple can open (a private link) and put the link in the Notes, or attach it under Attachment.
 
 Export compliance: already answered in the app (`ITSAppUsesNonExemptEncryption = false`: HTTPS only), so no extra questions.
 
@@ -154,6 +175,6 @@ The build appears in TestFlight about 10 to 30 minutes after EAS finishes upload
 ## 7. Things the App Store review may raise later (not for TestFlight)
 
 1. **Sign in with Apple.** The app offers "Continue with Google"; Apple's rule 4.8 asks for an equivalent privacy-preserving login (Sign in with Apple, or a login that hides the email and does not track). Email and password sign-up already exists; if the review insists, Sign in with Apple has to be added.
-2. **User-generated content (rule 1.2)** wants filtering, a way to report, a way to block abusive users and published contact details. Reporting a group message and moderator removal exist; blocking a member does not yet.
+2. **User-generated content (rule 1.2)** wants filtering, a way to report, a way to block abusive users and published contact details. Reporting a group message, moderator removal and (since 23 Nov 2026) blocking a member exist; contact details are on https://myculture.online/contact.
 3. **Name on the phone.** Done: build 4 (1.0.0) shows "MyCulture" under its icon. The app still uses the Lango emblem as its logo.
 4. **Acholi dictionary.** Live since 18 Nov 2026: 4,252 words, 577 of them tagged "Doubtful, check with a speaker". A reviewer who picks Acholi will see the rest of the Acholi edition thin (no quizzes, no proverbs, no radio), which the description and the notes say plainly. Its source (Blackings 2009) is copyrighted; settle that with the publisher before the public release.
