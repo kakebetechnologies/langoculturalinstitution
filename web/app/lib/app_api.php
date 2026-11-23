@@ -161,11 +161,11 @@ function member_delete_check(array $u, string $password, string $confirmEmail): 
     return !empty($u['google_sub']) ? 'Type the email address of your account to confirm.' : 'That password is not right.';
 }
 
-/** Deletes a member's account (app stores require it): contributions stay in the archive without the person's link; messages, streaks, quiz results,
+/** Deletes a member's account (app stores require it): contributions stay in the archive without the person's link, name or contact details; messages, streaks, quiz results,
  *  tokens and notifications go with the account. Staff accounts are never deleted this way. */
 function member_delete_account(array $u): void
 {
-    q('UPDATE contributions SET user_id=NULL WHERE user_id=?', [$u['id']]);
+    q("UPDATE contributions SET user_id=NULL, name='Former member', email=NULL, phone=NULL, credit=0 WHERE user_id=?", [$u['id']]);   // the contribution stays in the archive, without the person's name or contact details
     q('DELETE FROM clan_message_reports WHERE user_id=? OR message_id IN (SELECT id FROM (SELECT id FROM clan_messages WHERE user_id=?) x)', [$u['id'], $u['id']]);
     q('DELETE FROM clan_messages WHERE user_id=?', [$u['id']]);
     foreach (['activity_days', 'quiz_scores', 'quiz_results'] as $t) q("DELETE FROM `$t` WHERE user_id=?", [$u['id']]);   // streaks and quiz results go with the account
